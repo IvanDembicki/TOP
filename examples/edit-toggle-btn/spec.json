@@ -1,0 +1,20 @@
+{
+  "type": "EditToggleBtn",
+  "doc": "Switchable state holder for the mode toggle action. No own action control. Switches between ViewModeState (default) and EditModeState based on editor mode. Reads isEditMode from ancestor TreeEditor on refresh().",
+  "prompt": "prompts/EditToggleBtn.prompt.md",
+  "props": { "contentType": "view" },
+  "children": [
+    {
+      "type": "EditToggleBtnViewModeState",
+      "doc": "Default state for the 'Edit mode' action. On user activation, requests TreeEditor to toggle editor mode.",
+      "prompt": "prompts/EditToggleBtnViewModeState.prompt.md",
+      "props": { "contentType": "view" }
+    },
+    {
+      "type": "EditToggleBtnEditModeState",
+      "doc": "Active edit state for the 'View mode' action. On user activation, requests TreeEditor to toggle editor mode.",
+      "prompt": "prompts/EditToggleBtnEditModeState.prompt.md",
+      "props": { "contentType": "view" }
+    }
+  ]
+}

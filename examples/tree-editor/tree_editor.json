@@ -1,0 +1,199 @@
+{
+  "type": "App",
+  "doc": "Application root model. Intended runtime composition root; current target may bootstrap TreeEditor directly until AppNode is materialized.",
+  "props": {
+    "materializationPolicy": "runtime-composition-root-pending"
+  },
+  "children": [
+    {
+      "type": "TreeEditor",
+      "doc": "Root node of the executable tree editor branch. Mounts the editor into a host container, owns the toolbar, mode holder, and pane, and provides isEditMode derived from EditorModeHolder state.",
+      "prompt": "prompts/TreeEditor.prompt.md",
+      "props": {
+        "dir": ".",
+        "contentType": "view",
+        "materializationPolicy": "runtime"
+      },
+      "children": [
+        {
+          "type": "EditorToolbar",
+          "doc": "Horizontal toolbar area. Immutable container for EditToggleBtn.",
+          "prompt": "prompts/toolbar/EditorToolbar.prompt.md",
+          "props": {
+            "dir": "toolbar",
+            "contentType": "view"
+          },
+          "children": [
+            {
+              "type": "EditToggleBtn",
+              "doc": "Switchable holder for the mode toggle action. Owns the active visual sub-state, switches between EditToggleBtnViewModeState and EditToggleBtnEditModeState based on editor mode, and reads isEditMode from ancestor TreeEditor on refresh().",
+              "prompt": "prompts/toolbar/EditToggleBtn.prompt.md",
+              "children": [
+                {
+                  "type": "EditToggleBtnViewModeState",
+                  "doc": "Default visual state of EditToggleBtn. Owns the 'Edit mode' action content. Its content owns the low-level activation subscription and forwards a semantic toggle request to TreeEditor.",
+                  "prompt": "prompts/toolbar/EditToggleBtnViewModeState.prompt.md",
+                  "props": {
+                    "contentType": "view"
+                  }
+                },
+                {
+                  "type": "EditToggleBtnEditModeState",
+                  "doc": "Edit visual state of EditToggleBtn. Owns the 'View mode' action content. Its content owns the low-level activation subscription and forwards a semantic toggle request to TreeEditor.",
+                  "prompt": "prompts/toolbar/EditToggleBtnEditModeState.prompt.md",
+                  "props": {
+                    "contentType": "view"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "BuildInfo",
+              "doc": "Displays the build timestamp. Informational leaf node, no interaction.",
+              "prompt": "prompts/toolbar/BuildInfo.prompt.md",
+              "props": {
+                "contentType": "view"
+              }
+            }
+          ]
+        },
+        {
+          "type": "EditorModeHolder",
+          "doc": "Switchable state holder owning the editor mode state. Children: _viewModeState (default), _editModeState.",
+          "prompt": "prompts/toolbar/EditorModeHolder.prompt.md",
+          "props": {
+            "dir": "toolbar"
+          },
+          "children": [
+            {
+              "type": "ViewModeState",
+              "doc": "State node for view mode. onOpen(): applies view-mode presentation to TreeEditor and calls refreshAll().",
+              "prompt": "prompts/toolbar/ViewModeState.prompt.md"
+            },
+            {
+              "type": "EditModeState",
+              "doc": "State node for edit mode. onOpen(): applies edit-mode presentation to TreeEditor and calls refreshAll().",
+              "prompt": "prompts/toolbar/EditModeState.prompt.md"
+            }
+          ]
+        },
+        {
+          "type": "EditorPane",
+          "doc": "Main content area of the editor. Immutable container holding RootItemHolder.",
+          "prompt": "prompts/pane/EditorPane.prompt.md",
+          "props": {
+            "dir": "pane",
+            "contentType": "view"
+          },
+          "children": [
+            {
+              "type": "RootItemHolder",
+              "doc": "Mutable container holding the single root TreeItem instance. Initialises the tree from source data.",
+              "prompt": "prompts/pane/RootItemHolder.prompt.md",
+              "props": {
+                "contentType": "view"
+              },
+              "children": [
+                {
+                  "type": "lib:pane.TreeItem",
+                  "doc": "Runtime root item created by RootItemHolder from source data.",
+                  "props": {
+                    "materializationPolicy": "runtime-library-reference"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Library",
+      "doc": "Project library branch. Contains reusable node templates referenced from executable branches.",
+      "props": {
+        "materializationPolicy": "generation-support"
+      },
+      "children": [
+        {
+          "type": "PaneLibrary",
+          "doc": "Library namespace for editor pane nodes. Detailed branch is stored in top/libraries/pane.library.json.",
+          "props": {
+            "source": "libraries/pane.library.json",
+            "materializationPolicy": "source-model"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Assets",
+      "doc": "Project asset catalog. Describes project-local source assets stored under top/assets.",
+      "props": {
+        "assetRoot": "assets",
+        "materializationPolicy": "source-model"
+      },
+      "children": [
+        {
+          "type": "DemoTreeData",
+          "doc": "Demo source tree data used by the application entry point.",
+          "props": {
+            "contentType": "data",
+            "assetPath": "assets/demo-tree.json",
+            "format": "json",
+            "materializationPolicy": "source-model"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Presentation",
+      "doc": "Presentation branch. Owns platform-neutral theme/style source model; target may compile it into presentation artifacts or materialize it as runtime nodes when needed.",
+      "prompt": "prompts/presentation/Presentation.prompt.md",
+      "props": {
+        "dir": "presentation",
+        "contentType": "presentation",
+        "presentationRoot": "presentation",
+        "materializationPolicy": "target-optional-runtime"
+      },
+      "children": [
+        {
+          "type": "ThemeHolder",
+          "doc": "Switchable holder for active presentation theme. Owns theme state and exposes the active theme model.",
+          "prompt": "prompts/presentation/ThemeHolder.prompt.md",
+          "children": [
+            {
+              "type": "LightTheme",
+              "doc": "Light theme state derived from presentation source artifacts.",
+              "prompt": "prompts/presentation/LightTheme.prompt.md",
+              "props": {
+                "materializationPolicy": "target-optional-runtime"
+              }
+            },
+            {
+              "type": "DarkTheme",
+              "doc": "Dark theme state derived from presentation source artifacts.",
+              "prompt": "prompts/presentation/DarkTheme.prompt.md",
+              "props": {
+                "materializationPolicy": "target-optional-runtime"
+              }
+            }
+          ],
+          "props": {
+            "materializationPolicy": "target-optional-runtime"
+          }
+        },
+        {
+          "type": "TreeEditorPresentation",
+          "doc": "Presentation provider for TreeEditor nodes. Interprets source presentation rules and exposes platform-neutral style roles plus target-specific materialization helpers.",
+          "prompt": "prompts/presentation/TreeEditorPresentation.prompt.md",
+          "props": {
+            "contentType": "presentation",
+            "presentationPath": "presentation/tree-editor.presentation.json",
+            "format": "top-presentation-json",
+            "role": "default",
+            "materializationPolicy": "target-optional-runtime"
+          }
+        }
+      ]
+    }
+  ]
+}

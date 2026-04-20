@@ -1,0 +1,47 @@
+{
+  "_comment": "Example: recursive library node stored in an external spec file. App has a single root with TreeEditor and Library branches.",
+  "_classification": {
+    "content_type": "*ui-tree*",
+    "representation_level": "spec tree",
+    "statefulness": "state tree"
+  },
+  "type": "App",
+  "doc": "Application root. Owns the executable editor branch and the project library branch.",
+  "children": [
+    {
+      "type": "TreeEditor",
+      "doc": "Executable editor branch.",
+      "children": [
+        {
+          "type": "EditorPane",
+          "doc": "Pane that owns the root item holder.",
+          "children": [
+            {
+              "type": "RootItemHolder",
+              "doc": "Single-child mutable holder for the root tree item.",
+              "children": [
+                {
+                  "type": "lib:pane.TreeItem",
+                  "doc": "Runtime root item created from source data. Uses the same project Library definition as nested items."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Library",
+      "doc": "Project library branch. Contains reusable node templates referenced from executable branches.",
+      "children": [
+        {
+          "type": "PaneLibrary",
+          "doc": "Library namespace for editor pane nodes. Details are stored in an external spec file.",
+          "props": {
+            "source": "libraries/pane.library.json"
+          }
+        }
+      ]
+    }
+  ]
+}

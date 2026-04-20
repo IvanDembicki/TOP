@@ -1,0 +1,146 @@
+{
+  "type": "PresentationModel",
+  "version": 1,
+  "scope": "TreeEditor",
+  "themes": {
+    "light": {
+      "tokens": {
+        "color.text.primary": "#d4d4d4",
+        "color.text.nodeLabel": "#9cdcfe",
+        "color.surface.app": "#1e1e1e",
+        "color.surface.editor": "#1e1e1e",
+        "color.surface.toolbar": "#2d2d2d",
+        "color.surface.control": "#3a3a3a",
+        "color.surface.controlHover": "#4a4a4a",
+        "color.surface.rowHover": "#2a2d2e",
+        "color.surface.editModeRow": "rgba(38, 79, 120, .18)",
+        "color.border.default": "#444444",
+        "color.border.control": "#555555",
+        "color.accent.primary": "#4a9eff",
+        "color.accent.toggle": "#4a9eff",
+        "color.accent.active": "#264f78",
+        "color.icon.default": "#888888",
+        "color.icon.action": "#cccccc",
+        "color.icon.actionHover": "#ffffff",
+        "color.success": "#89d185",
+        "color.success.surface": "#2d4a2d",
+        "color.success.border": "#3a6b3a",
+        "color.danger": "#f48771",
+        "color.danger.surface": "#4a1a1a",
+        "color.danger.border": "#6b2a2a",
+        "font.family.main": "Consolas, Cascadia Mono, SFMono-Regular, monospace",
+        "size.app.minWidth": 320,
+        "size.toolbar.minHeight": 38,
+        "size.row.minHeight": 24,
+        "size.icon": 16,
+        "size.button.small": 16,
+        "space.app.desktop": 0,
+        "space.app.mobile": 0,
+        "space.editor.maxWidth": "full",
+        "space.toolbar.x": 12,
+        "space.toolbar.y": 6,
+        "space.row.x": 0,
+        "space.row.y": 0,
+        "radius.control": 3,
+        "radius.action": 2
+      }
+    },
+    "dark": {
+      "tokens": {
+        "color.text.primary": "#e7edf1",
+        "color.surface.app": "#11181d",
+        "color.surface.editor": "#172026",
+        "color.surface.toolbar": "#0f171b",
+        "color.surface.rowHover": "#1e2c33",
+        "color.surface.editModeRow": "#242211",
+        "color.border.default": "#33434b",
+        "color.border.subtle": "#26343b",
+        "color.border.control": "#526872",
+        "color.accent.primary": "#65aaf7",
+        "color.accent.toggle": "#88bdea",
+        "color.icon.default": "#9ab0ba",
+        "color.icon.action": "#8cc7f3",
+        "color.success": "#7bd99d",
+        "color.danger": "#f0a0a0"
+      }
+    }
+  },
+  "roles": {
+    "appHost": {
+      "layout": { "minHeight": "viewport", "padding": "space.app.desktop" },
+      "responsive": { "maxWidth": 640, "padding": "space.app.mobile" }
+    },
+    "treeEditorRoot": {
+        "layout": { "maxWidth": "space.editor.maxWidth", "minHeightOffset": "space.app.desktop", "center": false },
+      "surface": "color.surface.editor",
+      "overflow": "hidden"
+    },
+    "toolbar": {
+      "layout": { "direction": "row", "align": "center", "justify": "space-between", "gap": 8, "paddingX": "space.toolbar.x", "paddingY": "space.toolbar.y" },
+      "surface": "color.surface.toolbar",
+      "textColor": "#ffffff",
+      "borderBottom": "color.border.default",
+      "responsive": { "maxWidth": 640, "direction": "column", "align": "flex-start" }
+    },
+    "editToggleButton": {
+      "layout": { "minWidth": 104, "minHeight": 26, "paddingX": 12, "paddingY": 4 },
+      "surface": "color.surface.control",
+      "textColor": "color.text.primary",
+      "border": "color.border.control",
+      "radius": "radius.control",
+      "cursor": "pointer",
+      "active": { "surface": "color.accent.active", "border": "color.accent.toggle", "textColor": "#ffffff" }
+    },
+    "buildInfo": {
+      "textColor": "#666666",
+      "fontSize": 11,
+      "whiteSpace": "nowrap"
+    },
+    "editorPane": {
+      "layout": { "padding": 12, "overflow": "auto" }
+    },
+    "treeItemRow": {
+      "layout": { "direction": "row", "align": "center", "gap": 6, "paddingX": "space.row.x", "paddingY": "space.row.y", "minHeight": "size.row.minHeight" },
+      "hoverSurface": "color.surface.rowHover",
+      "editModeSurface": "color.surface.editModeRow",
+      "textColor": "color.text.primary",
+      "userSelect": "none"
+    },
+    "dropIndicator": {
+      "height": 2,
+      "surface": "color.accent.primary",
+      "zIndex": 1
+    },
+    "nodeIcon": {
+      "size": "size.icon",
+      "textColor": "color.icon.default",
+      "clickableTextColor": "color.icon.action",
+      "cursor": "pointer"
+    },
+    "dragHandle": {
+      "width": 16,
+      "textColor": "#555555",
+      "cursor": "grab",
+      "textAlign": "center"
+    },
+    "actionButton": {
+      "size": "size.button.small",
+      "surface": "color.surface.control",
+      "border": "color.border.control",
+      "radius": "radius.action",
+      "cursor": "pointer"
+    },
+    "addButton": {
+      "extends": "actionButton",
+      "surface": "color.success.surface",
+      "textColor": "color.success",
+      "border": "color.success.border"
+    },
+    "deleteButton": {
+      "extends": "actionButton",
+      "surface": "color.danger.surface",
+      "textColor": "color.danger",
+      "border": "color.danger.border"
+    }
+  }
+}

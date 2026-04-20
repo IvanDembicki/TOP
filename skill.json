@@ -1,0 +1,64 @@
+{
+  "name": "top-skill",
+  "displayName": "Tree-Oriented Programming Skill",
+  "version": "1.0.0",
+  "description": "Skill for designing, analyzing, generating and validating systems built with Tree-Oriented Programming (TOP) paradigm.",
+  "author": {
+    "name": "Ivans Dembickis",
+    "email": "ivan.dembicki@gmail.com"
+  },
+  "license": "CC-BY-NC-4.0",
+  "entrypoint": "SKILL.md",
+  "ai_preload": "AI_PRELOAD_CONTEXT.md",
+  "invocation": "/top",
+  "onboarding": "onboarding/top-learning-agent.md",
+  "changelog": "CHANGELOG.md",
+  "language": "en",
+  "modes": [
+    "analysis-only",
+    "modeling-refactor",
+    "generation-pipeline",
+    "spec-change"
+  ],
+  "agents": [
+    "agents/intake-agent.md",
+    "agents/ambiguity-resolver-agent.md",
+    "agents/domain-structuring-agent.md",
+    "agents/top-modeling-agent.md",
+    "agents/canon-precheck-agent.md",
+    "agents/semantic-interpreter-agent.md",
+    "agents/target-adaptation-agent.md",
+    "agents/generation-agent.md",
+    "agents/spec-sync-agent.md",
+    "agents/validation-agent.md",
+    "agents/repair-agent.md",
+    "agents/final-audit-agent.md",
+    "agents/orchestrator-agent.md",
+    "agents/spec-audit-agent.md",
+    "agents/migration-agent.md",
+    "agents/spec-change-verification-agent.md"
+  ],
+  "canon": [
+    "canon/core-axioms.md",
+    "canon/decision-rules.md",
+    "canon/validation-rules.md",
+    "canon/forbidden-confusions.md",
+    "canon/controller-content-rules.md",
+    "canon/forbidden-interpretations.md",
+    "canon/architectural-invariants.md"
+  ],
+  "examples": [
+    "examples/edit-toggle-btn/README.md",
+    "examples/recursive-library/tree.json",
+    "examples/tree-editor/README.md"
+  ],
+  "keywords": [
+    "TOP",
+    "tree-oriented-programming",
+    "architecture",
+    "node-tree",
+    "AI-assisted-development",
+    "code-generation",
+    "validation"
+  ]
+}

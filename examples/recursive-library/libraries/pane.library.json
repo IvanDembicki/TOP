@@ -1,0 +1,48 @@
+{
+  "type": "PaneLibrary",
+  "doc": "Library namespace for editor pane nodes.",
+  "children": [
+    {
+      "type": "TreeItem",
+      "doc": "Reusable tree item template. Runtime instances are created for the root item and for nested child items.",
+      "props": {
+        "contentType": "view"
+      },
+      "children": [
+        {
+          "type": "TreeItemRow",
+          "doc": "Visual row for one item."
+        },
+        {
+          "type": "ExpandCollapseHolder",
+          "doc": "Switchable holder for expanded/collapsed state.",
+          "props": {
+            "switchable": true
+          },
+          "children": [
+            {
+              "type": "ExpandedState",
+              "doc": "Expanded state. Contains ChildrenList.",
+              "children": [
+                {
+                  "type": "ChildrenList",
+                  "doc": "Mutable collection of nested tree items.",
+                  "children": [
+                    {
+                      "type": "lib:pane.TreeItem",
+                      "doc": "Runtime child item created from child data. This recursive reference points back to the project Library definition."
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "CollapsedState",
+              "doc": "Collapsed state. No child content."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

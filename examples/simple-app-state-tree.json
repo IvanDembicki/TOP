@@ -1,0 +1,104 @@
+{
+  "_comment": "Пример: *ui-tree* простого приложения. Является state tree. Демонстрирует: library node локально (PostItem) и через раздел Library (NavItem).",
+  "_classification": {
+    "content_type": "*ui-tree*",
+    "representation_level": "spec tree",
+    "statefulness": "state tree"
+  },
+  "Library": {
+    "nav": {
+      "NavItem": {
+        "doc": "Базовый элемент навигации. Используется в NavMenu как state node."
+      }
+    }
+  },
+  "type": "App",
+  "doc": "Root node приложения. Все основные секции существуют одновременно.",
+  "children": [
+    {
+      "type": "Header",
+      "doc": "Заголовок приложения.",
+      "children": [
+        {
+          "type": "Logo",
+          "doc": "Логотип."
+        },
+        {
+          "type": "NavMenu",
+          "doc": "Навигационное меню. State holder. По умолчанию открыт HomeNavItem.",
+          "props": {
+            "switchable": true
+          },
+          "children": [
+            {
+              "type": "lib:nav.NavItem",
+              "doc": "Главная. Открыт по умолчанию.",
+              "props": { "title": "Home", "route": "/" }
+            },
+            {
+              "type": "lib:nav.NavItem",
+              "doc": "Профиль.",
+              "props": { "title": "Profile", "route": "/profile" }
+            },
+            {
+              "type": "lib:nav.NavItem",
+              "doc": "Настройки.",
+              "props": { "title": "Settings", "route": "/settings" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ContentArea",
+      "doc": "Основная область контента. State holder. По умолчанию открыт HomeScreen.",
+      "props": {
+        "switchable": true
+      },
+      "children": [
+        {
+          "type": "HomeScreen",
+          "doc": "Главный экран. State node ContentArea. Открыт по умолчанию.",
+          "children": [
+            {
+              "type": "PostList",
+              "doc": "Список постов. Mutable: содержит lib-узлы PostItem.",
+              "children": [
+                {
+                  "type": "PostItem",
+                  "props": { "lib": true },
+                  "doc": "Элемент списка постов. Локальный lib-узел: используется только здесь."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ProfileScreen",
+          "doc": "Экран профиля. State node ContentArea. Также state holder.",
+          "props": {
+            "switchable": true
+          },
+          "children": [
+            {
+              "type": "ProfileView",
+              "doc": "Просмотр профиля. State node ProfileScreen. Открыт по умолчанию."
+            },
+            {
+              "type": "ProfileEdit",
+              "doc": "Редактирование профиля. State node ProfileScreen."
+            }
+          ]
+        },
+        {
+          "type": "SettingsScreen",
+          "doc": "Экран настроек. State node ContentArea.",
+          "children": [
+            { "type": "ThemeSettings", "doc": "Настройки темы." },
+            { "type": "NotificationSettings", "doc": "Настройки уведомлений." }
+          ]
+        }
+      ]
+    }
+  ]
+}

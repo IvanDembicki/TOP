@@ -1,0 +1,53 @@
+{
+  "_comment": "Пример: *ui-tree* онбординга. Линейный wizard с шагами. Является state tree.",
+  "_classification": {
+    "content_type": "*ui-tree*",
+    "representation_level": "spec tree",
+    "statefulness": "state tree"
+  },
+  "type": "OnboardingFlow",
+  "doc": "Root node онбординга. State holder. По умолчанию открыт WelcomeStep.",
+  "props": {
+    "switchable": true
+  },
+  "children": [
+    {
+      "type": "WelcomeStep",
+      "doc": "Шаг 1: приветствие. State node OnboardingFlow. Открыт по умолчанию.",
+      "children": [
+        { "type": "WelcomeIllustration", "doc": "Иллюстрация приветствия." },
+        { "type": "WelcomeText", "doc": "Заголовок и подзаголовок." },
+        { "type": "StartButton", "doc": "Кнопка перехода к следующему шагу." }
+      ]
+    },
+    {
+      "type": "ProfileSetupStep",
+      "doc": "Шаг 2: настройка профиля. State node OnboardingFlow. Также state holder. По умолчанию открыт ProfileForm.",
+      "props": {
+        "switchable": true
+      },
+      "children": [
+        { "type": "ProfileForm", "doc": "Форма ввода данных. State node ProfileSetupStep. Открыт по умолчанию." },
+        { "type": "ProfileLoading", "doc": "Индикатор сохранения. State node ProfileSetupStep." },
+        { "type": "ProfileError", "doc": "Сообщение об ошибке. State node ProfileSetupStep." }
+      ]
+    },
+    {
+      "type": "PermissionsStep",
+      "doc": "Шаг 3: запрос разрешений. State node OnboardingFlow.",
+      "children": [
+        { "type": "NotificationsPermission", "doc": "Запрос разрешения на уведомления." },
+        { "type": "LocationPermission", "doc": "Запрос разрешения на геолокацию." }
+      ]
+    },
+    {
+      "type": "CompletionStep",
+      "doc": "Шаг 4: завершение онбординга. State node OnboardingFlow.",
+      "children": [
+        { "type": "SuccessIllustration", "doc": "Иллюстрация успешного завершения." },
+        { "type": "CompletionText", "doc": "Текст завершения." },
+        { "type": "EnterAppButton", "doc": "Кнопка входа в приложение." }
+      ]
+    }
+  ]
+}

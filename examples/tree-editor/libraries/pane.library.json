@@ -1,0 +1,190 @@
+{
+  "type": "PaneLibrary",
+  "doc": "Library namespace for editor pane nodes.",
+  "props": {
+    "materializationPolicy": "source-model"
+  },
+  "children": [
+    {
+      "type": "TreeItem",
+      "doc": "Library template node representing one item in the editor tree. Contains TreeItemRow and ExpandCollapseHolder.",
+      "prompt": "prompts/pane/tree_item/TreeItem.prompt.md",
+      "props": {
+        "dir": "pane/tree_item",
+        "contentType": "view",
+        "materializationPolicy": "runtime-template"
+      },
+      "children": [
+        {
+          "type": "TreeItemRow",
+          "doc": "Switchable container node for the row representation of a tree item. Has its own content area. Switches between ViewState (default) and EditState based on editor mode. Delegates setText, updateToggle, setPaddingLeft to both states.",
+          "prompt": "prompts/pane/tree_item/TreeItemRow.prompt.md",
+          "props": {
+            "contentType": "view"
+          },
+          "children": [
+            {
+              "type": "TreeItemRowViewState",
+              "doc": "View-mode row state. Contains NodeIcon and NodeLabel. NodeIcon is clickable for folders.",
+              "prompt": "prompts/pane/tree_item/TreeItemRowViewState.prompt.md",
+              "props": {
+                "contentType": "view"
+              },
+              "children": [
+                {
+                  "type": "NodeIcon",
+                  "doc": "Icon reflecting node state: folder-open (has children, expanded), folder-closed (has children, collapsed), file (leaf). Updated via updateToggle().",
+                  "prompt": "prompts/pane/tree_item/NodeIcon.prompt.md",
+                  "props": {
+                    "contentType": "view"
+                  }
+                },
+                {
+                  "type": "NodeLabel",
+                  "doc": "Text label displaying the node type name. Updated via setText().",
+                  "prompt": "prompts/pane/tree_item/NodeLabel.prompt.md",
+                  "props": {
+                    "contentType": "view"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "TreeItemRowEditState",
+              "doc": "Switchable container node for the edit-mode row. Has its own content area. Switches between NormalState (default) and HoverState on hover enter/leave. Delegates setText, updateToggle, setPaddingLeft to both states.",
+              "prompt": "prompts/pane/tree_item/TreeItemRowEditState.prompt.md",
+              "props": {
+                "contentType": "view"
+              },
+              "children": [
+                {
+                  "type": "TreeItemRowEditStateNormalState",
+                  "doc": "Default edit-mode row. Children: DragHandle (non-root only), NodeIcon, NodeLabel. NodeIcon activates folders. On hover enter: switches parent to HoverState. Drag events are forwarded to ancestor TreeItem.",
+                  "prompt": "prompts/pane/tree_item/TreeItemRowEditStateNormalState.prompt.md",
+                  "props": {
+                    "contentType": "view"
+                  },
+                  "children": [
+                    {
+                      "type": "DragHandle",
+                      "doc": "Drag handle affordance. Present only for non-root items.",
+                      "prompt": "prompts/pane/tree_item/DragHandle.prompt.md",
+                      "props": {
+                        "contentType": "view"
+                      }
+                    },
+                    {
+                      "type": "NodeIcon",
+                      "doc": "Icon reflecting node state: folder-open, folder-closed, or file. Updated via updateToggle().",
+                      "prompt": "prompts/pane/tree_item/NodeIcon.prompt.md",
+                      "props": {
+                        "contentType": "view"
+                      }
+                    },
+                    {
+                      "type": "NodeLabel",
+                      "doc": "Text label displaying the node type name. Updated via setText().",
+                      "prompt": "prompts/pane/tree_item/NodeLabel.prompt.md",
+                      "props": {
+                        "contentType": "view"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "TreeItemRowEditStateHoverState",
+                  "doc": "Hover edit-mode row. Children: DragHandle (non-root only), NodeIcon, NodeLabel, AddBtn, DeleteBtn (non-root only). NodeIcon activates folders. On hover leave: switches parent to NormalState. Drag events are forwarded to ancestor TreeItem.",
+                  "prompt": "prompts/pane/tree_item/TreeItemRowEditStateHoverState.prompt.md",
+                  "props": {
+                    "contentType": "view"
+                  },
+                  "children": [
+                    {
+                      "type": "DragHandle",
+                      "doc": "Drag handle affordance. Present only for non-root items.",
+                      "prompt": "prompts/pane/tree_item/DragHandle.prompt.md",
+                      "props": {
+                        "contentType": "view"
+                      }
+                    },
+                    {
+                      "type": "NodeIcon",
+                      "doc": "Icon reflecting node state: folder-open, folder-closed, or file. Updated via updateToggle().",
+                      "prompt": "prompts/pane/tree_item/NodeIcon.prompt.md",
+                      "props": {
+                        "contentType": "view"
+                      }
+                    },
+                    {
+                      "type": "NodeLabel",
+                      "doc": "Text label displaying the node type name. Updated via setText().",
+                      "prompt": "prompts/pane/tree_item/NodeLabel.prompt.md",
+                      "props": {
+                        "contentType": "view"
+                      }
+                    },
+                    {
+                      "type": "AddBtn",
+                      "doc": "Action control to add a new child node. Activation delegates _onAddClick() to ancestor TreeItem.",
+                      "prompt": "prompts/pane/tree_item/AddBtn.prompt.md",
+                      "props": {
+                        "contentType": "view"
+                      }
+                    },
+                    {
+                      "type": "DeleteBtn",
+                      "doc": "Action control to delete the current node. Present only for non-root items. Activation delegates _onDeleteClick() to ancestor TreeItem.",
+                      "prompt": "prompts/pane/tree_item/DeleteBtn.prompt.md",
+                      "props": {
+                        "contentType": "view"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "ExpandCollapseHolder",
+          "doc": "Switchable state holder owning the expanded/collapsed state of a tree item. First child = ExpandedState, second child = CollapsedState.",
+          "prompt": "prompts/pane/tree_item/ExpandCollapseHolder.prompt.md",
+          "props": {
+            "contentType": "view"
+          },
+          "children": [
+            {
+              "type": "ExpandedState",
+              "doc": "State node for expanded state. getView(): activates ChildrenList if destroyed and returns its view. onOpen()/onClose(): notify TreeItem; onClose() also deactivates ChildrenList after the previous view has been captured by the switcher.",
+              "prompt": "prompts/pane/tree_item/ExpandedState.prompt.md",
+              "children": [
+                {
+                  "type": "ChildrenList",
+                  "doc": "Mutable container holding child TreeItem instances. Its view is exposed through ExpandedState.getView() and mounted by the parent switcher into ExpandCollapseHolder content.",
+                  "prompt": "prompts/pane/tree_item/ChildrenList.prompt.md",
+                  "props": {
+                    "contentType": "view"
+                  },
+                  "children": [
+                    {
+                      "type": "lib:pane.TreeItem",
+                      "doc": "Runtime child item created by ChildrenList from child data.",
+                      "props": {
+                        "materializationPolicy": "runtime-library-reference"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "CollapsedState",
+              "doc": "State node for collapsed state. Has no content of its own. Its activation means children are not materialized through the expanded branch.",
+              "prompt": "prompts/pane/tree_item/CollapsedState.prompt.md"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

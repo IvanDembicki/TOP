@@ -1,0 +1,118 @@
+{
+  "_comment": "Пример: независимая module branch (MediaPlayer) в составе основного *ui-tree*. Демонстрирует: module branch, interface, connector, Library section с переиспользуемыми library nodes.",
+  "_classification": {
+    "content_type": "*ui-tree*",
+    "representation_level": "spec tree",
+    "statefulness": "state tree"
+  },
+  "Library": {
+    "buttons": {
+      "MediaControlButton": {
+        "doc": "Базовая кнопка управления медиа. Переиспользуется в разных плеерах.",
+        "props": { "switchable": true },
+        "children": [
+          {
+            "type": "PauseState",
+            "doc": "Состояние: плеер на паузе. Открыт по умолчанию."
+          },
+          {
+            "type": "PlayState",
+            "doc": "Состояние: плеер воспроизводит."
+          }
+        ]
+      }
+    }
+  },
+  "type": "ArticlePage",
+  "doc": "Страница статьи. Root node. Все секции существуют одновременно.",
+  "children": [
+    {
+      "type": "ArticleHeader",
+      "doc": "Заголовок статьи."
+    },
+    {
+      "type": "ArticleBody",
+      "doc": "Тело статьи с текстом."
+    },
+    {
+      "type": "MediaPlayerConnector",
+      "doc": "Connector для подключения MediaPlayer module к ArticlePage. Реализует MediaPlayerInterface в контексте ArticlePage.",
+      "_module_boundary": {
+        "role": "connector",
+        "connects_to": "MediaPlayer",
+        "interface": "MediaPlayerInterface"
+      }
+    }
+  ],
+  "_module_branches": [
+    {
+      "type": "MediaPlayer",
+      "doc": "Независимая module branch — медиаплеер. Внутренняя структура скрыта за interface.",
+      "_classification": {
+        "content_type": "*ui-tree*",
+        "representation_level": "spec tree",
+        "statefulness": "state tree"
+      },
+      "interface": {
+        "name": "MediaPlayerInterface",
+        "methods": [
+          { "name": "load", "params": ["url: string"], "doc": "Загрузить медиафайл." },
+          { "name": "play", "params": [], "doc": "Начать воспроизведение." },
+          { "name": "pause", "params": [], "doc": "Поставить на паузу." },
+          { "name": "seek", "params": ["position: number"], "doc": "Перейти к позиции." }
+        ],
+        "events": [
+          { "name": "onPlaybackStarted", "doc": "Воспроизведение началось." },
+          { "name": "onPlaybackPaused", "doc": "Воспроизведение остановлено." },
+          { "name": "onPlaybackEnded", "doc": "Воспроизведение завершено." },
+          { "name": "onError", "params": ["error: string"], "doc": "Ошибка воспроизведения." }
+        ]
+      },
+      "children": [
+        {
+          "type": "PlayerControls",
+          "doc": "Панель управления плеером.",
+          "children": [
+            {
+              "type": "lib:buttons.MediaControlButton",
+              "doc": "Кнопка Play/Pause в данном контексте. Структура берётся из Library."
+            },
+            {
+              "type": "VolumeControl",
+              "doc": "Регулятор громкости."
+            }
+          ]
+        },
+        {
+          "type": "PlayerTimeline",
+          "doc": "Полоса прокрутки медиафайла."
+        },
+        {
+          "type": "PlayerStatus",
+          "doc": "Статус загрузки и воспроизведения. State holder. По умолчанию открыт IdleStatus.",
+          "props": {
+            "switchable": true
+          },
+          "children": [
+            {
+              "type": "IdleStatus",
+              "doc": "Плеер ожидает загрузки. Открыт по умолчанию."
+            },
+            {
+              "type": "LoadingStatus",
+              "doc": "Плеер загружает файл."
+            },
+            {
+              "type": "ReadyStatus",
+              "doc": "Плеер готов к воспроизведению."
+            },
+            {
+              "type": "ErrorStatus",
+              "doc": "Ошибка загрузки или воспроизведения."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

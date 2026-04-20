@@ -1,0 +1,56 @@
+{
+  "_comment": "Пример: *data-tree* простого приложения. Является state tree (switchable источник данных).",
+  "_classification": {
+    "content_type": "*data-tree*",
+    "representation_level": "spec tree",
+    "statefulness": "state tree"
+  },
+  "type": "AppData",
+  "doc": "Root data node приложения.",
+  "children": [
+    {
+      "type": "DataSource",
+      "doc": "Источник данных. State holder. По умолчанию открыт MockSource.",
+      "props": {
+        "switchable": true
+      },
+      "children": [
+        {
+          "type": "MockSource",
+          "doc": "Локальные тестовые данные. State node DataSource. Открыт по умолчанию.",
+          "children": [
+            { "type": "MockUserData", "doc": "Тестовые данные пользователя." },
+            { "type": "MockPostsData", "doc": "Тестовые данные постов." }
+          ]
+        },
+        {
+          "type": "ServerSource",
+          "doc": "Данные с сервера. State node DataSource.",
+          "children": [
+            { "type": "UserApiClient", "doc": "Клиент API пользователя." },
+            { "type": "PostsApiClient", "doc": "Клиент API постов." }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "UserData",
+      "doc": "Данные текущего пользователя.",
+      "children": [
+        { "type": "UserProfile", "doc": "Профиль: имя, аватар, описание." },
+        { "type": "UserPreferences", "doc": "Настройки: тема, язык, уведомления." }
+      ]
+    },
+    {
+      "type": "PostsData",
+      "doc": "Список постов. Родитель mutable: содержит lib-узлы PostData.",
+      "children": [
+        {
+          "type": "PostData",
+          "props": { "lib": true },
+          "doc": "Данные одного поста. Lib-узел: добавляется и удаляется динамически."
+        }
+      ]
+    }
+  ]
+}

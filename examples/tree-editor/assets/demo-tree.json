@@ -1,0 +1,112 @@
+{
+  "type": "C:",
+  "children": [
+    {
+      "type": "Windows",
+      "children": [
+        {
+          "type": "System32",
+          "children": [
+            { "type": "drivers" },
+            { "type": "config" },
+            { "type": "notepad.exe" },
+            { "type": "cmd.exe" }
+          ]
+        },
+        {
+          "type": "Fonts",
+          "children": [
+            { "type": "arial.ttf" },
+            { "type": "segoeui.ttf" }
+          ]
+        },
+        { "type": "explorer.exe" }
+      ]
+    },
+    {
+      "type": "Program Files",
+      "children": [
+        {
+          "type": "Google",
+          "children": [
+            {
+              "type": "Chrome",
+              "children": [
+                { "type": "Application" },
+                { "type": "User Data" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Microsoft Office",
+          "children": [
+            { "type": "Word" },
+            { "type": "Excel" },
+            { "type": "PowerPoint" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Users",
+      "children": [
+        {
+          "type": "Ivan",
+          "children": [
+            {
+              "type": "Desktop",
+              "children": [
+                { "type": "todo.txt" },
+                { "type": "tree-editor.lnk" }
+              ]
+            },
+            {
+              "type": "Documents",
+              "children": [
+                { "type": "Book" },
+                { "type": "Invoices" },
+                { "type": "notes.md" }
+              ]
+            },
+            {
+              "type": "Downloads",
+              "children": [
+                { "type": "top-skill.zip" },
+                { "type": "tree-editor.zip" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Public",
+          "children": [
+            { "type": "Shared Pictures" },
+            { "type": "Shared Documents" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Projects",
+      "children": [
+        {
+          "type": "top",
+          "children": [
+            { "type": "skills" },
+            { "type": "examples" },
+            { "type": "README.md" }
+          ]
+        },
+        {
+          "type": "tree-editor",
+          "children": [
+            { "type": "src" },
+            { "type": "top" },
+            { "type": "package.json" }
+          ]
+        }
+      ]
+    }
+  ]
+}

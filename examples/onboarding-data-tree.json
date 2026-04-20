@@ -1,0 +1,37 @@
+{
+  "_comment": "Пример: *data-tree* онбординга. Не является state tree — нет state nodes.",
+  "_classification": {
+    "content_type": "*data-tree*",
+    "representation_level": "spec tree",
+    "statefulness": "не является state tree"
+  },
+  "type": "OnboardingData",
+  "doc": "Root data node онбординга. Собирает данные, введённые пользователем.",
+  "children": [
+    {
+      "type": "UserInputData",
+      "doc": "Данные профиля, введённые на шаге ProfileSetupStep.",
+      "children": [
+        { "type": "NameInput", "doc": "Имя пользователя. Тип: string." },
+        { "type": "AvatarInput", "doc": "Аватар пользователя. Тип: File | null." },
+        { "type": "BioInput", "doc": "Краткое описание. Тип: string." }
+      ]
+    },
+    {
+      "type": "PermissionsData",
+      "doc": "Результаты запроса разрешений на шаге PermissionsStep.",
+      "children": [
+        { "type": "NotificationsGranted", "doc": "Разрешение на уведомления. Тип: boolean | null." },
+        { "type": "LocationGranted", "doc": "Разрешение на геолокацию. Тип: boolean | null." }
+      ]
+    },
+    {
+      "type": "OnboardingConfig",
+      "doc": "Конфигурация онбординга. Задаётся при инициализации.",
+      "children": [
+        { "type": "RequiredSteps", "doc": "Список обязательных шагов." },
+        { "type": "SkippableSteps", "doc": "Список шагов, которые можно пропустить." }
+      ]
+    }
+  ]
+}
