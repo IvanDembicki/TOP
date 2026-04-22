@@ -2,6 +2,8 @@
 
 **Version:** 1.0.0 | **License:** CC BY-NC 4.0 | **Invocation:** `/top`
 
+**TOP turns architecture from a weak social norm into a strong machine-verifiable protocol.**
+
 A skill for AI-driven design, generation, and validation of systems built with the **Tree-Oriented Programming (TOP)** paradigm.
 
 ---
