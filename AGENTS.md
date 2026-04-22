@@ -22,20 +22,6 @@ Skipping step 1 is not allowed. Any analysis or architectural conclusion produce
 
 ---
 
-## Canonical loading order
-
-When interpreting this repository, apply this priority:
-
-1. `AGENTS.md` (this file)
-2. Canonical TOP rule documents: `canon/`, `rules/`, `references/`
-3. Agent definitions: `agents/`
-4. `/top` folder — operational source of truth for the active project
-5. Examples and explanatory materials: `examples/`
-
-If examples conflict with formal TOP rules, follow the formal TOP rules.
-
----
-
 ## TOP-specific repository handling
 
 When a `/top` folder exists in the project:
