@@ -1,14 +1,37 @@
 # TOP — Tree-Oriented Programming
 
-**TOP turns architecture from a weak social norm into a strong machine-verifiable protocol.**
+**Architecture that keeps AI-generated code under control.**
 
-This repository contains materials on the Tree-Oriented Programming paradigm.
+TOP turns architecture from a weak social norm into a strict, machine-verifiable system.
+
+In the era of AI-assisted development, code grows faster than our ability to understand it.  
+Connections multiply, structure degrades, and both developers and AI lose control.
+
+TOP solves this by enforcing a **typed, hierarchical tree structure**:
+- every node has a strictly defined place
+- dependencies are explicit and limited
+- architecture is verifiable by AI
+
+This makes it possible to:
+- scale systems without architectural collapse
+- work with codebases larger than the AI context window
+- regenerate and validate systems from structured specifications
 
 ---
 
-## Contents
+## What's inside
 
-- [`top-skill/`](top-skill/) — AI skill for designing, generating, and validating TOP-based systems. Load it by giving your AI the link to this repository.
+- [`top-skill/`](top-skill/) — AI skill for designing, generating, and validating TOP-based systems
+
+---
+
+## Getting started
+
+Give your AI the link to this repository:
+
+```
+Load the TOP skill from https://github.com/IvanDembicki/TOP
+```
 
 ---
 
