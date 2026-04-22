@@ -20,6 +20,20 @@ The practical goal is **complexity control**. Without explicit structural constr
 
 ---
 
+## Problems TOP solves
+
+**Architectural entropy under AI generation.** AI accelerates code production — and equally accelerates the accumulation of hidden dependencies, inconsistent decisions, and lost intent. Conventions do not scale under AI generation. TOP replaces conventions with machine-verifiable structure.
+
+**Loss of architectural intent.** Code stores *what*; it rarely stores *why*. In AI-assisted development this compounds: if prompts are lost or never formalized, the reasoning behind the system disappears. TOP externalizes intent into `spec + prompt` — the source of truth that survives refactoring and platform changes.
+
+**Expensive onboarding and poor change locality.** A developer fixing one node should not need to read the entire project. TOP enforces explicit boundaries so that scope of change stays local by design — critical for teams with high turnover or parallel development.
+
+**Architecture that doesn't survive platform changes.** TOP separates the structural model from implementation: one spec tree, platform-neutral semantics, per-target adaptation. The architecture transfers; only the generated code changes. In many cases this fully eliminates the need to redesign when adding a new platform.
+
+**Unenforceable architectural rules.** Most teams rely on code review, wikis, and senior authority. TOP replaces this with canon rules, audit agents, and explicit contracts — rules that run automatically, not rules that people try to remember.
+
+---
+
 ## What this skill provides
 
 This is a complete AI-native development system:
