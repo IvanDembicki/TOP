@@ -40,9 +40,8 @@ After completing the mandatory startup sequence:
 1. Analyze the task.
 2. Determine whether TOP applies (see `SKILL.md` for applicable topics).
 3. If TOP applies:
-   - if a `/top` folder exists in the project, load and inspect it before generating or modifying anything;
-   - if `/top` does not exist, proceed using TOP principles and repository rules without a project-specific tree;
-   - use specs and prompts from `/top` as the operational source of truth;
+   - if a `/top` folder exists: load and inspect it before generating or modifying anything; use its specs and prompts as the operational source of truth;
+   - if `/top` does not exist: proceed using TOP principles and repository rules without a project-specific tree;
    - route the task through the agent pipeline defined in `agents/index.md`;
    - do not bypass the agent pipeline when TOP applies;
    - generate or modify strictly within TOP rules.
