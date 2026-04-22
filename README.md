@@ -1,6 +1,6 @@
 # TOP Skill — Tree-Oriented Programming
 
-**Version:** 1.0.0 | **License:** CC BY-NC 4.0 | **Invocation:** `/top`
+**Version:** 1.0.0 | **License:** MIT | **Invocation:** `/top`
 
 **TOP turns architecture from a weak social norm into a strong machine-verifiable protocol.**
 
@@ -85,4 +85,4 @@ Task modes: `analysis-only` · `modeling-refactor` · `generation-pipeline` · `
 
 ## License
 
-CC BY-NC 4.0 — free for non-commercial use with attribution.
+MIT — free to use, modify, and distribute, including in commercial projects.
