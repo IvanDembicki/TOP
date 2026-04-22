@@ -28,9 +28,9 @@ The practical goal is **complexity control**. Without explicit structural constr
 
 **Expensive onboarding and poor change locality.** A developer fixing one node should not need to read the entire project. TOP enforces explicit boundaries so that scope of change stays local by design — critical for teams with high turnover or parallel development.
 
-**Architecture that doesn't survive platform changes.** TOP separates the structural model from implementation: one spec tree, platform-neutral semantics, per-target adaptation. The architecture transfers; only the generated code changes. In many cases this fully eliminates the need to redesign when adding a new platform.
+**Platform dependency.** TOP separates the structural model from implementation: one spec tree, platform-neutral semantics, per-target adaptation. The architecture transfers; only the generated code changes. In many cases this fully eliminates the need to redesign when adding a new platform.
 
-**Unenforceable architectural rules.** Most teams rely on code review, wikis, and senior authority. TOP replaces this with canon rules, audit agents, and explicit contracts — rules that run automatically, not rules that people try to remember.
+**Architectural rules cannot be verified automatically.** Most teams rely on code review, wikis, and senior authority. TOP replaces this with canon rules, audit agents, and explicit contracts — rules that run automatically, not rules that people try to remember.
 
 ---
 
