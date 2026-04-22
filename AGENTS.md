@@ -33,11 +33,26 @@ When a `/top` folder exists in the project:
 
 ---
 
+## Execution protocol
+
+After completing the mandatory startup sequence:
+
+1. Analyze the task.
+2. Determine whether TOP applies (see `SKILL.md` for applicable topics).
+3. If TOP applies:
+   - if a `/top` folder exists in the project, load and inspect it before generating or modifying anything;
+   - use specs and prompts from `/top` as the operational source of truth;
+   - route the task through the agent pipeline defined in `agents/index.md`;
+   - generate or modify strictly within TOP rules.
+4. If TOP does not apply: proceed normally without enforcing TOP.
+
+---
+
 ## Scope
 
-Apply this skill only when the task explicitly involves treating a system as a tree of nodes in TOP terms.
+Apply this skill when the task involves architecture, structure, code generation, or system design in a context where TOP is in use or being adopted.
 
-This skill is not a general-purpose architectural advisor. See `SKILL.md` for the full list of applicable topics.
+When in doubt whether TOP applies, check `SKILL.md` — it lists the applicable topics explicitly.
 
 ---
 
