@@ -93,29 +93,9 @@ https://youtu.be/NS0rwed0gjE
 
 ---
 
-## License gate (mandatory on first run)
+## License
 
-Before any first use of the skill, the user must explicitly accept the license.
-
-Show the user the following message:
-
-> Before using this skill, please review the license terms.
->
-> This skill is licensed under CC BY-NC 4.0.
-> Commercial use is not allowed without explicit permission from the author.
->
-> Copyright (c) 2006–2026 Ivans Dembickis
-> ivan.dembicki@gmail.com
->
-> Do you agree to these terms?
-> 1. Yes
-> 2. No
-
-Invariants:
-- before the license is accepted, the skill must not proceed to onboarding, canon, references, or pipeline;
-- the skill accepts only `1` or `2`;
-- if the user selects `1`, work may continue;
-- if the user selects `2`, the skill must respond: `Understood. The skill cannot be used without accepting the license terms.` and halt further work.
+MIT — free to use, modify, and distribute, including in commercial projects.
 
 ---
 

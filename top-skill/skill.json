@@ -7,7 +7,7 @@
     "name": "Ivans Dembickis",
     "email": "ivan.dembicki@gmail.com"
   },
-  "license": "CC-BY-NC-4.0",
+  "license": "MIT",
   "entrypoint": "SKILL.md",
   "ai_preload": "AI_PRELOAD_CONTEXT.md",
   "invocation": "/top",
