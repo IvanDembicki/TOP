@@ -1,3 +1,8 @@
+---
+name: top-skill
+description: Skill for designing, generating, and validating systems built with Tree-Oriented Programming (TOP). Use when working with TOP architecture, node trees, spec generation, multi-platform code generation, or architectural validation.
+---
+
 # TOP Skill
 
 **Version:** 1.0.0
