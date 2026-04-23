@@ -49,6 +49,10 @@ If a discrepancy arises between this agent file and the output contract:
 - copy source-platform primitives instead of following target adaptation decisions
 - introduce target behavior that has no semantic source in Layer B
 
+<avoid_over_engineering>
+Generate only what the spec and prompt explicitly define. Do not add features, abstractions, utilities, or error handling beyond what is specified. Do not design for hypothetical future requirements. Do not add comments or documentation to code not explicitly required by the prompt. The right amount of complexity is the minimum needed to satisfy the node contract — nothing more.
+</avoid_over_engineering>
+
 ## Validation focus
 
 - generated structure matches approved model
