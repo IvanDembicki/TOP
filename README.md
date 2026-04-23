@@ -30,7 +30,7 @@ This makes it possible to:
 Give your AI the link to this repository:
 
 ```
-Load the TOP skill from https://github.com/IvanDembicki/TOP
+https://github.com/IvanDembicki/TOP
 ```
 
 ---
