@@ -56,6 +56,18 @@ Required stages:
 
 Semantic Interpreter Agent, Target Adaptation Agent, and Generation Agent are required only if a materialized implementation is needed.
 
+Execution steps:
+1. Determine representation level, content type, statefulness, and materialization mode.
+2. Restore or design the tree model.
+3. Determine the controller/content split for nodes with content.
+4. Record `props.contentType` if the content type must be explicitly defined.
+5. Identify nodes, branches, states, and module boundaries.
+6. Perform composite decomposition.
+7. Determine the owner state.
+8. Determine logical ownership, render attachment rules, and source of truth.
+9. Form node specs and the spec tree.
+10. Prepare refactoring recommendations if needed.
+
 ---
 
 ## 3. generation-pipeline
@@ -77,6 +89,20 @@ Required stages:
 - Spec Sync Agent
 - Validation Agent
 - Final Audit Agent
+
+Execution steps:
+1. Confirm that the tree model is already defined.
+2. Verify that nodes have defined: `type`, `doc`, `props.contentType` (if content exists), `prompt`, `props`, `children`.
+3. Verify that the JSON spec is stored as `.json` inside `top/`.
+4. Verify that node prompt files will be stored inside `top/` in project-local `prompts/` folders alongside the corresponding tree or branch description.
+5. Prepare a separate implementation prompt for each code-generated node.
+6. Specify `props.dir` for generated class files for each node as needed.
+7. Perform code generation.
+8. Run node validation rules without fail: detect violations, classify them, choose the canonical correction direction, and perform re-validation after each fix.
+9. Run the mandatory drift check: compare JSON topology, prompt behavior/materialization rules, project-local `top/` artifacts, and generated/materialized implementation artifacts.
+10. Run the verification loop.
+11. On mismatch — fix the prompt/spec and protocol artifacts first, not just the code.
+12. After reaching the attempt limit — perform escalation.
 
 Repair Agent is used in a loop on failed validation. If repair changes synchronized artifacts, the loop must pass through Spec Sync Agent before Validation.
 
