@@ -25,6 +25,10 @@ it does not require the standard pipeline to have run first.
 - canon
 - validation rules
 
+## Output contract
+
+No dedicated output contract in `contracts/agent-output-contracts/`. Output structure is defined inline below.
+
 ## Outputs
 
 1. **Hidden node map** — identification of nodes that exist implicitly in the current code:

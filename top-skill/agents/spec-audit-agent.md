@@ -48,6 +48,10 @@ For each prompt, verifies:
 - For `refresh()`: only data-driven display updates are permitted (contract — `references/tree-node-contracts.md §5`); the presence of architectural state reads is a violation
 - Whether all delegation conditions are covered
 
+## Output contract
+
+Output schema is defined inline in this file. No dedicated contract in `contracts/agent-output-contracts/`.
+
 ## Output
 
 ```

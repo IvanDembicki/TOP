@@ -20,6 +20,10 @@ Use this agent whenever a task enters the skill or whenever the current stage mu
 - contracts
 - known missing inputs or blocked conditions
 
+## Output contract
+
+Routing meta-agent. No dedicated output contract — produces pipeline routing metadata only, not a structured data artifact.
+
 ## Outputs
 
 - `current_stage`
