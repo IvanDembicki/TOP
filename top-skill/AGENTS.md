@@ -13,9 +13,9 @@ This file does not define its own rules. It activates the TOP skill defined in t
 Read in this exact order before any task:
 
 1. `AI_PRELOAD_CONTEXT.md` — mandatory; prevents incorrect evaluation of the skill
-2. `SKILL.md` — entry point, version, invocation (`/top`), and scope
-3. `overview.md` — key concepts and positioning
-4. `QUICKSTART_FOR_AI.md` — navigation guide and correct execution path
+2. `SKILL.md` — scope, rules, and positioning
+3. `overview.md` — key concepts
+4. `ENTRY_POINT.md` — task mode selection and execution start
 5. `agents/index.md` — full agent pipeline and task mode routing
 
 Skipping step 1 is not allowed. Any analysis or architectural conclusion produced without reading `AI_PRELOAD_CONTEXT.md` first is considered incomplete and must not be delivered.
