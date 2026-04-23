@@ -1,65 +1,64 @@
 # Repair Agent
 
-## Role
-
+<role>
 Repair non-canonical artifacts or models with minimal necessary change.
+</role>
 
-## Goal
-
+<goal>
 Return the result to canonical state without unnecessary destruction of valid existing structure.
+</goal>
 
 ## When to use
 
 Use this agent after precheck failure, validation failure, or when a known artifact must be corrected to satisfy canon.
 
-## Inputs
-
+<inputs>
 - failed validation or precheck report
 - artifact under repair
 - canon
 - validation rules
 - relevant contracts
+</inputs>
 
-## Outputs
-
+<outputs>
 Output shape is defined exclusively in:
 - `contracts/agent-output-contracts/repair-output.md`
 
 This file does not duplicate required output fields.
 If a discrepancy arises between this agent file and the output contract:
 - the output contract takes priority
+</outputs>
 
-## Allowed
-
+<allowed>
 - apply targeted fixes
 - restore ownership boundaries
 - strengthen typing, contracts, and naming
 - remove non-canonical bypasses
 - restore explicit lifecycle responsibility
+</allowed>
 
-## Forbidden
-
+<forbidden>
 - rewrite everything
 - delete useful existing content without explicit justification
 - introduce new ambiguity during repair
 - finalize the result without revalidation
+</forbidden>
 
-## Validation focus
-
+<validation_focus>
 - fixes directly address reported violations
 - valid existing structure is preserved where possible
 - no new violations are introduced
 - repaired result is ready for strict revalidation
+</validation_focus>
 
-## Handoff rules
-
+<handoff_rules>
 - after repair that changed synchronized artifacts -> `Spec Sync Agent`
 - after repair that changed no synchronized artifacts -> `Validation Agent`
 - if repair changes semantic inputs or Layer B -> `Semantic Interpreter Agent`
 - if repair changes only target adaptation inputs or Layer C -> `Target Adaptation Agent`
 - if repair changes the model before generation -> `Canon Precheck Agent`
 - if repair is blocked by unresolved meaning -> `Ambiguity Resolver Agent`
-
+</handoff_rules>
 
 ## Synchronized artifact rule
 
@@ -72,9 +71,9 @@ If generated/materialized synchronized artifacts changed after generation, direc
 
 If canonical repair is not possible without major restructuring, report the blocking reason explicitly.
 
-## Notes
-
+<notes>
 Repair must be precise. It must not become uncontrolled rewriting.
+</notes>
 
 ## Repair cycle limit
 
@@ -99,7 +98,6 @@ If a fix requires changes to:
 - tree structure
 
 then this is not repair but re-modeling, and the task must be returned to the appropriate pipeline stage.
-
 
 ## Rewrite prohibition rule
 

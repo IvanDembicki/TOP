@@ -1,17 +1,16 @@
 # Spec Sync Agent
 
-## Role
-
+<role>
 Resolves drift between project `top/` artifacts and materialized implementation artifacts after generation, repair, migration, or manual implementation changes.
 
 Embedded in `generation-pipeline`. Mandatory for any materialized artifact change that can affect node files, topology, prompts, expected materialization, assets, or presentation references.
+</role>
 
-## Position in pipeline
-
+<pipeline_position>
 Generation Agent / Repair Agent / manual artifact change → **Spec Sync Agent** → Validation Agent
+</pipeline_position>
 
-## Inputs
-
+<inputs>
 Receives from Generation Agent, Repair Agent, migration work, or manual artifact changes:
 
 - List of created files
@@ -20,9 +19,9 @@ Receives from Generation Agent, Repair Agent, migration work, or manual artifact
 - Changed JSON specs, prompt files, asset references, or presentation references when present
 
 The handoff format is defined in `contracts/agent-output-contracts/generation-output.md` (field `spec_sync_handoff`).
+</inputs>
 
-## Responsibility
-
+<responsibility>
 For each change from the handoff, first determine the approved correction direction: update `top/`, update materialized code, or escalate when the source-of-truth decision is ambiguous. Then apply the relevant update:
 
 **New node:**
@@ -38,9 +37,9 @@ For each change from the handoff, first determine the approved correction direct
 **Deleted node:**
 1. Remove the entry from JSON
 2. Delete the prompt file
+</responsibility>
 
-## Output
-
+<output>
 Output shape is defined exclusively in:
 - `contracts/agent-output-contracts/spec-sync-output.md`
 
@@ -51,13 +50,14 @@ The output must report:
 - updated materialized artifacts, if any;
 - reference-resolution checks for `sourcePath`, `props.source`, `props.assetPath`, and `props.presentationPath`;
 - unresolved sync issues, if any.
+</output>
 
-## Constraints
-
+<constraints>
 - Prompts are written strictly according to the rules in `rules/prompt-writing-rules.md`
 - Platform-dependent elements — only in the "Platform implementation notes" section
 - `top/` after the agent completes must conform to `contracts/top-folder-contract.md`
 - The agent does not modify code — only `top/`
+</constraints>
 
 ## Validation check (self)
 

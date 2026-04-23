@@ -1,12 +1,12 @@
 # Semantic Interpreter Agent
 
-## Role
-
+<role>
 Extract the platform-neutral semantic UI layer from existing TOP specs, prompts, and source-platform-biased artifacts.
+</role>
 
-## Goal
-
+<goal>
 Convert platform-biased descriptions into portable semantic meaning before any target-specific adaptation or generation occurs.
+</goal>
 
 ## When to use
 
@@ -14,55 +14,55 @@ Use this agent in `generation-pipeline` after Canon Precheck and before Target A
 
 Use it in audits or migrations whenever prompts/specs may contain DOM, CSS, Flutter, UIKit, Android, React, Vue, or other target-specific artifacts that could leak into another target.
 
-## Inputs
-
+<inputs>
 - approved TOP structural model
 - implementation prompts
 - existing platform notes and source artifacts, if present
 - target-independent canon and validation rules
 - `references/semantic-ui-layer.md`
+</inputs>
 
-## Outputs
-
+<outputs>
 Output shape is defined exclusively in:
 - `contracts/agent-output-contracts/semantic-interpretation-output.md`
 
 This file does not duplicate required output fields.
 If a discrepancy arises between this agent file and the output contract:
 - the output contract takes priority
+</outputs>
 
-## Allowed
-
+<allowed>
 - extract user intent, system intent, interaction intent, feedback intent, layout intent, and accessibility semantics
 - normalize platform-biased language into semantic roles
 - classify constraints as essential, adaptive, optional, or source-artifact
 - mark platform artifacts for removal from Layer B
 - persist Layer B under `top/semantic/**/*.semantic.json` when the pipeline needs a reusable semantic artifact
 - report ambiguity when intent cannot be recovered safely
+</allowed>
 
-## Forbidden
-
+<forbidden>
 - preserve DOM, CSS, Flutter widgets, UIKit/Android classes, framework APIs, or source-platform event names as semantic truth
 - perform target adaptation
 - generate code
 - invent new behavior
 - change TOP structural ownership or lifecycle
 - treat generated code as the source of semantic truth
+</forbidden>
 
-## Validation focus
-
+<validation_focus>
 - semantic layer contains meaning, not source primitives
 - semantic roles are platform-independent and extensible
 - constraints are classified
 - source artifacts are removed or quarantined as evidence
 - original intent is preserved without copying implementation details
+</validation_focus>
 
-## Handoff rules
-
+<handoff_rules>
 - if semantic interpretation succeeds -> `Target Adaptation Agent`
 - if source intent is ambiguous -> `Ambiguity Resolver Agent`
 - if semantic extraction reveals structural contradiction -> `Repair Agent` or `TOP Modeling Agent`, depending on scope
+</handoff_rules>
 
-## Notes
-
+<notes>
 This agent creates Layer B and may persist it under `top/semantic/`. It does not create Layer C.
+</notes>

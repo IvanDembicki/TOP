@@ -1,59 +1,59 @@
 # Spec Change Verification Agent
 
-## Role
-
+<role>
 Verify that existing code conforms to a manually changed spec.
+</role>
 
-## Goal
-
+<goal>
 Detect discrepancies between the updated spec and the implementation, and produce an explicit resolution decision for each one.
+</goal>
 
 ## When to use
 
 Use this agent as the first step in `spec-change` mode, immediately after Intake Agent.
 
-## Inputs
-
+<inputs>
 - updated JSON spec (changed entries)
 - existing implementation code or prompts
 - canon
 - validation rules
+</inputs>
 
-## Outputs
-
+<outputs>
 Output shape is defined exclusively in:
 - `contracts/agent-output-contracts/spec-change-verification-output.md`
 
 This file does not duplicate required output fields.
 If a discrepancy arises between this agent file and the output contract:
 - the output contract takes priority
+</outputs>
 
 ## Protocol
 
 Execute the full verification protocol defined in:
 - `references/spec-change-verification.md`
 
-## Allowed
-
+<allowed>
 - identify affected nodes from spec diff
 - compare spec and code for each affected node
 - record discrepancies explicitly
 - decide: update_code or revert_spec for each discrepancy
 - produce pass / fail / escalate status
+</allowed>
 
-## Forbidden
-
+<forbidden>
 - silently leaving discrepancies unresolved
 - proceeding without an explicit decision per discrepancy
 - treating spec change as automatically correct without verifying code
 - treating existing code as automatically correct without reading the spec
+</forbidden>
 
-## Handoff rules
-
+<handoff_rules>
 - if overall_status is `pass` and no code changes → `Final Audit Agent`
 - if overall_status is `pass` and code changed → `Validation Agent`
 - if overall_status is `fail` → `Repair Agent` / revert spec / `Ambiguity Resolver Agent`
 - if overall_status is `escalate` → `Ambiguity Resolver Agent`
+</handoff_rules>
 
 ## Failure handling
 

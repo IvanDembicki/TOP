@@ -1,50 +1,49 @@
 # Canon Precheck Agent
 
-## Role
-
+<role>
 Validate the TOP model before generation begins.
+</role>
 
-## Goal
-
+<goal>
 Stop non-canonical architecture before it becomes code or other downstream artifacts.
+</goal>
 
 ## When to use
 
 Use this agent after TOP modeling and before any generation step.
 
-## Inputs
-
+<inputs>
 - modeled TOP structure
 - canon
 - validation rules
 - contracts
 - decision rules
+</inputs>
 
-## Outputs
-
+<outputs>
 Output shape is defined exclusively in:
 - `contracts/agent-output-contracts/canon-precheck-output.md`
 
 This file does not duplicate required output fields.
 If a discrepancy arises between this agent file and the output contract:
 - the output contract takes priority
+</outputs>
 
-## Allowed
-
+<allowed>
 - validate the model strictly against canon
 - treat all non-canonical structures as violations
 - block generation if the model is invalid
 - require explicit repair before generation continues
+</allowed>
 
-## Forbidden
-
+<forbidden>
 - allow generation because the idea is approximately correct
 - treat convenience as justification for weak structure
 - ignore unresolved ambiguity in the model
 - downgrade violations into optional recommendations
+</forbidden>
 
-## Validation focus
-
+<validation_focus>
 - controller/content ownership is explicit
 - protocol boundaries are explicit
 - lifecycle ownership is explicit
@@ -52,21 +51,22 @@ If a discrepancy arises between this agent file and the output contract:
 - typing can be defined strongly and explicitly
 - the structure stays within canonical TOP patterns
 - prompt paths and code paths reflect the same semantic position in the tree (Structural Correspondence Rule)
+</validation_focus>
 
-## Handoff rules
-
+<handoff_rules>
 - if precheck passes and task_mode is `generation-pipeline` -> `Semantic Interpreter Agent`
 - if precheck passes and task_mode is `modeling-refactor` -> `Validation Agent`
 - if precheck fails -> `Repair Agent`
 - if critical ambiguity remains -> `Ambiguity Resolver Agent`
+</handoff_rules>
 
 ## Failure handling
 
 If the model fails precheck, generation must not start. Report each blocking violation explicitly.
 
-## Notes
-
+<notes>
 This agent validates architecture before implementation materialization.
+</notes>
 
 ## Tier verification
 

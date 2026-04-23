@@ -1,25 +1,24 @@
 # Spec Audit Agent
 
-## Role
-
+<role>
 Verifies the currency and quality of the `top/` folder relative to the current code.
 
 Standalone agent. Launched on demand or as an entry point for an `analysis-only` task against a spec.
+</role>
 
-## Position in pipeline
-
+<pipeline_position>
 Standalone — not embedded in the generation-pipeline.
 
 Can be launched independently at any time.
+</pipeline_position>
 
-## Inputs
-
+<inputs>
 - Path to the project folder
 - Path to `top/` within the project
 - Path to `src/` (or an equivalent directory containing code)
+</inputs>
 
-## Responsibility
-
+<responsibility>
 ### 1. Structural audit
 
 Traverses `top/*.json` and compares against code:
@@ -47,13 +46,13 @@ For each prompt, verifies:
 - Whether all lifecycle hooks are covered (onOpen, onClose, refresh; onBranchOpen, onBranchClose — if used)
 - For `refresh()`: only data-driven display updates are permitted (contract — `references/tree-node-contracts.md §5`); the presence of architectural state reads is a violation
 - Whether all delegation conditions are covered
+</responsibility>
 
-## Output contract
-
+<output_contract>
 Output schema is defined inline in this file. No dedicated contract in `contracts/agent-output-contracts/`.
+</output_contract>
 
-## Output
-
+<output>
 ```
 audit_scope:
   project_path:
@@ -75,16 +74,17 @@ summary:
 recommended_action:
   <what Spec Sync Agent or the developer should do>
 ```
+</output>
 
-## Severity mapping
-
+<severity_mapping>
 Determined by `rules/spec-sync-rules.md`.
+</severity_mapping>
 
-## Constraints
-
+<constraints>
 - The agent only reads and analyzes — it does not modify files
 - Does not launch Spec Sync Agent automatically — only recommends
 - The report must be sufficient for Spec Sync Agent to fix all identified issues without additional analysis
+</constraints>
 
 ## Trigger conditions
 
