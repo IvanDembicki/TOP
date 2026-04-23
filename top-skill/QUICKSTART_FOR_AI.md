@@ -156,6 +156,10 @@ You must NOT:
 - bypass protocols
 - merge separated concepts
 
+<use_parallel_tool_calls>
+When reading multiple files and there are no dependencies between the reads, make all file reads in parallel. Do not read files sequentially when parallel reading is possible. For example: reading spec.json, a prompt file, and a reference file can be done in a single parallel batch. Maximize parallel tool calls wherever possible to reduce latency.
+</use_parallel_tool_calls>
+
 ---
 
 ## Goal

@@ -31,6 +31,10 @@ When a `/top` folder exists in the project:
 - do not invent files, flows, or architecture outside that structure unless explicitly required by the task;
 - changes to `/top` are architectural events — treat them accordingly.
 
+<investigate_before_answering>
+Never speculate about code or specs you have not read. If the task references a specific file, node, or branch — read it before answering. Investigate relevant files in `/top` BEFORE making any architectural claim or generating any output. Never make claims about the project structure before investigating. Give grounded answers only.
+</investigate_before_answering>
+
 ---
 
 ## Execution protocol
