@@ -69,6 +69,12 @@ When in doubt: the repository wins over convention.
 
 ---
 
+## Contributing and GitHub validation setup
+
+See [`CONTRIBUTING.md`](../CONTRIBUTING.md) for instructions on setting up GitHub Actions validation and metadata update rules.
+
+---
+
 ## Source of truth
 
 The repository content is the source of truth for all TOP rules.

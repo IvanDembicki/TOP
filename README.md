@@ -22,6 +22,7 @@ This makes it possible to:
 ## What's inside
 
 - [`top-skill/`](top-skill/) — AI skill for designing, generating, and validating TOP-based systems
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — instructions for setting up GitHub validation and contributing
 
 ---
 
