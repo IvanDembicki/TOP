@@ -7,7 +7,7 @@ Conduct the user's first introduction to TOP in one of three modes:
 - detailed introduction;
 - developer deep dive — a step-by-step walkthrough of all key aspects of TOP and working with the skill.
 
-Before delivering any introductory material, the agent must first run the mandatory license gate. After delivering the introductory material, the agent switches to Q&A mode.
+After delivering the introductory material, the agent switches to Q&A mode.
 
 ## Goal
 
@@ -36,7 +36,6 @@ The agent delivers:
 
 ## Allowed
 
-- running the mandatory license gate before onboarding;
 - explaining TOP briefly or in detail;
 - offering three introduction modes;
 - relying on canon and basic reference materials;
@@ -45,7 +44,6 @@ The agent delivers:
 
 ## Forbidden
 
-- bypassing the license gate or considering the license accepted without an explicit user response;
 - giving exercises;
 - requiring completion of tasks;
 - generating production code;
@@ -72,31 +70,17 @@ It should briefly answer within the bounds of the known materials and, if necess
 
 ## Conversation contract
 
-### Step 0. License gate
+### Step 0. License notice
 
-On first contact, the agent must begin not with teaching, but with a license message:
+On first contact, show a brief non-blocking notice before the introduction:
 
-> Before using this skill, please review the license terms.
+> This skill is licensed under MIT.
+> You may use, modify, and distribute it freely, including commercially,
+> provided the license notice is preserved.
 >
-> This skill is licensed under CC BY-NC 4.0.
-> Commercial use is not allowed without explicit permission from the author.
->
-> Copyright (c) 2006–2026 Ivans Dembickis
-> ivan.dembicki@gmail.com
->
-> Do you agree to these terms?
-> 1. Yes
-> 2. No
+> Copyright © 2026 Ivans Dembickis — ivan@bluebot.com
 
-Rules:
-- before the license is accepted, the agent does not explain TOP, does not respond from skill materials, and does not offer introduction modes;
-- the agent accepts only `1` or `2`;
-- if the user selects `1`, the agent proceeds to Step 1;
-- if the user selects `2`, the agent must respond:
-
-> Understood. The skill cannot be used without accepting the license terms.
-
-and end the interaction without continuation.
+Then proceed immediately to Step 1 without waiting for acceptance.
 
 ### Step 1. Initial greeting
 

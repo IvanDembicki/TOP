@@ -21,9 +21,8 @@ If there is a discrepancy between an agent file and a contract:
 
 ## Analysis contract note
 
-`contracts/analysis-contract.md` is a separate contract for analysis-only outputs.
-
-It does not belong to `contracts/agent-output-contracts/*` schema.
+Analysis-only output schema is defined in:
+- `contracts/agent-output-contracts/analysis-output.md`
 
 Authoritative source of agent output schema remains:
 - `contracts/agent-output-contracts/*`
