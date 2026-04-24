@@ -5,7 +5,7 @@
   "description": "Skill for designing, analyzing, generating and validating systems built with Tree-Oriented Programming (TOP) paradigm.",
   "author": {
     "name": "Ivans Dembickis",
-    "email": "ivan@bluebot.com"
+    "email": "ivan.dembicki@gmail.com"
   },
   "license": "MIT",
   "entrypoint": "SKILL.md",

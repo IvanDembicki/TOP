@@ -78,7 +78,7 @@ On first contact, show a brief non-blocking notice before the introduction:
 > You may use, modify, and distribute it freely, including commercially,
 > provided the license notice is preserved.
 >
-> Copyright © 2026 Ivans Dembickis — ivan@bluebot.com
+> Copyright © 2026 Ivans Dembickis — ivan.dembicki@gmail.com
 
 Then proceed immediately to Step 1 without waiting for acceptance.
 
