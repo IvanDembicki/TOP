@@ -1,41 +1,72 @@
-# TOP — Tree-Oriented Programming
+# TOP
 
-**Architecture that keeps AI-generated code under control.**
+TOP is a Tree-Oriented Programming workspace for structured AI systems.
 
-TOP turns architecture from a weak social norm into a strict, machine-verifiable system.
+This repository is the root navigation layer for the current TOP product line. It contains three active products that solve different parts of the same problem: keeping prompt-based and skill-based AI systems structured, reviewable, and evolvable.
 
-In the era of AI-assisted development, code grows faster than our ability to understand it.  
-Connections multiply, structure degrades, and both developers and AI lose control.
+## Product line
 
-TOP solves this by enforcing a **typed, hierarchical tree structure**:
-- every node has a strictly defined place
-- dependencies are explicit and limited
-- architecture is verifiable by AI
+### 1. `top-skill`
 
-This makes it possible to:
-- scale systems without architectural collapse
-- work with codebases larger than the AI context window
-- regenerate and validate systems from structured specifications
+The foundational TOP skill package.
 
----
+Use this if you need:
+- the core TOP skill model
+- the base execution protocol
+- onboarding into TOP concepts and structure
+- the canonical reference layer for TOP-oriented skill design
 
-## What's inside
+Start here if you want to understand the TOP model itself.
 
-- [`top-skill/`](top-skill/) — AI skill for designing, generating, and validating TOP-based systems
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) — instructions for setting up GitHub validation and contributing
+### 2. `top-prompt-cleaner`
 
----
+A product for cleaning, tightening, and restructuring prompts.
 
-## Getting started
+Use this if you need:
+- prompt cleanup
+- prompt normalization
+- clearer instruction structure
+- safer prompt editing before a prompt becomes a larger workflow
 
-Give your AI the link to this repository:
+Start here if the problem is still mainly “this prompt is messy”.
 
-```
-https://github.com/IvanDembicki/TOP
-```
+### 3. `top-skill-factory`
 
----
+A governed skill-lifecycle product for converting, validating, comparing, updating, and rolling back AI skills.
+
+Use this if you need:
+- skill conversion from messy prompt workflows
+- explicit contracts and validation gates
+- compare / rollback / update flows
+- structured artifacts instead of loose prompt text
+
+Start here if the problem is no longer “a prompt”, but “a skill that now needs architecture and lifecycle control”.
+
+## How to choose
+
+- Want to learn TOP itself -> [`top-skill/`](top-skill/)
+- Want to improve prompts -> [`top-prompt-cleaner/`](top-prompt-cleaner/)
+- Want to turn skills into governed artifacts -> [`top-skill-factory/`](top-skill-factory/)
+
+## Repository structure
+
+This root layer is intentionally thin.
+
+It exists to:
+- explain the product line
+- route humans and AI agents to the correct product
+- define cross-product contribution rules
+
+Product-specific execution rules, validation, release metadata, and onboarding live inside each product directory.
+
+## For agents
+
+Read [`AGENTS.md`](AGENTS.md) for routing rules across the three products.
+
+## For contributors
+
+Read [`CONTRIBUTING.md`](CONTRIBUTING.md) before making cross-product or product-specific changes.
 
 ## License
 
-MIT — free to use, modify, and distribute, including in commercial projects.
+See the license files inside the relevant product directories.

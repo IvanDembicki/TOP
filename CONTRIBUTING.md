@@ -1,176 +1,90 @@
 # Contributing to TOP
 
-This file contains instructions for humans and AI agents working with this repository.
+This repository is a workspace for multiple TOP-based products.
 
----
+It is not a single-product repository. Before making changes, identify which product you are actually changing.
 
-## For AI agents
+## Product model
 
-If the user asks to set up GitHub validation for this repository, follow the steps below.
+The current active products are:
+- [`top-skill/`](top-skill/)
+- [`top-prompt-cleaner/`](top-prompt-cleaner/)
+- [`top-skill-factory/`](top-skill-factory/)
 
-### Setting up GitHub Actions validation
+Each product owns its own:
+- README and onboarding
+- release metadata
+- validation surface
+- examples
+- release criteria
+- product-specific contracts and rules
 
-Create the following two files in the repository:
+## Before making changes
 
-**1. `.github/workflows/validate-skill.yml`**
+1. Determine the target product.
+2. Read that product's local `README.md` and `SKILL.md`.
+3. Read that product's release metadata and release criteria if they exist.
+4. Use that product's local validator, test scripts, and release checks.
 
-```yaml
-name: validate-skill
+Do not treat the root docs as a substitute for product-local documentation.
 
-on:
-  pull_request:
-  push:
-    branches: [main]
+## Product-specific changes
 
-jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+If a change affects only one product:
+- make the change inside that product directory
+- update that product's docs and metadata as needed
+- run that product's validator and test or release-check scripts
+- keep the change local unless a shared convention is intentionally being updated
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
+## Cross-product changes
 
-      - name: Validate JSON files
-        run: node scripts/validate-json.mjs
+If a change affects more than one product:
+- define the shared convention explicitly
+- inspect each affected product before editing
+- update all affected products in the same pass when practical
+- keep wording, status models, and release semantics aligned where the convention is shared
+- do not force artificial uniformity where products intentionally differ
 
-      - name: Validate manifest links
-        run: node scripts/validate-manifest-links.mjs
+Examples of valid cross-product changes:
+- root navigation layer updates
+- shared startup update check conventions
+- shared provenance conventions
+- shared release metadata patterns
 
-      - name: Validate prompt references
-        run: node scripts/validate-prompt-references.mjs
+## Release and validation discipline
 
-      - name: Validate license consistency
-        run: node scripts/validate-license.mjs
-```
+For every product, prefer the local release surface over assumptions.
 
-**2. `scripts/validate-json.mjs`** — checks all `*.json` files parse without errors:
+That usually means checking some combination of:
+- `release-metadata.json`
+- `RELEASE_CRITERIA.md`
+- `VALIDATION_REPORT.md`
+- local validator scripts
+- local regression or sensitive-case tests
 
-```js
-import { readFileSync } from 'fs';
-import { globSync } from 'fs';
-import path from 'path';
+A product is ready when its own release gates pass, not because another product in this repository is already stable.
 
-const files = globSync('top-skill/**/*.json');
-let errors = 0;
+## Root docs
 
-for (const file of files) {
-  try {
-    JSON.parse(readFileSync(file, 'utf8'));
-  } catch (e) {
-    console.error(`Invalid JSON: ${file}\n  ${e.message}`);
-    errors++;
-  }
-}
+The root files:
+- [`README.md`](README.md)
+- [`AGENTS.md`](AGENTS.md)
+- [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
-if (errors > 0) process.exit(1);
-console.log(`✓ ${files.length} JSON files valid`);
-```
+should stay focused on:
+- repository navigation
+- product routing
+- cross-product contribution rules
 
-**3. `scripts/validate-manifest-links.mjs`** — checks all paths in `skill.json` exist:
+Do not overload root docs with product-specific execution detail that belongs inside a product folder.
 
-```js
-import { readFileSync, existsSync } from 'fs';
+## Commit discipline
 
-const manifest = JSON.parse(readFileSync('top-skill/skill.json', 'utf8'));
-const base = 'top-skill';
-let errors = 0;
-
-const checkPath = (p) => {
-  const full = `${base}/${p}`;
-  if (!existsSync(full)) {
-    console.error(`Missing: ${full}`);
-    errors++;
-  }
-};
-
-checkPath(manifest.entrypoint);
-checkPath(manifest.ai_preload);
-checkPath(manifest.onboarding);
-checkPath(manifest.changelog);
-for (const f of [...manifest.agents, ...manifest.canon, ...manifest.examples]) {
-  checkPath(f);
-}
-
-if (errors > 0) process.exit(1);
-console.log(`✓ All manifest links exist`);
-```
-
-**4. `scripts/validate-prompt-references.mjs`** — checks that every `prompt` field in JSON specs points to an existing file:
-
-```js
-import { readFileSync, existsSync } from 'fs';
-import { globSync } from 'fs';
-import path from 'path';
-
-const files = globSync('top-skill/examples/**/*.json');
-let errors = 0;
-
-for (const file of files) {
-  const dir = path.dirname(file);
-  let tree;
-  try { tree = JSON.parse(readFileSync(file, 'utf8')); } catch { continue; }
-
-  const check = (node) => {
-    if (node.prompt) {
-      const full = path.join(dir, node.prompt);
-      if (!existsSync(full)) {
-        console.error(`Missing prompt: ${full} (referenced in ${file})`);
-        errors++;
-      }
-    }
-    for (const child of node.children || []) check(child);
-  };
-  check(tree);
-}
-
-if (errors > 0) process.exit(1);
-console.log(`✓ All prompt references valid`);
-```
-
-**5. `scripts/validate-license.mjs`** — checks license and email are consistent:
-
-```js
-import { readFileSync } from 'fs';
-
-const manifest = JSON.parse(readFileSync('top-skill/skill.json', 'utf8'));
-const license = readFileSync('top-skill/LICENSE.md', 'utf8');
-let errors = 0;
-
-if (manifest.license !== 'MIT') {
-  console.error(`skill.json license is "${manifest.license}", expected "MIT"`);
-  errors++;
-}
-if (!license.includes(manifest.author.email)) {
-  console.error(`LICENSE.md does not contain email "${manifest.author.email}"`);
-  errors++;
-}
-
-if (errors > 0) process.exit(1);
-console.log(`✓ License consistent`);
-```
-
----
-
-## Metadata rules when making changes
-
-When modifying any file inside `top-skill/`:
-
-1. Update `top-skill/SKILL.md` → `**Last updated:**` field to today's date
-2. Add an entry to `top-skill/CHANGELOG.md` under a new version
-3. Bump `version` in `top-skill/skill.json` (patch version for fixes, minor for new features)
-
----
-
-## Commit message format
-
-```
-type(scope): short description
+Prefer commit messages that make the scope obvious.
 
 Examples:
-fix(onboarding): remove stale license gate
-feat(agents): add domain-structuring execution steps
-docs(readme): update getting started section
-ci(validate): add json and reference validation workflow
-```
+- `docs(root): rewrite product-line navigation`
+- `docs(factory): align release report wording`
+- `feat(cleaner): add update check support`
+- `fix(skill): sync release metadata`
+- `chore(shared): align provenance convention across products`
