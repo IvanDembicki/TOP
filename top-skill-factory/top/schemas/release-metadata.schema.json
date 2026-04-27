@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "release_metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "product_name",
+    "current_version",
+    "release_channel",
+    "startup_update_check_supported",
+    "update_check_strategy",
+    "manifest_source"
+  ],
+  "properties": {
+    "product_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "current_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "release_channel": {
+      "type": "string",
+      "minLength": 1
+    },
+    "update_check_strategy": {
+      "type": "string",
+      "enum": [
+        "manifest-compare"
+      ]
+    },
+    "manifest_source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "notes": {
+      "type": "string",
+      "minLength": 1
+    },
+    "startup_update_check_supported": {
+      "type": "boolean"
+    }
+  }
+}

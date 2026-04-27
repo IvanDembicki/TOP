@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "top_skill_factory_spec",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "skill_name",
+    "skill_version",
+    "status",
+    "purpose",
+    "core_thesis",
+    "root",
+    "invariants",
+    "tree",
+    "output_contract",
+    "validation_model",
+    "mode_maturity"
+  ],
+  "properties": {
+    "schema_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "skill_name": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "skill_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open-alpha",
+        "alpha",
+        "beta",
+        "stable",
+        "draft",
+        "review_required"
+      ]
+    },
+    "purpose": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "core_thesis": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "root": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "invariants": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "minItems": 1
+    },
+    "tree": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "output_contract": {
+      "required": [
+        "required_artifacts"
+      ],
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "required_artifacts": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array",
+          "minItems": 1
+        }
+      }
+    },
+    "validation_model": {
+      "type": "string",
+      "enum": [
+        "llm-governed-contract-validation"
+      ]
+    },
+    "mode_maturity": {
+      "required": [
+        "stable",
+        "experimental",
+        "planned"
+      ],
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "experimental": {
+          "type": "array",
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "stable": {
+          "type": "array",
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "planned": {
+          "type": "array",
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      }
+    },
+    "stable_release_scope": {
+      "type": "array",
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      }
+    },
+    "experimental_cli_scope": {
+      "type": "array",
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      }
+    },
+    "roadmap_modes_excluded_from_stable_contract": {
+      "type": "array",
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      }
+    }
+  }
+}

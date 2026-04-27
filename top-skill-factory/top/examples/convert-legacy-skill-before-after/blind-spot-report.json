@@ -1,0 +1,42 @@
+{
+  "covered_questions": [
+    "high-level purpose",
+    "preferred markdown presentation",
+    "need for more detailed output in some strategic situations",
+    "desire for practical next steps"
+  ],
+  "missing_questions": [
+    "explicit input contract",
+    "explicit output contract for concise versus detailed mode",
+    "ready-state criteria",
+    "defined validation artifacts",
+    "safe assumptions boundary",
+    "escalation rules for critical missing scope information"
+  ],
+  "ambiguous_questions": [
+    "What qualifies a request as strategic enough to switch from concise output to detailed output?",
+    "What counts as a critical missing input versus a non-critical gap that can be exposed as an assumption?",
+    "When the user is rushed, does speed lower the clarification threshold or only the amount of explanatory text?"
+  ],
+  "blocking_blind_spots": [
+    "The rule \"do your best with reasonable assumptions\" can override mandatory clarification and lead to silent invention of scope, timeline, or ownership.",
+    "The source asks for both concise output and strategic depth without an explicit routing rule, which can change public behavior unpredictably.",
+    "The source says broad requests should still be helped instead of blocked, but does not define the minimum information required for a safe partial response."
+  ],
+  "user_clarification_required": true,
+  "safe_inference_allowed": [
+    "Markdown output is a safe preserved presentation behavior.",
+    "Bullet-oriented formatting is a safe preserved presentation behavior.",
+    "Practical next-step orientation is a safe preserved behavior when required inputs are present."
+  ],
+  "coverage_dimensions_checked": [
+    "purpose",
+    "input_contract",
+    "output_contract",
+    "process_flow",
+    "failure_behavior",
+    "validation_rules",
+    "assumptions",
+    "escalation_conditions"
+  ]
+}

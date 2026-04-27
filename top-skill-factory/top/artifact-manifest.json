@@ -1,0 +1,100 @@
+{
+  "manifest_version": "0.2",
+  "contracts": [
+    {
+      "contract_id": "full_factory_contract",
+      "applies_to": "TopSkillFactory repository and any full skill bundle claiming full readiness under the complete factory contract.",
+      "required_artifacts": [
+        "SKILL.md",
+        "README.md",
+        "release-metadata.json",
+        "top/spec.json",
+        "top/prompts/root.md",
+        "top/prompts/mode-router.md",
+        "top/prompts/composite-flow-controller.md",
+        "top/prompts/input-controller.md",
+        "top/prompts/skill-discovery.md",
+        "top/prompts/skill-design-controller.md",
+        "top/prompts/user-interaction-controller.md",
+        "top/prompts/output-controller.md",
+        "top/prompts/validation-controller.md",
+        "top/prompts/quality-control-controller.md",
+        "top/prompts/final-decision-controller.md",
+        "top/prompts/nodes/*",
+        "top/validation/*",
+        "top/schemas/*",
+        "top/modes/*",
+        "top/shared-rules/*",
+        "top/examples/*",
+        "top/artifact-manifest.json"
+      ],
+      "readiness_rule": "Use when a result claims full TopSkillFactory readiness."
+    },
+    {
+      "contract_id": "stable_workflow_contract",
+      "applies_to": "Stable bounded CLI workflow outputs that are ready within the stable release scope without claiming the full factory artifact surface.",
+      "required_artifacts": [
+        "top/spec.json",
+        "top/README.md",
+        "top/artifact-manifest.json",
+        "top/prompts/root.md",
+        "top/prompts/mode-router.md",
+        "top/prompts/input-controller.md",
+        "top/prompts/user-interaction-controller.md",
+        "top/prompts/validation-controller.md",
+        "top/prompts/final-decision-controller.md",
+        "top/modes/*",
+        "top/validation/output-rules.md",
+        "top/shared-rules/decision-boundaries.md",
+        "top/schemas/clarification-request.schema.json",
+        "top/provenance.json"
+      ],
+      "optional_artifacts": [
+        "top/schemas/*",
+        "top/shared-rules/*"
+      ],
+      "readiness_rule": "Use for stable bounded workflow outputs that have enough artifact surface to be reviewed and reused without claiming full repository completeness."
+    },
+    {
+      "contract_id": "workflow_draft_contract",
+      "applies_to": "Reviewable CLI workflow outputs that intentionally stop at draft because broader proof or manual review is still required.",
+      "required_artifacts": [
+        "top/spec.json",
+        "top/README.md",
+        "top/artifact-manifest.json",
+        "top/prompts/root.md",
+        "top/prompts/mode-router.md",
+        "top/prompts/input-controller.md",
+        "top/prompts/user-interaction-controller.md",
+        "top/prompts/validation-controller.md",
+        "top/prompts/final-decision-controller.md",
+        "top/modes/*",
+        "top/validation/output-rules.md",
+        "top/provenance.json"
+      ],
+      "optional_artifacts": [
+        "top/shared-rules/*",
+        "top/schemas/*"
+      ],
+      "readiness_rule": "Use for reviewable outputs that are intentionally not final and still require manual or broader behavior review."
+    },
+    {
+      "contract_id": "minimal_demo_contract",
+      "applies_to": "Compact generated example bundles used only to demonstrate a bounded mode outcome without claiming stable workflow or full factory readiness.",
+      "required_artifacts": [
+        "top/spec.json",
+        "top/prompts/root.md",
+        "top/prompts/mode-router.md",
+        "top/modes/*",
+        "top/validation/*",
+        "top/provenance.json"
+      ],
+      "optional_artifacts": [
+        "top/schemas/*",
+        "top/shared-rules/*",
+        "top/artifact-manifest.json"
+      ],
+      "readiness_rule": "Use only in top/examples or when demo output is explicitly requested."
+    }
+  ]
+}

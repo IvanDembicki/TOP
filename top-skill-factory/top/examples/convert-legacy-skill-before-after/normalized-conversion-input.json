@@ -1,0 +1,30 @@
+{
+  "source_artifacts": [
+    "legacy-skill-before.md"
+  ],
+  "legacy_skill_name": "LaunchPlanAdvisor",
+  "inferred_primary_purpose": "Turn a user goal into a bounded execution plan without silently inventing missing critical inputs.",
+  "preserved_user_visible_behaviors": [
+    "Use concise, scannable markdown output.",
+    "Prefer bullet-oriented plans.",
+    "Offer richer plan structure when the user explicitly asks for more depth or when the route is clearly strategic.",
+    "Prioritize practical next steps over abstract discussion."
+  ],
+  "required_structural_repairs": [
+    "Separate routing, clarification, generation, and validation responsibilities.",
+    "Replace implicit strategic-vs-concise branching with explicit mode routing.",
+    "Replace \"do your best with reasonable assumptions\" with bounded clarification and explicit assumptions policy.",
+    "Define a ready-state contract instead of relying on \"feels realistic\"."
+  ],
+  "conversion_risks": [
+    "The source mixes public behavior with internal validation and escalation policy.",
+    "The source conflicts on when to ask clarification versus infer missing information.",
+    "The source implies a detailed strategic path without declaring an explicit trigger or mode contract.",
+    "Executive confidence notes are requested, but there is no rule for when assumptions are safe to expose versus when the workflow must block."
+  ],
+  "required_clarification_policy": [
+    "Missing inputs that change scope, timeline, or success criteria are blocking.",
+    "A rushed tone must not override mandatory clarification for critical missing inputs.",
+    "User-visible assumptions are allowed only for non-critical gaps and must be labeled explicitly."
+  ]
+}

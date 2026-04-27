@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "complexity_report.schema.json",
+  "title": "complexity_report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["complexity_level", "signals", "recommendation"],
+  "properties": {
+    "complexity_level": {
+      "type": "string",
+      "enum": ["low", "medium", "high"]
+    },
+    "signals": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Specific patterns that triggered the complexity assessment."
+    },
+    "recommendation": {
+      "type": "string",
+      "enum": ["proceed", "proceed_with_warning", "escalate"]
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "complexity_level": { "const": "high" } } },
+      "then": {
+        "properties": {
+          "signals": { "minItems": 1 },
+          "recommendation": { "const": "escalate" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "complexity_level": { "const": "medium" } } },
+      "then": {
+        "properties": {
+          "recommendation": { "const": "proceed_with_warning" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "complexity_level": { "const": "low" } } },
+      "then": {
+        "properties": {
+          "recommendation": { "const": "proceed" }
+        }
+      }
+    }
+  ],
+  "x-hard_rules": [
+    "high complexity_level requires at least one named signal",
+    "high complexity_level requires recommendation: escalate",
+    "low complexity_level with zero signals is valid"
+  ]
+}

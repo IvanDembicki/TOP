@@ -1,0 +1,1 @@
+# StrictMode\n\nBlock when goal or output format is missing.\n

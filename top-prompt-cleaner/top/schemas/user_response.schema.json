@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "user_response.schema.json",
+  "title": "user_response",
+  "description": "User's response to a clarification request. Provided when the user selects an option or supplies free-text.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["selected_option"],
+  "properties": {
+    "selected_option": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The id of the chosen option (e.g. 'A', 'B', 'U')."
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Required when selected_option is 'U'. Contains the user's free-text answer."
+    }
+  },
+  "x-hard_rules": [
+    "text is required when selected_option is 'U'",
+    "selected_option must match an id from the clarification_request options list"
+  ]
+}

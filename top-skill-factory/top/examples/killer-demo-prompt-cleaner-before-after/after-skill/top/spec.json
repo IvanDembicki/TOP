@@ -1,0 +1,30 @@
+{
+  "skill_name": "PromptCleanerSkill",
+  "skill_version": "1.0.0",
+  "purpose": "Clean and shorten prompts without silently dropping declared critical meaning or safety boundaries.",
+  "root": "PromptCleanerSkill",
+  "invariants": [
+    "Critical meaning must not be removed silently.",
+    "Policy or safety text must not be simplified without an explicit safe-handling rule.",
+    "Urgency does not override mandatory clarification."
+  ],
+  "tree": {
+    "PromptCleanerSkill": {
+      "type": "root_controller",
+      "children": {
+        "ModeRouter": {
+          "type": "controller",
+          "prompt": "prompts/mode-router.md"
+        },
+        "CleanPromptMode": {
+          "type": "mode",
+          "prompt": "modes/clean-prompt-mode.md"
+        },
+        "ValidateOutput": {
+          "type": "validator",
+          "prompt": "prompts/nodes/output-check.md"
+        }
+      }
+    }
+  }
+}

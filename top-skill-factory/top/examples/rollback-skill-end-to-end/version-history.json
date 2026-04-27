@@ -1,0 +1,14 @@
+{
+  "versions": [
+    {
+      "version": "v0.1-validated",
+      "status": "validated",
+      "summary": "Concise default behavior preserved; detailed mode is explicit only."
+    },
+    {
+      "version": "v0.2-risky",
+      "status": "current",
+      "summary": "Detailed behavior may activate when more detail seems useful."
+    }
+  ]
+}

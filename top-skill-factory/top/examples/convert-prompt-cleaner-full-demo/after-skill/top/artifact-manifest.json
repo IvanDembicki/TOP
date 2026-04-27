@@ -1,0 +1,28 @@
+{
+  "manifest_version": "0.2",
+  "contracts": [
+    {
+      "contract_id": "workflow_draft_contract",
+      "applies_to": "Rich demo draft bundle.",
+      "required_artifacts": [
+        "top/spec.json",
+        "top/README.md",
+        "top/artifact-manifest.json",
+        "top/prompts/root.md",
+        "top/prompts/mode-router.md",
+        "top/prompts/input-controller.md",
+        "top/prompts/user-interaction-controller.md",
+        "top/prompts/validation-controller.md",
+        "top/prompts/final-decision-controller.md",
+        "top/modes/*",
+        "top/validation/output-rules.md",
+        "top/provenance.json"
+      ],
+      "optional_artifacts": [
+        "top/shared-rules/*",
+        "top/schemas/*"
+      ],
+      "readiness_rule": "Rich demo remains reviewable draft only."
+    }
+  ]
+}

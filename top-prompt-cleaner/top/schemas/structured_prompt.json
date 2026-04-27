@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "structured_prompt.json",
+  "title": "structured_prompt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["goal", "goal_source", "constraints", "output_format", "output_format_source"],
+  "properties": {
+    "goal": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The primary task or objective the prompt is asking for."
+    },
+    "goal_source": {
+      "type": "string",
+      "enum": ["stated", "inferred", "missing"],
+      "description": "Whether the goal was explicitly stated, safely inferred from context, or is absent."
+    },
+    "constraints": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Explicit limitations, requirements, or rules stated by the user. Empty array when none present."
+    },
+    "output_format": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The expected structure or format of the output."
+    },
+    "output_format_source": {
+      "type": "string",
+      "enum": ["stated", "inferred", "missing"],
+      "description": "Whether the output_format was explicitly stated, safely inferred from context, or is absent."
+    },
+    "style": {
+      "type": "string",
+      "enum": ["default", "claude", "gpt", "custom"],
+      "description": "Target LLM style for TargetLLMStyleMode."
+    },
+    "noise_removed": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Phrases or sections removed as noise, listed for transparency."
+    },
+    "contradictions_resolved": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Contradictions found and how each was resolved."
+    }
+  },
+  "x-hard_rules": [
+    "goal must be extracted from the original prompt, not invented.",
+    "goal_source must be 'stated' when goal text was present verbatim or near-verbatim in the original.",
+    "goal_source must be 'inferred' when goal was reconstructed from implicit context.",
+    "goal_source must be 'missing' when the goal cannot be determined — in this case StrictMode must block.",
+    "output_format_source must follow the same stated/inferred/missing logic as goal_source.",
+    "constraints must not be removed without appearing in noise_removed or contradictions_resolved.",
+    "When goal_source or output_format_source is 'missing', StrictMode must block before proceeding."
+  ]
+}

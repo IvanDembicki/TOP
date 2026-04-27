@@ -1,0 +1,1 @@
+# QuickCleanMode\n\nFast clean path for low-complexity prompts.\n

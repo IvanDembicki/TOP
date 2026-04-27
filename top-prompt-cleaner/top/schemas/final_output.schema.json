@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "final_output.schema.json",
+  "title": "final_output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["ready", "blocked", "escalated"],
+      "description": "The terminal state of the pipeline run. 'blocked' covers both conflict-blocked and clarification-blocked cases."
+    },
+    "cleaned_prompt": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Present when status is 'ready' and mode is QuickClean or StrictClean."
+    },
+    "target_style_output": {
+      "$ref": "target_style_output.schema.json",
+      "description": "Present when status is 'ready' and mode is TargetLLMStyle. Replaces cleaned_prompt."
+    },
+    "structured_prompt": {
+      "$ref": "structured_prompt.json",
+      "description": "Present when status is 'ready'."
+    },
+    "diff": {
+      "$ref": "diff.schema.json",
+      "description": "Present when status is 'ready' and the prompt was modified."
+    },
+    "diagnosis": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Present when status is 'blocked'. Explains what is missing or conflicting."
+    },
+    "clarification_request": {
+      "$ref": "clarification_request.schema.json",
+      "description": "Present when status is 'blocked' due to a missing required field."
+    },
+    "escalation_notice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reason", "signals", "recommended_next_step"],
+      "properties": {
+        "reason":                { "type": "string", "minLength": 1 },
+        "signals":               { "type": "array", "items": { "type": "string" } },
+        "recommended_next_step": { "type": "string", "minLength": 1 }
+      },
+      "description": "Present only when status is 'escalated'."
+    },
+    "upgrade_recommendation": {
+      "type": "string",
+      "enum": ["consider_top_skill_factory"],
+      "description": "Optional. Present when complexity is medium and the prompt may grow into a workflow."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "ready" } } },
+      "then": {
+        "required": ["structured_prompt", "diff"],
+        "properties": {
+          "escalation_notice": false,
+          "clarification_request": false
+        },
+        "oneOf": [
+          {
+            "required": ["cleaned_prompt"],
+            "properties": { "target_style_output": false }
+          },
+          {
+            "required": ["target_style_output"],
+            "properties": { "cleaned_prompt": false }
+          }
+        ]
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "blocked" } } },
+      "then": {
+        "required": ["diagnosis"],
+        "properties": {
+          "cleaned_prompt": false,
+          "target_style_output": false,
+          "escalation_notice": false
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "escalated" } } },
+      "then": {
+        "required": ["escalation_notice"],
+        "properties": {
+          "cleaned_prompt": false,
+          "target_style_output": false,
+          "structured_prompt": false,
+          "diff": false,
+          "clarification_request": false
+        }
+      }
+    }
+  ],
+  "x-hard_rules": [
+    "cleaned_prompt and target_style_output are mutually exclusive — exactly one must be present when status is 'ready'",
+    "cleaned_prompt must not be present when status is 'blocked' or 'escalated'",
+    "escalation_notice must not be present when status is 'ready' or 'blocked'",
+    "diff must be present when status is 'ready' and output differs from raw input",
+    "clarification = blocked state with clarification_request present; there is no separate 'clarification' status"
+  ]
+}

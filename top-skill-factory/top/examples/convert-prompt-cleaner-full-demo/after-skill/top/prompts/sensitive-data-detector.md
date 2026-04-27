@@ -1,0 +1,1 @@
+# SensitiveDataDetector\n\nStop on secrets; warn on non-blocking sensitive material.\n

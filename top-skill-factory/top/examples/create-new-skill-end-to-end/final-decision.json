@@ -1,0 +1,20 @@
+{
+  "status": "ready",
+  "reason": "All required artifacts for the minimal demo contract are present and the bounded dry run passed.",
+  "evidence": [
+    "normalized-input.json",
+    "generated-skill/top/artifact-manifest.json",
+    "generated-skill/top/spec.json",
+    "generated-skill/top/prompts/root.md",
+    "generated-skill/top/prompts/mode-router.md",
+    "generated-skill/top/modes/create-plan-mode.md",
+    "generated-skill/top/validation/output-rules.md",
+    "dry-run-report.md"
+  ],
+  "artifact_contract": "minimal_demo_contract",
+  "user_acceptance": {
+    "required": false,
+    "status": "not_required_for_demo"
+  },
+  "readiness_note": "This example is ready under the minimal demo contract, not the full TopSkillFactory repository contract."
+}

@@ -1,0 +1,22 @@
+{
+  "status": "ready",
+  "reason": "The before/after conversion preserved useful cleaning behavior while replacing unsafe shortening and policy-simplification patterns with explicit rules.",
+  "evidence": [
+    "before.md",
+    "normalized-conversion-input.json",
+    "blind-spot-report.json",
+    "conversion-report.json",
+    "after-skill/top/artifact-manifest.json",
+    "after-skill/top/spec.json",
+    "after-skill/top/prompts/root.md",
+    "after-skill/top/prompts/mode-router.md",
+    "after-skill/top/modes/clean-prompt-mode.md",
+    "after-skill/top/validation/output-rules.md"
+  ],
+  "artifact_contract": "minimal_demo_contract",
+  "user_acceptance": {
+    "required": false,
+    "status": "not_required_for_demo"
+  },
+  "readiness_note": "This before/after demo is intentionally compact and claims readiness only under the minimal demo contract."
+}

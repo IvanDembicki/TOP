@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "clarification_request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "question",
+    "reason",
+    "options",
+    "default_if_skipped",
+    "blocking_if_unanswered"
+  ],
+  "properties": {
+    "question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "options": {
+      "type": "array",
+      "maxItems": 7,
+      "contains": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "const": "U"
+          }
+        }
+      },
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 2
+    },
+    "default_if_skipped": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "blocking_if_unanswered": {
+      "type": "boolean"
+    }
+  },
+  "x-option_u": {
+    "id": "U",
+    "label": "User-defined answer"
+  },
+  "x-hard_rules": [
+    "Every clarification request must include option U.",
+    "U means User-defined answer.",
+    "A user-defined answer must return to InputController and SkillDiscovery as an additional input, constraint, or decision.",
+    "Clarification must not become uncontrolled free dialogue.",
+    "Forced user choice must distinguish blocking vs non-blocking clarification."
+  ]
+}

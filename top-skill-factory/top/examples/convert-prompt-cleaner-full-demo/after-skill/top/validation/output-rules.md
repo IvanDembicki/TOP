@@ -1,0 +1,1 @@
+# Output Rules\n\n- draft conversion must not be labeled ready\n- unresolved blind spots must remain visible\n

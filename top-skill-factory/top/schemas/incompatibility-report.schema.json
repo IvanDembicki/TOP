@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "incompatibility_report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "structural_conflicts",
+    "contract_conflicts",
+    "policy_conflicts",
+    "repairable",
+    "failure_reason"
+  ],
+  "properties": {
+    "structural_conflicts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "contract_conflicts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "policy_conflicts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "repairable": {
+      "type": "boolean"
+    },
+    "failure_reason": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

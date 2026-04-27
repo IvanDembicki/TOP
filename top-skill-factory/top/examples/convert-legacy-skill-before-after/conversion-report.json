@@ -1,0 +1,58 @@
+{
+  "source_artifacts": [
+    "legacy-skill-before.md"
+  ],
+  "detected_issues": [
+    {
+      "category": "mixed_responsibility",
+      "description": "Routing, clarification, output shaping, and validation were mixed inside one prompt.",
+      "status": "resolved"
+    },
+    {
+      "category": "contradiction",
+      "description": "The source simultaneously prefers asking one question and proceeding with assumptions under time pressure.",
+      "status": "resolved"
+    },
+    {
+      "category": "blind_spot",
+      "description": "There was no explicit distinction between safe visible assumptions and blocking missing scope information.",
+      "status": "resolved"
+    },
+    {
+      "category": "missing_contract",
+      "description": "The source had no explicit input contract or ready-state contract.",
+      "status": "resolved"
+    },
+    {
+      "category": "weak_validation",
+      "description": "The phrase \"validate the result before you send it\" did not define what evidence or checks were required.",
+      "status": "resolved"
+    },
+    {
+      "category": "hidden_assumption",
+      "description": "Strategic depth was implied but not tied to an explicit user-facing route.",
+      "status": "resolved"
+    },
+    {
+      "category": "blind_spot",
+      "description": "Executive confidence notes were requested without a policy for when exposed assumptions are acceptable.",
+      "status": "resolved"
+    }
+  ],
+  "preserved_behavior": [
+    "Concise markdown output remains a valid public behavior.",
+    "Bullet-oriented plan structure is preserved.",
+    "Practical next steps remain the default content preference.",
+    "A richer plan path remains available when the request is explicitly strategic or detailed."
+  ],
+  "structural_changes": [
+    "Introduced explicit ModeRouter, InputController, UserInteractionController, and ValidationController boundaries.",
+    "Split output generation into CreateCompactPlanMode and CreateDetailedPlanMode.",
+    "Moved clarification into a declared contract and schema-backed request format.",
+    "Replaced silent assumptions with an explicit safe-assumption policy and blocking clarification boundary.",
+    "Turned legacy \"realistic and internally consistent\" language into validation and output rules."
+  ],
+  "unresolved_gaps": [],
+  "final_status": "ready",
+  "final_rationale": "The converted skill preserved useful user-visible behavior, replaced unsafe invention paths with explicit clarification rules, and now exposes structural routing and validation artifacts that the legacy prompt lacked."
+}

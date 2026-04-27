@@ -1,0 +1,25 @@
+{
+  "skill_name": "PlanBuilderSkillB",
+  "skill_version": "1.0.0",
+  "purpose": "Generate a plan, with richer detail when useful.",
+  "root": "PlanBuilderSkillB",
+  "tree": {
+    "PlanBuilderSkillB": {
+      "type": "root_controller",
+      "children": {
+        "ModeRouter": {
+          "type": "controller",
+          "prompt": "prompts/mode-router.md"
+        },
+        "CreatePlanMode": {
+          "type": "mode",
+          "prompt": "modes/create-plan-mode.md"
+        },
+        "CreateDetailedChecklistMode": {
+          "type": "mode",
+          "prompt": "modes/create-detailed-checklist-mode.md"
+        }
+      }
+    }
+  }
+}

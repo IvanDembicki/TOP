@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mode_routing_result.schema.json",
+  "title": "mode_routing_result",
+  "description": "Output of ModeRouter. Records which mode was selected and why.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["selected_mode", "routing_reason"],
+  "properties": {
+    "selected_mode": {
+      "type": "string",
+      "enum": ["quick_clean", "strict_clean", "target_llm_style"],
+      "description": "The mode activated for this run."
+    },
+    "target_style_source": {
+      "type": "string",
+      "enum": ["stated", "detected", "default"],
+      "description": "Present when selected_mode is 'target_llm_style'. How the target style was determined."
+    },
+    "routing_reason": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Explanation of why this mode was selected."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "selected_mode": { "const": "target_llm_style" } }
+      },
+      "then": {
+        "required": ["target_style_source"]
+      }
+    }
+  ],
+  "x-hard_rules": [
+    "exactly one mode must be selected per run — ModeRouter cannot activate two modes",
+    "target_style_source is required when selected_mode is 'target_llm_style'",
+    "routing_reason must reference the specific signal or user input that triggered the selection"
+  ]
+}

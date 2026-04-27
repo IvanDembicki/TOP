@@ -1,0 +1,27 @@
+{
+  "covered_questions": [
+    "purpose",
+    "basic visible behavior"
+  ],
+  "missing_questions": [
+    "explicit input contract",
+    "ready-state criteria"
+  ],
+  "ambiguous_questions": [
+    "The source allows best-effort assumptions that can hide missing required inputs."
+  ],
+  "blocking_blind_spots": [
+    "The source allows best-effort assumptions that can hide missing required inputs."
+  ],
+  "user_clarification_required": true,
+  "safe_inference_allowed": [
+    "Formatting preferences may remain as bounded draft assumptions."
+  ],
+  "coverage_dimensions_checked": [
+    "purpose",
+    "input_contract",
+    "output_contract",
+    "validation_rules",
+    "assumptions"
+  ]
+}

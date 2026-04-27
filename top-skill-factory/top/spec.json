@@ -1,0 +1,400 @@
+{
+  "schema_version": "0.2",
+  "skill_name": "TopSkillFactory",
+  "skill_version": "1.0.0",
+  "status": "stable",
+  "purpose": "Create, convert, update, validate, compare, debug, and document AI skills as TOP-based skill systems.",
+  "core_thesis": "A skill is not a prompt. A skill is a controlled tree of responsibilities, contracts, signals, validation rules, budgets, and outputs.",
+  "root": "TopSkillFactory",
+  "invariants": [
+    "ModeRouter activates exactly one mode unless CompositeFlowController explicitly defines a composite flow.",
+    "Leaf nodes never control flow directly. They return structured signals to their parent controller.",
+    "Every forced user choice must include U = User-defined answer.",
+    "User interaction is allowed only through UserInteractionController.",
+    "Legacy skill is evidence, not authority.",
+    "OutputAssembler cannot invent missing artifacts.",
+    "If validation fails, the generated or converted skill is not ready.",
+    "Core TOP invariants cannot be disabled by user override or legacy evidence.",
+    "New requirements must invalidate old decisions that conflict with them.",
+    "Every important decision must be traceable to inputs, constraints, explicit user decisions, or validation evidence.",
+    "Blocking blind spots must be escalated or explicitly resolved before ready output.",
+    "Mode handoff must use structured mode results and structured signals, not uncontrolled previous context.",
+    "Required artifacts cannot be empty placeholders in a ready result.",
+    "A startup update check should run before active work when release metadata and a comparison source are available."
+  ],
+  "tree": {
+    "TopSkillFactory": {
+      "type": "root_controller",
+      "children": {
+        "ModeRouter": {
+          "type": "controller",
+          "prompt": "prompts/mode-router.md"
+        },
+        "CompositeFlowController": {
+          "type": "controller",
+          "prompt": "prompts/composite-flow-controller.md"
+        },
+        "Modes": {
+          "type": "controller",
+          "children": {
+            "CreateNewSkillMode": {
+              "type": "mode",
+              "prompt": "modes/create-new-skill-mode.md"
+            },
+            "ConvertLegacySkillMode": {
+              "type": "mode",
+              "prompt": "modes/convert-legacy-skill-mode.md"
+            },
+            "UpdateExistingSkillMode": {
+              "type": "mode",
+              "prompt": "modes/update-existing-skill-mode.md"
+            },
+            "ForkExperimentMode": {
+              "type": "mode",
+              "prompt": "modes/fork-experiment-mode.md"
+            },
+            "CompareSkillMode": {
+              "type": "mode",
+              "prompt": "modes/compare-skill-mode.md"
+            },
+            "RollbackMode": {
+              "type": "mode",
+              "prompt": "modes/rollback-mode.md"
+            },
+            "DeprecationMode": {
+              "type": "mode",
+              "prompt": "modes/deprecation-mode.md"
+            },
+            "DocumentationMode": {
+              "type": "mode",
+              "prompt": "modes/documentation-mode.md"
+            },
+            "MergeSkillsMode": {
+              "type": "mode",
+              "prompt": "modes/merge-skills-mode.md"
+            },
+            "SplitSkillMode": {
+              "type": "mode",
+              "prompt": "modes/split-skill-mode.md"
+            },
+            "RefactorSkillMode": {
+              "type": "mode",
+              "prompt": "modes/refactor-skill-mode.md"
+            },
+            "CompatibilityCheckMode": {
+              "type": "mode",
+              "prompt": "modes/compatibility-check-mode.md"
+            },
+            "RuntimeMonitorMode": {
+              "type": "mode",
+              "prompt": "modes/runtime-monitor-mode.md"
+            },
+            "ReplayDebuggerMode": {
+              "type": "mode",
+              "prompt": "modes/replay-debugger-mode.md"
+            },
+            "MarketplaceValidationMode": {
+              "type": "mode",
+              "prompt": "modes/marketplace-validation-mode.md"
+            }
+          }
+        },
+        "CoreControllers": {
+          "type": "controller",
+          "children": {
+            "InputController": {
+              "type": "controller",
+              "prompt": "prompts/input-controller.md",
+              "children": {
+                "InputCompletenessCheck": {
+                  "type": "validator",
+                  "prompt": "prompts/nodes/input-completeness-check.md"
+                },
+                "ConstraintConflictDetector": {
+                  "type": "validator",
+                  "prompt": "prompts/nodes/constraint-conflict-detector.md"
+                },
+                "BlindSpotDetector": {
+                  "type": "validator",
+                  "prompt": "prompts/nodes/blind-spot-detector.md"
+                },
+                "SensitiveDataDetector": {
+                  "type": "validator",
+                  "prompt": "prompts/nodes/sensitive-data-detector.md"
+                }
+              }
+            },
+            "SkillDiscovery": {
+              "type": "controller",
+              "prompt": "prompts/skill-discovery.md"
+            },
+            "SkillDesignController": {
+              "type": "controller",
+              "prompt": "prompts/skill-design-controller.md",
+              "children": {
+                "SkillTreeDesigner": {
+                  "type": "designer",
+                  "prompt": "prompts/nodes/skill-tree-designer.md"
+                },
+                "NodeContractDesigner": {
+                  "type": "designer",
+                  "prompt": "prompts/nodes/node-contract-designer.md"
+                },
+                "SignalDesigner": {
+                  "type": "designer",
+                  "prompt": "prompts/nodes/signal-designer.md"
+                },
+                "ValidationDesigner": {
+                  "type": "designer",
+                  "prompt": "prompts/nodes/validation-designer.md"
+                }
+              }
+            },
+            "UserInteractionController": {
+              "type": "controller",
+              "prompt": "prompts/user-interaction-controller.md",
+              "children": {
+                "UserClarificationController": {
+                  "type": "controller",
+                  "prompt": "prompts/nodes/user-clarification-controller.md"
+                },
+                "UserOverrideHandler": {
+                  "type": "controller",
+                  "prompt": "prompts/nodes/user-override-handler.md"
+                },
+                "RealUserEscalationController": {
+                  "type": "controller",
+                  "prompt": "prompts/nodes/real-user-escalation-controller.md"
+                }
+              }
+            },
+            "InvalidationController": {
+              "type": "controller",
+              "prompt": "prompts/nodes/invalidation-controller.md",
+              "children": {
+                "ConflictResolver": {
+                  "type": "controller",
+                  "prompt": "prompts/nodes/conflict-resolver.md"
+                },
+                "AffectedDecisionDetector": {
+                  "type": "validator",
+                  "prompt": "prompts/nodes/affected-decision-detector.md"
+                },
+                "DecisionCleanupController": {
+                  "type": "controller",
+                  "prompt": "prompts/nodes/decision-cleanup-controller.md"
+                },
+                "RebuildPlanner": {
+                  "type": "controller",
+                  "prompt": "prompts/nodes/rebuild-planner.md"
+                }
+              }
+            },
+            "OutputController": {
+              "type": "controller",
+              "prompt": "prompts/output-controller.md",
+              "children": {
+                "OutputAssembler": {
+                  "type": "assembler",
+                  "prompt": "prompts/nodes/output-assembler.md"
+                },
+                "OutputFormatter": {
+                  "type": "formatter",
+                  "prompt": "prompts/nodes/output-formatter.md"
+                },
+                "PartialOutputController": {
+                  "type": "controller",
+                  "prompt": "prompts/nodes/partial-output-controller.md"
+                }
+              }
+            },
+            "ValidationController": {
+              "type": "controller",
+              "prompt": "prompts/validation-controller.md",
+              "children": {
+                "FailureClassifier": {
+                  "type": "validator",
+                  "prompt": "prompts/nodes/failure-classifier.md"
+                },
+                "SelfAudit": {
+                  "type": "validator",
+                  "prompt": "prompts/nodes/self-audit.md",
+                  "children": {
+                    "ArchitectureCheck": {
+                      "type": "validator",
+                      "prompt": "prompts/nodes/architecture-check.md"
+                    },
+                    "ContractCheck": {
+                      "type": "validator",
+                      "prompt": "prompts/nodes/contract-check.md"
+                    },
+                    "SignalCheck": {
+                      "type": "validator",
+                      "prompt": "prompts/nodes/signal-check.md"
+                    },
+                    "OutputCheck": {
+                      "type": "validator",
+                      "prompt": "prompts/nodes/output-check.md"
+                    }
+                  }
+                },
+                "ValidationFailureHandler": {
+                  "type": "controller",
+                  "prompt": "prompts/nodes/validation-failure-handler.md"
+                },
+                "IterationBudgetController": {
+                  "type": "controller",
+                  "prompt": "prompts/nodes/iteration-budget-controller.md"
+                }
+              }
+            },
+            "QualityControlController": {
+              "type": "controller",
+              "prompt": "prompts/quality-control-controller.md",
+              "children": {
+                "ArtifactConsistencyValidator": {
+                  "type": "validator",
+                  "prompt": "prompts/nodes/artifact-consistency-validator.md"
+                },
+                "TypeStrictnessValidator": {
+                  "type": "validator",
+                  "prompt": "prompts/nodes/type-strictness-validator.md"
+                },
+                "ComplexityBudgetController": {
+                  "type": "controller",
+                  "prompt": "prompts/nodes/complexity-budget-controller.md"
+                },
+                "RuleVerifiabilityCheck": {
+                  "type": "validator",
+                  "prompt": "prompts/nodes/rule-verifiability-check.md"
+                },
+                "DryRunController": {
+                  "type": "controller",
+                  "prompt": "prompts/nodes/dry-run-controller.md"
+                },
+                "CoreInvariantGuard": {
+                  "type": "validator",
+                  "prompt": "prompts/nodes/core-invariant-guard.md"
+                }
+              }
+            },
+            "VersionController": {
+              "type": "controller",
+              "prompt": "prompts/nodes/version-controller.md"
+            },
+            "DecisionTraceController": {
+              "type": "controller",
+              "prompt": "prompts/nodes/decision-trace-controller.md"
+            },
+            "UserAcceptanceController": {
+              "type": "controller",
+              "prompt": "prompts/nodes/user-acceptance-controller.md"
+            },
+            "FinalDecisionController": {
+              "type": "controller",
+              "prompt": "prompts/final-decision-controller.md"
+            }
+          }
+        },
+        "SharedRules": {
+          "type": "rules",
+          "children": {
+            "CoreInvariants": {
+              "type": "rules_file",
+              "path": "shared-rules/core-invariants.md"
+            },
+            "LegacyConversionRules": {
+              "type": "rules_file",
+              "path": "shared-rules/legacy-conversion.md"
+            },
+            "DecisionInvalidationRules": {
+              "type": "rules_file",
+              "path": "shared-rules/decision-invalidation.md"
+            },
+            "PrivacyAndRedactionRules": {
+              "type": "rules_file",
+              "path": "shared-rules/privacy-and-redaction.md"
+            },
+            "UserAuthorityBoundaries": {
+              "type": "rules_file",
+              "path": "shared-rules/user-authority-boundaries.md"
+            },
+            "StartupUpdateCheckRules": {
+              "type": "rules_file",
+              "path": "shared-rules/startup-update-check.md"
+            }
+          }
+        }
+      }
+    }
+  },
+  "output_contract": {
+    "required_artifacts": [
+      "SKILL.md",
+      "artifact-manifest.json",
+      "spec.json",
+      "prompts/root.md",
+      "prompts/mode-router.md",
+      "prompts/composite-flow-controller.md",
+      "prompts/input-controller.md",
+      "prompts/skill-discovery.md",
+      "prompts/skill-design-controller.md",
+      "prompts/user-interaction-controller.md",
+      "prompts/output-controller.md",
+      "prompts/validation-controller.md",
+      "prompts/quality-control-controller.md",
+      "prompts/final-decision-controller.md",
+      "prompts/nodes/*",
+      "validation/*",
+      "schemas/*",
+      "modes/*",
+      "shared-rules/*",
+      "examples/*",
+      "README.md"
+    ]
+  },
+  "validation_model": "llm-governed-contract-validation",
+  "mode_maturity": {
+    "stable": [
+      "CreateNewSkillMode",
+      "ConvertLegacySkillMode",
+      "UpdateExistingSkillMode",
+      "CompareSkillMode",
+      "RollbackMode"
+    ],
+    "experimental": [
+      "ForkExperimentMode",
+      "MergeSkillsMode",
+      "DocumentationMode",
+      "RefactorSkillMode",
+      "SplitSkillMode"
+    ],
+    "planned": [
+      "RuntimeMonitorMode",
+      "MarketplaceValidationMode",
+      "CompatibilityCheckMode",
+      "DeprecationMode",
+      "ReplayDebuggerMode"
+    ]
+  },
+  "stable_release_scope": [
+    "validate",
+    "check-output",
+    "demo",
+    "create",
+    "convert",
+    "update",
+    "compare",
+    "rollback"
+  ],
+  "experimental_cli_scope": [
+    "merge"
+  ],
+  "roadmap_modes_excluded_from_stable_contract": [
+    "RuntimeMonitorMode",
+    "MarketplaceValidationMode",
+    "CompatibilityCheckMode",
+    "DeprecationMode",
+    "ReplayDebuggerMode"
+  ]
+}

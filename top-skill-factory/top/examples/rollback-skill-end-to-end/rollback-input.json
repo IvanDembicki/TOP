@@ -1,0 +1,7 @@
+{
+  "mode_request": "rollback_skill",
+  "current_skill": "PlanBuilderSkill v0.2-risky",
+  "target_version": "v0.1-validated",
+  "version_history": "version-history.json",
+  "rollback_reason": "Restore explicit concise-default behavior boundary."
+}

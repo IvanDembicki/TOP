@@ -1,0 +1,14 @@
+{
+  "status": "ready",
+  "reason": "The comparison has enough evidence to conclude that the variants are not behaviorally equivalent and that Variant B is riskier.",
+  "preferred_variant": "skill-a/top",
+  "evidence": [
+    "comparison-input.json",
+    "structural-diff.md",
+    "contract-diff.md",
+    "signal-diff.md",
+    "validation-diff.md",
+    "behavior-risk-report.md",
+    "compare-dry-run-report.md"
+  ]
+}

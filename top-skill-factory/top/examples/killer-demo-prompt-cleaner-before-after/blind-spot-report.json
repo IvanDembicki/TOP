@@ -1,0 +1,31 @@
+{
+  "covered_questions": [
+    "high-level purpose",
+    "desire for shorter prompts"
+  ],
+  "missing_questions": [
+    "explicit preservation contract",
+    "safe policy-handling contract",
+    "ready-state criteria"
+  ],
+  "ambiguous_questions": [
+    "What counts as junk versus critical context?",
+    "When is aggressive shortening allowed?",
+    "What policy text may be simplified without loss of safety?"
+  ],
+  "blocking_blind_spots": [
+    "Urgency plus aggressive shortening can erase critical safety or instruction boundaries.",
+    "Policy simplification is undefined and can silently change behavior."
+  ],
+  "user_clarification_required": true,
+  "safe_inference_allowed": [
+    "Output should be cleaner and easier to reuse when constraints are explicit."
+  ],
+  "coverage_dimensions_checked": [
+    "purpose",
+    "output_contract",
+    "failure_behavior",
+    "validation_rules",
+    "assumptions"
+  ]
+}

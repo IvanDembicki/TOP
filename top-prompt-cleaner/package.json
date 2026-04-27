@@ -1,0 +1,21 @@
+{
+  "name": "top-prompt-cleaner",
+  "version": "1.0.0",
+  "description": "Validator and helper scripts for the TOP Prompt Cleaner skill package",
+  "scripts": {
+    "validate": "node scripts/validate.js",
+    "validate:verbose": "node scripts/validate.js --verbose",
+    "validate:release": "node scripts/validate.js && echo 'Release check passed'",
+    "check-updates": "node scripts/check-updates.js"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "author": "Ivans Dembickis <ivan.dembicki@gmail.com>",
+  "type": "module"
+}

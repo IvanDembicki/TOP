@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "extraction_result.schema.json",
+  "title": "extraction_result",
+  "description": "Intermediate output of StructureExtractor. NOT the final structured_prompt. May contain empty fields and noise_candidates.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["goal", "goal_source", "constraints", "output_format", "output_format_source"],
+  "properties": {
+    "goal": {
+      "type": "string",
+      "description": "Extracted goal. Empty string when absent — goal_source will be 'missing'."
+    },
+    "goal_source": {
+      "type": "string",
+      "enum": ["stated", "inferred", "missing"]
+    },
+    "constraints": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Constraints extracted from the prompt. Empty array when none present."
+    },
+    "output_format": {
+      "type": "string",
+      "description": "Extracted output format. Empty string when absent — output_format_source will be 'missing'."
+    },
+    "output_format_source": {
+      "type": "string",
+      "enum": ["stated", "inferred", "missing"]
+    },
+    "noise_candidates": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Phrases identified as likely noise. Passed to ConflictDetector and OutputBuilder for removal decision."
+    }
+  },
+  "x-hard_rules": [
+    "goal_source must be 'missing' when goal is empty string",
+    "output_format_source must be 'missing' when output_format is empty string",
+    "noise_candidates are candidates only — removal requires validation by OutputBuilder",
+    "This schema is for StructureExtractor output only. Final cleaned artifacts use structured_prompt.json."
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "source_artifacts": [
+    "before.md"
+  ],
+  "target_skill": "PromptCleanerSkill",
+  "inferred_purpose": "Turn messy prompts into cleaner reusable prompt artifacts without silently deleting critical meaning or policy boundaries.",
+  "conversion_risks": [
+    "Aggressive shortening conflicts with meaning preservation.",
+    "Importance-based detail retention is undefined.",
+    "Urgency may override clarification and lead to accidental deletion of safety-critical content.",
+    "Policy simplification is unsafe without explicit safe-boundary rules."
+  ]
+}

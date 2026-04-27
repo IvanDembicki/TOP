@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "final_decision_signal.schema.json",
+  "title": "final_decision_signal",
+  "description": "Node trace output of FinalDecisionController. A lightweight status signal recorded in the trace, distinct from the full final_output artifact delivered to the user.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["ready", "blocked", "escalated"],
+      "description": "The terminal state decided by FinalDecisionController."
+    },
+    "diagnosis": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Present when status is 'blocked'. Names the specific rule or missing field."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "blocked" } } },
+      "then": { "required": ["diagnosis"] }
+    }
+  ],
+  "x-hard_rules": [
+    "This is a node trace record, not the user-facing final_output — it does not include cleaned_prompt, diff, or structured_prompt",
+    "The full user-facing artifact is produced by OutputBuilder and conforms to final_output.schema.json",
+    "diagnosis is required when status is 'blocked' — omitting it is a contract violation",
+    "escalated takes precedence over blocked when escalation_signal is present"
+  ]
+}

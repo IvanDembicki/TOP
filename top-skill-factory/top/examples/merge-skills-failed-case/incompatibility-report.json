@@ -1,0 +1,15 @@
+{
+  "structural_conflicts": [
+    "Both source skills want to own final answer authority for the same support domain."
+  ],
+  "contract_conflicts": [
+    "One skill requires escalation before answer generation; the other permits answer generation before escalation.",
+    "The merged skill cannot preserve both output contracts without changing public behavior."
+  ],
+  "policy_conflicts": [
+    "Sensitive-topic routing is user-safe only under the stricter escalation-first policy.",
+    "Allowing the permissive policy would weaken the original guaranteed safety boundary."
+  ],
+  "repairable": false,
+  "failure_reason": "The merge would require choosing one authority model over the other, which is a product decision rather than a structural repair."
+}

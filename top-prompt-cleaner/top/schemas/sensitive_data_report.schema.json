@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sensitive_data_report.schema.json",
+  "title": "sensitive_data_report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sensitive_findings", "sensitive_blocking"],
+  "properties": {
+    "sensitive_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "excerpt", "severity", "recommendation"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "api_key",
+              "password",
+              "private_key",
+              "credential",
+              "pii_name",
+              "pii_email",
+              "pii_phone",
+              "pii_id",
+              "internal_url",
+              "internal_code"
+            ],
+            "description": "Category of sensitive content detected."
+          },
+          "excerpt": {
+            "type": "string",
+            "maxLength": 40,
+            "description": "Truncated excerpt (max 40 chars) to identify the location without reproducing the secret."
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["blocking", "warning"],
+            "description": "Blocking halts the pipeline; warning is surfaced but does not halt in quick_clean mode."
+          },
+          "recommendation": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Actionable guidance for the user."
+          }
+        }
+      },
+      "description": "List of sensitive content findings. Empty array when nothing detected."
+    },
+    "sensitive_blocking": {
+      "type": "boolean",
+      "description": "True when at least one finding has severity 'blocking'. Pipeline must halt."
+    }
+  },
+  "x-hard_rules": [
+    "sensitive_blocking must be true if and only if at least one finding has severity 'blocking'",
+    "excerpt must not exceed 40 characters",
+    "full secret values must never appear in excerpt",
+    "this report must be produced before StructureExtractor runs",
+    "sensitive_blocking: true halts the pipeline regardless of mode"
+  ]
+}

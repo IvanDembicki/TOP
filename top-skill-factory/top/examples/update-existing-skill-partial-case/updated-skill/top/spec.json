@@ -1,0 +1,30 @@
+{
+  "skill_name": "PlanBuilderSkill",
+  "skill_version": "1.0.0",
+  "purpose": "Turn a user goal into either a concise plan or an optional detailed execution checklist.",
+  "root": "PlanBuilderSkill",
+  "invariants": [
+    "ModeRouter activates exactly one mode.",
+    "Default concise behavior remains intact unless the detailed mode is explicitly requested.",
+    "Ready state is invalid if required update artifacts are missing."
+  ],
+  "tree": {
+    "PlanBuilderSkill": {
+      "type": "root_controller",
+      "children": {
+        "ModeRouter": {
+          "type": "controller",
+          "prompt": "prompts/mode-router.md"
+        },
+        "CreatePlanMode": {
+          "type": "mode",
+          "prompt": "modes/create-plan-mode.md"
+        },
+        "CreateDetailedChecklistMode": {
+          "type": "mode",
+          "prompt": "modes/create-detailed-checklist-mode.md"
+        }
+      }
+    }
+  }
+}

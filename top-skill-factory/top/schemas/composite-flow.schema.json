@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "composite_flow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "flow_id",
+    "ordered_modes",
+    "entry_conditions",
+    "exit_conditions",
+    "rollback_strategy",
+    "shared_constraints"
+  ],
+  "properties": {
+    "flow_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ordered_modes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "entry_conditions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "exit_conditions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "rollback_strategy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "shared_constraints": {
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "type": "array"
+    }
+  },
+  "x-hard_rules": [
+    "Composite flow must be explicit.",
+    "Each step must define entry and exit conditions.",
+    "Each step must consume a structured mode result from the previous step."
+  ]
+}

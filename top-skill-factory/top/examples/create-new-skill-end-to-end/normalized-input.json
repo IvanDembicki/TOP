@@ -1,0 +1,19 @@
+{
+  "goal": "Create a small TOP-based skill that builds a short execution plan from a user goal.",
+  "mode_request": "new_skill",
+  "constraints": {
+    "max_modes": 1,
+    "must_include_clarification_path": true,
+    "must_block_ready_if_required_artifacts_missing": true,
+    "legacy_import_allowed": false
+  },
+  "ambiguities": [],
+  "required_outputs": [
+    "spec.json",
+    "prompts/root.md",
+    "prompts/mode-router.md",
+    "modes/create-plan-mode.md",
+    "validation/output-rules.md",
+    "README.md"
+  ]
+}

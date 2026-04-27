@@ -1,0 +1,31 @@
+{
+  "skill_name": "PlanBuilderSkill",
+  "skill_version": "1.0.0",
+  "purpose": "Return to a validated plan-builder variant with concise default behavior.",
+  "root": "PlanBuilderSkill",
+  "invariants": [
+    "ModeRouter activates exactly one mode.",
+    "Concise mode is the default path.",
+    "Detailed mode activates only on explicit request.",
+    "Rollback reason must be preserved."
+  ],
+  "tree": {
+    "PlanBuilderSkill": {
+      "type": "root_controller",
+      "children": {
+        "ModeRouter": {
+          "type": "controller",
+          "prompt": "prompts/mode-router.md"
+        },
+        "CreatePlanMode": {
+          "type": "mode",
+          "prompt": "modes/create-plan-mode.md"
+        },
+        "CreateDetailedChecklistMode": {
+          "type": "mode",
+          "prompt": "modes/create-detailed-checklist-mode.md"
+        }
+      }
+    }
+  }
+}

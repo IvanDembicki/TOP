@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "final_decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "reason",
+    "evidence",
+    "user_acceptance",
+    "artifact_contract"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "ready",
+        "draft",
+        "blocked",
+        "failed"
+      ]
+    },
+    "reason": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "evidence": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "minItems": 1
+    },
+    "artifact_contract": {
+      "type": "string",
+      "enum": [
+        "full_factory_contract",
+        "stable_workflow_contract",
+        "workflow_draft_contract",
+        "minimal_demo_contract",
+        "not_applicable"
+      ]
+    },
+    "user_acceptance": {
+      "required": [
+        "required",
+        "status"
+      ],
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "accepted",
+            "missing",
+            "not_required_for_demo",
+            "not_reached"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "readiness_note": {
+      "minLength": 1,
+      "type": "string"
+    }
+  }
+}

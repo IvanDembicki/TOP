@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "artifact_manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifest_version",
+    "contracts"
+  ],
+  "properties": {
+    "manifest_version": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "contracts": {
+      "items": {
+        "required": [
+          "contract_id",
+          "applies_to",
+          "required_artifacts"
+        ],
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "optional_artifacts": {
+            "type": "array",
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "readiness_rule": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "contract_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "applies_to": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "required_artifacts": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      },
+      "type": "array",
+      "minItems": 1
+    }
+  }
+}

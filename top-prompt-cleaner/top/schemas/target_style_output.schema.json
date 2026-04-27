@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "target_style_output.schema.json",
+  "title": "target_style_output",
+  "description": "Output of TargetLLMStyleMode. Supports different structural forms depending on the target model.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["output_type", "target_style", "target_style_source", "profile_used"],
+  "properties": {
+    "output_type": {
+      "type": "string",
+      "enum": ["single_prompt", "message_bundle", "xml_prompt"],
+      "description": "The structural form of the adapted prompt."
+    },
+    "target_style": {
+      "type": "string",
+      "enum": ["claude", "gpt", "default", "custom"],
+      "description": "The target LLM convention applied."
+    },
+    "target_style_source": {
+      "type": "string",
+      "enum": ["stated", "detected", "default"],
+      "description": "How target_style was determined: stated by user, auto-detected from idioms, or defaulted to generic."
+    },
+    "target_model": {
+      "type": "string",
+      "description": "Optional. Specific model identifier (e.g., 'o1', 'claude-opus-4') for sub-profile logic."
+    },
+    "profile_used": {
+      "type": "string",
+      "enum": ["claude", "gpt", "generic", "custom"],
+      "description": "The model profile actually applied."
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The adapted prompt content. Structure depends on output_type.",
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "description": "Present when output_type is 'single_prompt' or 'xml_prompt'."
+        },
+        "system_message": {
+          "type": "string",
+          "description": "Present when output_type is 'message_bundle'. Contains role, context, rules."
+        },
+        "user_message": {
+          "type": "string",
+          "description": "Present when output_type is 'message_bundle'. Contains the task."
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "output_type": { "const": "single_prompt" } } },
+      "then": { "required": ["content"], "properties": { "content": { "required": ["prompt"] } } }
+    },
+    {
+      "if": { "properties": { "output_type": { "const": "xml_prompt" } } },
+      "then": { "required": ["content"], "properties": { "content": { "required": ["prompt"] } } }
+    },
+    {
+      "if": { "properties": { "output_type": { "const": "message_bundle" } } },
+      "then": {
+        "required": ["content"],
+        "properties": { "content": { "required": ["system_message", "user_message"] } }
+      }
+    }
+  ],
+  "x-hard_rules": [
+    "output_type must be 'message_bundle' when target_style is 'gpt' and target_model is not o1/o3",
+    "output_type must be 'xml_prompt' when target_style is 'claude' and the prompt mixes role with task",
+    "output_type must be 'single_prompt' for o1/o3 (no system message support)",
+    "semantic content (goal, constraints, output_format) must be identical to the input structured_prompt",
+    "target_style_source is always required — never omit"
+  ]
+}

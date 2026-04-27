@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "decision_trace_record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "decision_id",
+    "trace_id",
+    "created_at",
+    "created_by_node",
+    "decision_type",
+    "decision_value",
+    "based_on_inputs",
+    "based_on_constraints",
+    "authority_source",
+    "affected_artifacts",
+    "status"
+  ],
+  "properties": {
+    "decision_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "created_by_node": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision_value": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "based_on_inputs": {
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "type": "array"
+    },
+    "based_on_constraints": {
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "type": "array"
+    },
+    "authority_source": {
+      "enum": [
+        "user",
+        "invariant",
+        "legacy-evidence",
+        "validation",
+        "mode-policy"
+      ],
+      "type": "string"
+    },
+    "affected_artifacts": {
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "type": "array"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "invalidated",
+        "superseded",
+        "deprecated"
+      ],
+      "type": "string"
+    },
+    "status_reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "invalidated_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "superseded_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "replaced_artifacts": {
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "type": "array"
+    },
+    "notes": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "invalidated"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "status_reason",
+          "invalidated_by"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "superseded"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "status_reason",
+          "superseded_by"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "deprecated"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "status_reason"
+        ]
+      }
+    }
+  ],
+  "x-hard_rules": [
+    "Every important decision must be traceable.",
+    "Invalidated decisions must keep the invalidation reason.",
+    "New decisions must not silently override old active conflicting decisions.",
+    "Status-specific required fields must be present.",
+    "Authority source must be explicit: user, invariant, legacy-evidence, validation, or mode-policy."
+  ]
+}

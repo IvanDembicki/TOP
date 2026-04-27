@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "clarification_state.schema.json",
+  "title": "clarification_state",
+  "description": "Output of ClarificationController. Records whether clarification is needed and carries the request forward if so.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["clarification_needed", "proceed_with_inference"],
+  "properties": {
+    "clarification_needed": {
+      "type": "boolean",
+      "description": "True when a required field is missing and the mode cannot proceed without it."
+    },
+    "proceed_with_inference": {
+      "type": "boolean",
+      "description": "True only in QuickCleanMode when a non-blocking field is missing and safe inference is permitted."
+    },
+    "clarification_request": {
+      "$ref": "clarification_request.schema.json",
+      "description": "Present when clarification_needed is true. Carries the question and options."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "clarification_needed": { "const": true } } },
+      "then": { "required": ["clarification_request"] }
+    },
+    {
+      "if": { "properties": { "proceed_with_inference": { "const": true } } },
+      "then": {
+        "properties": { "clarification_needed": { "const": false } }
+      }
+    }
+  ],
+  "x-hard_rules": [
+    "clarification_needed and proceed_with_inference are mutually exclusive — both cannot be true",
+    "clarification_request is required when clarification_needed is true",
+    "proceed_with_inference: true is only valid in QuickCleanMode",
+    "StrictCleanMode must set clarification_needed: true when goal or output_format is missing — proceed_with_inference must be false"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "status": "draft",
+  "reason": "A reviewable partial package exists, but the update remains non-final until invalidation and final acceptance are resolved.",
+  "evidence": [
+    "normalized-update-input.json",
+    "invalidation-summary.json",
+    "partial-output-package.json",
+    "dry-run-report.md",
+    "updated-skill/top/spec.json"
+  ],
+  "artifact_contract": "minimal_demo_contract",
+  "user_acceptance": {
+    "required": true,
+    "status": "missing"
+  },
+  "readiness_note": "The package is intentionally reviewable but non-final."
+}

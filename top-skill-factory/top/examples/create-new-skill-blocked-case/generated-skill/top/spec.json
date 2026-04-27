@@ -1,0 +1,26 @@
+{
+  "skill_name": "LaunchPlanSkill",
+  "skill_version": "1.0.0",
+  "purpose": "Help a user prepare a launch plan once the domain and minimum required inputs are clarified.",
+  "root": "LaunchPlanSkill",
+  "invariants": [
+    "ModeRouter activates exactly one mode.",
+    "Clarification is required when domain-specific launch meaning is underspecified.",
+    "Ready state is invalid while blocking blind spots remain unresolved."
+  ],
+  "tree": {
+    "LaunchPlanSkill": {
+      "type": "root_controller",
+      "children": {
+        "ModeRouter": {
+          "type": "controller",
+          "prompt": "prompts/mode-router.md"
+        },
+        "CreateLaunchPlanMode": {
+          "type": "mode",
+          "prompt": "modes/create-launch-plan-mode.md"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,277 @@
+{
+  "manifest_version": "0.1",
+  "modes": [
+    {
+      "mode": "CreateNewSkillMode",
+      "maturity": "stable",
+      "input_types": [
+        "raw_skill_request"
+      ],
+      "output_types": [
+        "generated_skill_bundle",
+        "final_decision"
+      ],
+      "allowed_next_modes": [
+        "CompareSkillMode",
+        "DocumentationMode",
+        "UpdateExistingSkillMode"
+      ],
+      "requires_user_acceptance": false
+    },
+    {
+      "mode": "ConvertLegacySkillMode",
+      "maturity": "stable",
+      "input_types": [
+        "legacy_skill"
+      ],
+      "output_types": [
+        "converted_top_skill",
+        "conversion_report",
+        "final_decision"
+      ],
+      "allowed_next_modes": [
+        "CompareSkillMode",
+        "DocumentationMode",
+        "UpdateExistingSkillMode"
+      ],
+      "requires_user_acceptance": false
+    },
+    {
+      "mode": "UpdateExistingSkillMode",
+      "maturity": "stable",
+      "input_types": [
+        "existing_top_skill",
+        "new_requirement"
+      ],
+      "output_types": [
+        "updated_skill_bundle",
+        "final_decision"
+      ],
+      "allowed_next_modes": [
+        "CompareSkillMode",
+        "RollbackMode",
+        "DocumentationMode"
+      ],
+      "requires_user_acceptance": true
+    },
+    {
+      "mode": "CompareSkillMode",
+      "maturity": "stable",
+      "input_types": [
+        "skill_variant_a",
+        "skill_variant_b"
+      ],
+      "output_types": [
+        "comparison_result",
+        "behavior_risk_report",
+        "final_decision"
+      ],
+      "allowed_next_modes": [
+        "RollbackMode",
+        "DocumentationMode",
+        "UpdateExistingSkillMode"
+      ],
+      "requires_user_acceptance": false
+    },
+    {
+      "mode": "RollbackMode",
+      "maturity": "stable",
+      "input_types": [
+        "version_history",
+        "rollback_request"
+      ],
+      "output_types": [
+        "restored_skill_bundle",
+        "rollback_record",
+        "final_decision"
+      ],
+      "allowed_next_modes": [
+        "CompareSkillMode",
+        "DocumentationMode"
+      ],
+      "requires_user_acceptance": false
+    },
+    {
+      "mode": "ForkExperimentMode",
+      "maturity": "experimental",
+      "input_types": [
+        "existing_top_skill",
+        "experiment_goal"
+      ],
+      "output_types": [
+        "forked_skill_variant",
+        "final_decision"
+      ],
+      "allowed_next_modes": [
+        "CompareSkillMode",
+        "DocumentationMode"
+      ],
+      "requires_user_acceptance": false
+    },
+    {
+      "mode": "MergeSkillsMode",
+      "maturity": "experimental",
+      "input_types": [
+        "skill_a",
+        "skill_b",
+        "merge_goal"
+      ],
+      "output_types": [
+        "merged_skill_or_failure",
+        "final_decision"
+      ],
+      "allowed_next_modes": [
+        "CompareSkillMode",
+        "DocumentationMode"
+      ],
+      "requires_user_acceptance": true
+    },
+    {
+      "mode": "DocumentationMode",
+      "maturity": "experimental",
+      "input_types": [
+        "existing_skill_bundle"
+      ],
+      "output_types": [
+        "documentation_artifacts",
+        "final_decision"
+      ],
+      "allowed_next_modes": [],
+      "requires_user_acceptance": false
+    },
+    {
+      "mode": "RefactorSkillMode",
+      "maturity": "experimental",
+      "input_types": [
+        "existing_skill_bundle",
+        "refactor_goal"
+      ],
+      "output_types": [
+        "refactored_skill_bundle",
+        "final_decision"
+      ],
+      "allowed_next_modes": [
+        "CompareSkillMode",
+        "RollbackMode"
+      ],
+      "requires_user_acceptance": true
+    },
+    {
+      "mode": "SplitSkillMode",
+      "maturity": "experimental",
+      "input_types": [
+        "existing_skill_bundle",
+        "split_goal"
+      ],
+      "output_types": [
+        "split_skill_bundles",
+        "final_decision"
+      ],
+      "allowed_next_modes": [
+        "CompareSkillMode",
+        "DocumentationMode"
+      ],
+      "requires_user_acceptance": true
+    },
+    {
+      "mode": "RuntimeMonitorMode",
+      "maturity": "planned",
+      "input_types": [
+        "runtime_trace"
+      ],
+      "output_types": [
+        "monitoring_report"
+      ],
+      "allowed_next_modes": [
+        "ReplayDebuggerMode"
+      ],
+      "requires_user_acceptance": false
+    },
+    {
+      "mode": "MarketplaceValidationMode",
+      "maturity": "planned",
+      "input_types": [
+        "third_party_skill_bundle"
+      ],
+      "output_types": [
+        "marketplace_validation_report"
+      ],
+      "allowed_next_modes": [
+        "DocumentationMode"
+      ],
+      "requires_user_acceptance": false
+    },
+    {
+      "mode": "CompatibilityCheckMode",
+      "maturity": "planned",
+      "input_types": [
+        "skill_bundle",
+        "target_environment"
+      ],
+      "output_types": [
+        "compatibility_report"
+      ],
+      "allowed_next_modes": [
+        "UpdateExistingSkillMode"
+      ],
+      "requires_user_acceptance": false
+    },
+    {
+      "mode": "DeprecationMode",
+      "maturity": "planned",
+      "input_types": [
+        "existing_skill_bundle",
+        "deprecation_goal"
+      ],
+      "output_types": [
+        "deprecation_plan",
+        "final_decision"
+      ],
+      "allowed_next_modes": [
+        "DocumentationMode"
+      ],
+      "requires_user_acceptance": true
+    },
+    {
+      "mode": "ReplayDebuggerMode",
+      "maturity": "planned",
+      "input_types": [
+        "decision_trace",
+        "mode_results",
+        "signal_log"
+      ],
+      "output_types": [
+        "replay_report",
+        "divergence_points"
+      ],
+      "allowed_next_modes": [
+        "UpdateExistingSkillMode",
+        "RollbackMode"
+      ],
+      "requires_user_acceptance": false
+    }
+  ],
+  "hard_rules": [
+    "Minimal demo contract may only be used in top/examples or when demo output is explicitly requested.",
+    "Mode maturity in this manifest is the source of truth for release labeling.",
+    "Allowed next modes constrain declared routing, even when prompts describe broader future possibilities.",
+    "Products should expose a quick startup update check based on release metadata before active work begins.",
+    "The 1.0 stable workflow contract includes Create, Convert, Update, Compare, and Rollback only.",
+    "Merge remains experimental and is excluded from the stable release contract.",
+    "Planned modes must not be claimed stable by docs, CLI defaults, or release reports."
+  ],
+  "stable_release_scope": [
+    "CreateNewSkillMode",
+    "ConvertLegacySkillMode",
+    "UpdateExistingSkillMode",
+    "CompareSkillMode",
+    "RollbackMode"
+  ],
+  "experimental_release_scope": [
+    "MergeSkillsMode",
+    "ForkExperimentMode",
+    "DocumentationMode",
+    "RefactorSkillMode",
+    "SplitSkillMode"
+  ]
+}

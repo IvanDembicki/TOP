@@ -1,0 +1,29 @@
+{
+  "source_artifacts": [
+    "before.md"
+  ],
+  "detected_issues": [
+    {
+      "category": "blind_spot",
+      "description": "The source allows best-effort assumptions that can hide missing required inputs.",
+      "status": "partially_resolved"
+    },
+    {
+      "category": "mixed_responsibility",
+      "description": "The source mixes multiple responsibilities inside a single prompt surface.",
+      "status": "partially_resolved"
+    }
+  ],
+  "preserved_behavior": [
+    "Keep answers concise.",
+    "Support Claude and GPT formatting."
+  ],
+  "structural_changes": [
+    "Separated routing, interaction, validation, and output decisions into explicit nodes."
+  ],
+  "unresolved_gaps": [
+    "A broader behavior-preservation review is still required before ready state."
+  ],
+  "final_status": "partial",
+  "final_rationale": "The rich demo is reviewable but remains intentionally draft."
+}

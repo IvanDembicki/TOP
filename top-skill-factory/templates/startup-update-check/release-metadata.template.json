@@ -1,0 +1,9 @@
+{
+  "product_name": "replace-with-product-name",
+  "current_version": "1.0.0",
+  "release_channel": "stable",
+  "update_check_strategy": "manifest-compare",
+  "manifest_source": "Local manifest compare by default. A trusted newer release-metadata.json file may be provided explicitly.",
+  "notes": "Run a quick update check before active work begins whenever a comparison manifest is available.",
+  "startup_update_check_supported": true
+}

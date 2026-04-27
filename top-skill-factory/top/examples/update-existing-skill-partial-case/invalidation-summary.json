@@ -1,0 +1,16 @@
+{
+  "invalidated_decisions": [
+    "Any prior assumption that the skill has only one output depth."
+  ],
+  "preserved_decisions": [
+    "Default concise behavior remains the standard path.",
+    "Existing validation posture remains active unless explicitly replaced."
+  ],
+  "rebuild_scope": [
+    "spec.json",
+    "prompts/mode-router.md",
+    "modes/create-plan-mode.md",
+    "modes/create-detailed-checklist-mode.md",
+    "validation/output-rules.md"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "validation_repair_cycles_allowed": 3,
+  "validation_repair_cycles_used": 3,
+  "clarification_cycles_allowed": 2,
+  "clarification_cycles_used": 1,
+  "mode_retries_allowed": 2,
+  "mode_retries_used": 2,
+  "exhausted": true,
+  "exhaustion_reason": "Repeated repair attempts could restate the conflict but could not produce a merged contract that preserved both source guarantees."
+}

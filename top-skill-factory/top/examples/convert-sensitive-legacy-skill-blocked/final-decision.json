@@ -1,0 +1,14 @@
+{
+  "status": "blocked",
+  "reason": "Legacy conversion stopped because the imported source contains blocking sensitive material that must not be propagated into reusable artifacts.",
+  "evidence": [
+    "sensitive-import-report.json",
+    "legacy-skill-before.md"
+  ],
+  "artifact_contract": "not_applicable",
+  "user_acceptance": {
+    "required": true,
+    "status": "missing"
+  },
+  "readiness_note": "Remove or redact the sensitive source material before requesting conversion again."
+}

@@ -1,0 +1,39 @@
+{
+  "source_artifacts": [
+    "before.md"
+  ],
+  "detected_issues": [
+    {
+      "category": "contradiction",
+      "description": "Aggressive shortening conflicts with meaning preservation.",
+      "status": "resolved"
+    },
+    {
+      "category": "blind_spot",
+      "description": "Policy simplification was unsafe and underspecified.",
+      "status": "resolved"
+    },
+    {
+      "category": "missing_contract",
+      "description": "No explicit output contract or ready-state contract existed.",
+      "status": "resolved"
+    },
+    {
+      "category": "hidden_assumption",
+      "description": "Urgency was treated as an implicit permission to skip clarification.",
+      "status": "resolved"
+    }
+  ],
+  "preserved_behavior": [
+    "The skill still produces cleaner reusable prompt output.",
+    "Shortening remains a goal, but only within explicit preservation boundaries."
+  ],
+  "structural_changes": [
+    "Split input analysis, cleaning policy, and validation into separate artifacts.",
+    "Added explicit preservation, policy-handling, and clarification rules.",
+    "Replaced urgency-based best effort with bounded escalation."
+  ],
+  "unresolved_gaps": [],
+  "final_status": "ready",
+  "final_rationale": "The converted skill now preserves cleaning intent while preventing silent deletion of critical content."
+}

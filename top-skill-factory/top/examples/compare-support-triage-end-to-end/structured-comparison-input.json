@@ -1,0 +1,12 @@
+{
+  "mode": "CompareSkillMode",
+  "domain": "customer_support_triage",
+  "variant_a": "SupportTriageSkillA",
+  "variant_b": "SupportTriageSkillB",
+  "comparison_focus": [
+    "escalation ownership",
+    "VIP account handling",
+    "inferred urgency versus explicit routing",
+    "public behavior predictability"
+  ]
+}

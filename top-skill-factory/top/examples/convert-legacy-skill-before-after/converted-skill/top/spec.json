@@ -1,0 +1,44 @@
+{
+  "skill_name": "LaunchPlanAdvisor",
+  "skill_version": "1.0.0",
+  "purpose": "Turn a user goal into either a compact execution plan or a detailed strategic plan without silently inventing critical missing information.",
+  "root": "LaunchPlanAdvisor",
+  "invariants": [
+    "ModeRouter activates exactly one delivery mode.",
+    "Critical missing scope information requires clarification.",
+    "Urgency is not a valid override for mandatory clarification.",
+    "Detailed strategic output requires an explicit strategic signal or route.",
+    "Ready state is invalid if required artifacts are missing."
+  ],
+  "tree": {
+    "LaunchPlanAdvisor": {
+      "type": "root_controller",
+      "children": {
+        "ModeRouter": {
+          "type": "controller",
+          "prompt": "prompts/mode-router.md"
+        },
+        "InputController": {
+          "type": "controller",
+          "prompt": "prompts/input-controller.md"
+        },
+        "UserInteractionController": {
+          "type": "controller",
+          "prompt": "prompts/user-interaction-controller.md"
+        },
+        "ValidationController": {
+          "type": "controller",
+          "prompt": "prompts/validation-controller.md"
+        },
+        "CreateCompactPlanMode": {
+          "type": "mode",
+          "prompt": "modes/create-compact-plan-mode.md"
+        },
+        "CreateDetailedPlanMode": {
+          "type": "mode",
+          "prompt": "modes/create-detailed-plan-mode.md"
+        }
+      }
+    }
+  }
+}

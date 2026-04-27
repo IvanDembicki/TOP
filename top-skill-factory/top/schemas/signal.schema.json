@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "top_skill_factory_signal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "from",
+    "to",
+    "status",
+    "payload",
+    "meta"
+  ],
+  "properties": {
+    "type": {
+      "enum": [
+        "routing_signal",
+        "clarification_signal",
+        "validation_signal",
+        "artifact_signal",
+        "failure_signal",
+        "mode_result_signal"
+      ],
+      "type": "string"
+    },
+    "from": {
+      "type": "string",
+      "minLength": 1
+    },
+    "to": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "success",
+        "fail",
+        "partial",
+        "blocked"
+      ],
+      "type": "string"
+    },
+    "payload": {
+      "type": "object",
+      "propertyNames": {
+        "not": {
+          "enum": [
+            "raw_context_dump",
+            "chain_of_thought",
+            "full_previous_conversation"
+          ]
+        }
+      },
+      "maxProperties": 12,
+      "properties": {
+        "artifact_refs": {
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": "array"
+        },
+        "blocking_issues": {
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": "array"
+        },
+        "next_action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision_refs": {
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": "array"
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "version",
+        "trace_id",
+        "timestamp"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "trace_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "budget_snapshot": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mode_name": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "x-hard_rules": [
+    "Payload must be structured.",
+    "Payload must not contain chain-of-thought.",
+    "Payload must not refer to uncontrolled previous context.",
+    "from and to must refer to known nodes or user endpoints.",
+    "Every signal must be validatable.",
+    "Raw text dumps are forbidden when artifact references can be used."
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "clarification_request.schema.json",
+  "title": "clarification_request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["question", "reason", "missing_field", "blocking_if_unanswered"],
+  "properties": {
+    "question": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The question asked of the user."
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Why this field is needed to proceed."
+    },
+    "missing_field": {
+      "type": "string",
+      "enum": ["goal", "output_format", "target_style", "constraints"],
+      "description": "The specific field that is missing."
+    },
+    "options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label"],
+        "properties": {
+          "id":    { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 }
+        }
+      },
+      "minItems": 2,
+      "description": "Suggested answer options when the answer space is bounded. Always include { id: 'U', label: 'User-defined answer' } as the last item."
+    },
+    "blocking_if_unanswered": {
+      "type": "boolean",
+      "description": "True when the flow cannot proceed without an answer."
+    },
+    "user_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selected_option"],
+      "properties": {
+        "selected_option": {
+          "type": "string",
+          "description": "The id of the chosen option (e.g. 'A', 'B', 'U')."
+        },
+        "text": {
+          "type": "string",
+          "description": "Required when selected_option is 'U'. Contains the user's free-text answer."
+        }
+      },
+      "description": "Populated when the user has responded to this clarification request."
+    }
+  },
+  "x-hard_rules": [
+    "user_response must be present when the user has responded to this request",
+    "user_response.text must be present when user_response.selected_option is 'U'",
+    "blocking_if_unanswered must be true for missing_field: goal and output_format",
+    "options must be included when the answer space is bounded to a known set",
+    "when options are present, the last option must have id: 'U' and label: 'User-defined answer'"
+  ]
+}

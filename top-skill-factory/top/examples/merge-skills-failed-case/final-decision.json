@@ -1,0 +1,18 @@
+{
+  "status": "failed",
+  "reason": "Merge failed after bounded repair because the source skills encode incompatible answer-authority and escalation policies that cannot be merged without silently changing public behavior.",
+  "evidence": [
+    "request.md",
+    "normalized-merge-input.json",
+    "incompatibility-report.json",
+    "iteration-budget-summary.json",
+    "repair-attempt-log.md",
+    "final-diagnosis.md"
+  ],
+  "artifact_contract": "not_applicable",
+  "user_acceptance": {
+    "required": false,
+    "status": "not_reached"
+  },
+  "readiness_note": "Failure is terminal for this bounded merge attempt; no truthful partial merged artifact exists."
+}

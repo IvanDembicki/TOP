@@ -1,0 +1,35 @@
+{
+  "task_goal": "Create a TOP-based skill that helps prepare a launch plan.",
+  "target_skill": "LaunchPlanSkill",
+  "target_user": "unspecified",
+  "domain": "unknown",
+  "constraints": {
+    "must_work_for_any_domain": true,
+    "should_avoid_many_follow_up_questions": true,
+    "should_usually_proceed": true
+  },
+  "expected_outputs": [
+    "spec.json",
+    "prompts/root.md",
+    "prompts/mode-router.md",
+    "modes/create-launch-plan-mode.md",
+    "validation/output-rules.md",
+    "README.md"
+  ],
+  "provided_artifacts": [],
+  "open_questions": [
+    "What counts as a launch in this skill?",
+    "Which minimum domain details are required before plan generation?"
+  ],
+  "known_risks": [
+    "unsafe generalization across unrelated domains",
+    "pressure to proceed without sufficient domain information"
+  ],
+  "mode_hints": [
+    "create_new_skill"
+  ],
+  "initial_blind_spot_hints": [
+    "domain-specific launch behavior is unspecified",
+    "safe minimum input boundary is unspecified"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "delivery_type": "partial_output_package",
+  "usable_artifacts": [
+    "updated-skill/top/spec.json",
+    "updated-skill/top/prompts/root.md",
+    "updated-skill/top/prompts/mode-router.md",
+    "updated-skill/top/modes/create-plan-mode.md",
+    "updated-skill/top/modes/create-detailed-checklist-mode.md",
+    "updated-skill/top/validation/output-rules.md"
+  ],
+  "known_remaining_gaps": [
+    "Example set for the new detailed mode is not yet updated.",
+    "No fresh behavior baseline example has been added for the detailed mode."
+  ],
+  "consumer_warning": "This package is reviewable and partly usable, but not ready for final acceptance."
+}

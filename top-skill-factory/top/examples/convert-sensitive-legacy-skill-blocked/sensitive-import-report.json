@@ -1,0 +1,18 @@
+{
+  "blocked": true,
+  "policy_summary": "Blocking secrets stop conversion and must be removed or redacted before reusable artifact generation.",
+  "findings": [
+    {
+      "category": "api_key",
+      "severity": "blocking",
+      "action": "block",
+      "redacted_preview": "sk-l...REDACTED...56"
+    },
+    {
+      "category": "private_key",
+      "severity": "blocking",
+      "action": "block",
+      "redacted_preview": "[REDACTED PRIVATE KEY]"
+    }
+  ]
+}

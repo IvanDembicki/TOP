@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "mode_result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mode_name",
+    "input_refs",
+    "output_refs",
+    "validation_status",
+    "blocking_issues",
+    "next_allowed_modes",
+    "trace_id"
+  ],
+  "properties": {
+    "mode_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_refs": {
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "type": "array"
+    },
+    "output_refs": {
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "type": "array"
+    },
+    "validation_status": {
+      "enum": [
+        "pass",
+        "fail",
+        "partial",
+        "blocked"
+      ],
+      "type": "string"
+    },
+    "blocking_issues": {
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "type": "array"
+    },
+    "next_allowed_modes": {
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "type": "array"
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "x-hard_rules": [
+    "A mode result is the only legal handoff unit between modes.",
+    "Raw previous context is not a legal mode result.",
+    "Every referenced artifact must be explicit."
+  ]
+}

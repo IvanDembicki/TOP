@@ -1,0 +1,17 @@
+{
+  "mode_request": "update_existing_skill",
+  "target_skill": "PlanBuilderSkill",
+  "new_requirements": [
+    "Add an optional detailed execution checklist mode.",
+    "Preserve concise default behavior.",
+    "Do not change public behavior unless the user explicitly requests the detailed mode."
+  ],
+  "constraints": {
+    "preserve_existing_validation": true,
+    "examples_may_be_updated_later": true
+  },
+  "known_risks": [
+    "new mode may alter public behavior if routing is unclear",
+    "example set is not yet updated for the new optional mode"
+  ]
+}

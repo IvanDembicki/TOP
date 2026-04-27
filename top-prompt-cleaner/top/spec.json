@@ -1,0 +1,158 @@
+{
+  "schema_version": "0.2",
+  "skill_name": "TopPromptCleaner",
+  "skill_version": "1.0.0",
+  "status": "stable",
+  "purpose": "Convert raw prompts into cleaner, structured versions. Escalate to TopSkillFactory when complexity exceeds single-prompt scope.",
+  "core_thesis": "A prompt is not clean until its goal, constraints, and output format are explicit and contradiction-free.",
+  "root": "TopPromptCleaner",
+  "invariants_source": "top/shared-rules/core-invariants.md",
+  "invariants": [
+    "ModeRouter activates exactly one mode.",
+    "SensitiveDataDetector runs before any transformation; blocking findings halt the pipeline.",
+    "ComplexityDetector runs before any transformation.",
+    "High complexity routes to FactoryEscalationController, not to a cleaning mode.",
+    "A prompt is a single-scope artifact; multi-step AI workflows are not in scope for cleaning.",
+    "OutputBuilder cannot invent goal, constraints, or output format not present in the original prompt.",
+    "A cleaned prompt must not silently remove user-stated constraints.",
+    "Validation must pass before the result is marked ready.",
+    "TargetLLMStyleMode changes style only, not semantics.",
+    "Diff is required when the prompt was modified.",
+    "Noise removal requires a traceable reason recorded in diff.",
+    "Conflict resolution must be explicit; silent choices are not allowed.",
+    "Escalation and cleaned output are mutually exclusive primary outputs.",
+    "A blocked result is honest; it is not a failure to be hidden.",
+    "ClarificationController blocks in strict mode when goal or output_format is absent and cannot be safely inferred.",
+    "A startup update check should run before active work begins when release metadata and a trusted comparison manifest are available."
+  ],
+  "validation_model": "llm-governed-contract-validation",
+  "tree": {
+    "TopPromptCleaner": {
+      "type": "root_controller",
+      "children": {
+        "ModeRouter": {
+          "type": "controller",
+          "prompt": "prompts/mode-router.md"
+        },
+        "Modes": {
+          "type": "controller",
+          "children": {
+            "QuickCleanMode": {
+              "type": "mode",
+              "prompt": "modes/quick_clean.md",
+              "status": "stable"
+            },
+            "StrictMode": {
+              "type": "mode",
+              "prompt": "modes/strict.md",
+              "status": "stable"
+            },
+            "TargetLLMStyleMode": {
+              "type": "mode",
+              "prompt": "modes/target_llm_style.md",
+              "status": "stable"
+            },
+            "BatchCleanMode": {
+              "type": "mode",
+              "prompt": "roadmap/batch_clean.md",
+              "status": "planned"
+            }
+          }
+        },
+        "CoreControllers": {
+          "type": "controller",
+          "children": {
+            "InputController": {
+              "type": "controller",
+              "prompt": "prompts/input-controller.md",
+              "children": {
+                "SensitiveDataDetector": {
+                  "type": "validator",
+                  "prompt": "prompts/nodes/sensitive-data-detector.md",
+                  "order": 1
+                },
+                "ComplexityDetector": {
+                  "type": "validator",
+                  "prompt": "prompts/nodes/complexity-detector.md",
+                  "order": 2
+                }
+              }
+            },
+            "PromptAnalyzer": {
+              "type": "controller",
+              "prompt": "prompts/prompt_analyzer.md",
+              "children": {
+                "StructureExtractor": {
+                  "type": "extractor",
+                  "prompt": "prompts/nodes/structure-extractor.md",
+                  "output_schema": "schemas/extraction_result.schema.json"
+                },
+                "ConflictDetector": {
+                  "type": "validator",
+                  "prompt": "prompts/nodes/conflict-detector.md"
+                },
+                "ClarificationController": {
+                  "type": "controller",
+                  "prompt": "prompts/nodes/clarification-controller.md"
+                }
+              }
+            },
+            "OutputBuilder": {
+              "type": "assembler",
+              "prompt": "prompts/output-builder.md"
+            },
+            "ValidationController": {
+              "type": "controller",
+              "prompt": "prompts/validation-controller.md",
+              "output_schema": "schemas/validation_result.schema.json"
+            },
+            "FactoryEscalationController": {
+              "type": "controller",
+              "prompt": "prompts/factory_escalation.md"
+            },
+            "FinalDecisionController": {
+              "type": "controller",
+              "prompt": "prompts/final-decision-controller.md",
+              "output_schema": "schemas/final_output.schema.json"
+            }
+          }
+        }
+      }
+    }
+  },
+  "output_contract": {
+    "schemas": [
+      "schemas/normalized_input.schema.json",
+      "schemas/sensitive_data_report.schema.json",
+      "schemas/complexity_report.schema.json",
+      "schemas/extraction_result.schema.json",
+      "schemas/conflict_report.schema.json",
+      "schemas/clarification_state.schema.json",
+      "schemas/clarification_request.schema.json",
+      "schemas/mode_routing_result.schema.json",
+      "schemas/structured_prompt.json",
+      "schemas/diff.schema.json",
+      "schemas/validation_result.schema.json",
+      "schemas/final_decision_signal.schema.json",
+      "schemas/final_output.schema.json",
+      "schemas/target_style_output.schema.json",
+      "schemas/user_response.schema.json"
+    ],
+    "required_artifacts_on_ready": [
+      "structured_prompt",
+      "diff",
+      "one of: cleaned_prompt | target_style_output"
+    ],
+    "required_artifacts_on_escalated": [
+      "escalation_notice"
+    ],
+    "required_artifacts_on_blocked": [
+      "diagnosis"
+    ],
+    "required_artifacts_on_blocked_clarification": [
+      "diagnosis",
+      "clarification_request"
+    ]
+  },
+  "startup_update_check_rule": "top/shared-rules/startup-update-check.md"
+}

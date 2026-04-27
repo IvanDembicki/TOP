@@ -1,0 +1,20 @@
+{
+  "status": "ready",
+  "reason": "Rollback returned the skill to a previously validated target version with traceable reason, audit evidence, and restored artifact set.",
+  "evidence": [
+    "request.md",
+    "structured-rollback-input.json",
+    "version-history.json",
+    "rollback-record.json",
+    "rollback-plan.md",
+    "restored-skill/top/spec.json",
+    "rollback-audit.md",
+    "rollback-dry-run-report.md"
+  ],
+  "artifact_contract": "minimal_demo_contract",
+  "user_acceptance": {
+    "required": false,
+    "status": "not_required_for_demo"
+  },
+  "readiness_note": "The rollback example is ready under the bounded rollback demo contract."
+}

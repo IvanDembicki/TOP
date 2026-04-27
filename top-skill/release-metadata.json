@@ -1,0 +1,9 @@
+{
+  "product_name": "top-skill",
+  "current_version": "1.0.1",
+  "release_channel": "stable-skill-package",
+  "startup_update_check_required": true,
+  "update_check_strategy": "manifest-compare",
+  "manifest_source": "Provide a trusted release-metadata.json from a newer top-skill snapshot or release package.",
+  "notes": "At startup, check whether a newer top-skill package exists before relying on the local copy for serious work."
+}

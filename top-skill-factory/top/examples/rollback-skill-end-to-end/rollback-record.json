@@ -1,0 +1,8 @@
+{
+  "rollback_id": "rbk-001",
+  "source_version": "v0.2-risky",
+  "target_version": "v0.1-validated",
+  "reason": "Restore explicit concise-default behavior boundary.",
+  "validated_target": "validated",
+  "trace_id": "trace-rbk-001"
+}

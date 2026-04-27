@@ -1,0 +1,28 @@
+{
+  "status": "ready",
+  "reason": "The converted bundle preserved intended user-visible behavior, split concise and strategic output into explicit modes, replaced unsafe invention with clarification, and passed the bounded conversion dry run.",
+  "evidence": [
+    "legacy-skill-before.md",
+    "normalized-conversion-input.json",
+    "blind-spot-report.json",
+    "conversion-report.json",
+    "converted-skill/top/spec.json",
+    "converted-skill/top/prompts/root.md",
+    "converted-skill/top/prompts/mode-router.md",
+    "converted-skill/top/prompts/input-controller.md",
+    "converted-skill/top/prompts/user-interaction-controller.md",
+    "converted-skill/top/prompts/validation-controller.md",
+    "converted-skill/top/modes/create-compact-plan-mode.md",
+    "converted-skill/top/modes/create-detailed-plan-mode.md",
+    "converted-skill/top/schemas/clarification-request.schema.json",
+    "converted-skill/top/validation/output-rules.md",
+    "converted-skill/top/validation/contract-rules.md",
+    "conversion-dry-run-report.md"
+  ],
+  "artifact_contract": "minimal_demo_contract",
+  "user_acceptance": {
+    "required": false,
+    "status": "not_required_for_demo"
+  },
+  "readiness_note": "This example demonstrates a conversion-ready bundle under the bounded demo contract."
+}

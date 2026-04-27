@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "conflict_report.schema.json",
+  "title": "conflict_report",
+  "description": "Output of ConflictDetector. Reports tensions or contradictions found in the extracted constraints.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["conflicts", "has_blocking_conflicts"],
+  "properties": {
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["description", "severity", "resolution_recommendation"],
+        "properties": {
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Plain-language description of the conflict."
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["warning", "blocking"],
+            "description": "warning = auto-resolvable in QuickClean; blocking = must surface to user."
+          },
+          "resolution_recommendation": {
+            "type": "string",
+            "minLength": 1,
+            "description": "How the conflict can be resolved. Used by OutputBuilder for warning-level auto-resolution."
+          }
+        }
+      },
+      "description": "All conflicts detected. Empty array when none found."
+    },
+    "has_blocking_conflicts": {
+      "type": "boolean",
+      "description": "True when at least one conflict has severity 'blocking'."
+    }
+  },
+  "x-hard_rules": [
+    "has_blocking_conflicts must be true if and only if at least one conflict has severity 'blocking'",
+    "blocking conflicts halt QuickClean and StrictClean; user must resolve before output is produced",
+    "warning conflicts are auto-resolved in QuickCleanMode; the resolution must appear in diff.resolved_conflicts",
+    "empty conflicts array with has_blocking_conflicts: false is valid when no conflicts found"
+  ]
+}

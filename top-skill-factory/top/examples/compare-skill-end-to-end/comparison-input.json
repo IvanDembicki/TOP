@@ -1,0 +1,12 @@
+{
+  "mode_request": "compare_skill",
+  "skill_a": "skill-a/top",
+  "skill_b": "skill-b/top",
+  "comparison_criteria": [
+    "tree structure",
+    "contract boundaries",
+    "routing behavior",
+    "validation posture",
+    "behavior risk"
+  ]
+}

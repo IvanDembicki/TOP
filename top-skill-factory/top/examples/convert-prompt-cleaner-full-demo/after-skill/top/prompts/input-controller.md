@@ -1,0 +1,1 @@
+# InputController\n\nNormalize raw prompt input and preserve explicit scope.\n

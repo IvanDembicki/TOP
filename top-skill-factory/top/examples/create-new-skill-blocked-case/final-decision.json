@@ -1,0 +1,17 @@
+{
+  "status": "blocked",
+  "reason": "The request leaves unresolved blocking blind spots around domain-general behavior and minimum safe input boundaries.",
+  "evidence": [
+    "request.md",
+    "normalized-input.json",
+    "blind-spot-report.json",
+    "partial-design-note.md",
+    "dry-run-report.md"
+  ],
+  "artifact_contract": "minimal_demo_contract",
+  "user_acceptance": {
+    "required": false,
+    "status": "not_reached"
+  },
+  "readiness_note": "No ready package was produced because blocking clarification was still required."
+}

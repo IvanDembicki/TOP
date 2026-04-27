@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "validation_result.schema.json",
+  "title": "validation_result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["results", "all_pass"],
+  "properties": {
+    "results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rule", "pass"],
+        "properties": {
+          "rule": {
+            "type": "string",
+            "enum": [
+              "goal_present",
+              "output_format_defined",
+              "no_unresolved_blocking_contradictions",
+              "constraints_not_removed",
+              "no_high_complexity_in_cleaning_mode",
+              "no_scope_expansion",
+              "diff_present_if_modified",
+              "sensitive_data_cleared"
+            ],
+            "description": "The rule identifier, matching rules in top/validation/rules.md."
+          },
+          "pass": {
+            "type": "boolean",
+            "description": "Whether this rule passed."
+          },
+          "detail": {
+            "type": "string",
+            "description": "Optional explanation when pass is false."
+          }
+        }
+      },
+      "description": "One entry per validation rule evaluated."
+    },
+    "all_pass": {
+      "type": "boolean",
+      "description": "True only when every rule in results has pass: true."
+    },
+    "blocking_failures": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of rule identifiers that failed and block ready status."
+    }
+  },
+  "x-hard_rules": [
+    "all_pass must be false if any result has pass: false",
+    "blocking_failures must be present and non-empty when all_pass is false",
+    "status ready requires all_pass: true"
+  ]
+}

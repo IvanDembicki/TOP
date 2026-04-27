@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "blind_spot_report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "covered_questions",
+    "missing_questions",
+    "ambiguous_questions",
+    "blocking_blind_spots",
+    "user_clarification_required",
+    "safe_inference_allowed"
+  ],
+  "properties": {
+    "covered_questions": {
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "type": "array"
+    },
+    "missing_questions": {
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "type": "array"
+    },
+    "ambiguous_questions": {
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "type": "array"
+    },
+    "blocking_blind_spots": {
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "type": "array"
+    },
+    "user_clarification_required": {
+      "type": "boolean"
+    },
+    "safe_inference_allowed": {
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "type": "array"
+    },
+    "coverage_dimensions_checked": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "purpose",
+          "target_user",
+          "input_contract",
+          "output_contract",
+          "process_flow",
+          "failure_behavior",
+          "validation_rules",
+          "examples_or_behavior_baseline",
+          "assumptions",
+          "escalation_conditions"
+        ],
+        "type": "string"
+      }
+    }
+  },
+  "x-hard_rules": [
+    "A ready result is invalid when blocking blind spots remain.",
+    "Blocking blind spots must produce clarification or blocked status.",
+    "Safe inference is forbidden for gaps that change public behavior, architecture, validation, or safety."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "status": "draft",
+  "reason": "The rich conversion demo produces a reviewable draft with explicit controllers and evidence, but it is not presented as a final full-ready conversion.",
+  "evidence": [
+    "blind-spot-report.json",
+    "conversion-report.json",
+    "after-skill/top/spec.json"
+  ],
+  "artifact_contract": "workflow_draft_contract",
+  "user_acceptance": {
+    "required": true,
+    "status": "missing"
+  },
+  "readiness_note": "This richer demo is intentionally draft until broader review completes."
+}

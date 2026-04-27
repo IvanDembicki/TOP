@@ -1,0 +1,25 @@
+{
+  "skill_name": "PlanBuilderSkillA",
+  "skill_version": "1.0.0",
+  "purpose": "Generate a concise plan by default and an optional detailed checklist when explicitly requested.",
+  "root": "PlanBuilderSkillA",
+  "tree": {
+    "PlanBuilderSkillA": {
+      "type": "root_controller",
+      "children": {
+        "ModeRouter": {
+          "type": "controller",
+          "prompt": "prompts/mode-router.md"
+        },
+        "CreatePlanMode": {
+          "type": "mode",
+          "prompt": "modes/create-plan-mode.md"
+        },
+        "CreateDetailedChecklistMode": {
+          "type": "mode",
+          "prompt": "modes/create-detailed-checklist-mode.md"
+        }
+      }
+    }
+  }
+}

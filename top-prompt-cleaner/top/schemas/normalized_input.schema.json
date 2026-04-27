@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "normalized_input.schema.json",
+  "title": "normalized_input",
+  "description": "Output of InputController. The raw prompt preserved verbatim, plus metadata extracted before any transformation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["original_prompt", "normalized"],
+  "properties": {
+    "original_prompt": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The exact prompt as submitted by the user. Never modified."
+    },
+    "normalized": {
+      "type": "boolean",
+      "description": "True once the prompt has been ingested and is ready for downstream nodes."
+    },
+    "mode_hint": {
+      "type": "string",
+      "enum": ["quick_clean", "strict_clean", "target_llm_style"],
+      "description": "Optional. Explicit mode override declared by the user in the prompt (e.g. 'mode: strict')."
+    },
+    "target_style": {
+      "type": "string",
+      "enum": ["claude", "gpt", "custom"],
+      "description": "Optional. Explicit target style declared by the user (e.g. 'target_style: claude')."
+    },
+    "open_questions": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Ambiguities or missing fields noted during ingestion, forwarded to ClarificationController."
+    }
+  },
+  "x-hard_rules": [
+    "original_prompt must be the exact user input — no normalization, trimming, or modification",
+    "InputController runs before SensitiveDataDetector — it only ingests, it does not transform",
+    "mode_hint and target_style are extracted but not acted on here — ModeRouter acts on them"
+  ]
+}

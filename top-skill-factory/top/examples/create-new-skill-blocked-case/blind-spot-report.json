@@ -1,0 +1,24 @@
+{
+  "covered_questions": [
+    "high-level goal",
+    "desire for broad applicability"
+  ],
+  "missing_questions": [
+    "minimum required input for launch planning",
+    "definition of launch across domains",
+    "failure behavior when domain detail is absent"
+  ],
+  "ambiguous_questions": [
+    "How much domain-specific information may be inferred safely?",
+    "When should the skill stop and ask for clarification?"
+  ],
+  "blocking_blind_spots": [
+    "The request requires one skill to work across arbitrary domains without defining the minimum information boundary.",
+    "Proceeding without clarification would force the system to invent domain-specific planning logic."
+  ],
+  "user_clarification_required": true,
+  "safe_inference_allowed": [
+    "The skill should aim for concise planning output.",
+    "The skill should support clarification as part of normal operation."
+  ]
+}

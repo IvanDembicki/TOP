@@ -1,0 +1,1 @@
+# TargetLLMStyleMode\n\nAdapt output style for Claude or GPT.\n

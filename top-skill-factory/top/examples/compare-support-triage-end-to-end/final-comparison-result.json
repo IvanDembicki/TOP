@@ -1,0 +1,14 @@
+{
+  "status": "ready",
+  "preferred_variant": "SupportTriageSkillA",
+  "evidence": [
+    "structured-comparison-input.json",
+    "skill-a-summary.md",
+    "skill-b-summary.md",
+    "structural-diff.md",
+    "contract-diff.md",
+    "behavior-risk-report.md",
+    "compare-dry-run-report.md"
+  ],
+  "reason": "Variant A preserves explicit routing ownership and keeps escalation tied to declared severity state. Variant B is more aggressive, but its inference-driven escalation introduces contract ambiguity and weaker auditability."
+}

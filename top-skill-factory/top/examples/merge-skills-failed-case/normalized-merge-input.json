@@ -1,0 +1,19 @@
+{
+  "mode": "MergeSkillsMode",
+  "source_skills": [
+    "PolicyAnswerSkill",
+    "AutoReplySkill"
+  ],
+  "target_skill": "UnifiedSupportAssistant",
+  "merge_goal": "Combine support answering and escalation behavior into one coherent skill without weakening safety policy.",
+  "key_constraints": [
+    "Simple requests should receive immediate direct answers.",
+    "Sensitive or policy-bound requests must require escalation.",
+    "Merged output authority must remain deterministic and explicit."
+  ],
+  "known_conflicts": [
+    "PolicyAnswerSkill requires explicit escalation before any answer on policy-sensitive topics.",
+    "AutoReplySkill permits best-effort direct answers with a warning banner for the same topic family.",
+    "The two source skills disagree on who owns the escalate-versus-answer decision."
+  ]
+}

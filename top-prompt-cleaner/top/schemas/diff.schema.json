@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "diff.schema.json",
+  "title": "prompt_diff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "removed_noise",
+    "rewritten_phrases",
+    "resolved_conflicts",
+    "unresolved_conflicts",
+    "preserved_constraints",
+    "warnings"
+  ],
+  "properties": {
+    "removed_noise": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Filler phrases or redundant connectors removed from the original."
+    },
+    "rewritten_phrases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["original", "rewritten", "reason"],
+        "properties": {
+          "original":  { "type": "string", "minLength": 1 },
+          "rewritten": { "type": "string", "minLength": 1 },
+          "reason":    { "type": "string", "minLength": 1 }
+        }
+      },
+      "description": "Phrases that were rewritten with the reason for the change."
+    },
+    "resolved_conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["conflict", "resolution"],
+        "properties": {
+          "conflict":   { "type": "string", "minLength": 1 },
+          "resolution": { "type": "string", "minLength": 1 }
+        }
+      },
+      "description": "Warning-level conflicts that were auto-resolved."
+    },
+    "unresolved_conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["conflict", "recommendation"],
+        "properties": {
+          "conflict":       { "type": "string", "minLength": 1 },
+          "recommendation": { "type": "string", "minLength": 1 }
+        }
+      },
+      "description": "Blocking conflicts surfaced but not auto-resolved. User must decide."
+    },
+    "preserved_constraints": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "All user-stated constraints that were kept unchanged."
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Non-blocking notices: inferred fields, medium complexity, sensitivity advisory."
+    }
+  },
+  "x-hard_rules": [
+    "diff is required whenever cleaned_prompt differs from raw_prompt",
+    "every removed phrase must appear in removed_noise",
+    "every rewritten phrase must appear in rewritten_phrases with a reason",
+    "every auto-resolved warning-level conflict must appear in resolved_conflicts",
+    "every unresolved blocking conflict must appear in unresolved_conflicts",
+    "preserved_constraints must list all user-stated constraints kept unchanged",
+    "all six arrays are required even if empty"
+  ]
+}

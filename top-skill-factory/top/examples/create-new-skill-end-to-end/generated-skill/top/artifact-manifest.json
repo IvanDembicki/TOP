@@ -1,0 +1,18 @@
+{
+  "manifest_version": "0.1",
+  "contracts": [
+    {
+      "contract_id": "minimal_demo_contract",
+      "applies_to": "The compact create-new-skill generated bundle in this example.",
+      "required_artifacts": [
+        "top/spec.json",
+        "top/prompts/root.md",
+        "top/prompts/mode-router.md",
+        "top/modes/create-plan-mode.md",
+        "top/validation/output-rules.md",
+        "top/provenance.json"
+      ],
+      "readiness_rule": "This bundle may be marked ready only as a bounded demo result, not as a full factory-equivalent skill package."
+    }
+  ]
+}

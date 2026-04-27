@@ -1,0 +1,1 @@
+# ValidationController\n\nCheck contracts and no-fake-ready rules before final status.\n
