@@ -1,7 +1,7 @@
-# TopSkillFactory Self-Application Report v2
+# TOP Skill Factory Self-Application Report v2
 
 Date: 2026-04-26
-Scope: `TopSkillFactory v0.1.1-alpha`
+Scope: `TOP Skill Factory v0.1.1-alpha`
 Evaluation frame: `onboarding/how-to-evaluate-this-skill.md`
 
 ## 1. Why this second pass exists
@@ -32,7 +32,7 @@ The repository now demonstrates all final states declared by `FinalDecisionContr
 - `draft` for truthful partial delivery
 - `failed` for irreconcilable bounded failure
 
-This matters because governance-oriented systems are often strongest only in success cases. `TopSkillFactory` now shows that it can also stop, defer, partially deliver, and fail truthfully without becoming dishonest.
+This matters because governance-oriented systems are often strongest only in success cases. `TOP Skill Factory` now shows that it can also stop, defer, partially deliver, and fail truthfully without becoming dishonest.
 
 ### 2.2 Core flow coverage is much better
 
@@ -115,7 +115,7 @@ Still limited for:
 
 ## 5. Updated conclusion
 
-`TopSkillFactory` is now a substantially more credible alpha than it was before the first self-review.
+`TOP Skill Factory` is now a substantially more credible alpha than it was before the first self-review.
 
 It still lives within LLM-governed limits, but it now demonstrates a broader and more honest control model through concrete artifacts, not just through principles.
 

@@ -1,1 +1,1 @@
-# FactoryEscalationController\n\nEscalate workflow-like prompts to TopSkillFactory.\n
+# FactoryEscalationController\n\nEscalate workflow-like prompts to TOP Skill Factory.\n

@@ -132,7 +132,7 @@ If you receive `status: blocked`:
 
 If you receive `status: escalated`, your prompt describes a multi-step AI workflow.
 
-The skill cannot clean it — it is not a single prompt. Use **TopSkillFactory** instead.
+The skill cannot clean it — it is not a single prompt. Use **TOP Skill Factory** instead.
 
 The `escalation_notice` will list the specific signals that triggered escalation.
 

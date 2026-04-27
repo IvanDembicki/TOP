@@ -29,7 +29,7 @@ Classify as low / medium / high:
 If high: stop. Output:
   Status: escalated
   Why: [specific signals]
-  Next step: Use TopSkillFactory → CreateNewSkillMode
+  Next step: Use TOP Skill Factory → CreateNewSkillMode
 
 STEP 3 — MODE SELECTION
   • User declares target_style (claude/gpt) or prompt has model-specific idioms → TargetLLMStyle

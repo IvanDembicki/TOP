@@ -99,7 +99,7 @@ TOP Prompt Cleaner
         │
         ├─ Single prompt → clean and return
         │
-        └─ Multi-step workflow detected → escalate to TopSkillFactory
+        └─ Multi-step workflow detected → escalate to TOP Skill Factory
 ```
 
 It answers the question: **"Is this a prompt problem or a system design problem?"**

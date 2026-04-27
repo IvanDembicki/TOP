@@ -1,7 +1,7 @@
 # Behavioral Pass Report
 
 Date: 2026-04-26
-Scope: `TopSkillFactory v0.1.1-alpha`
+Scope: `TOP Skill Factory v0.1.1-alpha`
 
 ## Purpose
 

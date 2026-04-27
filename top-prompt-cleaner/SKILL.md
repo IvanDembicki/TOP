@@ -1,7 +1,7 @@
 ---
 name: top-prompt-cleaner
 version: 1.0.0
-description: Clean, structure, validate, and adapt any single prompt. Escalates complex multi-step workflows to TopSkillFactory.
+description: Clean, structure, validate, and adapt any single prompt. Escalates complex multi-step workflows to TOP Skill Factory.
 trigger: when a user shares a prompt they want improved, cleaned, structured, or adapted for a specific model
 ---
 
@@ -32,7 +32,7 @@ Do not use this skill when:
 - Task describes a multi-agent or multi-step AI workflow
 - Task requires designing a skill, agent, or system
 - Request involves routing between multiple AI behaviors based on runtime conditions
--> For those cases: use TopSkillFactory in CreateNewSkillMode
+-> For those cases: use TOP Skill Factory in CreateNewSkillMode
 
 ## What the user receives
 
@@ -51,7 +51,7 @@ Do not use this skill when:
 
 ## Key behavior
 
-- High complexity -> escalation to TopSkillFactory, no partial cleanup
+- High complexity -> escalation to TOP Skill Factory, no partial cleanup
 - Sensitive content (API keys, passwords) -> blocked immediately
 - PII / internal URLs -> warning in QuickClean, blocked in StrictClean
 - Blocking conflicts -> surfaced in diff, not silently resolved

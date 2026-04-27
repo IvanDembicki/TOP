@@ -137,7 +137,7 @@ TOP Prompt Cleaner handles single prompts only.
 
 NEXT STEP
 ─────────
-Use TopSkillFactory → CreateNewSkillMode
+Use TOP Skill Factory → CreateNewSkillMode
 to design the full workflow as a proper skill.
 ```
 

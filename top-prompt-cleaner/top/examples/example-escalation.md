@@ -33,12 +33,12 @@ It is not a single prompt to be cleaned — it is a system design task.
 - Routing logic between agents based on a score evaluation
 - Conditional loop requiring shared state across steps
 
-**What TopSkillFactory can help with:**
+**What TOP Skill Factory can help with:**
 - Define the agent tree and node contracts for each role
 - Design structured signal passing between agents
 - Set up validation and decision logic for the routing step
 
-**Recommended next step:** Use TopSkillFactory in CreateNewSkillMode.
+**Recommended next step:** Use TOP Skill Factory in CreateNewSkillMode.
 
 ## Final state: escalated
 
@@ -55,7 +55,7 @@ It is not a single prompt to be cleaned — it is a system design task.
       "stateful loop-back behavior",
       "multi-step workflow with inter-agent communication"
     ],
-    "recommended_next_step": "Use TopSkillFactory in CreateNewSkillMode to define the agent tree and node contracts."
+    "recommended_next_step": "Use TOP Skill Factory in CreateNewSkillMode to define the agent tree and node contracts."
   }
 }
 ```

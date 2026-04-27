@@ -1,6 +1,6 @@
-# TopSkillFactory
+# TOP Skill Factory
 
-TopSkillFactory turns messy AI skills into structured, validated, versioned skill systems.
+TOP Skill Factory turns messy AI skills into structured, validated, versioned skill systems.
 
 Short hook:
 
@@ -24,7 +24,7 @@ pwsh ./top-skill-factory.ps1 demo --out .\tmp\demo-output
 
 ## What it is
 
-TopSkillFactory is a TOP-based meta-skill for:
+TOP Skill Factory is a TOP-based meta-skill for:
 
 - creating new skills
 - converting legacy prompt-skills

@@ -171,7 +171,7 @@ You will process a customer support ticket in four steps:
     "handle unclear category as edge case"
   ],
   "warnings": [
-    "Medium complexity detected: this prompt includes sequential routing logic and conditional branching. It works as a single prompt now, but if it grows (more steps, more agents, dynamic routing), consider moving it to TopSkillFactory as a skill."
+    "Medium complexity detected: this prompt includes sequential routing logic and conditional branching. It works as a single prompt now, but if it grows (more steps, more agents, dynamic routing), consider moving it to TOP Skill Factory as a skill."
   ]
 }
 ```

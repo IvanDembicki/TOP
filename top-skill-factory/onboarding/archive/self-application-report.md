@@ -1,12 +1,12 @@
-# TopSkillFactory Self-Application Report
+# TOP Skill Factory Self-Application Report
 
 Date: 2026-04-25
-Scope: `TopSkillFactory v0.1.1-alpha`
+Scope: `TOP Skill Factory v0.1.1-alpha`
 Evaluation frame: `onboarding/how-to-evaluate-this-skill.md`
 
 ## 1. Purpose of this report
 
-This report applies the repository's own evaluation frame to `TopSkillFactory` itself.
+This report applies the repository's own evaluation frame to `TOP Skill Factory` itself.
 
 It is not a claim of formal proof. It is a structured self-assessment intended to:
 
@@ -19,7 +19,7 @@ It is not a claim of formal proof. It is a structured self-assessment intended t
 
 ### 2.1 Clear problem definition
 
-`TopSkillFactory` is explicit about the problem it tries to solve:
+`TOP Skill Factory` is explicit about the problem it tries to solve:
 
 - context drift
 - hidden assumptions
@@ -181,7 +181,7 @@ Less proven for:
 
 ## 7. Overall conclusion
 
-`TopSkillFactory` should be considered a strong governance-oriented alpha for LLM-based skill engineering.
+`TOP Skill Factory` should be considered a strong governance-oriented alpha for LLM-based skill engineering.
 
 Its main value is not that it proves correctness. Its main value is that it materially improves:
 

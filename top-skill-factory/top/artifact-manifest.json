@@ -3,7 +3,7 @@
   "contracts": [
     {
       "contract_id": "full_factory_contract",
-      "applies_to": "TopSkillFactory repository and any full skill bundle claiming full readiness under the complete factory contract.",
+      "applies_to": "TOP Skill Factory repository and any full skill bundle claiming full readiness under the complete factory contract.",
       "required_artifacts": [
         "SKILL.md",
         "README.md",
@@ -28,7 +28,7 @@
         "top/examples/*",
         "top/artifact-manifest.json"
       ],
-      "readiness_rule": "Use when a result claims full TopSkillFactory readiness."
+      "readiness_rule": "Use when a result claims full TOP Skill Factory readiness."
     },
     {
       "contract_id": "stable_workflow_contract",

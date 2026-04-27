@@ -37,7 +37,7 @@ pwsh ./top-skill-factory.ps1 demo --out .\tmp\demo-output
 
 ### Talking points
 
-1. `TopSkillFactory is for when a skill stopped being just a prompt.`
+1. `TOP Skill Factory is for when a skill stopped being just a prompt.`
 2. `It converts loose workflow text into explicit contracts, validation surfaces, and mode structure.`
 3. `It does not hide uncertainty behind fake ready states.`
 4. `It can validate both the repository and generated workflow outputs.`

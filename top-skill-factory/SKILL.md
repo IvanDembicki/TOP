@@ -3,7 +3,7 @@ name: top-skill-factory
 description: Convert messy AI skills and prompt workflows into structured TOP skill systems with explicit modes, contracts, signals, validation, comparison, rollback, and legacy-conversion reports. Stable bounded workflows cover create, convert, update, compare, rollback, validate, check-output, and demo. Merge remains experimental.
 ---
 
-# TopSkillFactory
+# TOP Skill Factory
 
 Use this skill to create, convert, update, compare, rollback, and audit AI skills as structured TOP artifacts instead of loose prompts.
 

@@ -19,7 +19,7 @@
 | [example-gpt-style](example-gpt-style.md) | TargetLLMStyle | `ready` | GPT profile — role to system message, task to user message |
 | [example-generic-style](example-generic-style.md) | TargetLLMStyle | `ready` | Generic profile — auto-detected from AI artifact idiom |
 | [example-sensitive-blocked](example-sensitive-blocked.md) | (any) | `blocked` | API key detected — pipeline halted before transformation |
-| [example-escalation](example-escalation.md) | (none) | `escalated` | Multi-agent workflow — routed to TopSkillFactory |
+| [example-escalation](example-escalation.md) | (none) | `escalated` | Multi-agent workflow — routed to TOP Skill Factory |
 
 ---
 

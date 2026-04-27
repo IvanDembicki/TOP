@@ -1,11 +1,11 @@
 {
   "schema_version": "0.2",
-  "skill_name": "TopSkillFactory",
+  "skill_name": "TOP Skill Factory",
   "skill_version": "1.0.0",
   "status": "stable",
   "purpose": "Create, convert, update, validate, compare, debug, and document AI skills as TOP-based skill systems.",
   "core_thesis": "A skill is not a prompt. A skill is a controlled tree of responsibilities, contracts, signals, validation rules, budgets, and outputs.",
-  "root": "TopSkillFactory",
+  "root": "TOP Skill Factory",
   "invariants": [
     "ModeRouter activates exactly one mode unless CompositeFlowController explicitly defines a composite flow.",
     "Leaf nodes never control flow directly. They return structured signals to their parent controller.",
@@ -23,7 +23,7 @@
     "A startup update check should run before active work when release metadata and a comparison source are available."
   ],
   "tree": {
-    "TopSkillFactory": {
+    "TOP Skill Factory": {
       "type": "root_controller",
       "children": {
         "ModeRouter": {

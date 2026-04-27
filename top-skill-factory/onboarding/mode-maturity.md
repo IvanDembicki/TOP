@@ -1,6 +1,6 @@
-# TopSkillFactory Mode Maturity
+# TOP Skill Factory Mode Maturity
 
-This file explains how to interpret mode readiness in TopSkillFactory 1.0.0.
+This file explains how to interpret mode readiness in TOP Skill Factory 1.0.0.
 
 ## Stable
 

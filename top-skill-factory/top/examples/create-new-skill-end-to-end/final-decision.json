@@ -16,5 +16,5 @@
     "required": false,
     "status": "not_required_for_demo"
   },
-  "readiness_note": "This example is ready under the minimal demo contract, not the full TopSkillFactory repository contract."
+  "readiness_note": "This example is ready under the minimal demo contract, not the full TOP Skill Factory repository contract."
 }

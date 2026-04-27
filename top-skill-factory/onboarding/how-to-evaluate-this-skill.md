@@ -1,10 +1,10 @@
 # How to Evaluate This Skill
 
-This file explains how `TopSkillFactory` should be evaluated by an external reviewer, including another AI system.
+This file explains how `TOP Skill Factory` should be evaluated by an external reviewer, including another AI system.
 
 ## 1. What this skill is trying to solve
 
-`TopSkillFactory` is a stable bounded skill package for turning AI skill authoring from a loose prompt-writing process into a controlled system with:
+`TOP Skill Factory` is a stable bounded skill package for turning AI skill authoring from a loose prompt-writing process into a controlled system with:
 
 - explicit structure
 - bounded modes
@@ -38,7 +38,7 @@ The correct standard is not “does this replace a full runtime orchestrator.”
 
 ## 3. What this version claims
 
-`TopSkillFactory 1.0.0` claims:
+`TOP Skill Factory 1.0.0` claims:
 
 - stable bounded workflows for `create`, `convert`, `update`, `compare`, `rollback`, `validate`, `check-output`, and `demo`
 - workflow output contracts with explicit ready vs draft boundaries
@@ -129,7 +129,7 @@ A useful review should separate:
 
 The most accurate frame is:
 
-> `TopSkillFactory` should be evaluated as a stable bounded governance package for LLM-based skill engineering, not as a substitute for a full autonomous runtime.
+> `TOP Skill Factory` should be evaluated as a stable bounded governance package for LLM-based skill engineering, not as a substitute for a full autonomous runtime.
 
 Within that frame, the key question is:
 

@@ -1,8 +1,8 @@
-# TopSkillFactory Quick Start
+# TOP Skill Factory Quick Start
 
 ## 1. What it is
 
-TopSkillFactory is a TOP-based system for turning loose prompt-skills into structured, validated skill artifacts.
+TOP Skill Factory is a TOP-based system for turning loose prompt-skills into structured, validated skill artifacts.
 
 ## 2. Stable release scope
 

@@ -97,7 +97,7 @@ Your prompt describes a multi-step AI workflow — not a single prompt.
 - Stateful loops (loop-back, retry, shared memory)
 - Persistent state or external system handoffs
 
-**Fix:** Use TopSkillFactory to design the multi-agent system. The `escalation_notice.signals` list explains exactly what was detected.
+**Fix:** Use TOP Skill Factory to design the multi-agent system. The `escalation_notice.signals` list explains exactly what was detected.
 
 ### Target style not applied
 
@@ -113,7 +113,7 @@ If target_style is not declared, the skill auto-detects from idioms. If no idiom
 
 Your prompt includes sequential logic, conditional branching, or edge-case handling that could grow into a workflow.
 
-This is not an error. The prompt was cleaned successfully. The warning in `diff.warnings` suggests considering TopSkillFactory if the prompt grows more complex.
+This is not an error. The prompt was cleaned successfully. The warning in `diff.warnings` suggests considering TOP Skill Factory if the prompt grows more complex.
 
 ---
 

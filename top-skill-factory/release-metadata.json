@@ -4,6 +4,6 @@
   "release_channel": "stable",
   "update_check_strategy": "manifest-compare",
   "manifest_source": "Local manifest compare by default. A trusted newer release-metadata.json file may be provided explicitly.",
-  "notes": "TopSkillFactory 1.0.0 is a stable bounded skill package with CLI workflows, validator coverage, regression tests, and security proof cases. It is not a full autonomous runtime.",
+  "notes": "TOP Skill Factory 1.0.0 is a stable bounded skill package with CLI workflows, validator coverage, regression tests, and security proof cases. It is not a full autonomous runtime.",
   "startup_update_check_supported": true
 }

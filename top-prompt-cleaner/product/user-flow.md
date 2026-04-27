@@ -5,7 +5,7 @@
 | Where user starts | What they bring |
 |---|---|
 | Direct use via Claude/ChatGPT | A prompt they already have and want improved |
-| Referred from TopSkillFactory | A single-prompt question, not a skill design task |
+| Referred from TOP Skill Factory | A single-prompt question, not a skill design task |
 | Team prompt library review | A batch of prompts to audit and clean |
 
 ---
@@ -20,7 +20,7 @@ TOP Prompt Cleaner receives it
         │
         ├─ SensitiveDataDetector → clean? ──NO──▶ Blocked: sensitive data notice
         │
-        ├─ ComplexityDetector → high? ──YES──▶ Escalated: refer to TopSkillFactory
+        ├─ ComplexityDetector → high? ──YES──▶ Escalated: refer to TOP Skill Factory
         │
         ├─ StructureExtractor → goal found? ──YES──▶ continue
         │
@@ -75,7 +75,7 @@ Complexity: high → no cleaning happens
         ▼
 Escalation notice:
   - signals that triggered escalation
-  - recommended next step: TopSkillFactory → CreateNewSkillMode
+  - recommended next step: TOP Skill Factory → CreateNewSkillMode
 ```
 
 ---
@@ -111,7 +111,7 @@ Normal QuickClean or StrictClean path continues
 | `blocked` (conflict) | The specific conflict, its severity, and resolution options |
 | `blocked` (missing field) | A clarification question with suggested answers including free text |
 | `blocked` (sensitive data) | What was found, why it blocks, and what to do before resubmitting |
-| `escalated` | Why it escalated and a direct referral to TopSkillFactory |
+| `escalated` | Why it escalated and a direct referral to TOP Skill Factory |
 
 ---
 

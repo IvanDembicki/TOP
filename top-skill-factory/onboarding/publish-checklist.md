@@ -21,7 +21,7 @@
 
 ## Stable release messaging
 
-- [ ] Present this as `TopSkillFactory 1.0.0 stable bounded skill package`
+- [ ] Present this as `TOP Skill Factory 1.0.0 stable bounded skill package`
 - [ ] Keep `merge` explicitly experimental
 - [ ] Do not claim full runtime orchestration
 - [ ] Do not claim compiler-grade enforcement

@@ -59,5 +59,5 @@ Not required for 1.0. Do not block 1.0 on these.
 
 - `BatchCleanMode` implementation (target: 1.1.0)
 - Prompt library integration
-- TopSkillFactory automation
+- TOP Skill Factory automation
 - `npm script: validate:release` stricter thresholds

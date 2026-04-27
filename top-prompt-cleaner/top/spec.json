@@ -3,7 +3,7 @@
   "skill_name": "TopPromptCleaner",
   "skill_version": "1.0.0",
   "status": "stable",
-  "purpose": "Convert raw prompts into cleaner, structured versions. Escalate to TopSkillFactory when complexity exceeds single-prompt scope.",
+  "purpose": "Convert raw prompts into cleaner, structured versions. Escalate to TOP Skill Factory when complexity exceeds single-prompt scope.",
   "core_thesis": "A prompt is not clean until its goal, constraints, and output format are explicit and contradiction-free.",
   "root": "TopPromptCleaner",
   "invariants_source": "top/shared-rules/core-invariants.md",

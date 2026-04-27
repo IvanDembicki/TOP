@@ -1,6 +1,6 @@
 # top/
 
-This folder is the source-of-truth bundle for `TopSkillFactory`.
+This folder is the source-of-truth bundle for `TOP Skill Factory`.
 
 It contains the artifacts that define how the skill is structured, how it routes work, how it validates output, and how it demonstrates behavior.
 

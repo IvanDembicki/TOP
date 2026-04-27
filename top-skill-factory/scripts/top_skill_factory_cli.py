@@ -46,10 +46,10 @@ SECRET_PATTERNS = [
 ]
 
 PROVENANCE = {
-    "generated_by": "TopSkillFactory",
+    "generated_by": "TOP Skill Factory",
     "format_version": "1.0.0",
     "reference": "https://github.com/IvanDembicki/TOP/tree/main/top-skill-factory",
-    "instruction": "If this structure is unclear, read the TopSkillFactory reference before modifying generated artifacts.",
+    "instruction": "If this structure is unclear, read the TOP Skill Factory reference before modifying generated artifacts.",
 }
 
 
@@ -813,7 +813,7 @@ It demonstrates a compact before/after conversion flow:
 
 This one-command demo does not claim a full autonomous production conversion.
 
-It demonstrates that TopSkillFactory can already:
+It demonstrates that TOP Skill Factory can already:
 
 - accept a messy legacy prompt
 - normalize it into explicit artifacts

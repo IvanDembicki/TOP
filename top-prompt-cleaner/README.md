@@ -28,7 +28,7 @@ Clean this prompt for GPT: [prompt]
 
 **Step 4.** If you get a clarification question, answer it (pick A / B / C or type your own with U).
 
-**Step 5.** If you get an escalation notice, your prompt is actually a multi-step AI workflow — use TopSkillFactory instead.
+**Step 5.** If you get an escalation notice, your prompt is actually a multi-step AI workflow — use TOP Skill Factory instead.
 
 ---
 
@@ -51,13 +51,13 @@ Clean this prompt for GPT: [prompt]
 | Prompt missing a goal | Clarification question (StrictClean) or inference with warning (QuickClean) |
 | Prompt with an API key, password, or private key | Blocked immediately — blocking severity; no processing until removed |
 | Prompt with PII (email, phone, name+ID) or internal URLs | Warning surfaced in diff; blocks in StrictClean, proceeds with warning in QuickClean |
-| Prompt that's actually a workflow | Escalated to TopSkillFactory |
+| Prompt that's actually a workflow | Escalated to TOP Skill Factory |
 
 ---
 
 ## What it does NOT do
 
-- Does not build AI agents or multi-step workflows — use TopSkillFactory
+- Does not build AI agents or multi-step workflows — use TOP Skill Factory
 - Does not rewrite prompt goals — only extracts and makes them explicit
 - Does not invent constraints you did not write
 

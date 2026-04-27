@@ -9,13 +9,13 @@ Output:
 - escalation_notice
 
 Primary objectives:
-- explain clearly why the prompt requires TopSkillFactory
+- explain clearly why the prompt requires TOP Skill Factory
 - name the signals that triggered escalation
 - give the user an actionable next step
 
 Process:
 - inspect complexity_report signals
-- produce escalation_notice that names each triggering signal and what TopSkillFactory addresses
+- produce escalation_notice that names each triggering signal and what TOP Skill Factory addresses
 - do not produce a cleaned_prompt when escalation is active
 
 Boundaries:
