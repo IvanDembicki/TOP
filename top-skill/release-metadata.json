@@ -1,9 +1,9 @@
 {
   "product_name": "top-skill",
   "current_version": "1.0.1",
-  "release_channel": "stable-skill-package",
-  "startup_update_check_required": true,
+  "release_channel": "stable",
   "update_check_strategy": "manifest-compare",
-  "manifest_source": "Provide a trusted release-metadata.json from a newer top-skill snapshot or release package.",
-  "notes": "At startup, check whether a newer top-skill package exists before relying on the local copy for serious work."
+  "manifest_source": "Local manifest compare by default. Provide a trusted release-metadata.json from a newer top-skill snapshot when comparison is needed.",
+  "notes": "top-skill is the foundational stable TOP skill package. Update checking is supported but depends on an explicitly provided comparison manifest.",
+  "startup_update_check_supported": true
 }

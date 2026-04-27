@@ -2,8 +2,8 @@
   "product_name": "top-prompt-cleaner",
   "current_version": "1.0.0",
   "release_channel": "stable",
-  "startup_update_check_required": false,
   "update_check_strategy": "manifest-compare",
   "manifest_source": "Local comparison only. Provide a release-metadata.json from a newer snapshot to compare versions. No remote manifest configured.",
-  "notes": "Update checking is supported but not required. Comparison requires an external manifest provided by the user."
+  "notes": "Update checking is supported but not required. Comparison requires an external manifest provided by the user.",
+  "startup_update_check_supported": true
 }

@@ -2,7 +2,9 @@
 
 © 2026 Ivans Dembickis · [ivan.dembicki@gmail.com](mailto:ivan.dembicki@gmail.com) · MIT License
 
-Paste any prompt → get a better one, with a full explanation of what changed and why.
+Paste any prompt -> get a better one, with a full explanation of what changed and why.
+
+This product is the prompt-cleaning layer in the TOP product line. If the prompt turns out to be a multi-step workflow or an actual skill, escalate to `top-skill-factory` instead of stretching this tool past its scope.
 
 ---
 

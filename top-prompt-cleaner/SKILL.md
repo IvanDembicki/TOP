@@ -18,6 +18,8 @@ On every invocation, before processing the user's prompt:
 
 See `top/shared-rules/startup-update-check.md` for full behavior.
 
+Within the TOP product line, this is the single-prompt cleanup tool. It should escalate to `top-skill-factory` rather than simulate skill design or workflow governance.
+
 ---
 
 Use this skill when:

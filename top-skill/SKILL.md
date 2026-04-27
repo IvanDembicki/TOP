@@ -5,13 +5,15 @@ description: Skill for designing, generating, and validating systems built with 
 
 # TOP Skill
 
-**Version:** 1.0.0
+**Version:** 1.0.1
 **Last updated:** 2026-04-24
 **Invocation:** `/top`
 
 > **Rule for AI:** whenever any top-skill file is modified, update the date and time in this field to the current values.
 
 This skill is intended for tasks where a system **is explicitly treated or must be treated as a tree of nodes** in terms of **Tree-Oriented Programming (TOP)**.
+
+Within the TOP product line, this is the foundational architecture skill. Use `top-prompt-cleaner` for single-prompt cleanup and `top-skill-factory` for governed skill lifecycle work.
 
 ---
 

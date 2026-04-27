@@ -1,10 +1,15 @@
 # TOP Skill — Tree-Oriented Programming
 
-**Version:** 1.0.0 | **License:** MIT | **Invocation:** `/top`
+**Version:** 1.0.1 | **License:** MIT | **Invocation:** `/top`
 
 **TOP turns architecture from a weak social norm into a strong machine-verifiable protocol.**
 
 A skill for AI-driven design, generation, and validation of systems built with the **Tree-Oriented Programming (TOP)** paradigm.
+
+This product is the foundational skill layer in the broader TOP product line:
+- use `top-skill` for TOP architecture, canon, modeling, and generation protocol;
+- use `top-prompt-cleaner` when the problem is still a single messy prompt;
+- use `top-skill-factory` when the prompt or skill now needs lifecycle control, contracts, validation gates, compare, update, or rollback.
 
 ---
 
@@ -61,13 +66,13 @@ The sufficient operational unit in TOP is the pair **`spec + prompt`**. Code is 
 
 ## Getting started
 
-Give your AI the link to this repository:
+Open the TOP workspace:
 
 ```
-Load the TOP skill from https://github.com/IvanDembicki/TOP
+https://github.com/IvanDembicki/TOP
 ```
 
-The AI will load all the knowledge it needs about the paradigm and can start applying TOP in your work. Type `/top` to begin.
+Then start with the `top-skill` package when the task is architectural, tree-based, or TOP-native. Type `/top` to begin.
 
 ---
 

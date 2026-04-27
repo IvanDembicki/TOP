@@ -8,7 +8,7 @@
     "product_name",
     "current_version",
     "release_channel",
-    "startup_update_check_required",
+    "startup_update_check_supported",
     "update_check_strategy",
     "manifest_source"
   ],
@@ -25,9 +25,6 @@
       "type": "string",
       "minLength": 1
     },
-    "startup_update_check_required": {
-      "type": "boolean"
-    },
     "update_check_strategy": {
       "type": "string",
       "enum": [
@@ -41,6 +38,9 @@
     "notes": {
       "type": "string",
       "minLength": 1
+    },
+    "startup_update_check_supported": {
+      "type": "boolean"
     }
   }
 }
