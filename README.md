@@ -6,7 +6,7 @@ This repository is the root navigation layer for the current TOP product line. I
 
 ## Product line
 
-### 1. `top-skill`
+### 1. [`top-skill`](top-skill/)
 
 The foundational TOP skill package.
 
@@ -18,7 +18,7 @@ Use this if you need:
 
 Start here if you want to understand the TOP model itself.
 
-### 2. `top-prompt-cleaner`
+### 2. [`top-prompt-cleaner`](top-prompt-cleaner/)
 
 A product for cleaning, tightening, and restructuring prompts.
 
@@ -30,7 +30,7 @@ Use this if you need:
 
 Start here if the problem is still mainly “this prompt is messy”.
 
-### 3. `top-skill-factory`
+### 3. [`top-skill-factory`](top-skill-factory/)
 
 A governed skill-lifecycle product for converting, validating, comparing, updating, and rolling back AI skills.
 
@@ -42,11 +42,6 @@ Use this if you need:
 
 Start here if the problem is no longer “a prompt”, but “a skill that now needs architecture and lifecycle control”.
 
-## How to choose
-
-- Want to learn TOP itself -> [`top-skill/`](top-skill/)
-- Want to improve prompts -> [`top-prompt-cleaner/`](top-prompt-cleaner/)
-- Want to turn skills into governed artifacts -> [`top-skill-factory/`](top-skill-factory/)
 
 ## Repository structure
 
