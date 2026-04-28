@@ -26,3 +26,5 @@ Blocking violations:
 - Blocking blind spots unresolved in a ready or draft-as-ready result.
 - Claimed output-generation skill has no output-side example artifacts.
 - Legacy conversion result is presented as ready without a conversion report.
+- CreateNewSkillMode result is presented without an ExistingSolutionCheck result.
+- Decision is `build` in ExistingSolutionCheck without a populated build_justification.

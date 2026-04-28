@@ -23,6 +23,9 @@ Primary objectives:
 - make conversion value explicit through a structured report
 
 Process:
+- ask the user via ResearchForInsight canonical question before conversion work begins (see `prompts/nodes/research-for-insight.md` — User-facing question):
+  - User confirms → run ResearchForInsight; use the report as additional context throughout conversion
+  - User declines → proceed directly to conversion
 - extract purpose, behavior, and structure cues from legacy evidence
 - identify blind spots, contradictions, unsafe assumption patterns, and sensitive imported material
 - preserve legitimate behavior while rejecting unsafe fallback logic
