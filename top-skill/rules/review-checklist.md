@@ -40,6 +40,17 @@ A result is not valid until all checklist items pass.
 
 ---
 
+
+## 4a. Pull-Based Construction
+
+- TOP objects are born at their architectural position in the tree
+- node constructors receive only the parent reference as semantic input
+- root `RootContext`, if present, is not a dependency injection container
+- Content/View constructors receive exactly one narrow typed owner access interface
+- Content/View is not typed against or downcast to the concrete controller
+- runtime props, slots, builders, render parameters, native view parameters, stores, services, callbacks, and prebuilt fragments are not used as semantic injection channels
+- View pulls from owner; owner pulls from children; children expose opaque handles
+- TOP spec props are not confused with runtime props
 ## 5. Lifecycle correctness
 
 - lifecycle ownership is explicit

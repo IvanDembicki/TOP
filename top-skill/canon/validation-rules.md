@@ -15,6 +15,15 @@ Local functionality does not override TOP rules.
 - Public node surface and internal access boundaries must not be mixed.
 - No real interaction outside allowed protocol boundaries.
 
+
+## Construction and locality validation
+- Every TOP object is constructed at its architectural position in the tree.
+- Node constructors receive only the parent reference as their semantic argument; root `null`/`RootContext` is allowed only as a root ownership/bootstrap marker, not as dependency injection.
+- Content/View constructors receive exactly one semantic argument: a narrow typed access interface implemented by the owning Node/Controller.
+- Content/View is not typed against, imported as, downcast to, or stored as the concrete controller class.
+- No data, callbacks, flags, stores, services, child components, slots, render props, builders, platform child views, prebuilt fragments, child view handles, or arbitrary props are pushed into Content/View through constructors or runtime render channels.
+- View pulls from owner; owner pulls from children; children expose opaque handles.
+- TOP spec props are declarative metadata, not runtime props.
 ## Content validation
 - Content has no architectural will.
 - Content does not manage lifecycle.

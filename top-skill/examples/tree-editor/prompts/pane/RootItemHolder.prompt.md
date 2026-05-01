@@ -33,7 +33,7 @@ Owns no state beyond being the logical parent of the root TreeItem.
 
 1. Constructor: no root item is created.
 2. Constructor: creates the holder content boundary with `setContent(...)`.
-3. On `init(sourceData)`: clears existing children (removing their views and logical nodes), creates a new root TreeItem from `lib:pane.TreeItem` via the library mechanism, places its view through the holder content boundary, calls `reset(sourceData)`.
+3. On `init(sourceData)`: clears existing children (removing their views and logical nodes), creates a new root TreeItem from `lib:pane.TreeItem` via the library mechanism with this node as parent, obtains its opaque view handle through the child controller, places that handle through the holder content boundary, then calls `reset(sourceData)` as an explicit post-construction data initialization method.
 4. The root TreeItem's view is placed into RootItemHolder's content area through content access.
 
 ## 7. Side Effects
@@ -56,7 +56,7 @@ Owns no state beyond being the logical parent of the root TreeItem.
 
 - Visual element: `div` with CSS class `root-item-holder`.
 - Child removal: `child.getView()?.remove(); child.remove()` for each existing child.
-- New root item view: `this.content.mount(item.getView())`.
+- New root item view: `this.content.mount(item.getView())` is parent-owned placement of a direct child opaque handle, not external view injection.
 - Extends `DomNode`.
 
 ## 11. Expected Materialization

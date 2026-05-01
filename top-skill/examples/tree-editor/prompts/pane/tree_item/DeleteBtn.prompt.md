@@ -54,7 +54,7 @@ Has no child nodes.
 - Visual element: `button` with CSS classes `edit-btn` and `delete-btn`, text content `×`, `title` attribute `"Delete node"`.
 - View is placed by the parent node during `buildChildren()`.
 - Click: `event.stopPropagation()` then `this._treeItem._onDeleteClick()`.
-- TypeScript/DOM constructor note: create content-local handlers before passing them into content, or pass the node/controller access object directly to the content boundary.
+- TypeScript/DOM constructor note: the Content constructor receives exactly one narrow typed controller access interface. Do not pass callbacks or handler bundles as extra constructor arguments; content-local handlers call methods on that access interface.
 - Extends `DomNode`.
 
 ## 11. Expected Materialization

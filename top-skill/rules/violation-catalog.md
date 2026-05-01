@@ -30,6 +30,13 @@ Affect architectural correctness. Always block finalization.
 | CORE-015 | Logic in content violation | Behavioral or architectural decision logic inside content — orchestration, lifecycle decisions, protocol routing, or state-driven behavior selection. |
 | CORE-016 | Semantic layer platform leakage | Layer B contains platform primitives, source-framework APIs, CSS/DOM/widget terms as truth, or copies source implementation details instead of semantic intent. |
 | CORE-017 | Target adaptation semantic drift | Layer C or generated target artifacts change business/system meaning, introduce new behavior, or adapt source primitives without preserving semantic intent. |
+| CORE-018 | Pull-based construction violation | TOP object constructed outside its architectural tree position and pushed inward instead of being born where it belongs. |
+| CORE-019 | Content/View semantic injection | Content/View constructor or runtime props/render channel receives data, callbacks, flags, stores, services, child components, slots, builders, prebuilt fragments, platform child views, child view handles, or arbitrary props instead of exactly one narrow owner access interface. |
+| CORE-020 | Concrete controller exposure to Content/View | Content/View is typed against, imports, stores, inspects, or downcasts to the concrete controller class instead of depending only on a narrow typed access interface. |
+| CORE-021 | Pushed child composition | Child components, child nodes, child view handles, platform child views, slots, render props, builders, or prebuilt view fragments are pushed into a View from parent/root/external code. |
+| CORE-022 | View child ownership violation | View constructs, imports, directly owns, or navigates child nodes/controllers instead of asking its owning controller for opaque child view handles. |
+| CORE-023 | RootContext dependency injection | `RootContext` is used as a generic dependency injection container or as a channel for application data, callbacks, services, stores, child instances, view fragments, or arbitrary props. |
+| CORE-024 | Spec props / runtime props confusion | TOP spec `props` are treated as React props, Flutter widget fields, native view parameters, Web component attributes, render parameters, or another runtime injection/composition channel. |
 
 ---
 

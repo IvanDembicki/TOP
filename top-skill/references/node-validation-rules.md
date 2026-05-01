@@ -55,6 +55,27 @@ Canonical correction direction:
 
 ---
 
+
+## 2a. Pull-Based Construction / Locality Validation
+
+Required checks:
+- every Node constructor has exactly one semantic argument: its parent reference;
+- a root constructor using `null` or `RootContext` treats it only as a root ownership/bootstrap marker, not as a dependency injection container;
+- every Content/View public constructor has exactly one semantic argument: a narrow typed access interface implemented by its owning controller;
+- Content/View constructor parameters, fields, and stored references are typed as the narrow access interface, not as the concrete controller class;
+- Content/View does not import, reference, inspect, or downcast to the concrete controller type;
+- Content/View does not receive data, callbacks, flags, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, or arbitrary props;
+- the same semantic inputs are not moved into runtime props, render parameters, Flutter constructor fields, builders, slots, native view parameters, Web component attributes, or analogous platform composition channels;
+- View requests data/actions/child view handles from its owning controller through explicit access methods;
+- the owning controller obtains child view handles from direct child controllers through public APIs;
+- View does not construct, import, inspect, or directly own child nodes.
+
+Canonical correction direction:
+- move child construction to the owning parent controller at the child position in the tree;
+- replace pushed constructor/runtime inputs with explicit access methods on a narrow access interface;
+- type Content/View only against the access interface;
+- remove downcasts/imports back to concrete controller types;
+- classify legacy props/slots/render parameters as wrapped legacy until they are removed from the TOP-conformant path.
 ## 3. Content behavior validation
 
 Required checks:

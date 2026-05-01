@@ -14,3 +14,9 @@ rules:
 - no architecture change
 - generate from Layer B semantic intent and Layer C target adaptation, not from source-platform primitives
 - do not invent behavior absent from the semantic layer
+- enforce Pull-Based Construction / Locality of Object Birth
+- node constructor receives only the parent reference as semantic input
+- Content/View constructor receives exactly one narrow typed access interface implemented by the owning controller
+- do not type Content/View against the concrete controller, and do not import/downcast back to it
+- do not generate semantic injection through constructor parameters, runtime props, slots, builders, render parameters, callbacks, stores, services, child components, platform child views, or prebuilt fragments
+- View pulls from owner; owner pulls from children; children expose opaque handles

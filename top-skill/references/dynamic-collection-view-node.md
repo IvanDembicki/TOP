@@ -35,7 +35,7 @@ Correct:
 - `NewsListContainerNode` itself owns the `NewsItem` children and builds the repeated list from their views.
 
 Incorrect:
-- `WindowView` simultaneously works with static slots and directly iterates news items.
+- `WindowView` simultaneously works with static named child-view endpoints and directly iterates news items.
 
 ---
 
@@ -55,10 +55,10 @@ The controller may provide:
 **Homogeneous collection** — a collection in which:
 - all items share the same base node type (or one common supertype);
 - each item is processed in the same way when building the view;
-- no item requires special-casing or a named slot.
+- no item requires special-casing or a named child-view endpoint.
 
 Example: all children are `TreeItemNode` → homogeneous.
-Counter-example: children are `HeaderNode`, `SectionNode`, `FooterNode` → not homogeneous; these are named slots, not a collection boundary.
+Counter-example: children are `HeaderNode`, `SectionNode`, `FooterNode` → not homogeneous; these are named child-view endpoints, not a collection boundary.
 
 ---
 
@@ -70,7 +70,7 @@ Counter-example: children are `HeaderNode`, `SectionNode`, `FooterNode` → not 
 - a collection explicitly declared in the node's contract.
 
 Forbidden:
-- mixing static named slots and a dynamic child collection in a single ordinary visual contract;
+- mixing static named child-view endpoints and a dynamic child collection in a single ordinary visual contract;
 - flattening descendants deeper than direct collection children;
 - delivering the internal items of a dynamic collection to the parent node instead of the container view.
 
@@ -78,7 +78,7 @@ Forbidden:
 
 A single `DynamicCollectionViewNode` declares exactly one collection boundary.
 
-If a node has several dynamic groups of children — each group is extracted into a separate `DynamicCollectionViewNode`, and the parent is an ordinary visual node with named slots referencing those container nodes.
+If a node has several dynamic groups of children — each group is extracted into a separate `DynamicCollectionViewNode`, and the parent is an ordinary visual node with named child-view endpoints referencing those container nodes.
 
 ---
 

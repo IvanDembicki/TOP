@@ -58,7 +58,7 @@ Has no child nodes.
 - Default inner content: `FILE_SVG`.
 - On `update`: set `innerHTML` to the appropriate SVG and toggle the activation presentation marker according to `hasChildren`.
 - Click: `event.stopPropagation()` before calling `this._treeItem._toggle()`.
-- TypeScript/DOM constructor note: create content-local handlers before passing them into content, or pass the node/controller access object directly to the content boundary.
+- TypeScript/DOM constructor note: the Content constructor receives exactly one narrow typed controller access interface. Do not pass callbacks or handler bundles as extra constructor arguments; content-local handlers call methods on that access interface.
 - Extends `DomNode`.
 
 ## 11. Expected Materialization

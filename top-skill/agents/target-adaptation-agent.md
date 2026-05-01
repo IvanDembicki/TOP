@@ -45,6 +45,8 @@ If a discrepancy arises between this agent file and the output contract:
 - introduce new business logic
 - change TOP structure, ownership, controller/content boundaries, or lifecycle
 - push target primitives back into prompts, specs, or semantic layer
+- treat platform composition syntax as TOP ownership semantics
+- use target props, slots, builders, render parameters, native child views, or widget constructor fields as semantic injection channels into TOP Content/View
 - treat target adaptation as source truth
 </forbidden>
 
@@ -54,6 +56,7 @@ If a discrepancy arises between this agent file and the output contract:
 - no source-platform primitive leaks into a non-source target
 - target behavior follows native platform expectations
 - TOP invariants remain intact
+- platform composition syntax is used only as materialization syntax; ownership remains pull-based through controller/content boundaries
 </validation_focus>
 
 <handoff_rules>

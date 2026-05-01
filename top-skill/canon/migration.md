@@ -76,6 +76,29 @@ prompt, not left implicit.
 
 ---
 
+## Mg-3a. Legacy composition is wrapped legacy, not TOP end state
+
+During migration, existing props, slots, render parameters, builders, callback
+bundles, service bags, stores, prebuilt child components, and platform child views
+may be retained only as explicitly declared wrapped legacy or adapter mechanics.
+
+They are not TOP-conformant final structure.
+
+The target migration direction is pull-based construction:
+- a Node constructor receives only its parent reference;
+- a Content/View constructor receives exactly one narrow typed owner access interface;
+- Content/View is not typed against the concrete controller;
+- parent Nodes/Controllers construct direct children at their tree positions;
+- View asks its owner for data, actions, and child view handles;
+- the owner asks direct child controllers for opaque public handles.
+
+A migration plan that merely moves legacy constructor injection into runtime props,
+slots, builders, render callbacks, or native child-view parameters has not reached
+TOP architecture. It has only changed the platform syntax of the same push-based
+composition.
+
+---
+
 ## Mg-4. Content boundary isolation check
 
 Before declaring a migration slice implemented, verify:

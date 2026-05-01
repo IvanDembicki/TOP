@@ -47,3 +47,16 @@ This example is the recommended starting point for teams evaluating TOP.
 4. **Compare with your mental model** — notice how ownership, state, and boundaries are made explicit.
 5. **Try a neighboring node** — expand to `EditorModeHolder` or `TreeItem` to see switchable and dynamic collection patterns.
 6. **Decide on scope** — TOP works incrementally. One branch at a time is a valid adoption strategy.
+
+## Pull-based construction audit
+
+This example is intended to follow the Pull-Based Construction / Locality of
+Object Birth invariant. Prompt wording that describes mounting child views refers
+to parent-owned materialization of direct child opaque handles, not to React-style
+slots, runtime props, external child injection, or prebuilt fragment passing.
+
+During generation, Content/View constructors must receive exactly one narrow typed
+owner access interface. Child nodes are constructed by their owning parent
+controllers at their tree positions. Legacy-looking target syntax such as DOM
+`mount(child.getView())` is valid only when it is the parent's own materialization
+primitive for a direct child opaque handle.

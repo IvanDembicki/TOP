@@ -53,6 +53,67 @@ Forbidden:
 
 ---
 
+## 2a. Pull-Based Construction / Locality of Object Birth Invariant
+
+A TOP object must be constructed at the exact place where it architecturally belongs in the tree.
+
+Objects are not assembled outside the tree and pushed inward.
+Objects are born at their position in the tree.
+
+This invariant is foundational. It is not a React-specific recommendation and it is not merely a constructor style preference. Push-based composition breaks TOP ownership semantics by making the tree decorative instead of real.
+
+### Construction rule
+
+- A Node constructor receives exactly one semantic argument: its Parent reference.
+- For a root node, the parent may be `null` or a special `RootContext`.
+- `RootContext` is only a root ownership/bootstrap marker. It must not become a generic dependency injection container and must not pass application data, callbacks, services, stores, child instances, view fragments, or arbitrary props into the tree.
+- A parent Node/Controller owns its direct children and is responsible for constructing them.
+- A Content/View constructor receives exactly one semantic argument: a narrow typed access interface implemented by its owning Node/Controller.
+- The Content/View constructor must not receive the concrete Node/Controller as its concrete class type. The runtime object may be the controller instance, but the Content/View must be typed only against the narrow access interface.
+- The Content/View constructor must not receive additional data, callbacks, flags, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, or arbitrary props.
+- The same restriction applies to runtime props/render parameters. Moving injection from constructor parameters to React props, Flutter constructor fields, render callbacks, builders, slots, native view parameters, Web component attributes, or analogous platform channels is still the same violation.
+
+### Pull direction
+
+Correct direction:
+
+```text
+View -> asks owning Node/Controller for data/actions/child view handles
+Owning Node/Controller -> asks child Node/Controller for public view handles
+Child Node/Controller -> returns opaque public view handle
+```
+
+Incorrect direction:
+
+```text
+Parent/root/external code creates data/actions/children/fragments outside the tree
+-> pushes them into View through constructor parameters, runtime props, slots, builders, callbacks, or prebuilt handles
+```
+
+When a parent View needs to render a child, the parent View asks its owning Node/Controller through its narrow access interface. The owning Node/Controller then asks the direct child Node/Controller for its public opaque view handle. The child Node/Controller returns its own view handle through its public API. The View may place returned opaque handles, but must not construct, import, inspect, downcast, or directly own child nodes.
+
+### Spec props clarification
+
+TOP spec props are declarative metadata in the TOP specification. `props.source`, `props.contentType`, `props.dir`, and analogous fields are not React props, Flutter widget fields, Web component attributes, native view parameters, or runtime render parameters. They are not a runtime injection channel and must not be used to justify props-based composition in React, React Native, Flutter, native Android/iOS, Web, or any other target.
+
+### Platform mechanics clarification
+
+The phrase "exactly one semantic argument" applies to the public constructor of the concrete TOP Content/View. Inside the Content/View implementation, it may create its own DOM element, native view, Flutter widget wrapper, internal platform object, or pass internal objects to protected/base constructors when required by the platform abstraction. External code must not pass `HTMLElement`, `Widget`, `UIView`, `Fragment`, draggable flags, tokens, children, slots, callbacks, stores, services, or prebuilt fragments into the TOP Content/View constructor.
+
+### Motivation
+
+This rule keeps the tree real, not decorative. If objects are assembled outside the tree and pushed inward, the visible tree no longer explains who owns what. Ownership direction becomes hidden in external assembly code.
+
+It preserves locality. A node should be locally understandable from its own spec, prompt, parent contract, children, and explicit access interfaces. Push-based composition creates hidden external dependencies that are invisible when reviewing the node itself.
+
+It prevents props/slot tunneling. Passing data, callbacks, services, stores, child components, or prebuilt view fragments through constructors, runtime props, slots, builders, or render parameters creates a side-channel that bypasses the tree.
+
+It makes the architecture verifiable. AI agents and validators can check local construction, ownership, and access interfaces when objects are born at their tree positions. They cannot reliably verify hidden external assembly dependencies that are pushed into a View from arbitrary code.
+
+It keeps TOP cross-platform. The rule is about ownership semantics, not React syntax. React props, Flutter constructor fields, SwiftUI builders, Android/iOS native view parameters, Web component attributes, and DOM fragments are all target materialization syntax. They do not define TOP ownership.
+
+---
+
 ## 3. AI Executor Invariant
 
 AI operates as executor within the model — not as architect of the model.
@@ -132,13 +193,14 @@ Any other node — whether an ancestor at any level above or a sibling — does 
 A node does not "give" its view to anyone — it exposes `getView()` and the caller is bound by tree position.
 
 Permitted:
-- a parent calling `getView()` on its direct children and composing the results into its own view.
+- an owning parent controller calling `getView()` on its direct children only as part of pull-based, parent-owned materialization, then handing the opaque handles to its own content/view through an explicit local boundary for placement.
 
 Forbidden:
 - calling `getView()` on a node from any position other than its direct parent;
 - accessing a descendant's view by bypassing intermediate nodes;
 - calling `getView()` on a sibling node directly;
-- skipping levels in view composition.
+- skipping levels in view composition;
+- receiving child view handles from external assembly code through constructor parameters, runtime props, slots, builders, render callbacks, or prebuilt fragments.
 
 ---
 
@@ -362,10 +424,13 @@ owns the action that changes the state is the owner, regardless of how many
 branches read it. Reading a value in multiple branches does not split ownership.
 
 When cross-cutting state is needed by multiple children, the common ancestor
-derives and distributes it as typed input through `IContentAccess` or through
-explicitly typed initialization parameters of the corresponding child branches.
-Children consume the derived value; they do not independently derive the same
-fact from cross-cutting sources.
+derives it once and exposes it through explicit access methods or named update
+methods owned by the relevant controller boundary. It must not push the derived
+value into child constructors, content/view constructors, runtime props, slots,
+builders, callbacks, or prebuilt fragments. Children consume the derived value
+through explicit local access/update methods after they have been constructed at
+their tree positions; they do not independently derive the same fact from
+cross-cutting sources.
 
 See also: `references/architecture-rules.md` R4c — the related but distinct
 case where the state holder must be the owner of the managed entity, not the
@@ -386,8 +451,11 @@ controller per subtree, then distributed as an explicit typed value.
 
 If the same fact appears in multiple controllers — each independently deriving it
 from the same underlying source — this is a derivation duplication defect.
-The correct form: one controller derives the fact once; other controllers receive
-the derived value through typed initialization parameters or typed `IContentAccess` fields.
+The correct form: one controller derives the fact once; other controllers obtain
+the derived value through explicit access methods or named update methods after
+they have been constructed at their tree positions. The derived value must not be
+pushed through child constructors, content/view constructors, runtime props,
+slots, builders, callbacks, or prebuilt fragments.
 
 This invariant applies regardless of whether the derivation is cheap or expensive.
 The concern is ownership clarity: one derivation point makes the source-of-truth

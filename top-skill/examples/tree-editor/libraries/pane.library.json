@@ -160,7 +160,7 @@
               "children": [
                 {
                   "type": "ChildrenList",
-                  "doc": "Mutable container holding child TreeItem instances. Its view is exposed through ExpandedState.getView() and mounted by the parent switcher into ExpandCollapseHolder content.",
+                  "doc": "Mutable container holding child TreeItem instances. Its opaque view handle is pulled by its direct parent ExpandedState through getView(); the parent switcher pulls ExpandedState view and places it into ExpandCollapseHolder content.",
                   "prompt": "prompts/pane/tree_item/ChildrenList.prompt.md",
                   "props": {
                     "contentType": "view"

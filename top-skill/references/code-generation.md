@@ -65,6 +65,36 @@ Before code generation:
 
 Generation may use target-specific primitives only from Layer C or from the active target's own conventions.
 It must not copy source-platform constructs from prompts, platform notes, imported code, CSS, DOM, Flutter widgets, UIKit/Android classes, or framework APIs into another target.
+
+## 3.2. Pull-Based Construction / Locality of Object Birth
+
+Generated code must construct every TOP object at the exact place where it
+architecturally belongs in the tree.
+
+Node constructors receive exactly one semantic argument: the parent reference.
+For root materialization, `null` or `RootContext` is permitted only as a root
+ownership/bootstrap marker. `RootContext` must not become a dependency injection
+container.
+
+Content/View constructors receive exactly one semantic argument: a narrow typed
+access interface implemented by the owning controller. The concrete controller
+may be the runtime object passed to the constructor, but Content/View must be
+typed only against the narrow access interface. Generated Content/View code must
+not import, reference, inspect, store, or downcast to the concrete controller type.
+
+Generated code must not pass data, callbacks, flags, stores, services, child
+components, slots, prebuilt view fragments, platform child views, child view
+handles, or arbitrary props into Content/View constructors. It must also not move
+the same semantic injection into runtime props, render parameters, builders,
+slots, native view parameters, widget constructor fields, Web component
+attributes, or analogous platform channels.
+
+View pulls from owner. Owner pulls from children. Children expose opaque handles.
+Platform composition syntax may be used only as local materialization syntax; it
+must not become the ownership model.
+
+---
+
 ## 4. Controller / Content split in generation
 
 Every node always has a controller.
@@ -84,6 +114,10 @@ Generated architecture must not mix the controller and concrete content into a s
 Generated architecture must preserve the public node surface and two distinct internal access boundaries:
 - `IControllerAccess` for content/view access to the controller via a narrow private contract;
 - `IContentAccess` for controller access to content via a narrow private contract.
+
+Content/View must be constructed and stored against the narrow `IControllerAccess`
+contract, not against the concrete controller class. The public constructor of
+the concrete TOP Content/View receives exactly that one semantic argument.
 
 Content must not access the public node surface. Anything else is strictly prohibited.
 
@@ -136,7 +170,7 @@ Both directions must be accounted for:
 - `IControllerAccess` / content-to-controller: what content may report or request from its own controller.
 
 If a direction has no permitted calls, generation must materialize or explicitly document a zero-contract for that direction according to the target technology. Silent omission is not valid.
-Raw callbacks, anonymous objects, full controller references, or full concrete content references are not valid substitutes for a named internal contract where the technology can express one.
+Raw callbacks, anonymous objects, full controller references, full concrete controller types, full concrete content references, or runtime props are not valid substitutes for a named internal contract where the technology can express one.
 
 These boundaries/artifacts:
 - are not the full controller or the full concrete content object;
@@ -304,6 +338,8 @@ Typical errors include:
 - relocation performed without updating spec/prompt paths;
 - generation mixes controller and concrete content;
 - generation leaves controller code directly manipulating its own platform primitive instead of calling named `IContentAccess` commands;
+- generation passes semantic inputs into Content/View through extra constructor arguments, runtime props, slots, builders, callbacks, stores, services, child components, platform child views, or prebuilt fragments;
+- generation types Content/View against the concrete controller or downcasts/imports back to that concrete type;
 - generation places hidden content/view declarations before the internal access boundary that stands between the controller and content;
 - generation makes non-visual content publicly accessible;
 - generation loses the distinction between `view` and `component`.

@@ -12,6 +12,7 @@ This example is derived from the node spec and implementation prompts. The code 
 - Switchable state holder with two visual child states
 - Controller / Content split with named access contracts
 - Parent-owned child view placement through the switchable mechanism
+- Pull-based Content/View access through narrow typed owner interfaces
 - Content-local low-level activation subscriptions
 - Full pipeline: `spec → prompt → code`
 
@@ -87,7 +88,7 @@ Target-specific details are declared in prompt §10 and may differ across platfo
 
 ### Semantic requests cross through controller access
 
-Content forwards activation as a semantic request to its controller access contract. The node layer then calls `TreeEditor.toggleEditMode()`.
+Content forwards activation as a semantic request to its narrow controller access contract. The runtime object may be the controller instance, but content is typed only against the access interface and receives no extra constructor data, callbacks, child handles, slots, or props. The node layer then calls `TreeEditor.toggleEditMode()`.
 
 ### Children don't mount themselves
 
@@ -143,3 +144,7 @@ Content handles target primitives and low-level subscriptions. Architectural dec
 `findUpByType(TreeEditorNode)` is acceptable because this branch has an architectural guarantee that a `TreeEditor` ancestor exists. The accessed members are public TreeEditor contract members named in the prompt.
 
 For untyped library insertion where that ancestor is not guaranteed, the node must use an explicit connector contract instead of assuming a concrete ancestor.
+
+## Known example scope
+
+The TypeScript files in `code/` are a branch fragment extracted from the larger Tree Editor example. They demonstrate narrow Content/View access interfaces and one-argument Content constructors, but their Node constructor parent types still use runtime base types because the concrete host branch is not included in this standalone artifact. In a full TOP materialization, replace those parent types with the concrete owning parent type or a root `RootContext`/`null` case where this branch is truly the root.

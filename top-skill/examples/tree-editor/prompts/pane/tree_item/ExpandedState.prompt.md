@@ -6,7 +6,7 @@ sourcePath: src/pane/tree_item/expanded_state.top
 
 ## 1. Node Identity and Role
 
-ExpandedState is the first (default active) child of ExpandCollapseHolder. When active, it represents the expanded state of a tree item. It is a logical state node with no visual content of its own. It contains ChildrenList as its only child and exposes the ChildrenList view through `getView()`.
+ExpandedState is the first (default active) child of ExpandCollapseHolder. When active, it represents the expanded state of a tree item. It is a logical state node with no visual content of its own. It contains ChildrenList as its only child and, as ChildrenList's direct parent, pulls the ChildrenList opaque view handle through `getView()` before exposing its own public opaque handle to the parent switcher.
 
 ## 2. Responsibility
 
@@ -67,7 +67,7 @@ Owns no independent state. It is itself the expanded state representation. The c
 
 - Extends `SwitchableNode`.
 - `buildChildren()`: creates `this._childrenList = new ChildrenListNode(this)`.
-- `getView()`: activates ChildrenList if inactive, then returns `this._childrenList?.getView() ?? null`.
+- `getView()`: activates ChildrenList if inactive, then returns `this._childrenList?.getView() ?? null` as a direct-parent pull of an opaque handle, not as external child injection.
 - TreeItem lookup: `this._treeItem = this.findUpByType(TreeItemNode)` captured in constructor.
 
 ## 11. Expected Materialization

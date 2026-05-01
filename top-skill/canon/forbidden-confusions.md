@@ -28,8 +28,9 @@ The returned value is an opaque view handle for parent-owned materialization onl
 - The node's view is private. Direct access to the view from outside is forbidden.
 - The view-part builds only its own visual shell.
 - If the view-part needs child visual content, it requests it only from its own controller via `IControllerAccess`.
-- The controller itself retrieves `child.getView()` from the child node and returns the result to its own view-part.
+- The controller itself retrieves `child.getView()` from the direct child node and returns the result to its own view-part through an explicit access method.
 - A parent may use a child view only as a placement/composition unit: mount, unmount, insert, reorder, replace, or pass into the parent's own content boundary.
+- The child view handle must be pulled through the owning controller. It must not be pushed into content/view from root code, parent render code, runtime props, slots, builders, callbacks, or prebuilt fragments.
 - A regular visual node does not iterate `children` to build UI. Only explicitly declared named child-view endpoints are permitted.
 - Dynamic repeated composition from an array of child nodes is only permitted inside a dedicated `DynamicCollectionViewNode`.
 
@@ -41,8 +42,43 @@ Forbidden:
 - querying inside a child view obtained via `getView()`
 - using a child view's platform API as a behavior or communication channel
 - self-mounting a child node into the parent view
-- mixing static named slots and dynamic child collection in the same regular visual contract
+- mixing static named child-view endpoints and dynamic child collection in the same regular visual contract
 - flattening dynamic descendants into the parent visual contract instead of a separate container node
+
+---
+
+### Pull-based construction vs pushed composition
+
+TOP construction is pull-based and local: objects are born at their architectural
+position in the tree. A parent Node/Controller constructs its direct children.
+Content/View asks its owning controller for data, actions, and child view handles.
+The owning controller asks direct child controllers for opaque public handles.
+
+Forbidden:
+- constructing data/actions/children/fragments externally and pushing them into
+  Content/View through constructors, runtime props, slots, builders, render
+  callbacks, native view parameters, stores, services, or arbitrary props
+- passing concrete child components or platform child views into a TOP View
+- treating ordinary React/Flutter/Web composition as TOP ownership
+- moving constructor injection into render-time props and claiming the constructor
+  rule is satisfied
+
+Push-based composition is not merely another implementation style. It makes the
+tree decorative, hides ownership in external assembly code, and prevents local
+verification.
+
+### TOP spec props vs runtime props
+
+TOP spec props are declarative metadata in the TOP model. They are not React
+props, Flutter widget fields, Web component attributes, native view parameters,
+or runtime render parameters.
+
+Forbidden:
+- using `props.source`, `props.contentType`, `props.dir`, or other spec props as
+  justification for runtime props-based composition
+- treating a platform prop/slot/builder API as a TOP ownership boundary
+- tunneling semantic dependencies through runtime props because the constructor
+  rule forbids them
 
 ---
 

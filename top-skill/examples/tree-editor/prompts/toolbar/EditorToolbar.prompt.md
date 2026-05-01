@@ -25,7 +25,7 @@ Owns no state.
 ## 5. Child Interaction Rules
 
 - Has two direct children: EditToggleBtn and BuildInfo.
-- EditorToolbar places child views through its content boundary in `buildChildren()`.
+- EditorToolbar constructs its direct children in `buildChildren()`, obtains their opaque view handles from the child controllers, and places those handles through its own content boundary.
 - EditorToolbar does not call methods on its children.
 
 ## 6. Lifecycle
@@ -53,7 +53,7 @@ None.
 ## 10. Platform Implementation Notes
 
 - Visual element: `div` with CSS class `editor-toolbar`.
-- Child mounting uses `this.content.mount(child.getView())`.
+- Child mounting may use `this.content.mount(child.getView())` only as the toolbar controller's own parent-owned placement primitive for direct child opaque handles; it is not a slot/props injection pattern.
 - Extends `DomNode`.
 
 ## 11. Expected Materialization

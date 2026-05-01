@@ -43,6 +43,21 @@ See `references/architecture-rules.md` R5b for the full rule, patterns, and dete
 
 ---
 
+
+## 1a. Construction access is not dependency injection
+
+Guaranteed access starts from real tree ownership. It is not created by passing
+dependencies into constructors, runtime props, slots, builders, render callbacks,
+native view parameters, stores, services, or prebuilt fragments.
+
+A Node constructor receives only its parent reference as semantic input.
+Content/View receives only a narrow typed access interface implemented by its
+owning controller. All data, actions, state, and child view handles that
+Content/View needs must be requested through explicit methods on that access
+interface.
+
+Root `null` or `RootContext` is allowed only for root ownership/bootstrap. It
+must not become a dependency injection container.
 ## 2. Search access
 
 Search access is access to nodes that are not structurally guaranteed to exist.

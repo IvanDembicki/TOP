@@ -6,7 +6,7 @@ sourcePath: src/pane/tree_item/children_list.top
 
 ## 1. Node Identity and Role
 
-ChildrenList is a mutable container that holds the child TreeItem instances of a tree item. It is the logical child of ExpandedState, which has no visual content of its own. ExpandedState exposes the ChildrenList view through `getView()`, and the parent switcher places that view into ExpandCollapseHolder content.
+ChildrenList is a mutable container that holds the child TreeItem instances of a tree item. It is the logical child of ExpandedState, which has no visual content of its own. ExpandedState, as the direct parent of ChildrenList, pulls the ChildrenList opaque view handle through `getView()`; the parent switcher then pulls ExpandedState's public opaque handle and places it into ExpandCollapseHolder content.
 
 ChildrenList follows a **destroy/activate content lifecycle**: its visual content is destroyed when the tree item collapses and re-created when it expands. The logical child nodes (TreeItems) are retained in the node tree across this cycle.
 
@@ -51,7 +51,7 @@ ChildrenList follows a **destroy/activate content lifecycle**: its visual conten
 
 - Creating a child TreeItem from `lib:pane.TreeItem` (via `addItem` or `init`) triggers `reset(data)`, which recursively initializes the entire subtree below that child.
 - `deactivate()` removes this node's visual content from the materialized view.
-- `activate()` re-creates this node's visual content so it can be returned by `getView()` and mounted by the parent switcher.
+- `activate()` re-creates this node's visual content so it can be returned by `getView()` as an opaque handle and placed by the parent switcher through parent-owned materialization.
 
 ## 8. Constraints and Invariants
 
@@ -70,8 +70,8 @@ ChildrenList follows a **destroy/activate content lifecycle**: its visual conten
 - Visual element: `div` with CSS class `children-list`.
 - In the DOM implementation, visual content is represented by the node's `el`.
 - `deactivate()`: calls `this.clearContent()` (base class method that destroys the content and nulls the reference).
-- `activate()`: calls `this.setContent(new ChildrenListContent(...))`, then re-mounts each child's view via `this.content.mount(child.getView())`.
-- Child TreeItem views are DOM elements returned by `child.getView()` and mounted through `this.content.mount(...)`.
+- `activate()`: calls `this.setContent(new ChildrenListContent(access))`, where `access` is the single narrow typed owner access interface, then re-mounts each direct child's opaque view handle via the parent-owned placement primitive `this.content.mount(child.getView())`.
+- Child TreeItem views are opaque handles returned by direct child controllers through `child.getView()` and mounted through `this.content.mount(...)` for placement only.
 - Extends `DomNode`.
 
 ## 11. Expected Materialization

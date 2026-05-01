@@ -44,7 +44,7 @@ TreeEditor queries EditorModeHolder via the private `_editorModeHolder` referenc
 
 1. Constructor: initializes TreeEditor-owned runtime state only.
 2. Constructor: creates the editor content boundary with `setContent(...)`.
-3. `buildChildren()`: creates EditorToolbar, EditorModeHolder, and EditorPane in the declared order; places the visual child views through TreeEditor's content boundary.
+3. `buildChildren()`: creates EditorToolbar, EditorModeHolder, and EditorPane in the declared order; obtains direct child opaque view handles from those child controllers and places them through TreeEditor's own content boundary.
 4. `mount(container, sourceData)`: attaches the editor view to the host container; delegates data initialization to EditorPane, which in turn calls `rootItemHolder.init(sourceData)`.
 5. `refreshAll()`: performs a synchronous depth-first traversal of the full node subtree and calls `refresh()` on each node.
 

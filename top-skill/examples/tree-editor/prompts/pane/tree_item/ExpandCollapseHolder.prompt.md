@@ -29,7 +29,7 @@ ExpandCollapseHolder is the exclusive owner of the expanded/collapsed state of a
 - Two children: ExpandedState (`_expandedState`, default) and CollapsedState (`_collapsedState`).
 - `_expandedState` is active by default. During initial child materialization, assign it as the active child and place its view without firing child lifecycle hooks.
 - Switching via `this.openChild(newChild)` called directly in `toggle()`, firing `onClose()` on the outgoing child and `onOpen()` on the incoming child.
-- ChildrenList view is exposed by ExpandedState.getView() and mounted/unmounted by the base switcher through ExpandCollapseHolder content.
+- The active child's opaque view handle is pulled from the direct child via `getView()` and mounted/unmounted by the base switcher through ExpandCollapseHolder content. ExpandedState may internally pull ChildrenList's handle because ExpandedState is ChildrenList's direct parent.
 - Does not call methods on children directly other than through lifecycle hooks.
 
 ## 6. Lifecycle

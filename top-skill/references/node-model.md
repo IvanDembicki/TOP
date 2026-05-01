@@ -46,6 +46,42 @@ In both cases, content is prohibited from:
 
 ---
 
+### 1.1. Pull-Based Construction and Locality of Object Birth
+
+A TOP object is constructed at the exact place where it architecturally belongs
+in the tree. Objects are not assembled outside the tree and pushed inward.
+
+Node construction:
+- a Node constructor receives exactly one semantic argument: its parent reference;
+- for a root node, the parent may be `null` or `RootContext`;
+- `RootContext` is only a root ownership/bootstrap marker, not a dependency
+  injection container;
+- the parent Node/Controller owns and constructs its direct children.
+
+Content/View construction:
+- a Content/View constructor receives exactly one semantic argument: a narrow
+  typed access interface implemented by its owning Node/Controller;
+- the constructor must not be typed as the concrete controller class;
+- the runtime object may be the controller instance, but Content/View must store
+  and use it only through the narrow access interface;
+- Content/View must not import, inspect, or downcast to the concrete controller;
+- Content/View must not receive additional data, callbacks, flags, stores,
+  services, child components, slots, prebuilt view fragments, platform child
+  views, child view handles, or arbitrary props;
+- runtime props/render parameters/builders/slots/native view parameters are not
+  a valid substitute for constructor injection.
+
+The legal data-flow direction is:
+
+```text
+View -> owning controller -> child controller -> opaque public view handle
+```
+
+This keeps ownership local, makes each node understandable in isolation, and
+prevents ordinary platform composition from being mistaken for TOP architecture.
+
+---
+
 ## 2. Content and `props.contentType`
 
 If a node has content, it must have exactly one concrete content class.
@@ -143,7 +179,7 @@ These are not the external API of the node and have no relation to the public no
 If a node has a separate content class/object, separate explicit access artifacts for these boundaries are mandatory.
 Such artifacts may be an interface, a nested interface, an abstract contract, an adapter, a wrapper, a proxy, or a separate access class.
 An implicit object without a separate contract artifact does not qualify as a complete materialization of the protocol.
-If the language supports explicit typing, these artifacts must be materialized in signatures as well: a constructor/factory/method parameter that accepts an artifact must have an explicit contract type; the field/reference storing the artifact must also be explicitly typed. An anonymous/untyped parameter such as `constructor(facing)` is not a correct implementation of a protocol boundary. Anything else is categorically prohibited.
+If the language supports explicit typing, these artifacts must be materialized in signatures as well: a constructor/factory/method parameter that accepts an artifact must have an explicit contract type; the field/reference storing the artifact must also be explicitly typed. For Content/View, the public constructor receives exactly one semantic argument, and that argument must be typed as the narrow access interface. The concrete controller class is not an acceptable Content/View constructor type even if the controller implements the interface. An anonymous/untyped parameter such as `constructor(facing)` is not a correct implementation of a protocol boundary. Anything else is categorically prohibited.
 
 Through `IControllerAccess`, only the following is permitted:
 - obtaining data that the content needs for its own construction and update;
@@ -171,7 +207,8 @@ Through internal access boundaries, the following is prohibited:
 - accessing external implementation objects, host/container references, or integration handles;
 - using an access boundary as a surrogate channel to reach the outside world;
 - obtaining direct access from view/content to child nodes, `children`, or `openedChild`;
-- bypassing the controller when obtaining child visual content.
+- bypassing the controller when obtaining child visual content;
+- tunneling semantic dependencies through runtime props, slots, builders, callbacks, stores, services, prebuilt fragments, child components, platform child views, or arbitrary props.
 
 Anything else is categorically prohibited.
 

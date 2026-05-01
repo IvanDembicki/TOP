@@ -55,6 +55,26 @@ Target adaptation must not:
 - push target primitives back into the semantic layer;
 - treat generated target output as source truth.
 
+
+## Platform composition syntax is not ownership semantics
+
+Target adaptation may choose React JSX, React Native component nesting, Flutter
+widgets, SwiftUI builders, Android/iOS native view APIs, Web component slots, DOM
+mount calls, or any other target-native materialization syntax.
+
+These mechanisms are materialization syntax only. They do not define TOP ownership.
+
+The TOP ownership direction remains:
+
+```text
+View -> owning controller -> child controller -> opaque public view handle
+```
+
+Target adaptation must not turn target props, slots, builders, render parameters,
+widget constructor fields, native child-view parameters, stores, services, or
+callbacks into semantic injection channels for TOP Content/View. If a target API
+requires such syntax internally, the TOP layer must still present it as a local
+controller/content materialization detail, not as externally assembled ownership.
 ## Interaction adaptation examples
 
 These examples are illustrative, not a fixed mapping table:

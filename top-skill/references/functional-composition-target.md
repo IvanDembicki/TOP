@@ -16,27 +16,39 @@ placement rule that FC-1 materializes.
 
 ## FC-1. Opaque typed view handle placement
 
-In a functional composition target, a child branch's view output is a first-class
-composable value: an opaque typed handle that the parent controller can hold, pass,
-and assign to a named typed field in `IContentAccess`.
+In a functional composition target, a child branch's view output may be represented
+as a first-class composable value. That value is still only an opaque view handle.
+It is not a slot payload, runtime prop, child component injection, or ownership
+transfer.
+
+The pull direction remains canonical:
+
+```text
+Content/View -> asks owning controller for a named child-view endpoint
+Owning controller -> asks direct child controller for its public opaque handle
+Child controller -> returns its own opaque handle
+Owning controller -> returns the opaque handle to its own Content/View for placement
+```
 
 The parent controller:
-- instantiates the child branch;
-- receives or holds the child's opaque view handle;
-- assigns it to a named, explicitly typed field in `IContentAccess`.
+- constructs the child branch at the child's tree position;
+- obtains the child's opaque view handle only from the direct child controller;
+- makes that handle available to its own Content/View through an explicit named
+  access method on the narrow access interface;
+- never treats the handle as an inspectable platform object.
 
-Content:
-- receives the handle as a typed field;
-- places it into the layout at the position designated by the controller;
-- must not inspect the handle, read from it, attach listeners to it, or pass it
-  outside the branch boundary.
+Content/View:
+- requests the handle from the owning controller through the narrow access interface;
+- places the returned handle into the layout at the position designated by its own
+  node contract;
+- must not construct, import, inspect, read from, attach listeners to, mutate, or
+  pass the handle outside the branch boundary.
 
-This is the functional-composition-target materialization of Rule 23 (opaque view
-handle placement through parent-owned materialization). The semantics are identical
-to the canonical rule; only the concrete form of the handle changes with the target.
-
-The handle must remain opaque throughout its lifetime in content. Treating it as
-anything other than a placement unit is a content boundary violation.
+This is the functional-composition-target materialization of the canonical opaque
+view handle placement rule. Platform syntax may look like composition, but the
+ownership semantics remain pull-based. A target API that uses props, children,
+slots, builders, or composable values internally does not make those mechanisms a
+TOP injection channel.
 
 ---
 

@@ -76,3 +76,25 @@ simply because it visually overlaps other branches at render time.
 Visual overlap does not determine ownership. The logical source of the secondary
 surface — the branch that holds the data, triggers the action, and processes the
 result — is the owner.
+
+## Rule 9 — Content/View construction is pull-based and access-typed
+
+A concrete TOP Content/View constructor receives exactly one semantic argument:
+a narrow typed access interface implemented by its owning Node/Controller.
+
+The Content/View must not be typed against the concrete controller class. The
+runtime object may be the controller instance, but the field, constructor
+parameter, and all Content/View references must use the narrow access interface.
+Downcasting, importing the concrete controller type for view access, or storing
+the concrete controller as such is a boundary violation.
+
+The constructor must not receive data, callbacks, flags, stores, services, child
+components, slots, prebuilt view fragments, platform child views, child view
+handles, or arbitrary props. Moving the same information into runtime props,
+render parameters, builders, framework slots, native view parameters, or widget
+constructor fields is still a violation.
+
+If Content/View needs state, actions, data, or child view handles, it requests
+them from the owning controller through the narrow access interface. The owning
+controller may then ask direct child controllers for opaque public handles and
+return those handles to its own Content/View for placement only.
