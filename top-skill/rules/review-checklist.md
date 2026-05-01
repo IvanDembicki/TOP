@@ -50,6 +50,8 @@ A result is not valid until all checklist items pass.
 - Content/View is not typed against or downcast to the concrete controller
 - runtime props, slots, builders, render parameters, native view parameters, stores, services, callbacks, and prebuilt fragments are not used as semantic injection channels
 - View pulls from owner; owner pulls from children; children expose opaque handles
+- child-output access methods are named by semantic branch/output, not by generic slot/children/render/builder terminology
+- artificial `Handle`/`ViewHandle` suffixes are not required; `Section` is used only when the branch is actually modeled as a section
 - TOP spec props are not confused with runtime props
 ## 5. Lifecycle correctness
 

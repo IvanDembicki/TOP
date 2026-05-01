@@ -20,3 +20,4 @@ rules:
 - do not type Content/View against the concrete controller, and do not import/downcast back to it
 - do not generate semantic injection through constructor parameters, runtime props, slots, builders, render parameters, callbacks, stores, services, child components, platform child views, or prebuilt fragments
 - View pulls from owner; owner pulls from children; children expose opaque handles
+- name child-output access methods by semantic branch/output, for example `getAccountIdentityView()`; do not require `Handle`/`ViewHandle`, do not use `slot`, and avoid generic `children`/`render`/`builder` names

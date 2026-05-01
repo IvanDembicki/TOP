@@ -192,6 +192,13 @@ A `view` must not access child nodes directly, must not read `children` directly
 The controller applies structural/state rules itself and returns to its view-part only those child views that are permitted by the contract of the given node.
 
 For a regular visual node, only explicitly named child-view endpoints are permitted.
+Those access methods must be named by semantic child branch/output, for example
+`getAccountIdentityView()`, `getOrganizationsAccessView()`, `getAppPreferencesView()`,
+or `getDebugAdminToolsView()`. The name does not have to include `Handle` or
+`ViewHandle`; `Section` is used only when the branch is actually modeled as a
+section. `slot` terminology and generic `children`/`render`/`builder` names are
+forbidden because they describe framework composition mechanics rather than TOP
+ownership.
 For a `DynamicCollectionViewNode`, a separate explicitly described collection-boundary is permitted, through which the controller can return an ordered collection of direct child views of a homogeneous dynamic collection.
 
 Through `IContentAccess`, only the following is permitted:

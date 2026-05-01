@@ -44,6 +44,25 @@ Content/View:
 - must not construct, import, inspect, read from, attach listeners to, mutate, or
   pass the handle outside the branch boundary.
 
+### FC-1a. Child-output access method naming
+
+Child output must be requested through named methods on the narrow owner access
+interface. The name identifies the semantic child branch/output, not the transport
+mechanism.
+
+Acceptable examples:
+- `getAccountIdentityView()`
+- `getOrganizationsAccessView()`
+- `getAppPreferencesView()`
+- `getDebugAdminToolsView()`
+
+Do not require artificial suffixes such as `Handle` or `ViewHandle` when they
+reduce readability. Do not require `Section` unless the branch is actually modeled
+as a section. Do not use `slot` terminology.
+
+Forbidden generic names include names based on `slot`, `children`, `render`,
+`builder`, or framework composition mechanics instead of the semantic branch name.
+
 This is the functional-composition-target materialization of the canonical opaque
 view handle placement rule. Platform syntax may look like composition, but the
 ownership semantics remain pull-based. A target API that uses props, children,
