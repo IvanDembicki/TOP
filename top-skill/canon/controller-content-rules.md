@@ -45,3 +45,34 @@ primitive and perform analogous platform commands on its own implementation
 material. This is execution, not ownership: content may forward a narrow event
 to its controller, but the controller owns interpretation, state transitions,
 lifecycle, structure, and orchestration.
+
+## Rule 7 — Controller is the sole derivation boundary for integration data
+
+Integration-layer types — API response shapes, SDK types, database record types,
+and any other types that originate outside the node's own domain — must not appear
+in content.
+
+The controller is responsible for receiving integration data and deriving a
+typed view-model from it. Content receives only the derived view-model.
+Content must have no structural dependency on integration-layer types:
+no structural reference, no implicit shape compatibility.
+
+The view-model is the only integration artifact that crosses the
+controller/content boundary.
+
+## Rule 8 — Secondary surface belongs entirely within the branch that owns it
+
+A secondary surface — an overlay, modal, popup, or equivalent transient layer
+that belongs to a specific branch — must be implemented and owned entirely within
+that branch's content.
+
+The controller owns the activation policy: it decides when and whether the
+secondary surface is shown, and receives back any semantic result through
+`IControllerAccess`. Content executes the show/hide command through `IContentAccess`
+and forwards results without interpreting them.
+
+A secondary surface must not be extracted into a sibling or ancestor controller
+simply because it visually overlaps other branches at render time.
+Visual overlap does not determine ownership. The logical source of the secondary
+surface — the branch that holds the data, triggers the action, and processes the
+result — is the owner.

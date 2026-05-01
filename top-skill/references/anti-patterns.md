@@ -350,3 +350,60 @@ When designing:
 1. run important nodes through the anti-patterns list;
 2. fix ownership, lifecycle, and source of truth in advance;
 3. separately check mutable and runtime-heavy branches.
+
+---
+
+## 20. Layout Proximity as Branch Boundary
+
+### What the error is
+Drawing branch decomposition boundaries based on visual grouping — placing elements
+in the same branch because they appear close together in the rendered layout —
+rather than analyzing lifecycle ownership and mutation authority.
+
+### Why this is harmful
+- branch structure becomes coupled to render layout rather than to ownership;
+- changes to visual design require branch restructuring with no structural justification;
+- elements with independent lifecycle concerns are merged into one branch, creating
+  a false structural dependency;
+- the logical ownership model dissolves into the visual model.
+
+### What to look for
+- whether the decomposition decision was based on visual proximity or ownership analysis;
+- whether elements in the same branch have independent lifecycle concerns or distinct
+  mutation authority that would justify separate ownership;
+- whether visual rearrangement would require branch restructuring.
+
+See also: anti-pattern 3 (Confusing Logical Ownership and Render Placement) — the related
+but distinct case of confusing who the logical parent is. Anti-pattern 20 applies when
+deciding where the branch boundary belongs during decomposition.
+
+---
+
+## 21. Extraction Without Decomposition
+
+### What the error is
+Extracting a monolithic node into a TOP branch root — achieving a controller/content
+split — but failing to further decompose the branch into semantic child branches. The
+result is a god-controller: a single controller that owns all state, mutations, lifecycle
+concerns, and integration sources of the original monolith, now placed behind a
+TOP-shaped facade.
+
+### Why this is harmful
+- the structural complexity of the original monolith is preserved inside the controller —
+  the migration appears complete but the underlying ownership problem remains;
+- the controller accumulates cross-cutting concerns that should belong to independent
+  child branches;
+- generation prompts for the controller become large and unstable;
+- the dependency-growth problem that TOP is designed to prevent is relocated, not resolved.
+
+### What to look for
+- whether the controller owns multiple independent lifecycle concerns, each tied to a
+  distinct data domain or integration source;
+- whether the controller's responsibilities can be separated cleanly by ownership and
+  mutation authority;
+- whether extracting child branches would leave the root controller with only
+  genuinely cross-cutting coordination.
+
+See also: anti-pattern 14 (Ignoring Hidden Semantic Subparts) — the related case where a
+composite node is not yet extracted. Anti-pattern 21 applies specifically after extraction
+has been performed but decomposition into child branches has not.

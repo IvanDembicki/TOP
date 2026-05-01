@@ -190,6 +190,21 @@ If a single node contains:
 
 then such parts should not automatically be left inside a single monolithic node.
 
+The primary signal for branch boundary placement is lifecycle and mutation
+ownership, not visual proximity.
+
+Visual grouping of elements does not determine where a branch boundary belongs.
+A branch boundary is warranted when a part of the system owns independent
+lifecycle responsibilities, distinct mutation authority, or an integration point
+that does not belong to its siblings.
+
+Branches that appear close together visually may have entirely distinct ownership
+profiles. Branches that appear visually separated may share state and belong to
+the same owner. TOP structure follows ownership, not layout.
+
+For specific detectable conditions that require decomposition, see
+`references/architecture-rules.md` R4a.
+
 ---
 
 ## Logical structure and render structure

@@ -349,3 +349,51 @@ A thin content shell that exists only as a formal stub, while the actual platfor
 - move all platform primitive construction into a dedicated content class;
 - controller interacts with content through `IContentAccess`;
 - content is created in the content materialization phase.
+
+---
+
+## 13. Shared State Ancestor Invariant
+
+State that is consumed by two or more sibling branches must be owned and
+coordinated at the closest common ancestor controller.
+
+Mutation authority determines ownership, not read volume. The controller that
+owns the action that changes the state is the owner, regardless of how many
+branches read it. Reading a value in multiple branches does not split ownership.
+
+When cross-cutting state is needed by multiple children, the common ancestor
+derives and distributes it as typed input through `IContentAccess` or through
+explicitly typed initialization parameters of the corresponding child branches.
+Children consume the derived value; they do not independently derive the same
+fact from cross-cutting sources.
+
+See also: `references/architecture-rules.md` R4c — the related but distinct
+case where the state holder must be the owner of the managed entity, not the
+control element that triggers the state change.
+
+Forbidden:
+- duplicating state derivation in multiple controllers when a common ancestor could own it;
+- passing raw integration sources to multiple sibling controllers so each derives
+  the same fact independently;
+- treating the controller that reads state most often as the owner.
+
+---
+
+## 14. Derivation Uniqueness Invariant
+
+A typed fact derived from a cross-cutting source must be computed at exactly one
+controller per subtree, then distributed as an explicit typed value.
+
+If the same fact appears in multiple controllers — each independently deriving it
+from the same underlying source — this is a derivation duplication defect.
+The correct form: one controller derives the fact once; other controllers receive
+the derived value through typed initialization parameters or typed `IContentAccess` fields.
+
+This invariant applies regardless of whether the derivation is cheap or expensive.
+The concern is ownership clarity: one derivation point makes the source-of-truth
+unambiguous and refactoring safe.
+
+Forbidden:
+- two controllers independently computing the same typed fact from the same raw source;
+- distributing raw integration data to multiple controllers so each independently
+  performs the same derivation.
