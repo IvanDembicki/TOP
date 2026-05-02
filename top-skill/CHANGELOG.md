@@ -7,6 +7,12 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.1] — 2026-05-02
+
+- Clarified that `View` is a visual specialization of `Content`, not a separate access model.
+- Expanded the glossary definition of `Content` to cover view, component, data, style, animation, transition, asset/resource, and other modeled content kinds.
+- Updated controller/content access wording so content access consistently flows through `IControllerAccess`, with visual child-output access described as the visual-content case.
+
 ## [1.1.0] — 2026-05-01
 
 - Added migration canon refinements for residual responsibility, legacy composition, and target adaptation.

@@ -51,7 +51,7 @@ A result is not valid until all checklist items pass.
 - content-to-controller zero-contracts are empty owner access interfaces implemented by the owning controller, not separate dummy runtime objects
 - controller access to content is typed through `IContentAccess`, not through the concrete Content/View class
 - runtime props, slots, builders, render parameters, native view parameters, stores, services, callbacks, and prebuilt fragments are not used as semantic injection channels
-- View pulls from owner; owner pulls from children; children expose opaque handles
+- Content pulls from owner; owner pulls from children when child output is required; children expose opaque handles
 - child-output access methods are named by semantic branch/output, not by generic slot/children/render/builder terminology
 - artificial `Handle`/`ViewHandle` suffixes are not required; `Section` is used only when the branch is actually modeled as a section
 - TOP spec props are not confused with runtime props

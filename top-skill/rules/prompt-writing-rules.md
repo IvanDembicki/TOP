@@ -136,7 +136,7 @@ Must describe:
 Must describe:
 - what is the content and what is the controller;
 - what role the content plays (view / component / data / other);
-- what content/view receives from controller via `IControllerAccess` and why the full public node surface is not available;
+- what content receives from controller via `IControllerAccess` and why the full public node surface is not available;
 - what controller receives from content via `IContentAccess` (if anything);
 - what content is not allowed to do independently;
 - if the node is visual, exactly how the view-part receives child visual content through `IControllerAccess`;

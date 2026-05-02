@@ -31,6 +31,10 @@ Controller:
 ## 4. Content
 
 **Content** — the hidden internal implementation of a node.
+Content may be a view, component, data object, style object, animation,
+transition, asset/resource, or another explicitly modeled content kind.
+See `props.contentType` for canonical content type values.
+
 If a node has content, it must be extracted into a separate concrete content-class.
 
 Exactly one concrete content-class is permitted per node.
@@ -40,7 +44,7 @@ Ordinary content has no architectural will and does not interact with the outsid
 
 ## 4.1. `IControllerAccess`
 
-**`IControllerAccess`** — the private protocol for content/view access to the controller. Through it, content/view does not receive the full public node surface, but only a narrow, permitted internal access contract.
+**`IControllerAccess`** — the private protocol for content access to the controller. Through it, content does not receive the full public node surface, but only a narrow, permitted internal access contract.
 Through it, content receives only a narrow, explicitly permitted, and strictly limited access to the data and actions of the controller
 that are genuinely needed for building, updating, and handling content's own events.
 

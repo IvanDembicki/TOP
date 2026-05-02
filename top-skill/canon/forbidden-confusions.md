@@ -51,7 +51,7 @@ Forbidden:
 
 TOP construction is pull-based and local: objects are born at their architectural
 position in the tree. A parent Node/Controller constructs its direct children.
-Content/View asks its owning controller for data, actions, and child view handles.
+Content asks its owning controller for data, actions, and permitted output handles.
 The owning controller asks direct child controllers for opaque public handles.
 
 Forbidden:

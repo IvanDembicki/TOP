@@ -173,7 +173,7 @@ For non-visual content, no public `getContent()` exists.
 ### 3.2. Internal Access Boundaries
 
 For a node with a separate content class/object, two internal access boundaries exist:
-- `IControllerAccess` — access of content/view to the controller through a narrow private contract, not through the full public node surface;
+- `IControllerAccess` — access of content to the controller through a narrow private contract, not through the full public node surface;
 - `IContentAccess` — access of the controller to content through a narrow private contract.
 
 These are not the external API of the node and have no relation to the public node surface.
@@ -187,10 +187,11 @@ Through `IControllerAccess`, only the following is permitted:
 - obtaining data that the content needs for its own construction and update;
 - calling explicitly permitted controller access methods;
 - passing to the controller only the content's own events;
-- if content is a `view`, requesting only the explicitly permitted child-view endpoints described by the node contract.
+- if content is visual, requesting only the explicitly permitted child-view endpoints described by the node contract.
 
-If content is a `view`, its child-view requests must go only through `IControllerAccess`.
-A `view` must not access child nodes directly, must not read `children` directly, and must not select `openedChild` itself.
+Content interacts with its owning controller only through `IControllerAccess`.
+If content is visual, its child-view requests must go only through explicitly declared `IControllerAccess` endpoints.
+Visual content must not access child nodes directly, must not read `children` directly, and must not select `openedChild` itself.
 The controller applies structural/state rules itself and returns to its view-part only those child views that are permitted by the contract of the given node.
 
 For a regular visual node, only explicitly named child-view endpoints are permitted.

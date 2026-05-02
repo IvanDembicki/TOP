@@ -24,7 +24,7 @@ Local functionality does not override TOP rules.
 - Content/View is not typed against, imported as, downcast to, or stored as the concrete controller class.
 - Empty content-to-controller zero-contracts are narrow access interfaces implemented by the owning controller, not separate dummy runtime objects.
 - No data, callbacks, flags, stores, services, child components, slots, render props, builders, platform child views, prebuilt fragments, child view handles, or arbitrary props are pushed into Content/View through constructors or runtime render channels.
-- View pulls from owner; owner pulls from children; children expose opaque handles.
+- Content pulls from owner; owner pulls from children when child output is required; children expose opaque handles.
 - TOP spec props are declarative metadata, not runtime props.
 
 ## Content validation

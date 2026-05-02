@@ -137,7 +137,7 @@ For each migrated branch, the agent must plan the final ownership direction:
 - the parent Node/Controller constructs direct child nodes at their tree positions;
 - a Node constructor receives only its parent reference;
 - Content/View receives exactly one narrow typed owner access interface;
-- Content/View asks the owner for data, actions, and child view handles;
+- Content asks the owner for data, actions, and permitted output handles;
 - the owner asks direct child controllers for opaque public handles;
 - child handles are placed only as opaque materialization units.
 

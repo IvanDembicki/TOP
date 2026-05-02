@@ -92,7 +92,8 @@ the same semantic injection into runtime props, render parameters, builders,
 slots, native view parameters, widget constructor fields, Web component
 attributes, or analogous platform channels.
 
-View pulls from owner. Owner pulls from children. Children expose opaque handles.
+Content pulls from owner. Owner pulls from children when child output is required.
+Children expose opaque handles.
 Platform composition syntax may be used only as local materialization syntax; it
 must not become the ownership model.
 
@@ -115,7 +116,7 @@ Generated architecture must not mix the controller and concrete content into a s
 
 ### Public and internal protocol surfaces
 Generated architecture must preserve the public node surface and two distinct internal access boundaries:
-- `IControllerAccess` for content/view access to the controller via a narrow private contract;
+- `IControllerAccess` for content access to the controller via a narrow private contract;
 - `IContentAccess` for controller access to content via a narrow private contract.
 
 Content/View must be constructed and stored against the narrow `IControllerAccess`

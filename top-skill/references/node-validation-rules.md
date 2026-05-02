@@ -69,9 +69,9 @@ Required checks:
 - Content/View does not import, reference, inspect, or downcast to the concrete controller type;
 - Content/View does not receive data, callbacks, flags, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, or arbitrary props;
 - the same semantic inputs are not moved into runtime props, render parameters, Flutter constructor fields, builders, slots, native view parameters, Web component attributes, or analogous platform composition channels;
-- View requests data/actions/child view handles from its owning controller through explicit access methods;
+- Content requests data/actions/permitted output handles from its owning controller through explicit access methods;
 - the owning controller obtains child view handles from direct child controllers through public APIs;
-- View does not construct, import, inspect, or directly own child nodes.
+- visual content does not construct, import, inspect, or directly own child nodes.
 
 Canonical correction direction:
 - move child construction to the owning parent controller at the child position in the tree;
