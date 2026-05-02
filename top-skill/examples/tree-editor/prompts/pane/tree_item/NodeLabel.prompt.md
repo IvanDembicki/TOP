@@ -61,5 +61,5 @@ None.
 - Materialization policy: one-file default
 - Internal contracts:
   - Controller-to-content: NodeLabelContentAccess
-  - Content-to-controller: NodeLabelControllerAccess with zero-contract implementation NodeLabelControllerAccessZero
+  - Content-to-controller: NodeLabelControllerAccess empty zero-contract interface implemented by the owning node/controller
 - Companion artifact stems: none

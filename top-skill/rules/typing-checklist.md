@@ -52,9 +52,13 @@ Each concrete TOP Content/View public constructor receives exactly one semantic 
 a narrow typed access interface implemented by the owning Node/Controller.
 
 The constructor parameter, stored field, and all Content/View references must be typed
-as the access interface, not as the concrete controller class. The runtime object may be
-the controller instance, but Content/View must not import, reference, inspect, or downcast
-to the concrete controller type.
+as the access interface, not as the concrete controller class. The runtime object must
+be the owning controller instance, but Content/View must not import, reference,
+inspect, or downcast to the concrete controller type.
+
+If the access interface has no permitted methods, it is an empty zero-contract
+implemented by the owning controller. It must not be replaced by a separate dummy
+runtime object such as `ControllerAccessZero`.
 
 Violation signal:
 - Content/View constructor has no declared access-interface type
@@ -64,8 +68,30 @@ Violation signal:
   prebuilt fragments, or arbitrary props
 - The same semantic inputs are moved to runtime props/render parameters/builders/slots
 - Content/View imports or downcasts to the concrete controller type
+- A separate dummy zero-access object is passed instead of the owning controller typed as the zero-contract interface
 
 *Platform implementation notes: internal platform/base constructor mechanics inside the Content/View implementation are allowed when they are not public TOP constructor inputs and do not become semantic injection channels.*
+
+---
+
+### 1b. Controller access to Content/View
+
+**What to check:**
+If a node has a separate content class/object, the controller stores and uses it
+through a narrow `IContentAccess` or target-equivalent interface.
+
+The controller field/reference must not be typed as the concrete Content/View class
+when the technology can express a narrower boundary. This is especially important
+when content wraps a platform component, native view, widget, or third-party object
+with many public methods; the controller is allowed to see only the methods exposed
+by `IContentAccess`.
+
+Violation signal:
+- Controller field is typed as the concrete Content/View class instead of `IContentAccess`
+- Controller calls methods that are public on the concrete content class but absent from `IContentAccess`
+- Concrete content implementation details are exposed to controller code through typing
+
+*Platform implementation notes: if the target language cannot hide the concrete runtime object completely, use the strongest available interface, protocol, abstract class, adapter, or wrapper boundary and document the fallback.*
 
 ---
 

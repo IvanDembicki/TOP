@@ -12,7 +12,7 @@ For positive patterns and canonical forms, see `pattern-cards.md`.
 Treating any node with one active child as the same pattern, without distinguishing:
 - fixed switchable: a fixed architectural state/candidate set;
 - dynamic switchable: a dynamic candidate set plus one owner-managed selected/opened child;
-- single-child mutable: one child slot whose concrete instance is replaced without retaining a candidate set.
+- single-child mutable: one child position whose concrete instance is replaced without retaining a candidate set.
 
 ### Why this is harmful
 - classification breaks down;
@@ -21,7 +21,7 @@ Treating any node with one active child as the same pattern, without distinguish
 - source-of-truth policy for the candidate set or selected child remains implicit.
 
 ### What to look for
-- whether there is a candidate set or only one replaceable slot;
+- whether there is a candidate set or only one replaceable child position;
 - whether one child is selected/opened through the canonical switching path;
 - whether the candidate set is fixed or dynamic;
 - whether child creation/removal and active-child removal behavior are explicit.

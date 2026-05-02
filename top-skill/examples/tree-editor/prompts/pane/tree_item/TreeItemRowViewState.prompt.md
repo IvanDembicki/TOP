@@ -65,5 +65,5 @@ None.
 - Materialization policy: one-file default
 - Internal contracts:
   - Controller-to-content: TreeItemRowViewStateContentAccess
-  - Content-to-controller: TreeItemRowViewStateControllerAccess with zero-contract implementation TreeItemRowViewStateControllerAccessZero
+  - Content-to-controller: TreeItemRowViewStateControllerAccess empty zero-contract interface implemented by the owning node/controller
 - Companion artifact stems: none

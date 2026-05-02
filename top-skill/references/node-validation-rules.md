@@ -17,6 +17,7 @@ Anything else is strictly prohibited.
 
 Required checks:
 - if the node has a separate content, the controller does not bypass the content boundary through direct access to the concrete implementation;
+- controller fields/references to content are typed as `IContentAccess` or the target-equivalent narrow contract, not as the concrete Content/View class where the technology permits that boundary;
 - if the controller performs any operation on its own content implementation, it does so only through explicitly named `this.content.<command>(...)` methods on `IContentAccess`;
 - controller code does not use the node's own render/view/native primitive, its platform API, or an equivalent exposed primitive handle, except inside the implementation of `getView()` itself and parent-owned placement/composition code that treats a child view as an opaque handle (detection examples for DOM-like targets: `this.el`, `this.getView().classList`, `this.getView().style`, `this.getView().addEventListener`, `this.getView().removeEventListener`, `this.getView().setAttribute`, `this.getView().querySelector`, `content.getView()`);
 - if a child view is obtained through `getView()`, it is used only as an opaque materialization handle for mount/unmount/insert/reorder/replace/placement through the parent's content boundary;
@@ -45,6 +46,7 @@ Required checks:
 - the field/reference storing the artifact is explicitly typed where the language permits;
 - if content access to the controller is permitted, the artifact is not an empty formal stub;
 - if the artifact is empty, it explicitly signifies a complete prohibition of content access to the controller;
+- if the content-to-controller artifact is a zero-contract, it is an empty narrow interface implemented by the owning controller, not a separate dummy runtime object;
 - the artifact does not contain parent/root/host/container/integration handles.
 
 Canonical correction direction:
@@ -63,6 +65,7 @@ Required checks:
 - a root constructor using `null` or `RootContext` treats it only as a root ownership/bootstrap marker, not as a dependency injection container;
 - every Content/View public constructor has exactly one semantic argument: a narrow typed access interface implemented by its owning controller;
 - Content/View constructor parameters, fields, and stored references are typed as the narrow access interface, not as the concrete controller class;
+- content-to-controller zero-contracts are empty owner access interfaces implemented by the owning controller;
 - Content/View does not import, reference, inspect, or downcast to the concrete controller type;
 - Content/View does not receive data, callbacks, flags, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, or arbitrary props;
 - the same semantic inputs are not moved into runtime props, render parameters, Flutter constructor fields, builders, slots, native view parameters, Web component attributes, or analogous platform composition channels;

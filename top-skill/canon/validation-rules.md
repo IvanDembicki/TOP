@@ -13,6 +13,7 @@ Local functionality does not override TOP rules.
 - If a node has a separate content object, explicit internal access boundaries must exist: `IContentAccess` and `IControllerAccess`.
 - Internal access boundaries must be explicit, typed, and hidden from the external world as far as the technology allows.
 - Public node surface and internal access boundaries must not be mixed.
+- Controller fields/references to content must be typed as `IContentAccess` or an equivalent narrow contract, not as the concrete content class.
 - No real interaction outside allowed protocol boundaries.
 
 
@@ -21,9 +22,11 @@ Local functionality does not override TOP rules.
 - Node constructors receive only the parent reference as their semantic argument; root `null`/`RootContext` is allowed only as a root ownership/bootstrap marker, not as dependency injection.
 - Content/View constructors receive exactly one semantic argument: a narrow typed access interface implemented by the owning Node/Controller.
 - Content/View is not typed against, imported as, downcast to, or stored as the concrete controller class.
+- Empty content-to-controller zero-contracts are narrow access interfaces implemented by the owning controller, not separate dummy runtime objects.
 - No data, callbacks, flags, stores, services, child components, slots, render props, builders, platform child views, prebuilt fragments, child view handles, or arbitrary props are pushed into Content/View through constructors or runtime render channels.
 - View pulls from owner; owner pulls from children; children expose opaque handles.
 - TOP spec props are declarative metadata, not runtime props.
+
 ## Content validation
 - Content has no architectural will.
 - Content does not manage lifecycle.
@@ -65,6 +68,7 @@ Behavioral analysis and typing analysis are independent passes. The absence of b
 - Layer C must explicitly mark each semantic element as preserved, adapted, or dropped with reasons for adapted/dropped decisions.
 - Target adaptation must use native target expectations and must not introduce new business logic.
 - Target adaptation must not alter TOP ownership, lifecycle, controller/content boundaries, or structural invariants.
+
 ## Canon rule
 Only canonical patterns are allowed. Everything else is a violation.
 

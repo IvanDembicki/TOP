@@ -56,7 +56,8 @@ to parent-owned materialization of direct child opaque handles, not to React-sty
 slots, runtime props, external child injection, or prebuilt fragment passing.
 
 During generation, Content/View constructors must receive exactly one narrow typed
-owner access interface. Child nodes are constructed by their owning parent
+owner access interface implemented by the owning controller. Empty zero-contracts
+are empty owner access interfaces, not separate dummy access objects. Child nodes are constructed by their owning parent
 controllers at their tree positions. Legacy-looking target syntax such as DOM
 `mount(child.getView())` is valid only when it is the parent's own materialization
 primitive for a direct child opaque handle.

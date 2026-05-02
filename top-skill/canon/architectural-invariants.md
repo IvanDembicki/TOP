@@ -69,9 +69,11 @@ This invariant is foundational. It is not a React-specific recommendation and it
 - `RootContext` is only a root ownership/bootstrap marker. It must not become a generic dependency injection container and must not pass application data, callbacks, services, stores, child instances, view fragments, or arbitrary props into the tree.
 - A parent Node/Controller owns its direct children and is responsible for constructing them.
 - A Content/View constructor receives exactly one semantic argument: a narrow typed access interface implemented by its owning Node/Controller.
-- The Content/View constructor must not receive the concrete Node/Controller as its concrete class type. The runtime object may be the controller instance, but the Content/View must be typed only against the narrow access interface.
+- The Content/View constructor must not receive the concrete Node/Controller as its concrete class type. The runtime object must be the owning controller instance, but the Content/View must be typed only against the narrow access interface.
+- If Content/View has no permitted calls to the controller, the content-to-controller zero-contract is an empty narrow access interface implemented by the owning controller. A separate dummy `ControllerAccessZero` object is not a valid owner access object.
 - The Content/View constructor must not receive additional data, callbacks, flags, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, or arbitrary props.
 - The same restriction applies to runtime props/render parameters. Moving injection from constructor parameters to React props, Flutter constructor fields, render callbacks, builders, slots, native view parameters, Web component attributes, or analogous platform channels is still the same violation.
+- For any node with separate content, controller-to-content access must also go through a narrow `IContentAccess` or equivalent interface. The controller must store and use content through this interface, not through the concrete content class.
 
 ### Pull direction
 
@@ -99,6 +101,14 @@ TOP spec props are declarative metadata in the TOP specification. `props.source`
 ### Platform mechanics clarification
 
 The phrase "exactly one semantic argument" applies to the public constructor of the concrete TOP Content/View. Inside the Content/View implementation, it may create its own DOM element, native view, Flutter widget wrapper, internal platform object, or pass internal objects to protected/base constructors when required by the platform abstraction. External code must not pass `HTMLElement`, `Widget`, `UIView`, `Fragment`, draggable flags, tokens, children, slots, callbacks, stores, services, or prebuilt fragments into the TOP Content/View constructor.
+
+### Internal access symmetry clarification
+
+The controller/content boundary is bidirectional. Content/View depends on the owning controller only through `IControllerAccess`; the controller depends on content only through `IContentAccess`.
+
+This symmetry is mandatory even when one direction currently has no methods. An empty zero-contract is still a named access interface at the boundary. For content-to-controller, that empty interface is implemented by the owning controller and passed as `this` typed only as the interface. It is not materialized as a separate runtime dependency object.
+
+This is especially important when content wraps a large platform component, widget, native view, or third-party object. The concrete content object may expose many public methods, but the controller may be allowed to use only one or two of them. `IContentAccess` cuts off the rest of the concrete surface and keeps the content implementation replaceable, portable, and verifiable.
 
 ### Motivation
 

@@ -72,5 +72,5 @@ Switching changes the mounted child view through the base switcher. ChildrenList
 - Materialization policy: one-file default
 - Internal contracts:
   - Controller-to-content: ExpandCollapseHolderContentAccess
-  - Content-to-controller: ExpandCollapseHolderControllerAccess with zero-contract implementation ExpandCollapseHolderControllerAccessZero
+  - Content-to-controller: ExpandCollapseHolderControllerAccess empty zero-contract interface implemented by the owning node/controller
 - Companion artifact stems: none

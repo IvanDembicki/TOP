@@ -61,5 +61,5 @@ None.
 - Materialization policy: one-file default
 - Internal contracts:
   - Controller-to-content: DragHandleContentAccess
-  - Content-to-controller: DragHandleControllerAccess with zero-contract implementation DragHandleControllerAccessZero
+  - Content-to-controller: DragHandleControllerAccess empty zero-contract interface implemented by the owning node/controller
 - Companion artifact stems: none

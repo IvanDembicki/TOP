@@ -73,5 +73,5 @@ None directly. Side effects (TreeEditor mode update and full tree refresh) happe
 - Materialization policy: one-file default
 - Internal contracts:
   - Controller-to-content: EditorModeHolderContentAccess
-  - Content-to-controller: EditorModeHolderControllerAccess with zero-contract implementation EditorModeHolderControllerAccessZero
+  - Content-to-controller: EditorModeHolderControllerAccess empty zero-contract interface implemented by the owning node/controller
 - Companion artifact stems: none

@@ -1,8 +1,10 @@
 # Functional Composition Target
 
 Materialization guidance for TOP branches deployed to targets where a branch's
-view output is represented as an opaque composable value — an opaque typed view handle
-that the parent controller holds, passes, and places without inspection.
+view output is represented as an opaque composable value — an opaque typed view
+handle that the parent controller obtains from the child controller, exposes
+through a named owner-access method, and allows its own Content/View to place
+without inspection.
 
 This file describes how existing TOP semantics materialize in functional
 composition targets. It does not introduce new architectural rules. All canonical

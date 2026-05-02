@@ -31,8 +31,9 @@ Iteration over a child collection for view construction is permitted only inside
 A dynamic collection must be extracted into a separate container node.
 
 Correct:
-- `Window` receives `Button1View`, `Button2View`, `Button3View`, and `NewsListContainerView`;
-- `NewsListContainerNode` itself owns the `NewsItem` children and builds the repeated list from their views.
+- `WindowView` requests semantic child-view endpoints from its owning controller, such as `getPrimaryActionView()` and `getNewsListView()`;
+- the `Window` controller obtains each opaque handle from its direct child controllers and returns them through those endpoints;
+- `NewsListContainerNode` itself owns the `NewsItem` children and provides an ordered opaque collection through its own controller access endpoint.
 
 Incorrect:
 - `WindowView` simultaneously works with static named child-view endpoints and directly iterates news items.

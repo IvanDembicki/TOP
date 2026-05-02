@@ -1,6 +1,6 @@
 # TOP Skill — Tree-Oriented Programming
 
-**Version:** 1.0.1 | **License:** MIT | **Invocation:** `/top`
+**Version:** 1.1.0 | **License:** MIT | **Invocation:** `/top`
 
 **TOP turns architecture from a weak social norm into a strong machine-verifiable protocol.**
 

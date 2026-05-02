@@ -62,8 +62,10 @@ Content/View construction:
 - a Content/View constructor receives exactly one semantic argument: a narrow
   typed access interface implemented by its owning Node/Controller;
 - the constructor must not be typed as the concrete controller class;
-- the runtime object may be the controller instance, but Content/View must store
+- the runtime object must be the owning controller instance, but Content/View must store
   and use it only through the narrow access interface;
+- if the access interface has no methods, it is an empty zero-contract
+  implemented by the owning controller, not a separate dummy access object;
 - Content/View must not import, inspect, or downcast to the concrete controller;
 - Content/View must not receive additional data, callbacks, flags, stores,
   services, child components, slots, prebuilt view fragments, platform child
@@ -179,7 +181,7 @@ These are not the external API of the node and have no relation to the public no
 If a node has a separate content class/object, separate explicit access artifacts for these boundaries are mandatory.
 Such artifacts may be an interface, a nested interface, an abstract contract, an adapter, a wrapper, a proxy, or a separate access class.
 An implicit object without a separate contract artifact does not qualify as a complete materialization of the protocol.
-If the language supports explicit typing, these artifacts must be materialized in signatures as well: a constructor/factory/method parameter that accepts an artifact must have an explicit contract type; the field/reference storing the artifact must also be explicitly typed. For Content/View, the public constructor receives exactly one semantic argument, and that argument must be typed as the narrow access interface. The concrete controller class is not an acceptable Content/View constructor type even if the controller implements the interface. An anonymous/untyped parameter such as `constructor(facing)` is not a correct implementation of a protocol boundary. Anything else is categorically prohibited.
+If the language supports explicit typing, these artifacts must be materialized in signatures as well: a constructor/factory/method parameter that accepts an artifact must have an explicit contract type; the field/reference storing the artifact must also be explicitly typed. For Content/View, the public constructor receives exactly one semantic argument, and that argument must be typed as the narrow access interface. The concrete controller class is not an acceptable Content/View constructor type even if the controller implements the interface. The owning controller implements even an empty content-to-controller zero-contract and passes itself as `this` typed only as that interface; a separate zero-access runtime object is not a correct substitute. The controller stores content through `IContentAccess`, not through the concrete content class. An anonymous/untyped parameter such as `constructor(facing)` is not a correct implementation of a protocol boundary. Anything else is categorically prohibited.
 
 Through `IControllerAccess`, only the following is permitted:
 - obtaining data that the content needs for its own construction and update;
@@ -207,6 +209,10 @@ Through `IContentAccess`, only the following is permitted:
 - performing other internal actions explicitly permitted by the private boundary.
 
 `IContentAccess` must not become a channel through which the controller manually bypasses the content boundary or pushes child nodes/content concrete implementation.
+It is also the boundary that hides any larger concrete content/component API from
+the controller. Even if the concrete content wraps a native view, framework widget,
+or third-party component with many public methods, the controller may see only the
+small `IContentAccess` surface.
 
 Through internal access boundaries, the following is prohibited:
 - accessing parent/root/sibling interaction;

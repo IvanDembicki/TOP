@@ -326,7 +326,16 @@ A node consists of two layers: controller and content. The controller materializ
 
 ```
 // pseudocode
-class ButtonNode extends SwitchableNode {
+interface ButtonContentAccess {
+  getView()
+}
+
+interface ButtonControllerAccess {
+  // zero-contract: ButtonView has no permitted controller calls
+}
+
+class ButtonNode extends SwitchableNode implements ButtonControllerAccess {
+  private content: ButtonContentAccess
 
   constructor(parent) {
     super(parent)
@@ -336,7 +345,7 @@ class ButtonNode extends SwitchableNode {
 
   materializeContent() {
     // create the view/content part of the node
-    this.setContent(new ButtonView(new ButtonControllerAccessZero()))
+    this.setContent(new ButtonView(this)) // `this` is typed as ButtonControllerAccess
   }
 
   materializeChildren() {
@@ -352,8 +361,8 @@ class ButtonNode extends SwitchableNode {
   }
 }
 
-class ButtonView extends Content {
-  constructor(controllerAccess) {
+class ButtonView extends Content implements ButtonContentAccess {
+  constructor(controllerAccess: ButtonControllerAccess) {
     // controllerAccess — a narrow access contract to the controller
     this.controllerAccess = controllerAccess
     this.el = createElement('div', 'button')
@@ -407,7 +416,7 @@ The type of a lib-child must be documented in the spec. Without an explicit type
 
 **DynamicCollectionViewNode**
 
-An ordinary visual node does not iterate its children to build UI — it has a named slot for each child.
+An ordinary visual node does not iterate its children to build UI — it has a named child-view endpoint for each semantic child branch.
 
 But if a node owns a homogeneous dynamic collection and must build UI through iteration — it is declared a `DynamicCollectionViewNode`. This is a special contract that permits iteration.
 
@@ -655,6 +664,11 @@ class ButtonView extends Content {
 The controller accesses content through the contract `IContentAccess`. Allowed:
 - obtaining the root view/element for attachment to the display tree;
 - calling strictly permitted content lifecycle methods.
+
+The controller must store content as `IContentAccess`, not as the concrete content
+class. This matters when content wraps a large platform component, native view,
+widget, or third-party object: the controller may need only two allowed methods,
+and the interface hides everything else.
 
 Pushing child nodes or concrete implementation objects through content is forbidden.
 

@@ -54,7 +54,8 @@ Check:
 - explicit typing of the constructor/factory/method parameter receiving the artifact, if the language allows;
 - explicit typing of the field/reference storing the artifact, if the language allows;
 - absence of empty formal protocol objects where content access to controller is permitted;
-- if the protocol artifact is empty, explicit confirmation that this is a zero-contract with full prohibition of content access to controller;
+- if the content-to-controller protocol artifact is empty, explicit confirmation that this is a zero-contract implemented by the owning controller and not a separate dummy runtime object;
+- confirmation that controller fields/references to content are typed through `IContentAccess`, not through the concrete Content/View class where the technology permits;
 - absence of controller bypass to concrete implementation;
 - absence of cases where a public/base-class primitive getter is used to justify controller access to concrete implementation;
 - absence of controller-side platform primitive access for anything other than implementing `getView()` or parent-owned placement/composition of an opaque child view (detection examples for DOM-like targets: `this.el`, `this.getView().classList`, `this.getView().style`, `this.getView().addEventListener`, `this.getView().setAttribute`, `querySelector`, `content.getView()`);

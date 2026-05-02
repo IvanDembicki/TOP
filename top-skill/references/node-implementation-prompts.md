@@ -126,8 +126,12 @@ must declare the materialization layout:
 
 For nodes with separate content, both internal directions must be represented in the expected
 materialization: controller-to-content (`IContentAccess`) and content-to-controller
-(`IControllerAccess`). If either direction has no permitted calls, this must be declared as
-an explicit zero-contract rather than silently omitted.
+(`IControllerAccess`). If content-to-controller has no permitted calls, this must
+be declared as an empty `IControllerAccess` zero-contract implemented by the
+owning controller, not as a separate dummy access object. If controller-to-content
+has no permitted calls, this must be declared as an empty `IContentAccess`
+zero-contract where the technology can express it. The controller must store and
+use content through `IContentAccess`, not through the concrete Content/View class.
 
 ---
 

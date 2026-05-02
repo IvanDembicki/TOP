@@ -17,6 +17,8 @@ rules:
 - enforce Pull-Based Construction / Locality of Object Birth
 - node constructor receives only the parent reference as semantic input
 - Content/View constructor receives exactly one narrow typed access interface implemented by the owning controller
+- zero-contract content-to-controller access is an empty owner access interface implemented by the controller; do not generate `ControllerAccessZero` dummy objects
+- controller stores and uses content through `IContentAccess`, not through the concrete Content/View class
 - do not type Content/View against the concrete controller, and do not import/downcast back to it
 - do not generate semantic injection through constructor parameters, runtime props, slots, builders, render parameters, callbacks, stores, services, child components, platform child views, or prebuilt fragments
 - View pulls from owner; owner pulls from children; children expose opaque handles

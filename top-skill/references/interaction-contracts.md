@@ -56,8 +56,18 @@ owning controller. All data, actions, state, and child view handles that
 Content/View needs must be requested through explicit methods on that access
 interface.
 
+If Content/View has no permitted calls to the controller, the access interface is
+an empty zero-contract implemented by the owning controller. It is not a separate
+dummy dependency object.
+
+The reverse direction is also interface-bound: if a node has content, the
+controller uses it through `IContentAccess`, not through the concrete content
+class. This keeps large platform/widget/component APIs hidden behind the small
+allowed TOP boundary.
+
 Root `null` or `RootContext` is allowed only for root ownership/bootstrap. It
 must not become a dependency injection container.
+
 ## 2. Search access
 
 Search access is access to nodes that are not structurally guaranteed to exist.

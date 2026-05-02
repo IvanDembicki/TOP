@@ -68,5 +68,5 @@ Owns no state beyond being the logical parent of the root TreeItem.
 - Materialization policy: one-file default
 - Internal contracts:
   - Controller-to-content: RootItemHolderContentAccess
-  - Content-to-controller: RootItemHolderControllerAccess with zero-contract implementation RootItemHolderControllerAccessZero
+  - Content-to-controller: RootItemHolderControllerAccess empty zero-contract interface implemented by the owning node/controller
 - Companion artifact stems: none

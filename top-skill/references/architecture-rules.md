@@ -41,7 +41,7 @@ If a parent node always contains exactly one child node at runtime, but the conc
 of that child node is determined by data and can be replaced entirely, such a node
 must be treated as a `single-child mutable node`.
 
-This pattern is not a `switchable node` merely because it has one active child. It is single-child mutable when no candidate set is retained and the active slot is replaced by a runtime-created child instance. A dynamic switchable node is different: it owns a dynamic candidate set and switches the opened child among candidates through the canonical switching path.
+This pattern is not a `switchable node` merely because it has one active child. It is single-child mutable when no candidate set is retained and the active child position is replaced by a runtime-created child instance. A dynamic switchable node is different: it owns a dynamic candidate set and switches the opened child among candidates through the canonical switching path.
 
 ### R3b. Do Not Confuse Switchable Node and Mutable Node with Library Children
 
@@ -50,7 +50,7 @@ These are distinct patterns with different semantics:
 - **Fixed switchable node** — the same element changes among a fixed architectural set of state children
   (e.g., `Normal`, `Hover`, `Disabled`).
 - **Dynamic switchable node** — the parent owns a dynamic candidate child set and one selected/opened child among those candidates. Candidate children may be created or removed at runtime, but selection still follows the canonical switching path.
-- **Single-child mutable node** — the parent always contains exactly one child slot, and the concrete child instance in that slot is replaced by data. No retained candidate set is required.
+- **Single-child mutable node** — the parent always contains exactly one child position, and the concrete child instance in that position is replaced by data. No retained candidate set is required.
 - **Mutable node with library children** — a container to which elements are added and removed at runtime without the container necessarily owning one lifecycle-opened selected child.
 
 ### R4. Mixing Switchable and Non-Switchable Child Nodes Is Prohibited
@@ -248,9 +248,11 @@ If a node has separate content, omitting the content-to-controller direction is 
 even when the current implementation only needs local low-level event subscription. The correct
 form is either a narrow named `IControllerAccess` contract or an explicit zero-contract.
 
-Raw callbacks, anonymous protocol objects, full controller references, or full concrete content
-references must not be treated as valid internal contract materialization where the technology
-can express named typed boundaries.
+Raw callbacks, anonymous protocol objects, full controller references, full concrete content
+references, or dummy zero-access runtime objects must not be treated as valid internal
+contract materialization where the technology can express named typed boundaries. A
+content-to-controller zero-contract is an empty `IControllerAccess` interface implemented
+by the owning controller.
 
 ---
 
@@ -313,7 +315,11 @@ constructor(parent) {
     this._editor = /** @type {TreeEditorNode} */ (this.findUpByType(TreeEditorNode));
 }
 
-// During the target-specific materialization phase — when a later phase uses the field`nmaterializeContent() {`n    this._treeItem = /** @type {TreeItemNode} */ (this.findUpByType(TreeItemNode));`n    this.setContent(new MyContent(new MyControllerAccessZero()));`n}
+// During the target-specific materialization phase — when a later phase uses the field
+materializeContent() {
+    this._treeItem = /** @type {TreeItemNode} */ (this.findUpByType(TreeItemNode));
+    this.setContent(new MyContent(this)); // `this` is typed as MyControllerAccess
+}
 
 // Lazy getter — also valid: resolves once on first access, caches in backing field
 get _editor() {

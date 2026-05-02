@@ -54,7 +54,7 @@ None beyond rendering the build timestamp text into its own content.
 - Text content format: `build: ` plus `__BUILD_TIME__`.
 - Extends `DomNode`.
 - Content extends `DomContent`.
-- Constructor materialization: `this.setContent(new BuildInfoContent(new BuildInfoControllerAccessZero()))`.
+- Constructor materialization: `this.setContent(new BuildInfoContent(this))`.
 
 ## 11. Expected Materialization
 
@@ -65,5 +65,5 @@ None beyond rendering the build timestamp text into its own content.
 - Materialization policy: one-file default
 - Internal contracts:
   - Controller-to-content: BuildInfoContentAccess
-  - Content-to-controller: BuildInfoControllerAccess with zero-contract implementation BuildInfoControllerAccessZero
+  - Content-to-controller: BuildInfoControllerAccess empty zero-contract interface implemented by the owning node/controller
 - Companion artifact stems: none

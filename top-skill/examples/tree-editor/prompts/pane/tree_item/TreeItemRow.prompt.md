@@ -77,5 +77,5 @@ TreeItemRow is a switchable container node that holds two row representations fo
 - Materialization policy: one-file default
 - Internal contracts:
   - Controller-to-content: TreeItemRowContentAccess
-  - Content-to-controller: TreeItemRowControllerAccess with zero-contract implementation TreeItemRowControllerAccessZero
+  - Content-to-controller: TreeItemRowControllerAccess empty zero-contract interface implemented by the owning node/controller
 - Companion artifact stems: none

@@ -65,5 +65,5 @@ None.
 - Materialization policy: one-file default
 - Internal contracts:
   - Controller-to-content: EditorToolbarContentAccess
-  - Content-to-controller: EditorToolbarControllerAccess with zero-contract implementation EditorToolbarControllerAccessZero
+  - Content-to-controller: EditorToolbarControllerAccess empty zero-contract interface implemented by the owning node/controller
 - Companion artifact stems: none

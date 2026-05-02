@@ -88,7 +88,7 @@ Target-specific details are declared in prompt §10 and may differ across platfo
 
 ### Semantic requests cross through controller access
 
-Content forwards activation as a semantic request to its narrow controller access contract. The runtime object may be the controller instance, but content is typed only against the access interface and receives no extra constructor data, callbacks, child handles, slots, or props. The node layer then calls `TreeEditor.toggleEditMode()`.
+Content forwards activation as a semantic request to its narrow controller access contract. The runtime object is the owning controller instance, but content is typed only against the access interface and receives no extra constructor data, callbacks, child handles, slots, or props. When the contract is empty, it remains an empty access interface implemented by the owning controller, not a separate dummy object. The node layer then calls `TreeEditor.toggleEditMode()`.
 
 ### Children don't mount themselves
 

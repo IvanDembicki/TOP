@@ -98,5 +98,5 @@ TreeItem is the core library template node representing a single item in the tre
 - Materialization policy: one-file default
 - Internal contracts:
   - Controller-to-content: TreeItemContentAccess
-  - Content-to-controller: TreeItemControllerAccess with zero-contract implementation TreeItemControllerAccessZero
+  - Content-to-controller: TreeItemControllerAccess empty zero-contract interface implemented by the owning node/controller
 - Companion artifact stems: none

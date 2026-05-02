@@ -288,7 +288,7 @@ different child nodes.
 ### 11.4. Single-child mutable node
 
 **Single-child mutable node** — a mutable node that at runtime always has at most one
-active child in a given slot, but the concrete child instance can be replaced entirely.
+active child in a given child position, but the concrete child instance can be replaced entirely.
 
 ### 11.5. Composite node
 

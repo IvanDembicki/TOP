@@ -83,5 +83,5 @@ ChildrenList follows a **destroy/activate content lifecycle**: its visual conten
 - Materialization policy: one-file default
 - Internal contracts:
   - Controller-to-content: ChildrenListContentAccess
-  - Content-to-controller: ChildrenListControllerAccess with zero-contract implementation ChildrenListControllerAccessZero
+  - Content-to-controller: ChildrenListControllerAccess empty zero-contract interface implemented by the owning node/controller
 - Companion artifact stems: none

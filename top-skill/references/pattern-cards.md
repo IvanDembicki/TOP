@@ -31,7 +31,7 @@ A switchable node may be fixed or dynamic:
 - there is no active/opened selection semantics;
 - a list of children is shown or processed without selecting one active/opened child;
 - the node simply stores a flag without a separate state/candidate structure;
-- the child slot is replaced by a single runtime instance rather than selected from a candidate set — use `single-child mutable node`.
+- the child position is replaced by a single runtime instance rather than selected from a candidate set — use `single-child mutable node`.
 
 ### Invariants
 - there is a switchable holder;
@@ -80,7 +80,7 @@ but that child can be replaced, recreated, or loaded at runtime.
 ### When to use
 - one active child instance is needed;
 - the child is created dynamically;
-- the child can be replaced by another instance of the same semantic slot;
+- the child can be replaced by another instance of the same semantic child position;
 - child composition is mutable, not fixed-state based.
 
 ### When not to use
@@ -89,7 +89,7 @@ but that child can be replaced, recreated, or loaded at runtime.
 - this is a list-like mutable container.
 
 ### Invariants
-- no more than one child occupies the slot at a time;
+- no more than one child occupies the child position at a time;
 - child policy is explicitly described;
 - child replacement has clear lifecycle semantics;
 - the owner of child instances is unambiguously defined.

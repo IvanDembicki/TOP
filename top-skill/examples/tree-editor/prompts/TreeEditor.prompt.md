@@ -86,5 +86,5 @@ TreeEditor queries EditorModeHolder via the private `_editorModeHolder` referenc
 - Materialization policy: one-file default
 - Internal contracts:
   - Controller-to-content: TreeEditorContentAccess
-  - Content-to-controller: TreeEditorControllerAccess with zero-contract implementation TreeEditorControllerAccessZero
+  - Content-to-controller: TreeEditorControllerAccess empty zero-contract interface implemented by the owning node/controller
 - Companion artifact stems: none

@@ -78,8 +78,11 @@ container.
 
 Content/View constructors receive exactly one semantic argument: a narrow typed
 access interface implemented by the owning controller. The concrete controller
-may be the runtime object passed to the constructor, but Content/View must be
-typed only against the narrow access interface. Generated Content/View code must
+must be the runtime object passed to the constructor, but Content/View must be
+typed only against the narrow access interface. If the content-to-controller
+direction has no permitted methods, the zero-contract is an empty access
+interface implemented by the owning controller; generation must not create a
+separate dummy `ControllerAccessZero` object. Generated Content/View code must
 not import, reference, inspect, store, or downcast to the concrete controller type.
 
 Generated code must not pass data, callbacks, flags, stores, services, child
@@ -118,6 +121,11 @@ Generated architecture must preserve the public node surface and two distinct in
 Content/View must be constructed and stored against the narrow `IControllerAccess`
 contract, not against the concrete controller class. The public constructor of
 the concrete TOP Content/View receives exactly that one semantic argument.
+
+The controller must store and use content through the narrow `IContentAccess`
+contract, not through the concrete Content/View class. This protects the
+controller from accidentally depending on methods exposed by a large platform
+component, native view, widget, or third-party object wrapped inside content.
 
 Content must not access the public node surface. Anything else is strictly prohibited.
 
@@ -169,7 +177,7 @@ Both directions must be accounted for:
 - `IContentAccess` / controller-to-content: what the controller may command or request from its own content;
 - `IControllerAccess` / content-to-controller: what content may report or request from its own controller.
 
-If a direction has no permitted calls, generation must materialize or explicitly document a zero-contract for that direction according to the target technology. Silent omission is not valid.
+If a direction has no permitted calls, generation must materialize or explicitly document a zero-contract for that direction according to the target technology. Silent omission is not valid. For the content-to-controller direction, the zero-contract is an empty narrow access interface implemented by the owning controller and passed as `this` typed only as that interface. It is not a separate runtime access object.
 Raw callbacks, anonymous objects, full controller references, full concrete controller types, full concrete content references, or runtime props are not valid substitutes for a named internal contract where the technology can express one.
 
 These boundaries/artifacts:

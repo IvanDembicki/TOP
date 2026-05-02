@@ -3,7 +3,7 @@ import { TreeEditorNode } from "../tree_editor.top";
 import { EditToggleBtnEditModeStateNode } from "./edit_toggle_btn_edit_mode_state.top";
 import { EditToggleBtnViewModeStateNode } from "./edit_toggle_btn_view_mode_state.top";
 
-export class EditToggleBtnNode extends SwitchableNode {
+export class EditToggleBtnNode extends SwitchableNode implements EditToggleBtnControllerAccess {
   private readonly _editor: TreeEditorNode;
   private _viewMode!: EditToggleBtnViewModeStateNode;
   private _editMode!: EditToggleBtnEditModeStateNode;
@@ -13,7 +13,7 @@ export class EditToggleBtnNode extends SwitchableNode {
     const editor = this.findUpByType(TreeEditorNode);
     if (!editor) throw new Error("EditToggleBtn requires TreeEditor ancestor");
     this._editor = editor;
-    this.setContent(new EditToggleBtnContent(new EditToggleBtnControllerAccessZero()));
+    this.setContent(new EditToggleBtnContent(this));
     this.buildChildren();
   }
 
@@ -35,7 +35,6 @@ interface EditToggleBtnContentAccess {
 }
 
 interface EditToggleBtnControllerAccess {}
-class EditToggleBtnControllerAccessZero implements EditToggleBtnControllerAccess {}
 
 class EditToggleBtnContent extends DomContent implements EditToggleBtnContentAccess {
   constructor(_controller: EditToggleBtnControllerAccess) {

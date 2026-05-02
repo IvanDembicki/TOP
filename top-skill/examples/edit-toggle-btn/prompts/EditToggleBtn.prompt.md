@@ -63,7 +63,7 @@ EditToggleBtn is a logical switchable node in the toolbar that controls which vi
 - Visual element: `div` with CSS class `edit-toggle-btn`.
 - Extends `SwitchableNode`.
 - Ancestor lookup: `this._editor = this.findUpByType(TreeEditorNode)` captured in constructor.
-- Constructor materialization: `this.setContent(new EditToggleBtnContent(new EditToggleBtnControllerAccessZero()))`.
+- Constructor materialization: `this.setContent(new EditToggleBtnContent(this))`.
 - On `refresh()`: `const target = this._editor.isEditMode ? this._editMode : this._viewMode; this.openChild(target);`
 
 ## 11. Expected Materialization
@@ -75,5 +75,5 @@ EditToggleBtn is a logical switchable node in the toolbar that controls which vi
 - Materialization policy: one-file default
 - Internal contracts:
   - Controller-to-content: EditToggleBtnContentAccess
-  - Content-to-controller: EditToggleBtnControllerAccess with zero-contract implementation EditToggleBtnControllerAccessZero
+  - Content-to-controller: EditToggleBtnControllerAccess empty zero-contract interface implemented by the owning node/controller
 - Companion artifact stems: none
