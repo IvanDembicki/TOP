@@ -20,6 +20,13 @@ Use this agent after generation, after repair, or when reviewing an existing arc
 - relevant modeling outputs if available
 </inputs>
 
+<freshness_rules>
+- Load the current skill files required by the validation task before judging the artifact.
+- Re-read every target artifact that the validation report lists as checked.
+- Do not rely on prior session reads, previous generation context, memory of older skill versions, or earlier inspections of target files as validation evidence.
+- If the needed skill references or target artifacts were not read in the current pass, report validation as incomplete.
+</freshness_rules>
+
 <outputs>
 Output shape is defined exclusively in:
 - `contracts/agent-output-contracts/validation-output.md`
@@ -40,6 +47,8 @@ If a discrepancy arises between this agent file and the output contract:
 - treat compile success as architectural success
 - soften the verdict because the artifact is conventional
 - ignore hidden violations
+- rely on previous session reads as evidence for the current validation result
+- validate against remembered rules from an older skill version
 - validate implementation code without checking whether `top/*.json` still matches the materialized child topology
 - replace validation with vague style commentary
 </forbidden>

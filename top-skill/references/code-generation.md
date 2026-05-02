@@ -94,10 +94,20 @@ semantic injection into any public runtime parameter, render/build parameter,
 component/native/platform field, composition mechanism, or other
 technology-specific entrypoint.
 
+If the target materializes Content through one public runtime input object/value,
+that input must be exactly the narrow owner access contract and nothing else. It
+must not become a general props/config/data/composition bag.
+
 Generated code must not treat an externally assembled access bundle as a valid
 replacement for `IControllerAccess`. Even if that bundle contains correctly named
 methods, it is invalid unless the runtime object is the owning controller
 instance typed only as the narrow owner access interface.
+
+Generated `IControllerAccess` methods must be controller-boundary methods owned
+by the controller. A controller-boundary method may delegate internally, but
+generation must not expose a raw imported function, externally owned method
+reference, service method, store action, or callback directly to Content as the
+access method itself.
 
 Content pulls from owner. Owner pulls from children when child output is required.
 Children expose opaque handles.

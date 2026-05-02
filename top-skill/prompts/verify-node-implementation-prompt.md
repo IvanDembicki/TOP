@@ -56,6 +56,8 @@ Check:
 - absence of empty formal protocol objects where content access to controller is permitted;
 - if the content-to-controller protocol artifact is empty, explicit confirmation that this is a zero-contract implemented by the owning controller and not a separate dummy runtime object;
 - confirmation that controller fields/references to content are typed through `IContentAccess`, not through the concrete Content/View class where the technology permits;
+- confirmation that any public runtime input object/value used to materialize Content is exactly the narrow owner access contract and not a general props/config/data/composition bag;
+- confirmation that `IControllerAccess` methods exposed to Content are controller-boundary methods owned by the controller, not raw imported functions, external method references, service methods, store actions, or callbacks;
 - absence of controller bypass to concrete implementation;
 - absence of cases where a public/base-class primitive getter is used to justify controller access to concrete implementation;
 - absence of controller-side platform primitive access for anything other than implementing `getView()` or parent-owned placement/composition of an opaque child view (detection examples for DOM-like targets: `this.el`, `this.getView().classList`, `this.getView().style`, `this.getView().addEventListener`, `this.getView().setAttribute`, `querySelector`, `content.getView()`);

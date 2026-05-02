@@ -7,6 +7,12 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.4] — 2026-05-02
+
+- Added fresh validation/review requirements: agents must load current skill rules and re-read target artifacts in the current pass instead of relying on previous session reads.
+- Clarified that a technology runtime input object/value is valid only when it is exactly the narrow owner access contract, not a general props/config/data/composition bag.
+- Clarified that `IControllerAccess` methods must be controller-boundary methods owned by the controller; they may delegate internally, but raw external function/service/store references must not be exposed directly as access methods.
+
 ## [1.1.3] — 2026-05-02
 
 - Corrected the Tree Editor `ChildrenList` prompt to construct content with the owning controller instance typed through the narrow owner access interface, not a separately named access object.

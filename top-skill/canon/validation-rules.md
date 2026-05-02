@@ -26,6 +26,15 @@ Local functionality does not override TOP rules.
 - No data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt fragments, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props are pushed into Content/View through constructors or any public runtime/composition entrypoint.
 - Content pulls from owner; owner pulls from children when child output is required; children expose opaque handles.
 - TOP spec props are declarative metadata, not runtime inputs.
+- If a technology materializes Content through one public runtime input object/value, that input is exactly the narrow owner access contract, not a general props/config/data/composition bag.
+- `IControllerAccess` methods are controller-boundary methods owned by the controller; raw imported functions, externally owned method references, service methods, store actions, or callbacks are not exposed directly to Content as access methods.
+
+## Validation freshness
+
+- Validation/review must load the current skill rules required for the active task.
+- Validation/review must re-read target artifacts in the current pass.
+- Prior session reads, old skill memory, previous generation context, or earlier file inspections are not validation evidence.
+- If a report lists a file as checked without reading it in the current pass, validation is incomplete.
 
 ## Content validation
 - Content has no architectural will.

@@ -57,6 +57,16 @@ owning controller. All data, actions, state, and child view handles that
 Content/View needs must be requested through explicit methods on that access
 interface.
 
+If a technology materializes Content through one public runtime input
+object/value, that input is valid only when it is exactly the narrow owner access
+contract and nothing else. It must not become a general props/config/data
+container or composition channel.
+
+Methods exposed through `IControllerAccess` are controller-boundary methods
+owned by the controller. The method body may delegate internally, but Content
+must not receive a raw imported function, externally owned method reference,
+service method, store action, or callback as the access method itself.
+
 If Content/View has no permitted calls to the controller, the access interface is
 an empty zero-contract implemented by the owning controller. It is not a separate
 dummy dependency object.

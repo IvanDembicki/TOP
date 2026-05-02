@@ -73,7 +73,9 @@ This invariant is foundational. It is not tied to any particular language, platf
 - If Content/View has no permitted calls to the controller, the content-to-controller zero-contract is an empty narrow access interface implemented by the owning controller. A separate dummy `ControllerAccessZero` object is not a valid owner access object.
 - The Content/View constructor must not receive additional data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props.
 - This restriction is technology-independent. Moving injection from constructor parameters into any public runtime parameter, render/build parameter, component/native/platform field, composition mechanism, or other technology-specific entrypoint is still the same violation.
+- If a technology materializes Content through one public runtime input object/value, that input must be exactly the narrow owner access contract and nothing else. It is not a general props/config/data/composition bag.
 - A semantic bundle with correctly named methods is not valid owner access unless it is the narrow `IControllerAccess` implemented by the owning controller itself.
+- Methods exposed through `IControllerAccess` must be controller-boundary methods owned by the controller. They may delegate internally, but a raw imported function, externally owned method reference, service method, store action, or callback must not be exposed directly to Content as the access method itself.
 - For any node with separate content, controller-to-content access must also go through a narrow `IContentAccess` or equivalent interface. The controller must store and use content through this interface, not through the concrete content class.
 
 ### Pull direction

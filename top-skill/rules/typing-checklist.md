@@ -71,6 +71,8 @@ Violation signal:
   component/native/platform field, composition mechanism, or other technology-specific entrypoint
 - An externally assembled access bundle is passed instead of the owning controller typed as the owner access interface
 - Content/View imports or downcasts to the concrete controller type
+- A public runtime input object/value contains anything beyond the narrow owner access contract
+- An `IControllerAccess` method is a raw imported function, externally owned method reference, service method, store action, or callback exposed directly to Content rather than a controller-boundary method
 - A separate dummy zero-access object is passed instead of the owning controller typed as the zero-contract interface
 
 *Platform implementation notes: internal platform/base constructor mechanics inside the Content/View implementation are allowed when they are not public TOP constructor inputs and do not become semantic injection channels.*

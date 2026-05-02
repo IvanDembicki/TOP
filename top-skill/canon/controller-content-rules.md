@@ -102,8 +102,18 @@ arbitrary props. Moving the same information into any public runtime parameter,
 render/build parameter, component/native/platform field, composition mechanism,
 or other technology-specific entrypoint is still the same violation.
 
+If a technology materializes Content through one public runtime input
+object/value, that input must be exactly the narrow owner access contract and
+nothing else. It is not a general props/config/data/composition bag.
+
 A semantic bundle with correctly named methods is not valid owner access unless
 it is the narrow `IControllerAccess` implemented by the owning controller itself.
+
+Methods exposed through `IControllerAccess` must be controller-boundary methods
+owned by the controller. A controller-boundary method may delegate internally to
+utilities, services, stores, or platform APIs, but Content must not receive a raw
+imported function, externally owned method reference, service method, store
+action, or callback as the access method itself.
 
 If Content/View needs state, actions, data, or child view handles, it requests
 them from the owning controller through the narrow access interface. The owning

@@ -4,12 +4,19 @@ This file defines mandatory post-generation / post-refactor validation for node-
 
 Successful compilation, local operability, or passing partial framework checks do not imply architectural correctness.
 A node implementation is not considered correct until the full cycle has been completed:
+- load the current skill rules required by the active task;
+- re-read the target artifacts being judged in the current validation pass;
 - identify the class of violation;
 - classify it as `confirmed`, `possible`, or `ambiguity`;
 - choose the canonical correction direction;
 - re-validate the result after the fix.
 
 Anything else is strictly prohibited.
+
+Prior session reads, previous generation context, memory of older skill versions,
+or earlier inspections of target files are not validation evidence. If a
+validation report lists a file as checked, that file must have been read during
+the current validation pass.
 
 ---
 
@@ -69,7 +76,10 @@ Required checks:
 - Content/View does not import, reference, inspect, or downcast to the concrete controller type;
 - Content/View does not receive data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props;
 - the same semantic inputs are not moved into any public runtime parameter, render/build parameter, component/native/platform field, composition mechanism, or other technology-specific entrypoint;
+- if the technology materializes Content through one public runtime input object/value, that input is exactly the narrow owner access contract and not a general props/config/data/composition bag;
 - no externally assembled access bundle replaces `IControllerAccess`, even when it contains correctly named methods;
+- `IControllerAccess` methods are controller-boundary methods owned by the controller;
+- `IControllerAccess` methods may delegate internally, but Content does not receive raw imported functions, externally owned method references, service methods, store actions, or callbacks as access methods;
 - Content requests data/actions/permitted output handles from its owning controller through explicit access methods;
 - the owning controller obtains child view handles from direct child controllers through public APIs;
 - visual content does not construct, import, inspect, or directly own child nodes.
