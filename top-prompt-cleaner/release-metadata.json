@@ -1,6 +1,6 @@
 {
   "product_name": "top-prompt-cleaner",
-  "current_version": "1.0.0",
+  "current_version": "1.0.1",
   "release_channel": "stable",
   "update_check_strategy": "manifest-compare",
   "manifest_source": "Local comparison only. Provide a release-metadata.json from a newer snapshot to compare versions. No remote manifest configured.",

@@ -1,6 +1,6 @@
 {
   "name": "top-prompt-cleaner",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Validator and helper scripts for the TOP Prompt Cleaner skill package",
   "scripts": {
     "validate": "node scripts/validate.js",

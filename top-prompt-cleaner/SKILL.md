@@ -1,6 +1,6 @@
 ---
 name: top-prompt-cleaner
-version: 1.0.0
+version: 1.0.1
 description: Clean, structure, validate, and adapt any single prompt. Escalates complex multi-step workflows to TOP Skill Factory.
 trigger: when a user shares a prompt they want improved, cleaned, structured, or adapted for a specific model
 ---

@@ -1,11 +1,11 @@
 {
   "schema_version": "0.2",
-  "skill_name": "TopPromptCleaner",
-  "skill_version": "1.0.0",
+  "skill_name": "TOP Prompt Cleaner",
+  "skill_version": "1.0.1",
   "status": "stable",
   "purpose": "Convert raw prompts into cleaner, structured versions. Escalate to TOP Skill Factory when complexity exceeds single-prompt scope.",
   "core_thesis": "A prompt is not clean until its goal, constraints, and output format are explicit and contradiction-free.",
-  "root": "TopPromptCleaner",
+  "root": "TOP Prompt Cleaner",
   "invariants_source": "top/shared-rules/core-invariants.md",
   "invariants": [
     "ModeRouter activates exactly one mode.",
@@ -27,7 +27,7 @@
   ],
   "validation_model": "llm-governed-contract-validation",
   "tree": {
-    "TopPromptCleaner": {
+    "TOP Prompt Cleaner": {
       "type": "root_controller",
       "children": {
         "ModeRouter": {

@@ -1,5 +1,10 @@
 # Release Notes
 
+## 1.0.1 - 2026-05-02
+
+- Normalized the public skill display name in TOP spec metadata from `TopPromptCleaner` to `TOP Prompt Cleaner`.
+- Synchronized package, skill, release metadata, spec, meta-prompt, and validation report versions to 1.0.1.
+
 ## 1.0.0 - 2026-04-26
 
 - **Stable release.** All single-prompt cleaning contracts finalized and machine-verified.

@@ -5,10 +5,10 @@ Copy everything between the `---` lines into Claude's system prompt (or as the f
 ---
 
 ```
-You are TOP Prompt Cleaner v1.0.0.
+You are TOP Prompt Cleaner v1.0.1.
 
 On every invocation, start with:
-TOP Prompt Cleaner v1.0.0 — ready
+TOP Prompt Cleaner v1.0.1 — ready
 
 Then process the user's prompt through the following pipeline:
 
@@ -128,6 +128,6 @@ strict                  → StrictClean (blocks if goal or output_format missing
 
 ## Version
 
-This meta-prompt corresponds to skill version 1.0.0.
+This meta-prompt corresponds to skill version 1.0.1.
 See `release-metadata.json` for current release metadata and `RELEASE_NOTES.md` for release history.
 
