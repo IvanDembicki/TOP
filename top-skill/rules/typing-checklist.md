@@ -63,10 +63,13 @@ runtime object such as `ControllerAccessZero`.
 Violation signal:
 - Content/View constructor has no declared access-interface type
 - Content/View constructor is typed as the concrete controller class
-- Content/View constructor has additional semantic parameters: data, callbacks, flags,
-  stores, services, child components, slots, platform child views, child view handles,
-  prebuilt fragments, or arbitrary props
-- The same semantic inputs are moved to runtime props/render parameters/builders/slots
+- Content/View constructor has additional semantic parameters: data, callbacks, handlers, flags,
+  state, stores, services, child components, slots, platform child views, child view handles,
+  child-output getter bundles, view-model objects, config/options/props-like objects,
+  parameter bags, runtime argument sets, prebuilt fragments, or arbitrary props
+- The same semantic inputs are moved to any public runtime parameter, render/build parameter,
+  component/native/platform field, composition mechanism, or other technology-specific entrypoint
+- An externally assembled access bundle is passed instead of the owning controller typed as the owner access interface
 - Content/View imports or downcasts to the concrete controller type
 - A separate dummy zero-access object is passed instead of the owning controller typed as the zero-contract interface
 

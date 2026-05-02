@@ -23,9 +23,9 @@ Local functionality does not override TOP rules.
 - Content/View constructors receive exactly one semantic argument: a narrow typed access interface implemented by the owning Node/Controller.
 - Content/View is not typed against, imported as, downcast to, or stored as the concrete controller class.
 - Empty content-to-controller zero-contracts are narrow access interfaces implemented by the owning controller, not separate dummy runtime objects.
-- No data, callbacks, flags, stores, services, child components, slots, render props, builders, platform child views, prebuilt fragments, child view handles, or arbitrary props are pushed into Content/View through constructors or runtime render channels.
+- No data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt fragments, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props are pushed into Content/View through constructors or any public runtime/composition entrypoint.
 - Content pulls from owner; owner pulls from children when child output is required; children expose opaque handles.
-- TOP spec props are declarative metadata, not runtime props.
+- TOP spec props are declarative metadata, not runtime inputs.
 
 ## Content validation
 - Content has no architectural will.

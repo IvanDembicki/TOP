@@ -12,6 +12,6 @@ output_contract:
 rules:
 - targeted fixes only
 - when replacing legacy composition, converge toward pull-based TOP construction
-- classify props/slots/render parameters/builders/callback bundles as wrapped legacy unless removed from the TOP-conformant final path
+- classify runtime parameters, parameter bags, config/options/props-like objects, composition entrypoints, and callback/handler bundles as wrapped legacy unless removed from the TOP-conformant final path
 - replace pushed Content/View inputs with narrow owner access methods
 - preserve valid internal platform/base constructor mechanics, but do not expose them as public TOP constructor inputs

@@ -7,6 +7,13 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.2] — 2026-05-02
+
+- Strengthened pull-based construction rules to forbid technology-independent semantic input bundles, including parameter bags, props-like/config/options objects, callbacks/handlers bundles, child-output getter bundles, view-model objects, runtime argument sets, and externally assembled access bundles.
+- Clarified that correctly named methods do not make an external bundle a valid `IControllerAccess`; the runtime object must be the owning controller typed through the narrow owner access interface.
+- Added `rules/skill-maintenance-rules.md` and linked it from `SKILL.md` as mandatory guidance for maintaining top-skill itself.
+- Reworked migration, validation, generation, target adaptation, and checklist wording to avoid platform-specific rule framing.
+
 ## [1.1.1] — 2026-05-02
 
 - Clarified that `View` is a visual specialization of `Content`, not a separate access model.

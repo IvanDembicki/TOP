@@ -67,8 +67,9 @@ Required checks:
 - Content/View constructor parameters, fields, and stored references are typed as the narrow access interface, not as the concrete controller class;
 - content-to-controller zero-contracts are empty owner access interfaces implemented by the owning controller;
 - Content/View does not import, reference, inspect, or downcast to the concrete controller type;
-- Content/View does not receive data, callbacks, flags, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, or arbitrary props;
-- the same semantic inputs are not moved into runtime props, render parameters, Flutter constructor fields, builders, slots, native view parameters, Web component attributes, or analogous platform composition channels;
+- Content/View does not receive data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props;
+- the same semantic inputs are not moved into any public runtime parameter, render/build parameter, component/native/platform field, composition mechanism, or other technology-specific entrypoint;
+- no externally assembled access bundle replaces `IControllerAccess`, even when it contains correctly named methods;
 - Content requests data/actions/permitted output handles from its owning controller through explicit access methods;
 - the owning controller obtains child view handles from direct child controllers through public APIs;
 - visual content does not construct, import, inspect, or directly own child nodes.
@@ -78,7 +79,7 @@ Canonical correction direction:
 - replace pushed constructor/runtime inputs with explicit access methods on a narrow access interface;
 - type Content/View only against the access interface;
 - remove downcasts/imports back to concrete controller types;
-- classify legacy props/slots/render parameters as wrapped legacy until they are removed from the TOP-conformant path.
+- classify legacy runtime parameters, parameter bags, config/options/props-like objects, and composition entrypoints as wrapped legacy until they are removed from the TOP-conformant path.
 ## 3. Content behavior validation
 
 Required checks:

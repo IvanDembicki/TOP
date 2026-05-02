@@ -58,9 +58,9 @@ Target adaptation must not:
 
 ## Platform composition syntax is not ownership semantics
 
-Target adaptation may choose React JSX, React Native component nesting, Flutter
-widgets, SwiftUI builders, Android/iOS native view APIs, Web component slots, DOM
-mount calls, or any other target-native materialization syntax.
+Target adaptation may choose whatever target-native syntax is appropriate for
+local materialization in the selected language, platform, UI framework, or
+component model.
 
 These mechanisms are materialization syntax only. They do not define TOP ownership.
 
@@ -70,9 +70,10 @@ The TOP ownership direction remains:
 View -> owning controller -> child controller -> opaque public view handle
 ```
 
-Target adaptation must not turn target props, slots, builders, render parameters,
-widget constructor fields, native child-view parameters, stores, services, or
-callbacks into semantic injection channels for TOP Content/View. If a target API
+Target adaptation must not turn technology-specific input/composition mechanisms,
+public runtime parameters, parameter bags, config/options/props-like objects,
+callbacks/handlers bundles, stores, services, or prebuilt outputs into semantic
+injection channels for TOP Content/View. If a target API
 requires such syntax internally, the TOP layer must still present it as a local
 controller/content materialization detail, not as externally assembled ownership.
 ## Interaction adaptation examples

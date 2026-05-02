@@ -47,8 +47,9 @@ See `references/architecture-rules.md` R5b for the full rule, patterns, and dete
 ## 1a. Construction access is not dependency injection
 
 Guaranteed access starts from real tree ownership. It is not created by passing
-dependencies into constructors, runtime props, slots, builders, render callbacks,
-native view parameters, stores, services, or prebuilt fragments.
+dependencies into constructors, public runtime parameters, composition entrypoints,
+parameter bags, config/options/props-like objects, callbacks/handlers bundles,
+stores, services, or prebuilt fragments.
 
 A Node constructor receives only its parent reference as semantic input.
 Content/View receives only a narrow typed access interface implemented by its

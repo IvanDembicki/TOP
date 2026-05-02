@@ -14,5 +14,5 @@ rules:
 - must follow canon strictly
 - model ownership so every runtime object is born at its architectural tree position
 - parent nodes/controllers own and construct direct children
-- do not model runtime props, slots, builders, render callbacks, or prebuilt child fragments as TOP ownership
-- use TOP spec props only as declarative metadata, not runtime props
+- do not model public runtime parameters, parameter bags, config/options/props-like objects, composition entrypoints, callbacks/handlers bundles, or prebuilt child fragments as TOP ownership
+- use TOP spec props only as declarative metadata, not runtime inputs

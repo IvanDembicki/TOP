@@ -67,11 +67,14 @@ Content/View construction:
 - if the access interface has no methods, it is an empty zero-contract
   implemented by the owning controller, not a separate dummy access object;
 - Content/View must not import, inspect, or downcast to the concrete controller;
-- Content/View must not receive additional data, callbacks, flags, stores,
-  services, child components, slots, prebuilt view fragments, platform child
-  views, child view handles, or arbitrary props;
-- runtime props/render parameters/builders/slots/native view parameters are not
-  a valid substitute for constructor injection.
+- Content/View must not receive additional data, callbacks, handlers, flags,
+  state, stores, services, child components, slots, prebuilt view fragments,
+  platform child views, child view handles, child-output getter bundles,
+  view-model objects, config/options/props-like objects, parameter bags,
+  runtime argument sets, or arbitrary props;
+- public runtime parameters, render/build parameters, composition entrypoints,
+  parameter bags, and props-like/config/options objects are not a valid
+  substitute for constructor injection.
 
 The legal data-flow direction is:
 
@@ -222,7 +225,7 @@ Through internal access boundaries, the following is prohibited:
 - using an access boundary as a surrogate channel to reach the outside world;
 - obtaining direct access from view/content to child nodes, `children`, or `openedChild`;
 - bypassing the controller when obtaining child visual content;
-- tunneling semantic dependencies through runtime props, slots, builders, callbacks, stores, services, prebuilt fragments, child components, platform child views, or arbitrary props.
+- tunneling semantic dependencies through public runtime parameters, composition entrypoints, parameter bags, config/options/props-like objects, callbacks/handlers bundles, stores, services, prebuilt fragments, child components, platform child views, or arbitrary props.
 
 Anything else is categorically prohibited.
 

@@ -94,11 +94,16 @@ materialization is still `new Content(this)` with `this` typed only as that
 interface from the Content/View side. A separate dummy `ControllerAccessZero`
 object is not a valid substitute for owner access.
 
-The constructor must not receive data, callbacks, flags, stores, services, child
-components, slots, prebuilt view fragments, platform child views, child view
-handles, or arbitrary props. Moving the same information into runtime props,
-render parameters, builders, framework slots, native view parameters, or widget
-constructor fields is still a violation.
+The constructor must not receive data, callbacks, handlers, flags, state, stores,
+services, child components, slots, prebuilt view fragments, platform child views,
+child view handles, child-output getter bundles, view-model objects,
+config/options/props-like objects, parameter bags, runtime argument sets, or
+arbitrary props. Moving the same information into any public runtime parameter,
+render/build parameter, component/native/platform field, composition mechanism,
+or other technology-specific entrypoint is still the same violation.
+
+A semantic bundle with correctly named methods is not valid owner access unless
+it is the narrow `IControllerAccess` implemented by the owning controller itself.
 
 If Content/View needs state, actions, data, or child view handles, it requests
 them from the owning controller through the narrow access interface. The owning

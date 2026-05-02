@@ -5,8 +5,8 @@ description: Skill for designing, generating, and validating systems built with 
 
 # TOP Skill
 
-**Version:** 1.1.1
-**Last updated:** 2026-05-01 10:20 -07:00
+**Version:** 1.1.2
+**Last updated:** 2026-05-02 15:51 -07:00
 **Invocation:** `/top`
 
 > **Rule for AI:** whenever any top-skill file is modified, update the date and time in this field to the current values.
@@ -28,12 +28,20 @@ It exists to prevent generic but incorrect criticism that ignores the AI-first w
 
 If `AI_PRELOAD_CONTEXT.md` was not read first, any high-level evaluation of top-skill is considered incomplete.
 
+When modifying top-skill itself, AI must also read:
+
+- `rules/skill-maintenance-rules.md`
+
+This file is mandatory for changes to top-skill canon, rules, references, prompts, agents, examples, validation wording, or release metadata.
+
 The required preload order for any first serious analysis is:
 1. `AI_PRELOAD_CONTEXT.md`
 2. `overview.md`
 3. `QUICKSTART_FOR_AI.md`
 4. `agents/index.md` and the mode-specific path
 5. canon, references, and prompts as required by the task
+
+For top-skill maintenance tasks, read `rules/skill-maintenance-rules.md` before proposing or applying changes.
 
 ---
 
@@ -224,11 +232,11 @@ Strong signals for activating the skill:
 11. The controller is the sole external interface of the node.
 12. Between controller and content only explicitly defined closed protocol boundaries operate. The internal implementation of either side is not a communication channel. Any other approach is strictly forbidden.
 12a. Pull-Based Construction / Locality of Object Birth is foundational: a TOP object is constructed at the exact place where it architecturally belongs in the tree. A node constructor receives exactly one semantic argument: its parent reference. For a root node, the parent may be `null` or a special `RootContext`, but `RootContext` is only a root ownership/bootstrap marker. It must not become a generic dependency injection container and must not pass application data, callbacks, services, stores, child instances, view fragments, or arbitrary props into the tree. A parent node/controller owns its direct children and constructs them at their tree positions. Objects are not assembled outside the tree and pushed inward.
-12b. A Content/View constructor receives exactly one semantic argument: a narrow typed access interface implemented by its owning node/controller. The constructor must not receive the concrete node/controller as its concrete class type. The runtime object must be the owning controller instance typed only through the narrow access interface. If Content/View has no permitted calls to the controller, this is an empty zero-contract access interface implemented by the owning controller; a separate dummy `ControllerAccessZero` object is not a valid substitute. Content/View must not receive additional data, callbacks, flags, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, or arbitrary props. The same restriction applies to runtime props/render parameters, Flutter constructor fields, render callbacks, builders, slots, native view parameters, and equivalent platform channels. Any other approach is push-based composition and is strictly forbidden.
+12b. A Content/View constructor receives exactly one semantic argument: a narrow typed access interface implemented by its owning node/controller. The constructor must not receive the concrete node/controller as its concrete class type. The runtime object must be the owning controller instance typed only through the narrow access interface. If Content/View has no permitted calls to the controller, this is an empty zero-contract access interface implemented by the owning controller; a separate dummy `ControllerAccessZero` object is not a valid substitute. Content/View must not receive additional data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props. This rule is technology-independent: moving the same semantic input into any public runtime parameter, render/build parameter, component/native/platform field, composition mechanism, or other technology-specific entrypoint is still the same violation. Any other approach is push-based composition and is strictly forbidden.
 12c. Content pulls from owner; owner pulls from children when child output is architecturally required; children expose opaque handles. If content needs data, actions, state, or visual child output, it requests them from its owning controller through the narrow access interface. The owning controller obtains direct child handles from direct child controllers through their public APIs and returns only opaque placement handles to its own content. The content may place returned opaque handles, but must not construct, import, inspect, downcast, or own child nodes/controllers. Child-output access method names on the narrow owner access interface must identify the semantic child branch/output, for example `getAccountIdentityView()`, `getOrganizationsAccessView()`, `getAppPreferencesView()`, or `getDebugAdminToolsView()`. Do not require artificial suffixes such as `Handle` or `ViewHandle`; do not require `Section` unless the branch is actually modeled as a section; do not use `slot` terminology. Generic `children`, `slot`, `render`, or framework-composition names are not valid TOP access names.
 13. If a node has a separate content class/object, the public node surface of the node/controller faces outward, while two separate access protocols operate internally: `IContentAccess` for the controller's access to content and `IControllerAccess` for content access to the controller. The controller must store and use content through `IContentAccess`, not through the concrete content class. The public node surface is not required to be materialized as a separate protocol artifact. Mixing the public node surface with internal access protocols, exposing the concrete content surface to the controller, or substituting direct access for these directions is strictly forbidden.
 14. Content has no architectural will and does not gain access to the public node surface. Content may execute low-level platform commands that belong to its own concrete implementation, including subscribe, unsubscribe, show, hide, and response to platform events. Any semantic event, state change request, lifecycle decision, structural decision, or orchestration request must go to the controller only through `IControllerAccess`. Content must not use these platform commands as a surrogate external interaction channel. Any other approach is strictly forbidden.
-15. If a node has a separate content class/object, `IContentAccess` and `IControllerAccess` must be explicit, narrow, and typed as strictly as the language permits. Their typing must be materialized in the code as separate named contract artifacts or other explicitly designated typed protocol boundaries allowed by the technology, and as explicitly typed boundaries in signatures, fields, and references where these access artifacts are passed or stored. `IContentAccess` is especially required when content wraps a large platform component, widget, native view, or third-party object: the controller may use only the small allowed surface, even if the concrete content object exposes many public methods. An implicit, anonymous, shape-only parameter/object, full concrete content type, full concrete controller type, or dummy zero-access object is not a valid materialization of a protocol. These internal access protocols must be hidden from the outside world to the extent the technology allows. The public node surface is not considered one of these internal access protocols. Any other approach is strictly forbidden.
+15. If a node has a separate content class/object, `IContentAccess` and `IControllerAccess` must be explicit, narrow, and typed as strictly as the language permits. Their typing must be materialized in the code as separate named contract artifacts or other explicitly designated typed protocol boundaries allowed by the technology, and as explicitly typed boundaries in signatures, fields, and references where these access artifacts are passed or stored. `IContentAccess` is especially required when content wraps a large platform component, widget, native view, or third-party object: the controller may use only the small allowed surface, even if the concrete content object exposes many public methods. An implicit, anonymous, shape-only parameter/object, externally assembled access bundle, parameter bag, props-like object, config/options object, callbacks/handlers bundle, child-output getter bundle, full concrete content type, full concrete controller type, or dummy zero-access object is not a valid materialization of a protocol. These internal access protocols must be hidden from the outside world to the extent the technology allows. The public node surface is not considered one of these internal access protocols. Any other approach is strictly forbidden.
 16. Content interacts with its owning controller only through `IControllerAccess`. If content is visual and needs child visual output, that output may only be requested through explicitly declared `IControllerAccess` endpoints. An ordinary visual node works only with explicitly declared named child-view endpoints. Iterating over `children` for repeated rendering is permitted only inside a separate `DynamicCollectionViewNode` explicitly described by the node contract. Any other approach is strictly forbidden.
 17. Content lifecycle is controlled by the controller: a runtime content instance is created only when actually needed and destroyed when the node/branch becomes inactive, unless a special retention pattern is explicitly defined. Any other approach is strictly forbidden by default.
 18. The top-level schema node must remain minimal and stable.
@@ -261,7 +269,7 @@ This means:
 - node spec extension happens through `props`;
 - `props` is the primary extension point for descriptive, classification, and project-local metadata.
 
-TOP spec props are declarative metadata in the TOP specification. They are not React props, Flutter widget fields, Web component attributes, native view parameters, runtime render parameters, or any other runtime injection channel. Fields such as `props.source`, `props.dir`, and `props.contentType` describe the model; they do not authorize props-based composition or external assembly.
+TOP spec props are declarative metadata in the TOP specification. They are not runtime parameters, component fields, platform fields, render/build parameters, or any other technology-specific input channel. Fields such as `props.source`, `props.dir`, and `props.contentType` describe the model; they do not authorize props-based composition or external assembly.
 
 
 ### `props.materializationPolicy`
@@ -589,11 +597,11 @@ A good result for the generative layer:
 - Do not assume control owner state automatically.
 - Do not mix logical ownership and render placement.
 - Do not leave runtime mutation without a source-of-truth policy.
-- Do not assemble TOP objects outside their architectural position and push them inward through constructor parameters, runtime props, slots, builders, render callbacks, stores, services, child components, prebuilt fragments, platform child views, or child view handles.
+- Do not assemble TOP objects outside their architectural position and push them inward through constructor parameters, public runtime parameters, composition entrypoints, parameter bags, config/options/props-like objects, callbacks/handlers bundles, stores, services, child components, prebuilt fragments, platform child views, child-output getter bundles, or child view handles.
 - Do not type a Content/View against the concrete controller class. The public constructor of concrete TOP Content/View receives exactly one semantic argument: a narrow typed access interface implemented by the owning controller. Internal platform/base constructor mechanics inside the Content/View implementation are allowed only when they do not become an external injection channel.
 - Do not create separate dummy zero-access objects for Content/View constructors. A zero-contract is an empty narrow access interface implemented by the owning controller; Content/View is constructed with the owning controller instance typed only as that interface.
 - Do not store or use concrete content/view classes from the controller when a separate content boundary exists. The controller must hold content through `IContentAccess`, which exposes only the allowed commands and opaque placement output.
-- Do not treat TOP spec `props` as runtime props. Spec props are declarative metadata, not a composition mechanism.
+- Do not treat TOP spec `props` as runtime inputs. Spec props are declarative metadata, not a composition mechanism.
 
 - Do not use `buildChildren()` as a general init method for the controller. If runtime child construction is absent, `buildChildren()` must not exist in the class. Any other approach is strictly forbidden.
 - Do not store project-local implementation prompts inside the skill.

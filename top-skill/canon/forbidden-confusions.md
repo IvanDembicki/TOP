@@ -30,7 +30,7 @@ The returned value is an opaque view handle for parent-owned materialization onl
 - If the view-part needs child visual content, it requests it only from its own controller via `IControllerAccess`.
 - The controller itself retrieves `child.getView()` from the direct child node and returns the result to its own view-part through an explicit access method.
 - A parent may use a child view only as a placement/composition unit: mount, unmount, insert, reorder, replace, or pass into the parent's own content boundary.
-- The child view handle must be pulled through the owning controller. It must not be pushed into content/view from root code, parent render code, runtime props, slots, builders, callbacks, or prebuilt fragments.
+- The child view handle must be pulled through the owning controller. It must not be pushed into content from root code, parent render/build code, public runtime parameters, parameter bags, callbacks, handlers, config/options/props-like objects, child-output getter bundles, or prebuilt fragments.
 - A regular visual node does not iterate `children` to build UI. Only explicitly declared named child-view endpoints are permitted.
 - Dynamic repeated composition from an array of child nodes is only permitted inside a dedicated `DynamicCollectionViewNode`.
 
@@ -56,29 +56,30 @@ The owning controller asks direct child controllers for opaque public handles.
 
 Forbidden:
 - constructing data/actions/children/fragments externally and pushing them into
-  Content/View through constructors, runtime props, slots, builders, render
-  callbacks, native view parameters, stores, services, or arbitrary props
+  Content/View through constructors, public runtime parameters, composition
+  entrypoints, parameter bags, config/options/props-like objects, callbacks,
+  handlers, stores, services, or arbitrary props
 - passing concrete child components or platform child views into a TOP View
-- treating ordinary React/Flutter/Web composition as TOP ownership
-- moving constructor injection into render-time props and claiming the constructor
+- treating ordinary technology-specific composition as TOP ownership
+- moving constructor injection into public runtime parameters and claiming the constructor
   rule is satisfied
 
 Push-based composition is not merely another implementation style. It makes the
 tree decorative, hides ownership in external assembly code, and prevents local
 verification.
 
-### TOP spec props vs runtime props
+### TOP spec props vs runtime inputs
 
-TOP spec props are declarative metadata in the TOP model. They are not React
-props, Flutter widget fields, Web component attributes, native view parameters,
-or runtime render parameters.
+TOP spec props are declarative metadata in the TOP model. They are not runtime
+parameters, component fields, platform fields, render/build parameters, or any
+other technology-specific input channel.
 
 Forbidden:
 - using `props.source`, `props.contentType`, `props.dir`, or other spec props as
-  justification for runtime props-based composition
-- treating a platform prop/slot/builder API as a TOP ownership boundary
-- tunneling semantic dependencies through runtime props because the constructor
-  rule forbids them
+  justification for runtime parameter/composition-based injection
+- treating a technology-specific composition/input mechanism as a TOP ownership boundary
+- tunneling semantic dependencies through public runtime parameters because the
+  constructor rule forbids them
 
 ---
 

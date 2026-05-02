@@ -85,12 +85,19 @@ interface implemented by the owning controller; generation must not create a
 separate dummy `ControllerAccessZero` object. Generated Content/View code must
 not import, reference, inspect, store, or downcast to the concrete controller type.
 
-Generated code must not pass data, callbacks, flags, stores, services, child
-components, slots, prebuilt view fragments, platform child views, child view
-handles, or arbitrary props into Content/View constructors. It must also not move
-the same semantic injection into runtime props, render parameters, builders,
-slots, native view parameters, widget constructor fields, Web component
-attributes, or analogous platform channels.
+Generated code must not pass data, callbacks, handlers, flags, state, stores,
+services, child components, slots, prebuilt view fragments, platform child views,
+child view handles, child-output getter bundles, view-model objects,
+config/options/props-like objects, parameter bags, runtime argument sets, or
+arbitrary props into Content/View constructors. It must also not move the same
+semantic injection into any public runtime parameter, render/build parameter,
+component/native/platform field, composition mechanism, or other
+technology-specific entrypoint.
+
+Generated code must not treat an externally assembled access bundle as a valid
+replacement for `IControllerAccess`. Even if that bundle contains correctly named
+methods, it is invalid unless the runtime object is the owning controller
+instance typed only as the narrow owner access interface.
 
 Content pulls from owner. Owner pulls from children when child output is required.
 Children expose opaque handles.
@@ -179,7 +186,7 @@ Both directions must be accounted for:
 - `IControllerAccess` / content-to-controller: what content may report or request from its own controller.
 
 If a direction has no permitted calls, generation must materialize or explicitly document a zero-contract for that direction according to the target technology. Silent omission is not valid. For the content-to-controller direction, the zero-contract is an empty narrow access interface implemented by the owning controller and passed as `this` typed only as that interface. It is not a separate runtime access object.
-Raw callbacks, anonymous objects, full controller references, full concrete controller types, full concrete content references, or runtime props are not valid substitutes for a named internal contract where the technology can express one.
+Raw callbacks, handlers, anonymous objects, externally assembled access bundles, parameter bags, full controller references, full concrete controller types, full concrete content references, or public runtime inputs are not valid substitutes for a named internal contract where the technology can express one.
 
 These boundaries/artifacts:
 - are not the full controller or the full concrete content object;
@@ -347,7 +354,7 @@ Typical errors include:
 - relocation performed without updating spec/prompt paths;
 - generation mixes controller and concrete content;
 - generation leaves controller code directly manipulating its own platform primitive instead of calling named `IContentAccess` commands;
-- generation passes semantic inputs into Content/View through extra constructor arguments, runtime props, slots, builders, callbacks, stores, services, child components, platform child views, or prebuilt fragments;
+- generation passes semantic inputs into Content/View through extra constructor arguments, public runtime parameters, composition entrypoints, parameter bags, config/options/props-like objects, callbacks/handlers bundles, stores, services, child components, platform child views, child-output getter bundles, or prebuilt fragments;
 - generation types Content/View against the concrete controller or downcasts/imports back to that concrete type;
 - generation places hidden content/view declarations before the internal access boundary that stands between the controller and content;
 - generation makes non-visual content publicly accessible;

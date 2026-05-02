@@ -126,8 +126,9 @@ These two prompts have different concerns and must not be merged into one file.
 
 The migration end state must satisfy Pull-Based Construction / Locality of Object Birth.
 
-During analysis, legacy props, slots, render props, builders, callback bundles,
-service bags, stores, prebuilt child components, and platform child views may be
+During analysis, legacy runtime parameters, parameter bags, config/options/props-like
+objects, slots, render/build parameters, callback/handler bundles, service bags,
+stores, prebuilt child components, and platform child views may be
 identified as legacy integration mechanisms. They may be wrapped temporarily as
 legacy adapters only when the migration plan labels them explicitly as such.
 
@@ -141,9 +142,9 @@ For each migrated branch, the agent must plan the final ownership direction:
 - the owner asks direct child controllers for opaque public handles;
 - child handles are placed only as opaque materialization units.
 
-Do not describe a React props tree, Flutter widget constructor tree, Web slot tree,
-native child-view assembly, or render-callback composition as TOP architecture unless
-the TOP ownership rules above are explicitly satisfied.
+Do not describe any technology-specific parameter/composition tree, child-view
+assembly, or render/build-callback composition as TOP architecture unless the TOP
+ownership rules above are explicitly satisfied.
 ---
 
 ## Safety protocol (mandatory before any migration step)
