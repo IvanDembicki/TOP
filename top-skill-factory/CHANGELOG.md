@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1] — 2026-05-02
+
+### Changed
+
+- Normalized TOP Prompt Cleaner display naming in onboarding and conversion demo artifacts.
+- Bumped `top/spec.json` `skill_version` and `release-metadata.json` `current_version` to 1.1.1.
+- Updated release notes and validation report version metadata.
+
 ## [1.1.0] — 2026-04-28
 
 ### Added

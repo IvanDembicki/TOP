@@ -1,9 +1,9 @@
 {
   "product_name": "top-skill-factory",
-  "current_version": "1.1.0",
+  "current_version": "1.1.1",
   "release_channel": "stable",
   "update_check_strategy": "manifest-compare",
   "manifest_source": "Local manifest compare by default. A trusted newer release-metadata.json file may be provided explicitly.",
-  "notes": "TOP Skill Factory 1.1.0 adds the ExistingSolutionCheck gate to CreateNewSkillMode. Before tree design begins, the system checks whether an existing solution can be reused, adapted, or composed. Build decisions require explicit justification. Blocking violations added for missing check results.",
+  "notes": "TOP Skill Factory 1.1.1 normalizes TOP Prompt Cleaner display naming in factory onboarding and conversion demo artifacts.",
   "startup_update_check_supported": true
 }

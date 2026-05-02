@@ -1,18 +1,18 @@
 {
   "schema_version": "0.1",
-  "skill_name": "TopPromptCleaner",
+  "skill_name": "TOP Prompt Cleaner",
   "skill_version": "1.0.0",
   "status": "stable",
   "purpose": "Convert raw prompts into cleaner structured outputs while escalating multi-step workflows.",
   "core_thesis": "A prompt is not clean until its goal, constraints, and output format are explicit and contradiction-free.",
-  "root": "TopPromptCleaner",
+  "root": "TOP Prompt Cleaner",
   "invariants": [
     "SensitiveDataDetector runs before any transformation.",
     "ComplexityDetector runs before any transformation.",
     "High complexity routes to escalation rather than cleaning."
   ],
   "tree": {
-    "TopPromptCleaner": {
+    "TOP Prompt Cleaner": {
       "type": "root_controller",
       "children": {
         "InputController": {

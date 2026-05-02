@@ -1,8 +1,8 @@
-# TopSkill Factory Summary
+# TOP Skill Factory Summary
 
 ## Why it exists
 
-TopSkill Factory exists to prevent AI skill workflows from collapsing into uncontrolled prompt text, hidden assumptions, and drifting context.
+TOP Skill Factory exists to prevent AI skill workflows from collapsing into uncontrolled prompt text, hidden assumptions, and drifting context.
 
 ## What it gives
 
@@ -22,4 +22,4 @@ TopSkill Factory exists to prevent AI skill workflows from collapsing into uncon
 
 ## Short formulation
 
-TopSkill Factory turns a chaotic AI workflow into a controlled, checkable, and reproducible system.
+TOP Skill Factory turns a chaotic AI workflow into a controlled, checkable, and reproducible system.

@@ -1,1 +1,1 @@
-# TopPromptCleaner\n\nPurpose: convert raw prompts into explicit cleaned outputs.\n
+# TOP Prompt Cleaner\n\nPurpose: convert raw prompts into explicit cleaned outputs.\n
