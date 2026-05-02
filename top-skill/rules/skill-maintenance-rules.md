@@ -31,7 +31,8 @@ Use `View` only when the rule is specifically visual: `getView()`, opaque view
 handles, visual placement, visual child output, or visual materialization.
 
 Rules about constructors, ownership, lifecycle, protocol boundaries, and access
-interfaces should usually be written for `Content`.
+interfaces must be written for `Content` unless the rule is specifically about
+visual materialization or opaque view output.
 
 ## 4. No exhaustive-looking technology lists
 
@@ -45,7 +46,7 @@ examples.
 
 ## 5. Update the whole rule surface
 
-A canon change usually requires checking:
+A canon change requires checking every affected part of the rule surface:
 - `SKILL.md`
 - `canon/*`
 - `references/*`

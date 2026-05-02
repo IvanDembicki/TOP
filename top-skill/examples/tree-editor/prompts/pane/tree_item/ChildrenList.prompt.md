@@ -70,7 +70,7 @@ ChildrenList follows a **destroy/activate content lifecycle**: its visual conten
 - Visual element: `div` with CSS class `children-list`.
 - In the DOM implementation, visual content is represented by the node's `el`.
 - `deactivate()`: calls `this.clearContent()` (base class method that destroys the content and nulls the reference).
-- `activate()`: calls `this.setContent(new ChildrenListContent(access))`, where `access` is the single narrow typed owner access interface, then re-mounts each direct child's opaque view handle via the parent-owned placement primitive `this.content.mount(child.getView())`.
+- `activate()`: calls `this.setContent(new ChildrenListContent(this))`, where `this` is typed from the Content side only as the single narrow owner access interface, then re-mounts each direct child's opaque view handle via the parent-owned placement primitive `this.content.mount(child.getView())`.
 - Child TreeItem views are opaque handles returned by direct child controllers through `child.getView()` and mounted through `this.content.mount(...)` for placement only.
 - Extends `DomNode`.
 

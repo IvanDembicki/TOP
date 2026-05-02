@@ -7,6 +7,12 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.3] — 2026-05-02
+
+- Corrected the Tree Editor `ChildrenList` prompt to construct content with the owning controller instance typed through the narrow owner access interface, not a separately named access object.
+- Tightened skill maintenance wording so general constructor, ownership, lifecycle, protocol-boundary, and access-interface rules are written for `Content` unless the rule is specifically visual.
+- Added `scripts/quick_validate.py` as a package sanity validator for required files, JSON parsing, manifest references, version consistency, markdown links, canonical phrases, and risky maintenance patterns.
+
 ## [1.1.2] — 2026-05-02
 
 - Strengthened pull-based construction rules to forbid technology-independent semantic input bundles, including parameter bags, props-like/config/options objects, callbacks/handlers bundles, child-output getter bundles, view-model objects, runtime argument sets, and externally assembled access bundles.
