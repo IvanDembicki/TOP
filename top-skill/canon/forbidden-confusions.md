@@ -13,12 +13,15 @@ Any confusion listed below is considered a canonical violation.
 ## 1. Controller vs Content
 
 - Controller owns behavior.
+- Controller is a non-renderable orchestration boundary.
 - Content is passive and has no architectural will.
 
 Forbidden:
 - assigning decision-making to content
 - allowing content to manage lifecycle
 - letting content control orchestration
+- treating a controller as content, view, component, renderable artifact, render/build function, platform UI lifecycle object, or public runtime input receiver for content composition
+- allowing a target runtime to mount, register, invoke, or execute the controller itself as the rendered content artifact
 
 ### View encapsulation
 

@@ -74,6 +74,10 @@ A result is not valid until all checklist items pass.
 ## 6. Controller vs Content
 
 - controller owns behavior
+- controller is not a renderable platform/framework entity
+- controller does not return render output
+- controller does not receive framework/runtime props, config, or options as component input
+- framework UI lifecycle APIs, hooks, callbacks, or equivalent target lifecycle mechanisms are not used as controller lifecycle
 - content remains passive
 - no architectural logic in content
 

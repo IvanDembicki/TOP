@@ -124,6 +124,7 @@ when generating for another platform.
 For a prompt that describes an implementation/materialized node, the "Expected Materialization" section must contain:
 - Primary artifact stem, without a platform-specific extension
 - Public node class (with `Node` suffix in the default naming convention)
+- Controller role purity: public node/controller class/function is not a renderable platform artifact; renderable artifacts are content-side or adapter-side.
 - Materialization policy (`one-file default`, `split`, `one-class-per-file`, or another explicit project/target policy)
 - Base class or base role. If a concrete platform base class is named, it belongs to the target-specific materialization contract or Platform implementation notes.
 - Internal contracts:

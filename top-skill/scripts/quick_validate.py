@@ -148,14 +148,16 @@ def check_markdown_links(root):
 def check_required_phrases(root):
     checks = [
         ("SKILL.md", "Pull-Based Construction / Locality of Object Birth"),
+        ("SKILL.md", "Controller Role Purity"),
         ("SKILL.md", "rules/skill-maintenance-rules.md"),
         ("SKILL.md", "Content/View constructor receives exactly one semantic argument"),
         ("SKILL.md", "RootContext"),
         ("SKILL.md", "TOP spec props are declarative metadata"),
         ("rules/skill-maintenance-rules.md", "No exhaustive-looking technology lists"),
         ("rules/skill-maintenance-rules.md", "Missed case feedback loop"),
-        ("rules/violation-catalog.md", "CORE-025"),
+        ("rules/violation-catalog.md", "CORE-026"),
         ("canon/architectural-invariants.md", "Objects are not assembled outside the tree and pushed inward"),
+        ("canon/architectural-invariants.md", "Controller Role Purity Invariant"),
     ]
     errors = []
     for file_name, phrase in checks:

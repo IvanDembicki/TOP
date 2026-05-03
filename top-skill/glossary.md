@@ -24,7 +24,8 @@ Controller:
 - manages node lifecycle and content lifecycle;
 - coordinates orchestration, branching, and external node behavior;
 - exposes only the permitted abstract interface of the node to the outside;
-- does not use the internal implementation of content as an interaction channel.
+- does not use the internal implementation of content as an interaction channel;
+- remains a non-renderable orchestration boundary, not a content-side or platform-renderable artifact.
 
 ---
 

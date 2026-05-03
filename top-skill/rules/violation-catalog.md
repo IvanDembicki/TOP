@@ -38,6 +38,7 @@ Affect architectural correctness. Always block finalization.
 | CORE-023 | RootContext dependency injection | `RootContext` is used as a generic dependency injection container or as a channel for application data, callbacks, services, stores, child instances, view fragments, or arbitrary props. |
 | CORE-024 | Spec props / runtime input confusion | TOP spec `props` are treated as runtime parameters, component fields, platform fields, render/build parameters, or another technology-specific injection/composition channel. |
 | CORE-025 | Concrete content exposure to Controller | Controller stores, types, or uses concrete Content/View implementation directly instead of the narrow `IContentAccess` boundary, exposing implementation or platform/component methods outside the permitted content contract. |
+| CORE-026 | Controller role purity violation | Controller is materialized as a content-side or platform-renderable artifact, render/build function, platform UI lifecycle object, public runtime input receiver for content composition, or otherwise becomes the node's rendered content instead of remaining a controller-only orchestration boundary. |
 
 ---
 

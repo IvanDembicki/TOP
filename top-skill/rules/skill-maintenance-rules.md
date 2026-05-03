@@ -228,3 +228,19 @@ file together with the functional TOP rule change.
 
 Do not only patch the immediate symptom. Close the rule gap that allowed the
 symptom to survive.
+
+## 22. Check for role-collapse variants
+
+When a rule closes an access, construction, data-flow, or composition loophole,
+also check whether the same failure can survive as role collapse.
+
+Ask:
+- can one TOP role be materialized as another role while the narrow access rule
+  appears locally satisfied?
+- can controller/content, model/materialization, adapter/controller, or
+  spec/runtime identities be collapsed by target syntax?
+- does validation detect both the data-flow violation and the role-purity
+  violation?
+
+If the role-collapse variant is possible, add a separate invariant or violation
+code instead of hiding it under a nearby generic rule.

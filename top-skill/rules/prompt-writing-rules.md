@@ -135,6 +135,7 @@ Must describe:
 
 Must describe:
 - what is the content and what is the controller;
+- that the controller is a non-renderable orchestration boundary, not the target renderable artifact;
 - what role the content plays (view / component / data / other);
 - what content receives from controller via `IControllerAccess` and why the full public node surface is not available;
 - what controller receives from content via `IContentAccess` (if anything);

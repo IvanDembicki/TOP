@@ -44,6 +44,11 @@ Local functionality does not override TOP rules.
 
 ## Controller validation
 - Controller owns behavior, lifecycle, orchestration, branching.
+- Controller remains a controller-only artifact.
+- Controller is not itself a view, component, widget, composable, render function, route/screen component, framework lifecycle UI object, or public runtime input receiver for content composition.
+- Controller does not return render output, render trees, platform views, layout fragments, style objects, animation objects, or content artifacts.
+- Controller is not mounted, registered, invoked, or executed by the target runtime as the renderable UI/content entity.
+- Target UI lifecycle APIs, hooks, callbacks, or equivalent lifecycle mechanisms must not become the controller lifecycle.
 - Controller does not use render primitives as communication channel.
 
 ## Lifecycle validation

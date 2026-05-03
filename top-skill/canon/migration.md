@@ -89,6 +89,7 @@ The target migration direction is pull-based construction:
 - a Node constructor receives only its parent reference;
 - a Content/View constructor receives exactly one narrow typed owner access interface;
 - Content/View is not typed against the concrete controller;
+- Node/Controller artifacts are non-renderable orchestration boundaries, not preserved source framework renderable artifacts;
 - parent Nodes/Controllers construct direct children at their tree positions;
 - Content asks its owner for data, actions, and permitted output handles;
 - the owner asks direct child controllers for opaque public handles.

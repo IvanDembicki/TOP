@@ -93,6 +93,8 @@ These are always two different classes.
 
 Concrete content is always hidden behind the controller.
 The controller is the sole external interface of the node.
+The controller is not the renderable/content artifact of the node; renderable
+target artifacts belong to content or to a thin adapter.
 
 Exactly one concrete content class is permitted per node.
 

@@ -120,6 +120,9 @@ If the target or project convention materializes a node into multiple artifacts,
 must declare the materialization layout:
 - primary artifact stem;
 - public node/controller class;
+- controller role purity: the public node/controller artifact is non-renderable
+  and is not the target framework view/component/widget/composable/render
+  function, platform UI lifecycle object, or equivalent content-side artifact;
 - materialization policy;
 - internal access contracts in both directions;
 - companion artifact stems and roles.
@@ -139,6 +142,7 @@ use content through `IContentAccess`, not through the concrete Content/View clas
 
 An implementation prompt must not:
 - mix multiple semantic nodes in a single description;
+- declare a target framework renderable artifact as the controller itself;
 - duplicate the entire project instead of node-specific semantics;
 - strictly require specific syntax without necessity;
 - place platform-specific implementation details in behavioral sections;

@@ -44,6 +44,7 @@ If a discrepancy arises between this agent file and the output contract:
 - weaken boundaries for convenience
 - replace explicit contracts with implicit ones
 - use hidden retention or bypass around content
+- materialize a TOP controller as a framework-rendered component, widget, composable, render/build function, platform UI lifecycle object, or equivalent target-renderable entity
 - finalize generation without validation readiness
 - copy source-platform primitives instead of following target adaptation decisions
 - introduce target behavior that has no semantic source in Layer B

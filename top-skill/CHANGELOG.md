@@ -7,6 +7,12 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.5] — 2026-05-02
+
+- Added Controller Role Purity as a foundational invariant: controllers must remain non-renderable orchestration boundaries and must not become content-side or platform-renderable artifacts.
+- Added `CORE-026` for controller role leakage and extended validation, review, generation, target adaptation, migration, and repair guidance to detect and correct renderable controllers.
+- Clarified that target-required renderable entrypoints belong to Content/View or thin framework adapters, not to controller identity.
+
 ## [1.1.4] — 2026-05-02
 
 - Added fresh validation/review requirements: agents must load current skill rules and re-read target artifacts in the current pass instead of relying on previous session reads.

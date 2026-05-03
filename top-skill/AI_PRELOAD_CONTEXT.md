@@ -214,6 +214,7 @@ Rules:
 
 * Content is a black box
 * Controller owns lifecycle and orchestration
+* Controller is a non-renderable orchestration boundary, not content or a platform-rendered artifact
 * direct access to internals is forbidden
 
 Pull-Based Construction / Locality of Object Birth:
@@ -224,6 +225,7 @@ Pull-Based Construction / Locality of Object Birth:
 * a content-to-controller zero-contract is an empty owner access interface implemented by the controller, not a separate dummy object
 * if content exists, both internal directions are explicit: controller-to-content through `IContentAccess`, content-to-controller through `IControllerAccess`
 * controller code uses content only through `IContentAccess`, never through the concrete content class
+* a Node/Controller that is itself rendered, mounted, invoked, or executed by a target runtime as the visual/content artifact is a controller role purity violation
 * runtime props, slots, builders, callbacks, stores, services, child handles, and prebuilt fragments are not TOP ownership semantics
 
 ---

@@ -90,6 +90,38 @@ Canonical correction direction:
 - type Content/View only against the access interface;
 - remove downcasts/imports back to concrete controller types;
 - classify legacy runtime parameters, parameter bags, config/options/props-like objects, and composition entrypoints as wrapped legacy until they are removed from the TOP-conformant path.
+
+---
+
+## 2b. Controller Role Purity Validation
+
+Required checks:
+- controller class/function/artifact is not a framework-rendered component or target-renderable entity;
+- controller does not return render output, widget/render trees, platform views, layout fragments, style objects, animation objects, or content artifacts;
+- controller does not receive props/config/options as framework component input or as a public runtime input receiver for content composition;
+- controller does not use framework UI lifecycle APIs, hooks, callbacks, or equivalent target lifecycle mechanisms as its own controller lifecycle;
+- controller does not construct platform primitives inline as a substitute for content;
+- controller is not the artifact exported, registered, mounted, invoked, or executed as the screen/widget/view/composable/renderable object itself.
+
+Non-exhaustive violation examples:
+- a node/controller function invoked by a target runtime as a rendered component and returning render output;
+- a controller object/class that implements the target's render/build/body method;
+- a controller registered as a screen, view, widget, composable, route lifecycle object, or equivalent UI artifact;
+- a controller receiving runtime props/config/options as framework component input.
+
+Concrete examples are illustrative only. The rule is target-independent: any
+target runtime mechanism that makes the controller itself the renderable/content
+artifact is a controller role purity violation.
+
+Canonical correction direction:
+- split the artifact into a non-renderable Controller/Node object and a Content/View renderable artifact;
+- add `IControllerAccess` and `IContentAccess` boundaries where content exists;
+- use a thin framework adapter only when the target runtime requires a renderable entrypoint;
+- keep controller logic out of the adapter and renderable content artifact;
+- expose only narrow access contracts and opaque handles.
+
+---
+
 ## 3. Content behavior validation
 
 Required checks:

@@ -240,6 +240,7 @@ or multiple physical files.
 The prompt must include an `Expected Materialization` section that declares:
 - primary artifact stem;
 - public node/controller class;
+- controller role purity: the public node/controller artifact is non-renderable and is not the target renderable artifact;
 - materialization policy;
 - internal access contracts in both directions (`IContentAccess` and `IControllerAccess`, or explicit zero-contracts);
 - companion artifact stems and roles if the node is split across multiple files.

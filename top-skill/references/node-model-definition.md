@@ -38,6 +38,12 @@ This split is not equivalent to MVC and should not be reduced to a mere naming
 convention.
 It expresses encapsulation at the level of TOP node semantics.
 
+The controller side is not the target runtime's renderable/content artifact. It
+is a non-renderable orchestration boundary. If a target requires a renderable
+component, widget, composable, screen, route, render/build function, or equivalent
+entrypoint, that artifact belongs to content materialization or to a thin
+adapter, not to controller identity.
+
 ## Ownership discipline
 
 A node is responsible for its subtree according to explicit parent-child rules.

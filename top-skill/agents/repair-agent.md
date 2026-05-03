@@ -35,6 +35,7 @@ If a discrepancy arises between this agent file and the output contract:
 - strengthen typing, contracts, and naming
 - remove non-canonical bypasses
 - restore explicit lifecycle responsibility
+- if controller role purity fails, split into a non-renderable Controller/Node, Content/View renderable artifact, `IControllerAccess`, `IContentAccess`, and a thin framework adapter only when required by the target runtime
 </allowed>
 
 <forbidden>

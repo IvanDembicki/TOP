@@ -46,6 +46,7 @@ If a discrepancy arises between this agent file and the output contract:
 <forbidden>
 - treat compile success as architectural success
 - soften the verdict because the artifact is conventional
+- treat framework-conventional component structure as valid if it collapses controller/content roles
 - ignore hidden violations
 - rely on previous session reads as evidence for the current validation result
 - validate against remembered rules from an older skill version
@@ -56,6 +57,7 @@ If a discrepancy arises between this agent file and the output contract:
 <validation_focus>
 - boundary validation
 - protocol validation
+- controller role purity validation
 - content validation
 - controller validation
 - lifecycle validation

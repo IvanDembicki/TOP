@@ -134,6 +134,15 @@ legacy adapters only when the migration plan labels them explicitly as such.
 
 They are not TOP-conformant final structure.
 
+When migrating from component-based or renderable-artifact-based source
+frameworks, do not preserve the source renderable artifact as the TOP controller.
+Treat the source artifact as evidence for content/view behavior and extract a
+non-renderable controller around it.
+
+A migrated branch is not TOP-conformant while its Node/Controller is still a
+target-rendered artifact receiving framework/runtime input and returning render
+output.
+
 For each migrated branch, the agent must plan the final ownership direction:
 - the parent Node/Controller constructs direct child nodes at their tree positions;
 - a Node constructor receives only its parent reference;
@@ -204,6 +213,7 @@ The migrated code must be verified against it before integration.
 
 <validation_focus>
 - each proposed TOP branch has a clear root node with a controller
+- controllers are non-renderable orchestration boundaries, not preserved framework-rendered artifacts
 - the connector interface between TOP branch and legacy code is explicit and minimal
 - migrated branches are self-contained: they can be developed and tested with a mock parent
 - migration steps are ordered so each step produces a working system

@@ -131,6 +131,16 @@ If a node has content, generation must preserve the architectural split:
 ### Canonical rule
 Generated architecture must not mix the controller and concrete content into a single class where content exists.
 
+Generated controllers must be non-renderable controller artifacts. Generation
+must not implement a TOP controller as a target framework renderable entity,
+render/build function, route/screen component, widget/composable equivalent, or
+platform UI lifecycle object.
+
+If the target requires such an entity, generate it as Content/View or as a thin
+framework-boundary adapter, not as the controller itself. The adapter may
+instantiate, locate, or delegate to the TOP branch, but it must not accumulate
+controller logic.
+
 ### Public and internal protocol surfaces
 Generated architecture must preserve the public node surface and two distinct internal access boundaries:
 - `IControllerAccess` for content access to the controller via a narrow private contract;

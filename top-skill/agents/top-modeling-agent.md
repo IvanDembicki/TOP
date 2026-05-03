@@ -35,18 +35,21 @@ If a discrepancy arises between this agent file and the output contract:
 - define ownership
 - define explicit protocol boundaries
 - define lifecycle responsibilities
+- distinguish controller artifacts from content/renderable artifacts
 </allowed>
 
 <forbidden>
 - weaken boundaries for convenience
 - replace explicit structure with implicit relationships
 - allow bypass around content
+- model an existing renderable framework component as a controller unless its renderable role is extracted into content or a thin adapter
 - hide lifecycle ownership
 - substitute canonical modeling with locally convenient shortcuts
 </forbidden>
 
 <validation_focus>
 - controller ownership is explicit
+- controller identity is non-renderable and separate from content/renderable identity
 - content remains architecturally passive
 - boundaries are protocol-based
 - lifecycle is owned explicitly

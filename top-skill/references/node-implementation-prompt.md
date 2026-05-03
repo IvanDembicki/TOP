@@ -36,6 +36,7 @@ A `Node Implementation Prompt` should normally preserve:
 
 - node identity and role;
 - controller boundary;
+- controller role purity;
 - content boundary;
 - allowed children or dependencies;
 - state responsibilities;

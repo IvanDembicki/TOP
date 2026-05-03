@@ -81,16 +81,18 @@ cannot be relocated to align with the TOP branch root.
 
 When this constraint applies, the canonical form is:
 
-- The framework-boundary file contains only a re-export or thin delegation to the
-  actual TOP branch root controller.
+- The framework-boundary file contains only a thin adapter or re-export to a
+  renderable artifact owned by Content/View or by an explicit adapter.
 - The framework-boundary file is not a TOP node. It has no controller logic, no
   contracts, and no state.
-- The TOP branch root remains the actual controller; the framework-boundary file is
-  a framework integration adapter only.
+- The TOP branch root controller remains a non-renderable controller; the
+  framework-boundary file is a framework integration adapter only.
 
 The thin delegation must not accumulate logic. If additional logic appears in the
 framework-boundary file over time, that logic must be moved into the root controller
-or a child branch, preserving the framework-boundary file as an adapter only.
+or a child branch according to ownership, preserving the framework-boundary file
+as an adapter only. The controller must not be exported as the runtime-rendered
+component/function/entity.
 
 ---
 
@@ -132,3 +134,37 @@ that must be corrected.
 The forced residual declaration must appear in the implementation prompt. An
 undocumented responsibility remaining in the root controller does not qualify as
 forced residual — it is an unjustified residual (see `canon/migration.md` Mg-3).
+
+---
+
+## FC-4. Controller is not the functional component
+
+In functional composition targets, a function or callable artifact invoked by the
+target runtime as a component, composable, renderable entity, route/screen
+artifact, or render/build function is not a TOP controller.
+
+A TOP controller may provide access methods, own child construction, coordinate
+lifecycle, and expose opaque handles where canon allows it. The renderable
+function/component/composable belongs to Content/View or to a thin framework
+adapter.
+
+Forbidden:
+- a `SomeNode` controller function that receives framework props/config/options
+  and returns render output;
+- target lifecycle hooks or UI lifecycle callbacks used as the controller's own
+  lifecycle;
+- arbitrary props passed into a Node/Controller function and treated as
+  controller input.
+
+Non-exhaustive example of the forbidden shape:
+
+```text
+function SomeNode(props) {
+  return SomeView(...)
+}
+```
+
+Correct direction:
+- keep the TOP controller as a non-renderable orchestration boundary;
+- put render output in Content/View or a thin adapter;
+- keep adapter logic minimal and free of controller responsibilities.

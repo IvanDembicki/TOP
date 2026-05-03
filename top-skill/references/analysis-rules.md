@@ -81,6 +81,8 @@ Required:
 - verify that the constructor/factory/method parameter accepting an access artifact is explicitly typed where the language permits;
 - verify that the field/reference holding the access artifact is explicitly typed where the language permits;
 - verify that the controller does not bypass the content boundary via direct access to the concrete implementation;
+- verify that the controller itself is not materialized as content, view, component, renderable artifact, render/build function, platform UI lifecycle object, or public runtime input receiver for content composition;
+- verify that a target runtime does not mount, register, invoke, or execute the controller itself as the rendered content artifact;
 - do not treat a public/base-class primitive getter as proof of a correct boundary: if the controller uses it for attach/wiring/update/read of the concrete implementation, this is a possible or confirmed bypass depending on the evidence;
 - explicitly check for controller-side access to the node's own render/view/native primitive, its platform API, or an equivalent exposed primitive handle; these are confirmed violations unless the code is implementing `getView()` itself or performing parent-owned placement/composition of an opaque child view;
 - use technology-specific detection examples when auditing a concrete target platform; for DOM-like code, examples include `this.el`, `this.getView().classList`, `this.getView().style`, `this.getView().addEventListener`, `this.getView().setAttribute`, `querySelector`, or `content.getView()` used for direct primitive manipulation;

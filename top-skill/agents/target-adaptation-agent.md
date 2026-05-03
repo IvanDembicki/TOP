@@ -46,6 +46,7 @@ If a discrepancy arises between this agent file and the output contract:
 - change TOP structure, ownership, controller/content boundaries, or lifecycle
 - push target primitives back into prompts, specs, or semantic layer
 - treat platform composition syntax as TOP ownership semantics
+- map TOP controller identity onto a target renderable component, widget, composable, render/build function, platform UI lifecycle object, or equivalent content-side artifact
 - use target-specific input/composition mechanisms, public runtime parameters, parameter bags, config/options/props-like objects, callbacks/handlers bundles, or prebuilt child outputs as semantic injection channels into TOP Content/View
 - treat target adaptation as source truth
 </forbidden>
@@ -56,6 +57,7 @@ If a discrepancy arises between this agent file and the output contract:
 - no source-platform primitive leaks into a non-source target
 - target behavior follows native platform expectations
 - TOP invariants remain intact
+- controller identity remains non-renderable and separate from target renderable artifacts
 - platform composition syntax is used only as materialization syntax; ownership remains pull-based through controller/content boundaries
 </validation_focus>
 

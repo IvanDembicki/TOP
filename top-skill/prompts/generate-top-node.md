@@ -15,7 +15,10 @@ rules:
 - generate from Layer B semantic intent and Layer C target adaptation, not from source-platform primitives
 - do not invent behavior absent from the semantic layer
 - enforce Pull-Based Construction / Locality of Object Birth
+- enforce Controller Role Purity
 - node constructor receives only the parent reference as semantic input
+- do not generate the Node/Controller as a framework-rendered component, widget, composable, render/build function, platform UI lifecycle object, or equivalent target-renderable entity
+- renderable target artifacts belong to Content/View or thin adapters, not to the controller
 - Content/View constructor receives exactly one narrow typed access interface implemented by the owning controller
 - zero-contract content-to-controller access is an empty owner access interface implemented by the controller; do not generate `ControllerAccessZero` dummy objects
 - controller stores and uses content through `IContentAccess`, not through the concrete Content/View class

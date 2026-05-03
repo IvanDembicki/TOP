@@ -127,6 +127,43 @@ It keeps TOP cross-platform. The rule is about ownership semantics, not the synt
 
 ---
 
+## 2b. Controller Role Purity Invariant
+
+A TOP controller must remain only a controller.
+
+A controller may contain orchestration, coordination, lifecycle,
+state-transition, validation, routing, async-flow, child-management, and domain
+decision logic when that logic belongs to the node responsibility.
+
+However, a controller must not become, extend, implement, replace, or be
+materialized as any content-side or platform-renderable artifact.
+
+A controller must not be the artifact that the target runtime treats as the
+node's rendered content, visual component, render/build function,
+layout/style/animation/content artifact, platform UI lifecycle object, or public
+runtime input receiver for content composition.
+
+A controller may own and coordinate content through `IContentAccess`.
+A controller may expose opaque output handles where canon allows parent-owned
+placement. But the controller itself must not participate in the platform
+rendering lifecycle.
+
+If a target runtime requires a renderable entrypoint, route file, component,
+widget, composable, screen artifact, render function, or equivalent executable
+render surface, that artifact belongs to Content/View or to a thin framework
+adapter. It is not the TOP controller. The adapter must not accumulate
+controller logic.
+
+Controller complexity may be a design smell. Controller role leakage is a
+structural violation.
+
+This invariant prevents ordinary framework component composition from being
+mistaken for TOP architecture. A renderable artifact may host or delegate to a
+TOP branch, but the controller identity remains a non-renderable orchestration
+boundary.
+
+---
+
 ## 3. AI Executor Invariant
 
 AI operates as executor within the model — not as architect of the model.

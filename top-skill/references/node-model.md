@@ -25,6 +25,15 @@ Every node always has a **controller**.
 
 The controller is the sole architectural carrier of node behavior, manages the node lifecycle and content lifecycle, coordinates orchestration, branching, and the node's external behavior.
 
+The controller is not the node's content and not the node's platform
+materialization. It is the external architectural boundary and orchestration
+owner only.
+
+The controller may be complex, but only inside the controller responsibility
+domain. If it becomes a view, component, widget, renderable artifact,
+render/build function, platform UI lifecycle object, or public runtime input
+receiver for content composition, the node model is invalid.
+
 If a node has content, the node must consist of two distinct classes:
 - `Controller`
 - `Content`
@@ -87,6 +96,26 @@ prevents ordinary platform composition from being mistaken for TOP architecture.
 
 ---
 
+### 1.2. Controller Role Purity
+
+A TOP controller is a non-renderable orchestration boundary.
+
+It may own lifecycle, child management, state transitions, routing,
+validation, async flow, and domain decisions that belong to its node. It must
+not itself be the target runtime's rendered content, render/build function,
+layout/style/animation/content artifact, platform UI lifecycle object, or
+runtime input receiver for content composition.
+
+If the target runtime needs a renderable entrypoint, that entrypoint is
+Content/View or a thin framework adapter. It may host or delegate to the TOP
+branch, but it is not the controller identity and must not accumulate
+controller logic.
+
+Controller complexity may be a design smell. Controller role leakage is a
+structural violation.
+
+---
+
 ## 2. Content and `props.contentType`
 
 If a node has content, it must have exactly one concrete content class.
@@ -105,6 +134,10 @@ Base canonical values of `props.contentType`:
 - `transition`
 - `asset`
 - `other`
+
+Anything materialized as view, component, data, style, animation, transition,
+asset/resource, or another content kind belongs to content-side materialization,
+not to controller identity.
 
 ### 2.1. `view`
 Locally implemented content of the given node.

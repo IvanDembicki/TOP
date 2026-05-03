@@ -56,6 +56,8 @@ Check:
 - absence of empty formal protocol objects where content access to controller is permitted;
 - if the content-to-controller protocol artifact is empty, explicit confirmation that this is a zero-contract implemented by the owning controller and not a separate dummy runtime object;
 - confirmation that controller fields/references to content are typed through `IContentAccess`, not through the concrete Content/View class where the technology permits;
+- confirmation that the public node/controller artifact is not itself a renderable framework component, widget, composable, render/build function, platform UI lifecycle object, or equivalent target-renderable entity;
+- confirmation that render output is produced only by content/view or adapter-side artifacts;
 - confirmation that any public runtime input object/value used to materialize Content is exactly the narrow owner access contract and not a general props/config/data/composition bag;
 - confirmation that `IControllerAccess` methods exposed to Content are controller-boundary methods owned by the controller, not raw imported functions, external method references, service methods, store actions, or callbacks;
 - absence of controller bypass to concrete implementation;

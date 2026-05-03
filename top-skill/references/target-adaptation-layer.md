@@ -45,6 +45,7 @@ Target adaptation must:
 - reinterpret interactions according to the target's native model;
 - choose target-native primitives;
 - keep TOP ownership, lifecycle, content, and controller boundaries intact;
+- keep TOP controller identity separate from target renderable identity;
 - keep adaptation decisions explicit and reviewable.
 
 Target adaptation must not:
@@ -52,6 +53,7 @@ Target adaptation must not:
 - copy source-platform behavior mechanically;
 - introduce new business logic;
 - change ownership, controller/content boundaries, or lifecycle semantics;
+- map a TOP controller onto a target renderable component, widget, composable, render function, screen artifact, platform UI lifecycle object, or equivalent content-side artifact;
 - push target primitives back into the semantic layer;
 - treat generated target output as source truth.
 
@@ -76,6 +78,13 @@ callbacks/handlers bundles, stores, services, or prebuilt outputs into semantic
 injection channels for TOP Content/View. If a target API
 requires such syntax internally, the TOP layer must still present it as a local
 controller/content materialization detail, not as externally assembled ownership.
+
+Target adaptation must not map TOP controller identity onto target renderable
+identity. A target-native component, widget, composable, render function,
+screen/route artifact, platform UI lifecycle object, or equivalent renderable
+entrypoint may be chosen only as content materialization or as a thin framework
+adapter, not as the controller itself.
+
 ## Interaction adaptation examples
 
 These examples are illustrative, not a fixed mapping table:

@@ -126,3 +126,20 @@ Content/View class. This is required even when the concrete content wraps a
 large platform component, widget, native view, or third-party object with many
 public methods: the controller sees only the small allowed boundary, and every
 other concrete method remains invisible.
+
+## Rule 10 — Controller role purity
+
+Controller is not a content artifact.
+
+The controller owns behavior and orchestration, but it is not the materialized
+view/content/renderable object. It must not be registered, mounted, invoked, or
+executed by a target runtime as the visual/content entity of the node.
+
+If target syntax requires a framework component, composable, widget, route file,
+screen artifact, render function, or any equivalent renderable entrypoint, that
+artifact belongs to Content/View or to a thin framework adapter, not to the
+controller itself.
+
+The adapter may delegate to the controller or content boundary, but it must not
+accumulate controller logic. The controller remains a non-renderable
+orchestration boundary.
