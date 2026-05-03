@@ -40,6 +40,7 @@ Affect architectural correctness. Always block finalization.
 | CORE-025 | Concrete content exposure to Controller | Controller stores, types, or uses concrete Content/View implementation directly instead of the narrow `IContentAccess` boundary, exposing implementation or platform/component methods outside the permitted content contract. |
 | CORE-026 | Controller role purity violation | Controller is materialized as a content-side or platform-renderable artifact, render/build function, platform UI lifecycle object, public runtime input receiver for content composition, or otherwise becomes the node's rendered content instead of remaining a controller-only orchestration boundary. |
 | CORE-027 | IContentAccess data bag misuse | `IContentAccess` is used as a carrier for view-model values, state flags, callbacks, child-output handles, or data fields that Content reads from the controller. Content must request controller-owned data/actions/output through `IControllerAccess`; `IContentAccess` is only the controller-to-content command/request boundary or an explicit zero-contract. |
+| CORE-028 | Test-covered behavior loss | A migrated TOP branch loses, weakens, or fails to represent behavior that was covered by legacy tests. This includes cases where legacy test-covered behavior was not extracted, normalized, mapped to TOP nodes/contracts, reflected in spec/prompts, or re-covered by preserved, adapted, or newly generated TOP-compatible tests. |
 
 ---
 
@@ -73,6 +74,7 @@ Violations of the execution process. Affect pipeline validity, not TOP Core itse
 | WF-007 | Repair cycle limit exceeded | `MAX_REPAIR_CYCLES = 3` reached without convergence and without escalation to re-modeling. |
 | WF-008 | Missing semantic interpretation stage | Generation pipeline reached target adaptation or generation without a valid Semantic Interpreter output. |
 | WF-009 | Missing target adaptation stage | Generation pipeline reached Generation without a valid Target Adaptation output for the active target. |
+| WF-010 | Missing behavior preservation pass | A migration scope has legacy tests or executable behavior evidence, but Behavior Preservation Agent did not run and no Behavior Preservation Plan was produced before modeling, generation, validation, or final audit. |
 
 ---
 

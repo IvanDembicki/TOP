@@ -36,11 +36,13 @@ If a discrepancy arises between this agent file and the output contract:
 - remove non-canonical bypasses
 - restore explicit lifecycle responsibility
 - if controller role purity fails, split into a non-renderable Controller/Node, Content/View renderable artifact, `IControllerAccess`, `IContentAccess`, and a thin framework adapter only when required by the target runtime
+- if behavior preservation fails, repair the spec, prompts, contracts, implementation, and tests so the preserved requirement is represented and re-covered
 </allowed>
 
 <forbidden>
 - rewrite everything
 - delete useful existing content without explicit justification
+- fix lost behavior only in code while leaving prompts/specs/tests unsynchronized
 - introduce new ambiguity during repair
 - finalize the result without revalidation
 </forbidden>
@@ -50,6 +52,7 @@ If a discrepancy arises between this agent file and the output contract:
 - valid existing structure is preserved where possible
 - no new violations are introduced
 - repaired result is ready for strict revalidation
+- behavior preservation repairs close `CORE-028` by updating TOP sources of truth and TOP-compatible tests, not only implementation code
 </validation_focus>
 
 <handoff_rules>

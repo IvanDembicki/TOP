@@ -17,6 +17,7 @@ output_contract:
 rules:
 - if current_attempt >= max_attempts and not stable → escalate
 - pass requires full behavior coverage
+- pass requires preserved legacy test-covered behavior to be represented in prompts and covered by TOP-compatible tests when the node belongs to a migration scope
 
 ---
 
@@ -30,6 +31,7 @@ Provide:
 - node spec;
 - implementation prompt;
 - reference implementation or expected behavior;
+- Behavior Preservation Plan when applicable;
 - regenerated code;
 - previous mismatch reports (if any);
 - current attempt number;
@@ -42,6 +44,7 @@ Provide:
 ### 1. Compare regenerated code against node requirements
 Check:
 - behavior coverage;
+- behavior preservation coverage for legacy test-covered requirements;
 - event handling;
 - state ownership;
 - state transitions;
@@ -66,16 +69,22 @@ Check:
 - absence of controller-side platform primitive access for anything other than implementing `getView()` or parent-owned placement/composition of an opaque child view (detection examples for DOM-like targets: `this.el`, `this.getView().classList`, `this.getView().style`, `this.getView().addEventListener`, `this.getView().setAttribute`, `querySelector`, `content.getView()`);
 - compliance with `references/node-validation-rules.md`;
 - preservation of Layer B semantic intent;
+- confirmation that behavior extracted from migrated tests is represented in the implementation prompt;
+- confirmation that each prompt requirement derived from legacy tests has preserved, adapted, replaced, or newly generated TOP-compatible test coverage;
+- confirmation that discarded legacy tests have explicit behavior-level justifications;
 - absence of source-platform leakage in a non-source target;
 - adherence to Layer C target adaptation decisions.
 
 ### 2. Identify mismatches
 Categorize them as:
 - missing behavior;
+- missing preserved test-covered behavior;
 - wrong state ownership;
 - structural mismatch;
 - missing child interaction;
 - platform-specific leakage;
+- missing prompt representation for a migrated behavior requirement;
+- missing TOP-compatible test coverage for a prompt requirement;
 - instability / ambiguity in prompt;
 - artifact placement mismatch.
 

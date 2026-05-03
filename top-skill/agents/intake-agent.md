@@ -32,7 +32,7 @@ If a discrepancy arises between this agent file and the output contract:
 - classify the task
 - extract explicit constraints
 - separate known facts from unknowns
-- identify whether the task is analysis, modeling, generation, refactor, or validation
+- identify whether the task is analysis, modeling, generation, migration, refactor, or validation
 </allowed>
 
 <forbidden>
@@ -64,6 +64,9 @@ if Tier 1 and task_mode is `generation-pipeline` and task is sufficiently clear 
 
 if Tier 1 and task_mode is `analysis-only` →
   Validation Agent (Canon Precheck is not part of analysis-only pipeline)
+
+if task_mode is `migration` →
+  Migration Agent
 
 if Tier 2 or Tier 3 and task is sufficiently clear →
   Domain Structuring Agent

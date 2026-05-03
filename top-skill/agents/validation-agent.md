@@ -18,6 +18,7 @@ Use this agent after generation, after repair, or when reviewing an existing arc
 - validation rules
 - contracts
 - relevant modeling outputs if available
+- Behavior Preservation Plan when validating a migrated scope with legacy tests
 </inputs>
 
 <freshness_rules>
@@ -50,6 +51,8 @@ If a discrepancy arises between this agent file and the output contract:
 - ignore hidden violations
 - rely on previous session reads as evidence for the current validation result
 - validate against remembered rules from an older skill version
+- accept a migrated scope with legacy tests when no Behavior Preservation Plan was produced
+- accept a migrated scope when test-covered behavior was not mapped to TOP prompts and TOP-compatible tests
 - validate implementation code without checking whether `top/*.json` still matches the materialized child topology
 - replace validation with vague style commentary
 </forbidden>
@@ -68,6 +71,7 @@ If a discrepancy arises between this agent file and the output contract:
 - semantic preservation validation
 - source-platform leakage validation
 - target adaptation coherence validation
+- behavior preservation validation for migrated scopes with legacy tests
 </validation_focus>
 
 <handoff_rules>

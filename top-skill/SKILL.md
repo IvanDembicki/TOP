@@ -5,8 +5,8 @@ description: Skill for designing, generating, and validating systems built with 
 
 # TOP Skill
 
-**Version:** 1.1.7
-**Last updated:** 2026-05-03 01:32 -07:00
+**Version:** 1.1.8
+**Last updated:** 2026-05-03 01:59 -07:00
 **Invocation:** `/top`
 
 > **Rule for AI:** whenever any top-skill file is modified, update the date and time in this field to the current values.
@@ -270,6 +270,7 @@ Strong signals for activating the skill:
 28. One implementation prompt describes one semantic node, not necessarily one physical file or one class. The prompt's `Expected Materialization` section must declare the primary artifact stem, public node class, materialization policy, internal contracts, and companion artifact stems if the node is split across multiple files. Companion artifacts are allowed when required by target technology, project convention, one-class-per-file rules, or clarity of controller/content/contract separation.
 29. If a node has separate content, both internal directions must be accounted for in materialization: controller-to-content (`IContentAccess`) and content-to-controller (`IControllerAccess`). If content-to-controller has no permitted calls, the prompt and generated materialization must declare an empty `IControllerAccess` zero-contract implemented by the owning controller; Content/View is still constructed as `new Content(this)` with `this` typed only as that access interface. If controller-to-content has no permitted calls, an empty `IContentAccess` zero-contract must still hide the concrete content class from the controller where the technology can express that boundary. If the target has no stable runtime content object for the controller to store, the controller-to-content zero direction must still be declared as an explicit zero-direction contract or prompt/materialization statement; absence of a runtime content reference is acceptable only when the direction has no permitted calls and the target cannot express such a reference cleanly. This does not permit using `IContentAccess` as a data bag. Passing raw callbacks, anonymous objects, dummy zero-access objects, merged access/data bags, or the full concrete controller/content object is not a valid substitute where the technology can materialize a named typed contract.
 30. Validation and review must be fresh. The validator/reviewer must load the current skill files required by the active task and must re-read the target artifacts being judged in the current validation pass. Prior session reads, previous generation context, memory of older skill versions, or earlier inspections of target files are not valid evidence. If a report lists a file as checked, it must have been read for that pass. Anything else is a workflow gap and the validation is incomplete.
+31. Legacy tests are requirements evidence during migration. Tests covering the migrated scope must be treated as executable traces of expected behavior, not merely as verification files. Implementation-specific assertions may be discarded only after their behavioral meaning is extracted, normalized, mapped to TOP nodes/contracts, reflected in spec/prompts, and re-covered by preserved, adapted, or newly generated TOP-compatible tests. Migration is incomplete until behavior preserved by legacy tests is represented in TOP prompts and covered by TOP-compatible tests.
 
 Normative chain for the generative layer:
 
@@ -545,6 +546,7 @@ Mode-specific execution steps are defined in `rules/task-modes.md`.
 
 - `modeling-refactor` — architectural workflow steps
 - `generation-pipeline` — generative workflow steps
+- `migration` — incremental non-TOP to TOP migration with behavior preservation
 
 ---
 
@@ -624,6 +626,7 @@ A good result for the generative layer:
 - Do not treat TOP spec `props` as runtime inputs. Spec props are declarative metadata, not a composition mechanism.
 
 - Do not use `buildChildren()` as a general init method for the controller. If runtime child construction is absent, `buildChildren()` must not exist in the class. Any other approach is strictly forbidden.
+- Do not migrate code without preserving behavior proven by legacy tests. Tests are executable traces of requirements; test-covered behavior must be extracted, normalized, mapped to TOP nodes/contracts, reflected in prompts, and re-covered by TOP-compatible tests.
 - Do not store project-local implementation prompts inside the skill.
 - Do not place platform-specific implementation details in behavioral prompt sections. Put them only in `Platform implementation notes`.
 - Do not mechanically transfer `Platform implementation notes` from one technology to another; use them as context and choose the target-appropriate implementation independently.
@@ -702,6 +705,7 @@ The execution model must use the official task modes:
 - `analysis-only`
 - `modeling-refactor`
 - `generation-pipeline`
+- `migration`
 - `spec-change`
 
 Detailed rules are defined in:
@@ -710,7 +714,9 @@ Detailed rules are defined in:
 A single universal pipeline does not apply to all tasks automatically.
 
 Generation is mandatory only for `generation-pipeline`.
-Analysis-only and modeling-refactor tasks remain valid without a Generation stage if their own mode pipeline has been completed in full.
+Analysis-only, modeling-refactor, and migration tasks remain valid without a
+Generation stage if their own mode pipeline has been completed in full and no
+materialized implementation was requested.
 
 ## Learning / onboarding entrypoint
 

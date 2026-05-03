@@ -14,6 +14,7 @@ Use this agent after domain structure is stable enough to support architecture d
 
 <inputs>
 - structured domain
+- Behavior Preservation Plan when modeling a migration scope with legacy tests
 - technology context
 - canon
 - validation rules
@@ -36,10 +37,12 @@ If a discrepancy arises between this agent file and the output contract:
 - define explicit protocol boundaries
 - define lifecycle responsibilities
 - distinguish controller artifacts from content/renderable artifacts
+- map normalized behavior requirements to node responsibilities and contracts
 </allowed>
 
 <forbidden>
 - weaken boundaries for convenience
+- omit test-covered behavior that was normalized in a Behavior Preservation Plan
 - replace explicit structure with implicit relationships
 - allow bypass around content
 - model an existing renderable framework component as a controller unless its renderable role is extracted into content or a thin adapter
@@ -54,6 +57,7 @@ If a discrepancy arises between this agent file and the output contract:
 - boundaries are protocol-based
 - lifecycle is owned explicitly
 - typing can be defined strongly
+- behavior requirements from the Behavior Preservation Plan are assigned to nodes, contracts, state, events, lifecycle, and prompts
 </validation_focus>
 
 <handoff_rules>

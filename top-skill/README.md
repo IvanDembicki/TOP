@@ -1,6 +1,6 @@
 # TOP Skill — Tree-Oriented Programming
 
-**Version:** 1.1.7 | **License:** MIT | **Invocation:** `/top`
+**Version:** 1.1.8 | **License:** MIT | **Invocation:** `/top`
 
 **TOP turns architecture from a weak social norm into a strong machine-verifiable protocol.**
 
@@ -114,7 +114,7 @@ The skill includes a full agent pipeline:
 
 **Intake → Domain Structuring → TOP Modeling → Canon Precheck → Semantic Interpretation → Target Adaptation → Generation → Spec Sync → Validation → Repair → Final Audit**
 
-Task modes: `analysis-only` · `modeling-refactor` · `generation-pipeline` · `spec-change`
+Task modes: `analysis-only` · `modeling-refactor` · `generation-pipeline` · `migration` · `spec-change`
 
 ---
 

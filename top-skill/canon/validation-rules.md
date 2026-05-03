@@ -75,6 +75,16 @@ Behavioral analysis and typing analysis are independent passes. The absence of b
 - Platform-specific source artifacts must be removed from Layer B or quarantined as evidence, not preserved as meaning.
 - Semantic vocabulary may be extended only with platform-independent meaning.
 
+## Behavior preservation validation for migration
+- Legacy tests are requirements evidence.
+- A migrated scope with legacy tests, snapshots, fixtures, QA scripts, executable examples, or documented test cases must have a Behavior Preservation Plan before validation can pass.
+- Each legacy behavior expectation must be extracted or discarded with explicit behavior-level justification.
+- Each normalized requirement must be mapped to TOP nodes, contracts, state, events, lifecycle, and prompt update requirements.
+- Each prompt requirement derived from legacy tests must be covered by preserved, adapted, replaced, or newly generated TOP-compatible tests.
+- A legacy test may be discarded only if its behavior is declared obsolete by explicit decision or re-covered through a normalized TOP requirement.
+- Missing Behavior Preservation Agent execution is `WF-010`.
+- Lost, weakened, unmapped, unprompted, or uncovered test-covered behavior is `CORE-028`.
+
 ## Source-platform leakage validation
 - DOM, CSS, Flutter widgets, UIKit/Android classes, framework APIs, and source-specific event APIs must not appear in Layer B.
 - A non-source target adaptation must not copy source-platform primitives unless the same primitive is native and justified for that target.

@@ -7,6 +7,13 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.8] — 2026-05-03
+
+- Added Behavior Preservation Agent and output contract for migration flows where legacy tests cover the migrated scope.
+- Added canonical migration rule: legacy tests are requirements evidence, and migration is incomplete until test-covered behavior is extracted, normalized, mapped to TOP nodes/contracts, reflected in prompts, and re-covered by TOP-compatible tests.
+- Added `CORE-028` for test-covered behavior loss and `WF-010` for missing behavior preservation pass.
+- Updated migration, modeling, generation, validation, repair, review, and prompt guidance so behavior preservation is a mandatory migration sub-flow rather than a checklist.
+
 ## [1.1.7] — 2026-05-03
 
 - Clarified that `IContentAccess` is only the controller-to-content command/request boundary and must not be used as a data bag for view-model values, state flags, callbacks, or child-output handles.

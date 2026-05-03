@@ -178,6 +178,20 @@ From this point:
 
 ---
 
+### 9a. Migration preserves behavior, not only code
+
+When existing non-TOP code is migrated, tests covering the migrated scope are
+requirements evidence.
+
+Legacy tests are executable traces of expected behavior. Their implementation
+details may be discarded, but their behavioral meaning must be extracted,
+normalized, mapped to TOP nodes/contracts/prompts, and re-covered by
+TOP-compatible tests.
+
+Migration that drops test-covered behavior is not a successful migration.
+
+---
+
 ### 10. Minimal example
 
 Without this system:

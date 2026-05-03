@@ -19,6 +19,7 @@ Choose one:
 | Audit, review, or explain existing architecture | `analysis-only` |
 | Build or refactor a TOP model, change tree structure | `modeling-refactor` |
 | Generate code from an approved spec | `generation-pipeline` |
+| Migrate existing non-TOP code into TOP while preserving legacy behavior | `migration` |
 | I changed the JSON spec manually and need to verify code | `spec-change` |
 | I don't know yet | Read `rules/task-modes.md` for detailed descriptions |
 

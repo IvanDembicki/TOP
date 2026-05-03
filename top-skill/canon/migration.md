@@ -136,3 +136,33 @@ Before declaring a migration slice implemented, verify:
 
 If any of these checks fail, the migration is incomplete regardless of whether the
 content is visually correct at runtime.
+
+---
+
+## Mg-5. Legacy tests are requirements evidence
+
+Legacy tests covering the migrated scope must be treated as executable evidence
+of expected behavior, not merely as verification files.
+
+Do not migrate tests as files. Migrate the behavioral requirements proven by
+those tests.
+
+Implementation-specific assertions may be discarded only after their behavioral
+meaning is:
+- extracted from the legacy test;
+- normalized into a platform-neutral requirement;
+- mapped to TOP nodes, contracts, state, events, or lifecycle responsibilities;
+- reflected in the relevant spec and implementation prompts;
+- re-covered by preserved, adapted, replaced, or newly generated TOP-compatible
+  tests.
+
+Migration is incomplete until behavior preserved by legacy tests is represented
+in TOP prompts and covered by TOP-compatible tests.
+
+Validation must fail if:
+- a migration scope has tests but no Behavior Preservation Plan was produced;
+- a legacy behavior expectation has no mapped TOP requirement;
+- a mapped requirement has no prompt representation;
+- a prompt requirement has no TOP-compatible test coverage;
+- a legacy test was discarded without justification;
+- behavior gaps remain unresolved.

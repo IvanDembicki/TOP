@@ -92,7 +92,21 @@ A result is not valid until all checklist items pass.
 
 ---
 
-## 8. Repair correctness
+## 8. Migration Behavior Preservation
+
+- migration scopes with legacy tests have a Behavior Preservation Plan
+- legacy tests are treated as requirements evidence, not only as files to rerun
+- test-covered behavior expectations are extracted and normalized
+- normalized requirements are mapped to TOP nodes, contracts, state, events, lifecycle, and prompts
+- prompt requirements derived from legacy tests are covered by preserved, adapted, replaced, or newly generated TOP-compatible tests
+- discarded legacy tests have explicit behavior-level justifications
+- unresolved behavior gaps block validation and final audit
+- `WF-010` is reported when the behavior preservation pass is missing
+- `CORE-028` is reported when test-covered behavior is lost, weakened, or not represented in TOP sources of truth
+
+---
+
+## 9. Repair correctness
 
 - only targeted fixes applied
 - no unnecessary rewrite
@@ -100,7 +114,7 @@ A result is not valid until all checklist items pass.
 
 ---
 
-## 9. Ambiguity handling
+## 10. Ambiguity handling
 
 - all critical ambiguity resolved or blocked
 - assumptions explicitly stated
@@ -108,7 +122,7 @@ A result is not valid until all checklist items pass.
 
 ---
 
-## 10. Readability
+## 11. Readability
 
 - naming is clear and descriptive
 - no unnecessary abbreviations
@@ -116,7 +130,7 @@ A result is not valid until all checklist items pass.
 
 ---
 
-## 11. Final status
+## 12. Final status
 
 - not just working, but canonical
 - no remaining critical risks

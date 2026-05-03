@@ -33,6 +33,10 @@ For a node undergoing prompt-based generation, the following must be available:
 - artifact placement rules;
 - verification criteria.
 
+For a migration scope with legacy tests, generation also requires a valid
+Behavior Preservation Plan. The plan supplies normalized behavior requirements,
+prompt update requirements, and TOP-compatible test coverage mapping.
+
 The node spec must be architecturally complete.
 
 If a node has content, the spec must record:
@@ -65,6 +69,27 @@ Before code generation:
 
 Generation may use target-specific primitives only from Layer C or from the active target's own conventions.
 It must not copy source-platform constructs from prompts, platform notes, imported code, CSS, DOM, Flutter widgets, UIKit/Android classes, or framework APIs into another target.
+
+## 3.1a. Behavior preservation during migration generation
+
+Legacy tests are requirements evidence.
+
+When generating or adapting a migrated scope, generation must preserve the
+behavioral requirements proven by legacy tests. It must not treat old tests only
+as files to keep passing.
+
+Generation must:
+- use normalized requirements from the Behavior Preservation Plan;
+- ensure prompt update requirements from that plan are reflected before code is
+  treated as final;
+- preserve, adapt, replace, or generate tests that cover each preserved behavior
+  requirement;
+- classify discarded legacy tests with explicit behavior-level justification.
+
+Generation that loses, weakens, omits from prompts, or fails to re-cover
+test-covered behavior is invalid and reports `CORE-028`.
+Generation that proceeds for a tested migration scope without a Behavior
+Preservation Plan reports `WF-010`.
 
 ## 3.2. Pull-Based Construction / Locality of Object Birth
 

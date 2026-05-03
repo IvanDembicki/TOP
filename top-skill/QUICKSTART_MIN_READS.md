@@ -46,7 +46,28 @@ Minimum:
 - `contracts/agent-output-contracts/generation-output.md`
 - `contracts/agent-output-contracts/validation-output.md`
 
-## 4. spec-change
+## 4. migration
+
+Minimum:
+- `SKILL.md`
+- `rules/task-modes.md`
+- `canon/migration.md`
+- `canon/validation-rules.md`
+- `rules/violation-catalog.md`
+- `agents/index.md`
+- `agents/migration-agent.md`
+- `agents/behavior-preservation-agent.md`
+- `agents/top-modeling-agent.md`
+- `contracts/agent-output-contracts/behavior-preservation-output.md`
+- `contracts/agent-output-contracts/top-modeling-output.md`
+- `contracts/agent-output-contracts/validation-output.md`
+- `contracts/agent-output-contracts/final-audit-output.md`
+
+If the migrated scope has no legacy tests or executable behavior evidence,
+Migration Agent records that absence and Behavior Preservation Agent is not
+required.
+
+## 5. spec-change
 
 Minimum:
 - `SKILL.md`

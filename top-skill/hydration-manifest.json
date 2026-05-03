@@ -1,5 +1,5 @@
 {
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Hydration manifest for TOP Skill. On every invocation the agent reads this manifest first, then reads the listed files directly from the skill filesystem directory using the base directory provided by the host environment.",
   "always": [
     "skill.json",
@@ -34,6 +34,7 @@
       "canon/migration.md",
       "references/functional-composition-target.md",
       "references/interaction-contracts.md",
+      "references/node-validation-rules.md",
       "contracts/agent-output-contracts/validation-output.md",
       "contracts/agent-output-contracts/final-audit-output.md"
     ],
@@ -46,6 +47,7 @@
       "canon/controller-content-rules.md",
       "canon/forbidden-confusions.md",
       "contracts/agent-output-contracts/intake-output.md",
+      "contracts/agent-output-contracts/behavior-preservation-output.md",
       "contracts/agent-output-contracts/canon-precheck-output.md",
       "contracts/agent-output-contracts/validation-output.md"
     ],
@@ -59,21 +61,38 @@
       "references/semantic-ui-layer.md",
       "references/multi-target-generation.md",
       "references/functional-composition-target.md",
+      "references/code-generation.md",
+      "references/node-validation-rules.md",
       "agents/semantic-interpreter-agent.md",
       "agents/target-adaptation-agent.md",
+      "contracts/agent-output-contracts/behavior-preservation-output.md",
       "contracts/agent-output-contracts/generation-output.md",
-      "contracts/agent-output-contracts/validation-output.md"
+      "contracts/agent-output-contracts/validation-output.md",
+      "prompts/generate-top-node.md"
     ],
     "migration": [
+      "agents/migration-agent.md",
+      "agents/behavior-preservation-agent.md",
+      "agents/top-modeling-agent.md",
+      "agents/validation-agent.md",
+      "contracts/agent-output-contracts/behavior-preservation-output.md",
+      "contracts/agent-output-contracts/top-modeling-output.md",
+      "contracts/agent-output-contracts/validation-output.md",
+      "contracts/agent-output-contracts/final-audit-output.md",
+      "rules/task-modes.md",
       "canon/migration.md",
       "rules/violation-catalog.md",
       "references/functional-composition-target.md",
       "references/interaction-contracts.md",
       "references/hybrid-systems.md",
       "references/migration-heuristics.md",
+      "references/code-generation.md",
+      "references/node-validation-rules.md",
       "canon/architectural-invariants.md",
       "canon/validation-rules.md",
-      "rules/violation-classification.md"
+      "rules/violation-classification.md",
+      "prompts/refactor-to-top.md",
+      "prompts/verify-node-implementation-prompt.md"
     ],
     "spec-change": [
       "rules/task-modes.md",
@@ -119,9 +138,28 @@
     "references/multi-target-generation.md",
     "references/artifact-layout-and-branch-derivation.md",
     "references/spec-change-verification.md",
+    "references/code-generation.md",
+    "references/node-validation-rules.md",
     "references/migration-heuristics.md",
     "references/paradigm-definition.md",
     "references/tree-model.md",
-    "references/runtime-model.md"
+    "references/runtime-model.md",
+    "agents/migration-agent.md",
+    "agents/behavior-preservation-agent.md",
+    "agents/top-modeling-agent.md",
+    "agents/generation-agent.md",
+    "agents/validation-agent.md",
+    "agents/repair-agent.md",
+    "agents/final-audit-agent.md",
+    "contracts/agent-output-contracts/behavior-preservation-output.md",
+    "contracts/agent-output-contracts/top-modeling-output.md",
+    "contracts/agent-output-contracts/generation-output.md",
+    "contracts/agent-output-contracts/validation-output.md",
+    "contracts/agent-output-contracts/repair-output.md",
+    "contracts/agent-output-contracts/final-audit-output.md",
+    "prompts/refactor-to-top.md",
+    "prompts/generate-top-node.md",
+    "prompts/verify-node-implementation-prompt.md",
+    "rules/review-checklist.md"
   ]
 }

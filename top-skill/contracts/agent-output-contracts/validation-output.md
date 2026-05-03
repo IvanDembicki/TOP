@@ -40,6 +40,7 @@ details:
 - asset_reference_check
 - presentation_reference_check
 - semantic_preservation_check
+- behavior_preservation_check
 - source_platform_leakage_check
 - target_adaptation_coherence_check
 
@@ -48,6 +49,7 @@ validation_signals:
 - non_blocking_issues
 - unresolved_drift
 - semantic_intent_preserved
+- test_covered_behavior_preserved
 - source_platform_leakage_present
 - target_adaptation_coherent
 
@@ -64,9 +66,12 @@ next_step:
 - Topology validation must mention child materialization points, dynamic/library children, prompt paths, and prompt child-interaction rules when applicable
 - `source_path_check` must verify extensionless `.top` artifact stems and target-specific artifact resolution
 - `source_reference_check`, `asset_reference_check`, and `presentation_reference_check` must verify `props.source`, `props.assetPath`, and `props.presentationPath` references relative to `top/` when applicable
+- `behavior_preservation_check` must explicitly report `pass`, `fail`, or `not_applicable`
 - If `unresolved_drift` is true, `overall_status` must be `fail` and `allowed_next_stage` must not be `Final Audit Agent`
 - If `source_platform_leakage_present` is true in Layer B or in a non-source target, `overall_status` must be `fail`
 - In `generation-pipeline`, validation must check semantic preservation, absence of source-platform leakage, target adaptation coherence, and TOP invariants
+- In migration scopes with legacy tests, validation must check Behavior Preservation Plan existence, prompt representation, and TOP-compatible test coverage
+- If `test_covered_behavior_preserved` is false, `overall_status` must be `fail`
 - Commentary cannot substitute for validation
 - Free text outside the required structure is prohibited
 

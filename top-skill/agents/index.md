@@ -19,6 +19,8 @@ This file defines the TOP agent pipeline and relationships between agents.
 
 Spec Change Verification Agent — mandatory first step in `spec-change` mode after Intake. See `agents/spec-change-verification-agent.md` and protocol in `references/spec-change-verification.md`.
 
+Behavior Preservation Agent — mandatory migration sub-flow after Migration Agent when the migrated scope has legacy tests or executable behavior evidence. See `agents/behavior-preservation-agent.md`.
+
 Orchestrator Agent controls transitions between all stages.
 
 Spec Audit Agent — standalone, launched on demand outside the main pipeline.
@@ -34,6 +36,7 @@ Migration Agent — standalone entry point for incremental migration of existing
 - Canon Precheck is mandatory before semantic interpretation and Generation.
 - Semantic Interpreter Agent is mandatory before Target Adaptation Agent in generation-pipeline mode.
 - Target Adaptation Agent is mandatory before Generation Agent in generation-pipeline mode.
+- Behavior Preservation Agent is mandatory before TOP Modeling, Generation, Validation, or Final Audit for any migration scope with legacy tests or executable behavior evidence.
 - Spec Sync is mandatory after Generation in generation-pipeline mode.
 - Validation is mandatory after Spec Sync.
 - Repair loops back through Spec Sync Agent when it changes synchronized artifacts; otherwise it may return directly to Validation until pass.
@@ -44,6 +47,8 @@ Migration Agent — standalone entry point for incremental migration of existing
 - Intake → Ambiguity Resolver / Domain Structuring
 - Ambiguity Resolver → Domain Structuring / stop
 - Domain Structuring → TOP Modeling
+- Migration Agent → Behavior Preservation Agent / TOP Modeling
+- Behavior Preservation Agent → TOP Modeling / Ambiguity Resolver / Migration Agent / Repair
 - TOP Modeling → Canon Precheck
 - Canon Precheck → Semantic Interpreter / Repair / Ambiguity Resolver
 - Semantic Interpreter → Target Adaptation / Ambiguity Resolver / Repair
@@ -128,6 +133,20 @@ Protocol: `references/spec-change-verification.md`.
 
 ---
 
+### migration
+
+- Migration Agent → Behavior Preservation Agent (if scope has tests or executable behavior evidence) / TOP Modeling
+- Behavior Preservation Agent → TOP Modeling / Ambiguity Resolver / Migration Agent / Repair
+- TOP Modeling → Canon Precheck
+- Canon Precheck → Validation / Repair / Ambiguity Resolver
+- Validation → Final Audit / Repair
+- Repair → Spec Sync (if synchronized artifacts changed) / TOP Modeling / Canon Precheck / Behavior Preservation Agent
+- Final Audit → Delivery
+
+Generation Agent is used only when the migration task includes materialization. If generation is used, the Behavior Preservation Plan is an input to Generation and Validation.
+
+---
+
 ## Global constraints
 
 - Canon overrides all agents.
@@ -208,6 +227,7 @@ Official modes:
 - `analysis-only`
 - `modeling-refactor`
 - `generation-pipeline`
+- `migration`
 - `spec-change`
 
 ### Mode routing
@@ -215,6 +235,7 @@ Official modes:
 - `analysis-only` does not require `Generation Agent` if the task does not materialize an implementation
 - `modeling-refactor` does not require `Generation Agent` if only an approved model / refactor decision is required
 - `generation-pipeline` requires `Semantic Interpreter Agent`, `Target Adaptation Agent`, and `Generation Agent`
+- `migration` requires `Migration Agent` and requires `Behavior Preservation Agent` when the scope has legacy tests or executable behavior evidence
 
 An analysis-only task must not be declared invalid solely due to the absence of a generation stage.
 

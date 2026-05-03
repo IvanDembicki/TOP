@@ -228,7 +228,32 @@ Canonical correction direction:
 
 ---
 
-## 10. Validation outcome
+## 10. Behavior Preservation Validation
+
+Required checks for migrated nodes or branches:
+- legacy tests, snapshots, fixtures, QA scripts, executable examples, and documented test cases covering the scope were inventoried;
+- a Behavior Preservation Plan exists when behavior evidence exists;
+- each extracted behavior expectation is normalized without legacy implementation details;
+- each normalized requirement maps to node responsibility, state, method, event, lifecycle, prompt, and test coverage;
+- each prompt requirement derived from legacy tests is covered by preserved, adapted, replaced, or newly generated TOP-compatible tests;
+- discarded legacy tests have explicit behavior-level justification;
+- no blocking behavior gaps remain.
+
+Violation examples:
+- generation updates code but leaves a legacy behavior expectation out of prompts;
+- a legacy behavior test is deleted because it asserted old props, but its user-facing warning behavior is not re-covered;
+- validation reports passing tests without mapping legacy test-covered behavior to TOP requirements;
+- a tested migration scope reaches modeling or generation without Behavior Preservation Agent.
+
+Canonical correction direction:
+- run Behavior Preservation Agent;
+- update prompts/specs/contracts with normalized requirements;
+- preserve, adapt, replace, or generate TOP-compatible tests for each requirement;
+- repair `CORE-028` by restoring behavior in TOP sources of truth and tests, not only in code.
+
+---
+
+## 11. Validation outcome
 
 The result of a validation must always contain:
 1. the identified class of problem;

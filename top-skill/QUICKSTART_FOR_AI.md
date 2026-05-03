@@ -55,6 +55,7 @@ Before launching the pipeline, you must determine the `task_mode`:
 - `analysis-only`
 - `modeling-refactor`
 - `generation-pipeline`
+- `migration` — if existing non-TOP code is being moved into TOP structure
 - `spec-change` — if the spec (JSON) was changed manually and code verification is required
 
 Task mode determines the mandatory pipeline stages.
@@ -62,6 +63,10 @@ The steps below are general operational principles, not a fixed linear sequence 
 
 See `rules/task-modes.md` — mandatory stages for each mode.
 See `agents/index.md` — mode-specific transition maps.
+
+For migration scopes with legacy tests or executable behavior evidence, the
+pipeline must include `Behavior Preservation Agent` before TOP Modeling,
+Generation, Validation, or Final Audit.
 
 ---
 

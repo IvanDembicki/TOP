@@ -23,9 +23,11 @@ context:
 result:
 - repaired_artifact
 - violations_addressed
+- behavior_violations_addressed
 
 details:
 - applied_fixes
+- behavior_preservation_fixes
 - preserved_structure
 - remaining_issues
 
@@ -43,6 +45,7 @@ next_step:
 
 - Only targeted fixes are permitted
 - Unnecessary rewrites are prohibited
+- For non-migration repairs, `behavior_violations_addressed` and `behavior_preservation_fixes` must be explicitly `not_applicable`
 - Free text outside the required structure is prohibited
 
 ## Semantic validity rule

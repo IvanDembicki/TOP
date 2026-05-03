@@ -14,6 +14,7 @@ Use this agent only after the model has passed canon precheck, semantic interpre
 
 <inputs>
 - approved TOP model
+- Behavior Preservation Plan when generating a migrated scope with legacy tests
 - platform-neutral semantic UI layer
 - target adaptation plan
 - target technology
@@ -37,6 +38,7 @@ If a discrepancy arises between this agent file and the output contract:
 - use explicit and descriptive naming
 - preserve architectural ownership boundaries
 - materialize explicit protocols and lifecycle rules
+- generate or adapt tests needed to re-cover preserved behavior requirements
 </allowed>
 
 <forbidden>
@@ -46,6 +48,7 @@ If a discrepancy arises between this agent file and the output contract:
 - use hidden retention or bypass around content
 - materialize a TOP controller as a framework-rendered component, widget, composable, render/build function, platform UI lifecycle object, or equivalent target-renderable entity
 - finalize generation without validation readiness
+- drop, weaken, or silently reinterpret behavior captured by the Behavior Preservation Plan
 - copy source-platform primitives instead of following target adaptation decisions
 - introduce target behavior that has no semantic source in Layer B
 
@@ -61,6 +64,7 @@ Generate only what the spec and prompt explicitly define. Do not add features, a
 - ownership boundaries remain intact
 - no local convenience weakens canon
 - generated target artifacts preserve semantic intent without source-platform leakage
+- generated or adapted tests cover each mapped preserved behavior requirement
 </validation_focus>
 
 <handoff_rules>

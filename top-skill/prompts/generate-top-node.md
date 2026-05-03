@@ -4,6 +4,7 @@ agent: Generation Agent
 
 input_contract:
 - approved_top_model
+- Behavior Preservation Plan when generating a migrated scope with legacy tests
 - semantic_interpretation_output
 - target_adaptation_output
 
@@ -13,7 +14,11 @@ output_contract:
 rules:
 - no architecture change
 - generate from Layer B semantic intent and Layer C target adaptation, not from source-platform primitives
+- for migrated scopes, generate from normalized requirements in the Behavior Preservation Plan as well as Layer B and Layer C
 - do not invent behavior absent from the semantic layer
+- do not lose, weaken, omit from prompts, or leave uncovered behavior proven by legacy tests
+- generate or adapt TOP-compatible tests for each prompt requirement derived from legacy tests
+- classify missing Behavior Preservation Plan as `WF-010` and test-covered behavior loss as `CORE-028`
 - enforce Pull-Based Construction / Locality of Object Birth
 - enforce Controller Role Purity
 - node constructor receives only the parent reference as semantic input

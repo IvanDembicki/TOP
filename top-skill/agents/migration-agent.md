@@ -19,6 +19,7 @@ it does not require the standard pipeline to have run first.
 
 <inputs>
 - existing code or description of the existing system (or a fragment)
+- legacy tests, snapshots, fixtures, QA scripts, executable examples, or documented test cases covering the scope
 - technology context
 - scope: full project or specific module/area
 - canon
@@ -192,6 +193,17 @@ being replaced:
 This contract becomes the acceptance criterion for the migrated version.
 The migrated code must be verified against it before integration.
 
+**4. Test evidence discovery and behavior preservation.**
+Before TOP Modeling, scan for tests, snapshots, fixtures, QA scripts, executable
+examples, or documented test cases that cover the migration scope.
+
+If any such evidence exists, hand off to `Behavior Preservation Agent` and require
+a valid Behavior Preservation Plan before modeling, generation, validation, or
+final audit continues.
+
+Legacy tests are requirements evidence. They must be analyzed as executable
+traces of expected behavior, not only as files that should pass.
+
 ---
 
 <allowed>
@@ -202,6 +214,7 @@ The migrated code must be verified against it before integration.
 - recommend migration order based on risk and isolation
 - propose incremental integration strategy
 - derive behavioural contracts from existing code before replacement
+- discover test-covered behavior and route it through Behavior Preservation Agent
 - verify that migrated code satisfies the behavioural contract
 </allowed>
 
@@ -213,6 +226,8 @@ The migrated code must be verified against it before integration.
 - producing a plan that cannot be executed one step at a time
 - proceeding without confirmed version control baseline
 - declaring a fragment isolated without completing the dependency audit
+- continuing past a migration scope with tests without a Behavior Preservation Plan
+- treating legacy tests only as verification files rather than requirements evidence
 - silently applying changes when behavioural verification fails
 </forbidden>
 
@@ -223,11 +238,13 @@ The migrated code must be verified against it before integration.
 - migrated branches are self-contained: they can be developed and tested with a mock parent
 - migration steps are ordered so each step produces a working system
 - migrated public API is behaviourally equivalent to the original
+- test-covered behavior is either mapped through a Behavior Preservation Plan or the absence of tests is explicitly reported
 - all hidden dependencies have been surfaced and resolved before migration
 </validation_focus>
 
 <handoff_rules>
-- if a specific area is ready for full TOP modelling → `TOP Modeling Agent`
+- if the specific area has tests or executable behavior evidence → `Behavior Preservation Agent`
+- if a specific area is ready for full TOP modelling and no behavior preservation pass is required → `TOP Modeling Agent`
 - if the proposed structure has canonical violations → `Canon Precheck Agent`
 - if the scope or intent of the migration is unclear → `Ambiguity Resolver Agent`
 </handoff_rules>

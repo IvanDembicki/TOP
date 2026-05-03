@@ -29,7 +29,9 @@ REQUIRED_PATHS = [
     "prompts/generate-top-tree.md",
     "prompts/refactor-to-top.md",
     "agents/migration-agent.md",
+    "agents/behavior-preservation-agent.md",
     "agents/target-adaptation-agent.md",
+    "contracts/agent-output-contracts/behavior-preservation-output.md",
 ]
 
 
@@ -218,6 +220,11 @@ def check_required_phrases(root):
         ("rules/skill-maintenance-rules.md", "Missed case feedback loop"),
         ("rules/violation-catalog.md", "CORE-026"),
         ("rules/violation-catalog.md", "CORE-027"),
+        ("rules/violation-catalog.md", "CORE-028"),
+        ("rules/violation-catalog.md", "WF-010"),
+        ("canon/migration.md", "Legacy tests are requirements evidence"),
+        ("agents/behavior-preservation-agent.md", "Behavior Preservation Plan"),
+        ("contracts/agent-output-contracts/behavior-preservation-output.md", "Legacy tests are requirements evidence"),
         ("SKILL.md", "IContentAccess` is not a data channel"),
         ("canon/architectural-invariants.md", "Objects are not assembled outside the tree and pushed inward"),
         ("canon/architectural-invariants.md", "Controller Role Purity Invariant"),

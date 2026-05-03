@@ -23,6 +23,7 @@ context:
 - target_adaptation_source
 - target_technology
 - source_contracts
+- behavior_preservation_source
 
 result:
 - generated_artifact
@@ -30,10 +31,13 @@ result:
 - typing_decisions
 - boundary_mapping
 - semantic_mapping_used
+- behavior_preservation_mapping_used
+- top_test_coverage_mapping
 - target_adaptation_decisions_applied
 
 details:
 - architectural_deviations
+- behavior_preservation_notes
 - self_check_notes
 
 validation_signals:
@@ -43,6 +47,7 @@ validation_signals:
 - synchronized_artifacts_changed
 - changed_synchronized_artifacts
 - semantic_intent_preserved
+- test_covered_behavior_preserved
 - source_platform_leakage_present
 - target_adaptation_followed
 
@@ -73,8 +78,10 @@ spec_sync_handoff:
 - `discovered_materialization_details` must list target-specific facts that need to be reflected in prompts or Expected Materialization without turning platform-specific implementation details into platform-neutral behavior
 - Generation is not permitted to override the approved architecture
 - Generation is not permitted to bypass Semantic Interpreter or Target Adaptation outputs in generation-pipeline mode
+- For non-migration tasks, `behavior_preservation_source`, `behavior_preservation_mapping_used`, `top_test_coverage_mapping`, and `behavior_preservation_notes` must be explicitly `not_applicable`
 - `source_platform_leakage_present` must be `false` for a valid result
 - `semantic_intent_preserved` and `target_adaptation_followed` must be `true` for a valid result
+- `test_covered_behavior_preserved` must be `true` for a valid migration result when legacy tests covered the migrated scope
 - Free text outside the required structure is prohibited
 
 ## Semantic validity rule

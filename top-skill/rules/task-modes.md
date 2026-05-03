@@ -6,12 +6,13 @@ This file defines the official operating modes of the skill.
 
 The skill does not use a single universal pipeline for all tasks.
 
-Four modes are officially supported:
+Five modes are officially supported:
 
 1. analysis-only
 2. modeling-refactor
 3. generation-pipeline
-4. spec-change
+4. migration
+5. spec-change
 
 ---
 
@@ -108,7 +109,38 @@ Repair Agent is used in a loop on failed validation. If repair changes synchroni
 
 ---
 
-## 4. spec-change
+## 4. migration
+
+Used for:
+- moving existing non-TOP code into TOP structure;
+- wrapping or replacing legacy branches incrementally;
+- preserving behavior while extracting TOP nodes, prompts, and tests.
+
+Required stages:
+- Migration Agent
+- Behavior Preservation Agent if the scope has legacy tests or executable behavior evidence
+- TOP Modeling Agent
+- Canon Precheck Agent
+- Validation Agent
+- Final Audit Agent
+
+Generation Agent, Semantic Interpreter Agent, Target Adaptation Agent, and Spec Sync Agent are required only if the migration task materializes implementation artifacts.
+
+Execution steps:
+1. Confirm a recoverable version-control baseline.
+2. Define the migration scope and dependency boundary.
+3. Discover legacy tests and executable behavior evidence covering the scope.
+4. Produce a Behavior Preservation Plan when test evidence exists.
+5. Extract a TOP model that preserves normalized behavior requirements.
+6. Update specs, prompts, contracts, and tests together.
+7. Validate TOP canon and behavior preservation before final audit.
+
+Skipping Behavior Preservation Agent for a tested migration scope is `WF-010`.
+Losing, weakening, or failing to represent test-covered behavior is `CORE-028`.
+
+---
+
+## 5. spec-change
 
 Used for:
 - manual changes to JSON spec without prior code generation;
@@ -137,13 +169,14 @@ If the task:
 - only analyzes → analysis-only
 - changes the model or structure → modeling-refactor
 - creates an implementation artifact → generation-pipeline
+- migrates existing non-TOP code → migration
 - changes spec and requires code verification → spec-change
 
 ---
 
 ## Prohibition of false mandatory stages
 
-Semantic interpretation, target adaptation, and generation are not required stages for analysis-only, modeling-refactor, and spec-change tasks unless the task explicitly enters materialization.
+Semantic interpretation, target adaptation, and generation are not required stages for analysis-only, modeling-refactor, migration, and spec-change tasks unless the task explicitly enters materialization.
 
 It is forbidden to consider an analysis-only task invalid simply because it did not reach the Generation Agent.
 
@@ -155,6 +188,7 @@ It is forbidden to consider an analysis-only task invalid simply because it did 
   - `analysis-only`
   - `modeling-refactor`
   - `generation-pipeline`
+  - `migration`
   - `spec-change`
 
 - `Tier` defines the scope of architectural change:
@@ -175,6 +209,7 @@ When forming the pipeline:
 `Tier` applies:
 - mandatorily within `generation-pipeline`
 - optionally within `modeling-refactor`, if the task genuinely changes architectural scope
+- optionally within `migration`, after the migration scope and behavior evidence are known
 - as an informational depth marker in `analysis-only`, if no generation occurs
 - as an informational depth marker in initial `spec-change`; verification direction is controlled by the changed spec and `Spec Change Verification Agent`
 
