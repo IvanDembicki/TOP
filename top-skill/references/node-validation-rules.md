@@ -274,6 +274,8 @@ Canonical correction direction:
 Required checks:
 - confirmed core violations remain listed as core violations even when they are
   explicitly documented as migration waypoints;
+- accepted deviations contain only TOP-canon-defined migration waypoints, not
+  project-local reclassification of arbitrary core violations;
 - an accepted migration deviation does not change validation status to `pass`;
 - validation does not route to Final Audit while confirmed core violations or
   accepted core deviations remain.
@@ -281,6 +283,10 @@ Required checks:
 Violation code:
 - `WF-011` when validation or audit reports `pass`, `ready`, or `ready_for_use`
   while confirmed core violations or accepted core deviations remain.
+- `WF-012` when a project prompt, migration status file, validation report,
+  repair report, or final audit labels a confirmed core violation as
+  accepted/temporary/deferred/waypoint without a TOP-canon-defined waypoint for
+  that violation.
 
 The result of a validation must always contain:
 1. the identified class of problem;

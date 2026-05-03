@@ -117,6 +117,8 @@ A result is not valid until all checklist items pass.
 - only targeted fixes applied
 - no unnecessary rewrite
 - no new violations introduced
+- no confirmed core violation is reclassified as accepted/temporary/deferred/waypoint unless TOP canon defines that exact migration waypoint
+- documenting a violation is not treated as repair
 
 ---
 

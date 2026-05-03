@@ -50,6 +50,10 @@ next_step:
 - Repair output must report `CORE-029` if the repair introduced semantic runtime input into a Node/Controller
 - Repair output must report an invalid repair if it replaces `CORE-029` with duplicate derivation of the same shared fact, or replaces Invariant 14 with Node/Controller runtime input tunneling
 - If a shared derived fact cannot be repaired without a new typed access/update boundary, named controller method, or modeled connector contract, repair output must mark the repair blocked instead of proposing a local workaround
+- Repair output must not treat documentation of a core violation as repair. A
+  core violation may be listed in `accepted_deviations` only when TOP canon
+  defines a specific migration waypoint for that violation; otherwise labeling it
+  accepted/temporary/deferred/waypoint is `WF-012`
 - Free text outside the required structure is prohibited
 
 ## Semantic validity rule

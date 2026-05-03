@@ -46,6 +46,20 @@ as validated TOP architecture, must not produce Validation `PASS` or Final Audit
 under `core_violations` until the renderable/controller split is actually
 performed.
 
+### no ad hoc accepted deviations
+
+Only migration waypoints explicitly defined by TOP canon may appear in
+`accepted_deviations`. A project prompt, migration status file, validation report,
+or repair report must not convert an arbitrary core violation into an accepted
+deviation by documenting it as "known", "temporary", "accepted", "deferred", or
+"planned".
+
+Documentation may track an unresolved violation, but tracking is not repair and
+does not make the violation an accepted deviation. In particular, `CORE-029`
+semantic runtime input has no standalone accepted-deviation waypoint. It remains
+blocking until structurally repaired or returned to modeling as a blocked
+migration issue.
+
 ---
 
 ## Mg-1. Partially-restructured must be explicitly declared
@@ -133,6 +147,11 @@ repair must introduce or use an explicit typed access/update boundary, named
 controller method, or modeled connector contract. If no such boundary exists in
 the current model, the migration remains blocked or in a declared waypoint; the
 agent must not invent a props-based or duplicate-derivation workaround.
+
+Declaring the resulting `CORE-029` as an accepted deviation is not a repair
+unless TOP canon defines a specific waypoint for that violation. For shared
+derived facts, no such waypoint exists. The correct next stage is structural
+repair or re-modeling of the missing access/update boundary.
 
 ---
 

@@ -89,6 +89,8 @@ Categorize them as:
 - missing prompt representation for a migrated behavior requirement;
 - missing TOP-compatible test coverage for a prompt requirement;
 - invalid pass with remaining accepted core deviation (`WF-011`);
+- ad hoc accepted-deviation label for a core violation with no TOP-canon-defined
+  waypoint (`WF-012`);
 - Node/Controller semantic runtime input (`CORE-029`);
 - invalid shared derived fact repair that swaps `CORE-029` with Invariant 14 or Invariant 14 with `CORE-029`;
 - instability / ambiguity in prompt;

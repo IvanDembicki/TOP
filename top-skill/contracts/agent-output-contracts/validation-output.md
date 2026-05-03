@@ -62,8 +62,11 @@ next_step:
 
 - Validation must remain a strict pass/fail check
 - `core_violations`, `skill_convention_violations`, and `workflow_gaps` must be separated
-- `accepted_deviations` may document migration waypoints, but it must not remove
-  the corresponding violation from `core_violations`
+- `accepted_deviations` may document only TOP-canon-defined migration
+  waypoints, and must not remove the corresponding violation from
+  `core_violations`
+- Labeling a core violation as accepted/temporary/deferred/waypoint without a
+  TOP-canon-defined waypoint for that violation is `WF-012`
 - If `core_violations` is non-empty, `overall_status` must be `fail` and
   `allowed_next_stage` must not be `Final Audit Agent`
 - If `accepted_deviations` contains any core violation, `overall_status` must be

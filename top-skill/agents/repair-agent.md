@@ -49,6 +49,9 @@ If a discrepancy arises between this agent file and the output contract:
   props/config/options/parameters
 - repair `CORE-029` by making the child Node/Controller independently re-derive
   the same shared or parent-owned fact from the same cross-cutting source
+- repair a confirmed core violation by merely documenting it as accepted,
+  temporary, deferred, or waypoint unless TOP canon defines that exact migration
+  waypoint
 - mark a documented core deviation as resolved or passing when the underlying
   structure remains non-canonical
 - introduce new ambiguity during repair
@@ -63,6 +66,7 @@ If a discrepancy arises between this agent file and the output contract:
 - behavior preservation repairs close `CORE-028` by updating TOP sources of truth and TOP-compatible tests, not only implementation code
 - repairs do not replace one core violation with `CORE-029` runtime input tunneling
 - repairs do not replace `CORE-029` with duplicate shared-fact derivation
+- repairs do not reclassify non-canon core violations as accepted deviations
 - documented migration waypoints remain reported as core violations until structurally removed
 </validation_focus>
 

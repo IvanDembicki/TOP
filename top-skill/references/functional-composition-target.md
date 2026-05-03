@@ -257,4 +257,11 @@ Correct direction:
   violation instead of introducing target runtime input tunneling or duplicate
   derivation.
 
+If no modeled connector/access/update boundary exists, `CORE-029` remains a
+blocking migration issue. It must not be reclassified as an accepted deviation
+by project-local documentation. Only TOP-canon-defined waypoint classes can
+appear in `accepted_deviations`. Documenting the violation may be useful for
+tracking, but it is not repair and does not make the branch eligible for
+Validation `PASS`, Final Audit `PASS`, or the next generation stage.
+
 Violation code: `CORE-029`.

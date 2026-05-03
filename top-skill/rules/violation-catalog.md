@@ -77,6 +77,7 @@ Violations of the execution process. Affect pipeline validity, not TOP Core itse
 | WF-009 | Missing target adaptation stage | Generation pipeline reached Generation without a valid Target Adaptation output for the active target. |
 | WF-010 | Missing behavior preservation pass | A migration scope has legacy tests or executable behavior evidence, but Behavior Preservation Agent did not run and no Behavior Preservation Plan was produced before modeling, generation, validation, or final audit. |
 | WF-011 | Core deviation marked as pass | Validation or Final Audit reports `pass`, `ready`, or `ready_for_use` while confirmed core violations or accepted core deviations remain. A documented migration waypoint may be tracked, but it cannot be converted into a passing TOP validation result. |
+| WF-012 | Ad hoc core deviation acceptance | A project prompt, migration status file, validation report, repair report, or final audit labels a confirmed core violation as accepted/temporary/deferred/waypoint without a TOP-canon-defined migration waypoint for that violation. Documentation may track the violation, but it cannot convert it into an accepted deviation or repair. |
 
 ---
 

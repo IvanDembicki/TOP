@@ -7,6 +7,12 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.10] — 2026-05-03
+
+- Added `WF-012` for ad hoc accepted-deviation labels on core violations that have no TOP-canon-defined migration waypoint.
+- Clarified that documenting a violation is tracking, not repair, and cannot make `CORE-029` an accepted deviation.
+- Tightened validation, repair, final-audit, migration, and functional-composition rules so only canon-defined waypoint classes may appear in `accepted_deviations`.
+
 ## [1.1.9] — 2026-05-03
 
 - Added `CORE-029` for semantic runtime input into Nodes/Controllers, closing the repair loophole where derivation duplication was replaced by prop/config/parameter tunneling into a child node.

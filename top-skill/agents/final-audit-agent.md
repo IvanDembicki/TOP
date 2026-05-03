@@ -42,6 +42,8 @@ If a discrepancy arises between this agent file and the output contract:
 - finalize a migrated scope with unclosed behavior preservation gaps
 - finalize a result while confirmed core violations or accepted core deviations remain
 - convert a documented migration waypoint into Final Audit `PASS`
+- accept an ad hoc accepted-deviation label for a core violation when TOP canon
+  does not define that exact migration waypoint
 - release an ambiguous result as ready
 - replace the verdict with vague commentary
 - treat convention or convenience as proof of canonicality

@@ -57,6 +57,8 @@ If a discrepancy arises between this agent file and the output contract:
 - route to Final Audit while confirmed core violations or accepted core deviations remain
 - accept a repair that replaces derivation duplication with Node/Controller runtime input tunneling
 - accept a repair that replaces `CORE-029` with independent duplicate derivation of the same shared fact
+- accept an ad hoc core deviation declaration when TOP canon does not define a
+  migration waypoint for that violation
 - validate implementation code without checking whether `top/*.json` still matches the materialized child topology
 - replace validation with vague style commentary
 </forbidden>
@@ -79,6 +81,7 @@ If a discrepancy arises between this agent file and the output contract:
 - validation verdict integrity: core violations and accepted core deviations force `overall_status: fail`
 - Node/Controller semantic runtime input validation (`CORE-029`)
 - shared derived fact repair direction validation: repairs must not swap `CORE-029` and Invariant 14
+- accepted deviation admissibility validation (`WF-012`)
 </validation_focus>
 
 <handoff_rules>

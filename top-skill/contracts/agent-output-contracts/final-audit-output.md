@@ -57,6 +57,8 @@ next_step:
 - Violation types must be separated into three categories
 - Reporting `pass`, `ready`, or `ready_for_use` with remaining core violations
   or accepted core deviations is `WF-011`
+- Labeling a core violation accepted/temporary/deferred/waypoint without a
+  TOP-canon-defined migration waypoint is `WF-012`
 - The final verdict must be explicit
 - Free text outside the required structure is prohibited
 

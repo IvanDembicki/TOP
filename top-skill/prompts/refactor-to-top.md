@@ -30,6 +30,9 @@ rules:
 - use an explicit typed access/update boundary, named controller method, or
   modeled connector contract for shared derived facts; if none exists, report the
   repair as blocked
+- do not "repair" a confirmed core violation by documenting it as accepted,
+  temporary, deferred, or waypoint unless TOP canon defines that exact waypoint;
+  otherwise report `WF-012`
 - classify migration past tested legacy scope without a Behavior Preservation Plan as `WF-010`
 - do not mark documented `CORE-026` or other accepted core deviations as validation pass; classify that verdict error as `WF-011`
 - preserve valid internal platform/base constructor mechanics, but do not expose them as public TOP constructor inputs
