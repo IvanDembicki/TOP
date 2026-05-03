@@ -147,7 +147,8 @@ For each migrated branch, the agent must plan the final ownership direction:
 - the parent Node/Controller constructs direct child nodes at their tree positions;
 - a Node constructor receives only its parent reference;
 - Content/View receives exactly one narrow typed owner access interface;
-- any public runtime input object/value used to materialize Content is exactly that narrow owner access contract and nothing else;
+- any public runtime input object/value used to materialize Content is exactly the narrow content-to-controller owner access contract and nothing else;
+- `IContentAccess` is not used as a view-model/data/state/callback bag for Content;
 - access methods exposed to Content are controller-boundary methods owned by the controller, even when they delegate internally;
 - Content asks the owner for data, actions, and permitted output handles;
 - the owner asks direct child controllers for opaque public handles;
@@ -156,6 +157,10 @@ For each migrated branch, the agent must plan the final ownership direction:
 Do not describe any technology-specific parameter/composition tree, child-view
 assembly, or render/build-callback composition as TOP architecture unless the TOP
 ownership rules above are explicitly satisfied.
+
+If a migrated branch still uses a renderable source artifact as the Node/Controller,
+mark it as a known migration deviation and report `CORE-026`. It may be a staged
+repair waypoint, but it is not a TOP-conformant final structure.
 ---
 
 ## Safety protocol (mandatory before any migration step)

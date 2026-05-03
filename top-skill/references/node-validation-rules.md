@@ -76,7 +76,8 @@ Required checks:
 - Content/View does not import, reference, inspect, or downcast to the concrete controller type;
 - Content/View does not receive data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props;
 - the same semantic inputs are not moved into any public runtime parameter, render/build parameter, component/native/platform field, composition mechanism, or other technology-specific entrypoint;
-- if the technology materializes Content through one public runtime input object/value, that input is exactly the narrow owner access contract and not a general props/config/data/composition bag;
+- if the technology materializes Content through one public runtime input object/value, that input is exactly the narrow content-to-controller owner access contract (`IControllerAccess` or target-equivalent) and not a merged `IContentAccess & IControllerAccess` bundle or general props/config/data/composition bag;
+- `IContentAccess` is not used as a view-model/data field carrier for content;
 - no externally assembled access bundle replaces `IControllerAccess`, even when it contains correctly named methods;
 - `IControllerAccess` methods are controller-boundary methods owned by the controller;
 - `IControllerAccess` methods may delegate internally, but Content does not receive raw imported functions, externally owned method references, service methods, store actions, or callbacks as access methods;
@@ -116,6 +117,7 @@ artifact is a controller role purity violation.
 Canonical correction direction:
 - split the artifact into a non-renderable Controller/Node object and a Content/View renderable artifact;
 - add `IControllerAccess` and `IContentAccess` boundaries where content exists;
+- move any controller-owned data exposed through `IContentAccess` into explicit `IControllerAccess` access methods;
 - use a thin framework adapter only when the target runtime requires a renderable entrypoint;
 - keep controller logic out of the adapter and renderable content artifact;
 - expose only narrow access contracts and opaque handles.

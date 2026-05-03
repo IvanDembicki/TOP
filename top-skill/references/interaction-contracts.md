@@ -59,8 +59,9 @@ interface.
 
 If a technology materializes Content through one public runtime input
 object/value, that input is valid only when it is exactly the narrow owner access
-contract and nothing else. It must not become a general props/config/data
-container or composition channel.
+contract (`IControllerAccess` or target-equivalent) and nothing else. It must not
+become a general props/config/data container, a merged `IContentAccess &
+IControllerAccess` bundle, or a composition channel.
 
 Methods exposed through `IControllerAccess` are controller-boundary methods
 owned by the controller. The method body may delegate internally, but Content
@@ -75,6 +76,11 @@ The reverse direction is also interface-bound: if a node has content, the
 controller uses it through `IContentAccess`, not through the concrete content
 class. This keeps large platform/widget/component APIs hidden behind the small
 allowed TOP boundary.
+
+`IContentAccess` is not a channel for pushing controller-owned data into content.
+It contains only controller-to-content commands/requests, or an explicit
+zero-contract when that direction has no permitted calls. Content requests data,
+state, actions, and permitted child/output handles through `IControllerAccess`.
 
 Root `null` or `RootContext` is allowed only for root ownership/bootstrap. It
 must not become a dependency injection container.

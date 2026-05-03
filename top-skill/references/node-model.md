@@ -245,6 +245,12 @@ Through `IContentAccess`, only the following is permitted:
 - calling strictly permitted lifecycle/content methods;
 - performing other internal actions explicitly permitted by the private boundary.
 
+Through `IContentAccess`, data does not flow from controller to content.
+Controller-owned data, view-model values, state flags, action methods, and
+child-output handles are requested by content through `IControllerAccess`.
+An `IContentAccess` interface containing fields that content reads is a direction
+collapse, not a TOP access boundary.
+
 `IContentAccess` must not become a channel through which the controller manually bypasses the content boundary or pushes child nodes/content concrete implementation.
 It is also the boundary that hides any larger concrete content/component API from
 the controller. Even if the concrete content wraps a native view, framework widget,

@@ -7,6 +7,13 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.7] — 2026-05-03
+
+- Clarified that `IContentAccess` is only the controller-to-content command/request boundary and must not be used as a data bag for view-model values, state flags, callbacks, or child-output handles.
+- Clarified functional composition target materialization: a single public runtime input object/value must be the narrow content-to-controller owner access contract, not a merged `IContentAccess & IControllerAccess` props/data bundle.
+- Clarified migration status for renderable controllers: they may be explicitly tracked as a known migration deviation, but are not TOP-conformant final structure and still report `CORE-026`.
+- Added `CORE-027` for `IContentAccess` data bag misuse and extended validation, generation, migration, and checklist wording to detect the direction-confusion loophole.
+
 ## [1.1.6] — 2026-05-03
 
 - Added runtime hydration protocol: `SKILL.md` is now the bootstrap and fallback entrypoint; the agent must hydrate from the installed skill filesystem directory on every invocation before applying any canon, validation rules, references, or prompts.

@@ -95,8 +95,10 @@ component/native/platform field, composition mechanism, or other
 technology-specific entrypoint.
 
 If the target materializes Content through one public runtime input object/value,
-that input must be exactly the narrow owner access contract and nothing else. It
-must not become a general props/config/data/composition bag.
+that input must be exactly the narrow content-to-controller owner access contract
+(`IControllerAccess` or target-equivalent) and nothing else. It must not become a
+general props/config/data/composition bag, a view-model/data carrier, or a merged
+`IContentAccess & IControllerAccess` bundle.
 
 Generated code must not treat an externally assembled access bundle as a valid
 replacement for `IControllerAccess`. Even if that bundle contains correctly named
@@ -205,7 +207,11 @@ Both directions must be accounted for:
 - `IContentAccess` / controller-to-content: what the controller may command or request from its own content;
 - `IControllerAccess` / content-to-controller: what content may report or request from its own controller.
 
-If a direction has no permitted calls, generation must materialize or explicitly document a zero-contract for that direction according to the target technology. Silent omission is not valid. For the content-to-controller direction, the zero-contract is an empty narrow access interface implemented by the owning controller and passed as `this` typed only as that interface. It is not a separate runtime access object.
+`IContentAccess` must not contain controller-owned data, state flags, view-model
+values, callbacks, child-output handles, or data fields read by content. Content
+gets those through `IControllerAccess` methods/accessors.
+
+If a direction has no permitted calls, generation must materialize or explicitly document a zero-contract for that direction according to the target technology. Silent omission is not valid. For the content-to-controller direction, the zero-contract is an empty narrow access interface implemented by the owning controller and passed as `this` typed only as that interface. It is not a separate runtime access object. For the controller-to-content direction, if the target has no stable runtime content object for the controller to store, generation must explicitly document the zero direction in contracts or materialization notes instead of inventing a data bag or dummy runtime object.
 Raw callbacks, handlers, anonymous objects, externally assembled access bundles, parameter bags, full controller references, full concrete controller types, full concrete content references, or public runtime inputs are not valid substitutes for a named internal contract where the technology can express one.
 
 These boundaries/artifacts:

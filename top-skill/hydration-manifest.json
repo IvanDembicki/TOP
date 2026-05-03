@@ -1,5 +1,5 @@
 {
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Hydration manifest for TOP Skill. On every invocation the agent reads this manifest first, then reads the listed files directly from the skill filesystem directory using the base directory provided by the host environment.",
   "always": [
     "skill.json",
@@ -13,6 +13,7 @@
     "analysis-only": [
       "rules/task-modes.md",
       "rules/violation-classification.md",
+      "rules/violation-catalog.md",
       "canon/core-axioms.md",
       "canon/validation-rules.md",
       "canon/architectural-invariants.md",
@@ -24,6 +25,7 @@
     "validation": [
       "rules/task-modes.md",
       "rules/violation-classification.md",
+      "rules/violation-catalog.md",
       "canon/core-axioms.md",
       "canon/validation-rules.md",
       "canon/architectural-invariants.md",
@@ -38,6 +40,7 @@
     "modeling-refactor": [
       "rules/task-modes.md",
       "canon/core-axioms.md",
+      "rules/violation-catalog.md",
       "canon/validation-rules.md",
       "canon/architectural-invariants.md",
       "canon/controller-content-rules.md",
@@ -48,6 +51,7 @@
     ],
     "generation-pipeline": [
       "rules/task-modes.md",
+      "rules/violation-catalog.md",
       "canon/core-axioms.md",
       "canon/validation-rules.md",
       "canon/architectural-invariants.md",
@@ -62,6 +66,7 @@
     ],
     "migration": [
       "canon/migration.md",
+      "rules/violation-catalog.md",
       "references/functional-composition-target.md",
       "references/interaction-contracts.md",
       "references/hybrid-systems.md",
@@ -72,6 +77,7 @@
     ],
     "spec-change": [
       "rules/task-modes.md",
+      "rules/violation-catalog.md",
       "references/spec-change-verification.md",
       "agents/spec-change-verification-agent.md",
       "contracts/agent-output-contracts/spec-change-verification-output.md",
@@ -80,6 +86,7 @@
     ],
     "maintenance": [
       "rules/skill-maintenance-rules.md",
+      "rules/violation-catalog.md",
       "canon/core-axioms.md",
       "canon/validation-rules.md",
       "canon/architectural-invariants.md",
@@ -94,6 +101,7 @@
     "QUICKSTART_FOR_AI.md",
     "rules/task-modes.md",
     "rules/violation-classification.md",
+    "rules/violation-catalog.md",
     "rules/skill-maintenance-rules.md",
     "rules/startup-update-check.md",
     "canon/core-axioms.md",

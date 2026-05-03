@@ -217,6 +217,8 @@ def check_required_phrases(root):
         ("rules/skill-maintenance-rules.md", "No exhaustive-looking technology lists"),
         ("rules/skill-maintenance-rules.md", "Missed case feedback loop"),
         ("rules/violation-catalog.md", "CORE-026"),
+        ("rules/violation-catalog.md", "CORE-027"),
+        ("SKILL.md", "IContentAccess` is not a data channel"),
         ("canon/architectural-invariants.md", "Objects are not assembled outside the tree and pushed inward"),
         ("canon/architectural-invariants.md", "Controller Role Purity Invariant"),
     ]

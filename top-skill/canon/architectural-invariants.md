@@ -73,10 +73,10 @@ This invariant is foundational. It is not tied to any particular language, platf
 - If Content/View has no permitted calls to the controller, the content-to-controller zero-contract is an empty narrow access interface implemented by the owning controller. A separate dummy `ControllerAccessZero` object is not a valid owner access object.
 - The Content/View constructor must not receive additional data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props.
 - This restriction is technology-independent. Moving injection from constructor parameters into any public runtime parameter, render/build parameter, component/native/platform field, composition mechanism, or other technology-specific entrypoint is still the same violation.
-- If a technology materializes Content through one public runtime input object/value, that input must be exactly the narrow owner access contract and nothing else. It is not a general props/config/data/composition bag.
+- If a technology materializes Content through one public runtime input object/value, that input must be exactly the narrow content-to-controller owner access contract (`IControllerAccess` or target-equivalent) and nothing else. It must not be a merged `IContentAccess & IControllerAccess` bundle, a view-model/data field carrier, or a general props/config/data/composition bag.
 - A semantic bundle with correctly named methods is not valid owner access unless it is the narrow `IControllerAccess` implemented by the owning controller itself.
 - Methods exposed through `IControllerAccess` must be controller-boundary methods owned by the controller. They may delegate internally, but a raw imported function, externally owned method reference, service method, store action, or callback must not be exposed directly to Content as the access method itself.
-- For any node with separate content, controller-to-content access must also go through a narrow `IContentAccess` or equivalent interface. The controller must store and use content through this interface, not through the concrete content class.
+- For any node with separate content, controller-to-content access must also go through a narrow `IContentAccess` or equivalent interface. The controller must store and use content through this interface, not through the concrete content class. `IContentAccess` is not a data channel into content.
 
 ### Pull direction
 
@@ -109,7 +109,9 @@ The phrase "exactly one semantic argument" applies to the public constructor of 
 
 The controller/content boundary is bidirectional. Content/View depends on the owning controller only through `IControllerAccess`; the controller depends on content only through `IContentAccess`.
 
-This symmetry is mandatory even when one direction currently has no methods. An empty zero-contract is still a named access interface at the boundary. For content-to-controller, that empty interface is implemented by the owning controller and passed as `this` typed only as the interface. It is not materialized as a separate runtime dependency object.
+`IControllerAccess` is the only direction through which content requests controller-owned data, state, actions, and permitted child/output handles. `IContentAccess` is the controller-to-content command/request boundary only. It must not contain view-model values, state flags, callbacks, child handles, or data fields for content to read.
+
+This symmetry is mandatory even when one direction currently has no methods. An empty zero-contract is still a named access interface at the boundary. For content-to-controller, that empty interface is implemented by the owning controller and passed as `this` typed only as the interface. It is not materialized as a separate runtime dependency object. For controller-to-content, if the target has no stable runtime content object for the controller to store, the zero direction must still be declared explicitly in the prompt/materialization contract; absence of a runtime reference is acceptable only when there are no permitted controller-to-content calls and the target cannot express such a reference cleanly.
 
 This is especially important when content wraps a large platform component, widget, native view, or third-party object. The concrete content object may expose many public methods, but the controller may be allowed to use only one or two of them. `IContentAccess` cuts off the rest of the concrete surface and keeps the content implementation replaceable, portable, and verifiable.
 

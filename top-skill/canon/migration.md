@@ -28,6 +28,21 @@ is a migration waypoint, not a target state. See `references/hybrid-systems.md`
 — the wrapped legacy integration layer is the non-TOP part; the controller/content
 split is the TOP part.
 
+### renderable-controller waypoint
+
+During migration from renderable-artifact-centered code, a branch may temporarily
+retain a source renderable artifact in the Node/Controller position only when it
+is explicitly declared as a known migration deviation.
+
+This is not TOP-conformant structure. It remains a `CORE-026` controller role
+purity violation until the branch is split into:
+- a non-renderable Controller/Node orchestration boundary;
+- Content/View or an explicit thin adapter for renderable target materialization;
+- explicit `IControllerAccess` and `IContentAccess` accounting.
+
+This waypoint is useful for tracking staged repair work. It must not be reported
+as validated TOP architecture and must not be used as a generation target.
+
 ---
 
 ## Mg-1. Partially-restructured must be explicitly declared
@@ -40,6 +55,8 @@ Validation against this state checks only what the state claims:
 - Does content have no structural dependency on integration-layer types?
 
 Validation does not require the integration layer itself to be migrated.
+It does not waive universal canon violations such as controller role purity,
+push-based construction, semantic runtime injection, or access-direction collapse.
 
 ---
 
@@ -110,8 +127,12 @@ Before declaring a migration slice implemented, verify:
    response shapes, external service types, database record types).
 2. All integration-derived data displayed by content has been transformed into
    typed view-model fields at the controller level.
-3. `IContentAccess` contains only view-model values and typed command parameters —
-   no raw integration types, raw response shapes, or integration handles.
+3. Content obtains view-model values only through the content-to-controller owner
+   access contract (`IControllerAccess` or target-equivalent), using explicit
+   methods or accessors owned by the controller.
+4. `IContentAccess` is not used as a view-model/data carrier. It contains only
+   controller-to-content commands/requests, or it is explicitly declared as a
+   zero-contract when that direction has no permitted calls.
 
 If any of these checks fail, the migration is incomplete regardless of whether the
 content is visually correct at runtime.

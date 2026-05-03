@@ -22,9 +22,10 @@ rules:
 - Content/View constructor receives exactly one narrow typed access interface implemented by the owning controller
 - zero-contract content-to-controller access is an empty owner access interface implemented by the controller; do not generate `ControllerAccessZero` dummy objects
 - controller stores and uses content through `IContentAccess`, not through the concrete Content/View class
+- do not generate `IContentAccess` as a data/view-model/state/callback bag for Content; Content pulls controller-owned data through `IControllerAccess`
 - do not type Content/View against the concrete controller, and do not import/downcast back to it
 - do not generate semantic injection through constructor parameters, public runtime parameters, composition entrypoints, parameter bags, config/options/props-like objects, callbacks/handlers bundles, stores, services, child components, platform child views, child-output getter bundles, or prebuilt fragments
-- if the target materializes Content through one public runtime input object/value, generate that input as exactly the narrow owner access contract and nothing else
+- if the target materializes Content through one public runtime input object/value, generate that input as exactly the narrow content-to-controller owner access contract and nothing else; do not generate a merged `IContentAccess & IControllerAccess` input
 - do not replace `IControllerAccess` with an externally assembled access bundle, even when the bundle contains correctly named methods
 - generate `IControllerAccess` methods as controller-boundary methods owned by the controller; they may delegate internally, but do not expose raw imported functions, external method references, service methods, store actions, or callbacks directly to Content as access methods
 - Content pulls from owner; owner pulls from children when child output is required; children expose opaque handles

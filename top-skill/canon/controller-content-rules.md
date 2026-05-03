@@ -103,8 +103,10 @@ render/build parameter, component/native/platform field, composition mechanism,
 or other technology-specific entrypoint is still the same violation.
 
 If a technology materializes Content through one public runtime input
-object/value, that input must be exactly the narrow owner access contract and
-nothing else. It is not a general props/config/data/composition bag.
+object/value, that input must be exactly the narrow content-to-controller owner
+access contract (`IControllerAccess` or target-equivalent) and nothing else. It
+must not be a merged `IContentAccess & IControllerAccess` bundle or a general
+props/config/data/composition bag.
 
 A semantic bundle with correctly named methods is not valid owner access unless
 it is the narrow `IControllerAccess` implemented by the owning controller itself.
@@ -126,6 +128,11 @@ Content/View class. This is required even when the concrete content wraps a
 large platform component, widget, native view, or third-party object with many
 public methods: the controller sees only the small allowed boundary, and every
 other concrete method remains invisible.
+
+`IContentAccess` is controller-to-content only. It must not carry view-model
+values, state flags, callbacks, child-output handles, or data fields that Content
+reads from the controller. Those belong behind `IControllerAccess` methods or
+accessors.
 
 ## Rule 10 — Controller role purity
 

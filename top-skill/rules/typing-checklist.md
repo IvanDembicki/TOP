@@ -72,6 +72,7 @@ Violation signal:
 - An externally assembled access bundle is passed instead of the owning controller typed as the owner access interface
 - Content/View imports or downcasts to the concrete controller type
 - A public runtime input object/value contains anything beyond the narrow owner access contract
+- A public runtime input object/value merges `IContentAccess` and `IControllerAccess`
 - An `IControllerAccess` method is a raw imported function, externally owned method reference, service method, store action, or callback exposed directly to Content rather than a controller-boundary method
 - A separate dummy zero-access object is passed instead of the owning controller typed as the zero-contract interface
 
@@ -95,6 +96,7 @@ Violation signal:
 - Controller field is typed as the concrete Content/View class instead of `IContentAccess`
 - Controller calls methods that are public on the concrete content class but absent from `IContentAccess`
 - Concrete content implementation details are exposed to controller code through typing
+- `IContentAccess` contains view-model values, state flags, callbacks, child-output handles, or data fields that content reads from the controller
 
 *Platform implementation notes: if the target language cannot hide the concrete runtime object completely, use the strongest available interface, protocol, abstract class, adapter, or wrapper boundary and document the fallback.*
 

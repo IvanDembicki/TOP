@@ -53,8 +53,9 @@ A result is not valid until all checklist items pass.
 - Content/View is not typed against or downcast to the concrete controller
 - content-to-controller zero-contracts are empty owner access interfaces implemented by the owning controller, not separate dummy runtime objects
 - controller access to content is typed through `IContentAccess`, not through the concrete Content/View class
+- `IContentAccess` is not used as a data/view-model/state/callback/child-output bag for content
 - public runtime parameters, composition entrypoints, parameter bags, config/options/props-like objects, callbacks/handlers bundles, stores, services, and prebuilt fragments are not used as semantic injection channels
-- any single public runtime input object/value used to materialize Content is exactly the narrow owner access contract, not a general props/config/data/composition bag
+- any single public runtime input object/value used to materialize Content is exactly the narrow content-to-controller owner access contract, not a merged `IContentAccess & IControllerAccess` bundle or general props/config/data/composition bag
 - no externally assembled access bundle replaces the narrow owner access interface implemented by the owning controller
 - access methods exposed to Content are controller-boundary methods owned by the controller, even when they delegate internally
 - raw imported functions, externally owned method references, service methods, store actions, and callbacks are not exposed directly to Content as access methods
@@ -78,6 +79,7 @@ A result is not valid until all checklist items pass.
 - controller does not return render output
 - controller does not receive framework/runtime props, config, or options as component input
 - framework UI lifecycle APIs, hooks, callbacks, or equivalent target lifecycle mechanisms are not used as controller lifecycle
+- renderable-controller migration waypoints are marked as known deviations and still report `CORE-026`
 - content remains passive
 - no architectural logic in content
 

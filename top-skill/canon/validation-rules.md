@@ -14,6 +14,8 @@ Local functionality does not override TOP rules.
 - Internal access boundaries must be explicit, typed, and hidden from the external world as far as the technology allows.
 - Public node surface and internal access boundaries must not be mixed.
 - Controller fields/references to content must be typed as `IContentAccess` or an equivalent narrow contract, not as the concrete content class.
+- `IContentAccess` is controller-to-content only. It must not contain view-model values, state flags, callbacks, child-output handles, or data fields that content reads from the controller.
+- Content requests controller-owned data, state, actions, and child/output handles only through `IControllerAccess`.
 - No real interaction outside allowed protocol boundaries.
 
 
@@ -26,7 +28,7 @@ Local functionality does not override TOP rules.
 - No data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt fragments, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props are pushed into Content/View through constructors or any public runtime/composition entrypoint.
 - Content pulls from owner; owner pulls from children when child output is required; children expose opaque handles.
 - TOP spec props are declarative metadata, not runtime inputs.
-- If a technology materializes Content through one public runtime input object/value, that input is exactly the narrow owner access contract, not a general props/config/data/composition bag.
+- If a technology materializes Content through one public runtime input object/value, that input is exactly the narrow content-to-controller owner access contract (`IControllerAccess` or target-equivalent), not a merged `IContentAccess & IControllerAccess` bundle or a general props/config/data/composition bag.
 - `IControllerAccess` methods are controller-boundary methods owned by the controller; raw imported functions, externally owned method references, service methods, store actions, or callbacks are not exposed directly to Content as access methods.
 
 ## Validation freshness

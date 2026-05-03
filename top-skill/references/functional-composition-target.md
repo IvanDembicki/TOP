@@ -168,3 +168,58 @@ Correct direction:
 - keep the TOP controller as a non-renderable orchestration boundary;
 - put render output in Content/View or a thin adapter;
 - keep adapter logic minimal and free of controller responsibilities.
+
+---
+
+## FC-5. Single runtime input is the owner access contract
+
+Functional composition targets often materialize Content/View through one public
+runtime input object/value. That object/value is valid only when its semantic
+surface is exactly the narrow content-to-controller owner access contract
+(`IControllerAccess` or target-equivalent) implemented by the owning controller.
+
+It must not be:
+- a merged `IContentAccess & IControllerAccess` bundle;
+- a view-model/data field carrier;
+- a callback or handler bag;
+- a child-output getter bundle assembled outside the owning controller;
+- a generic props/config/options object.
+
+`IContentAccess` is the opposite direction: controller-to-content. It is not a
+place to put data that content reads from the controller.
+
+If the target has no stable runtime content object for the controller to store,
+and the controller-to-content direction has no permitted calls, the branch must
+declare an explicit controller-to-content zero direction in its contracts,
+prompt, or materialization notes. A missing runtime content reference is acceptable
+only for that zero direction. It is not permission to collapse both directions
+into one data/method props object.
+
+Correct direction:
+- Content/View receives one owner access value typed as `IControllerAccess` or
+  target-equivalent;
+- data, state, actions, and child-output handles are requested through explicit
+  controller-owned methods/accessors on that owner access;
+- controller-to-content commands, if any, are modeled separately through
+  `IContentAccess` or target-equivalent.
+
+---
+
+## FC-6. Renderable controller migration waypoint
+
+When migrating a legacy functional composition target, a source artifact may
+initially combine controller logic and renderable target materialization. If that
+artifact remains in the Node/Controller role, the branch must be marked as a known
+migration deviation.
+
+This waypoint does not satisfy TOP controller role purity. Validators must still
+report `CORE-026`; the migration status may explain that the violation is
+accepted temporarily, but it must not classify the branch as TOP-conformant final
+structure.
+
+The target repair direction is:
+- extract a non-renderable Controller/Node orchestration boundary;
+- keep target-renderable output in Content/View or an explicit thin adapter;
+- keep any required framework-boundary file as a thin adapter only;
+- account for `IControllerAccess` and `IContentAccess` without using runtime
+  props/config/options as semantic injection.

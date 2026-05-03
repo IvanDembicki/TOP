@@ -58,7 +58,8 @@ Check:
 - confirmation that controller fields/references to content are typed through `IContentAccess`, not through the concrete Content/View class where the technology permits;
 - confirmation that the public node/controller artifact is not itself a renderable framework component, widget, composable, render/build function, platform UI lifecycle object, or equivalent target-renderable entity;
 - confirmation that render output is produced only by content/view or adapter-side artifacts;
-- confirmation that any public runtime input object/value used to materialize Content is exactly the narrow owner access contract and not a general props/config/data/composition bag;
+- confirmation that any public runtime input object/value used to materialize Content is exactly the narrow content-to-controller owner access contract and not a merged `IContentAccess & IControllerAccess` bundle or general props/config/data/composition bag;
+- confirmation that `IContentAccess` is not used as a data/view-model/state/callback bag for Content;
 - confirmation that `IControllerAccess` methods exposed to Content are controller-boundary methods owned by the controller, not raw imported functions, external method references, service methods, store actions, or callbacks;
 - absence of controller bypass to concrete implementation;
 - absence of cases where a public/base-class primitive getter is used to justify controller access to concrete implementation;
