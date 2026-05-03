@@ -1,9 +1,12 @@
 {
   "product_name": "top-skill",
-  "current_version": "1.1.5",
+  "current_version": "1.1.6",
   "release_channel": "stable",
   "update_check_strategy": "manifest-compare",
   "manifest_source": "Local manifest compare by default. Provide a trusted release-metadata.json from a newer top-skill snapshot when comparison is needed.",
   "notes": "top-skill is the foundational stable TOP skill package. Update checking is supported but depends on an explicitly provided comparison manifest.",
-  "startup_update_check_supported": true
+  "startup_update_check_supported": true,
+  "runtime_freshness_strategy": "hydration-manifest",
+  "hydration_manifest": "hydration-manifest.json",
+  "hydration_policy": "On every invocation the agent reads hydration-manifest.json from the skill base directory and hydrates from the filesystem before applying any skill content. Packaged SKILL.md is bootstrap and fallback only."
 }

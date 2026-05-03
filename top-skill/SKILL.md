@@ -5,8 +5,8 @@ description: Skill for designing, generating, and validating systems built with 
 
 # TOP Skill
 
-**Version:** 1.1.5
-**Last updated:** 2026-05-02 23:07 -07:00
+**Version:** 1.1.6
+**Last updated:** 2026-05-03 01:06 -07:00
 **Invocation:** `/top`
 
 > **Rule for AI:** whenever any top-skill file is modified, update the date and time in this field to the current values.
@@ -14,6 +14,23 @@ description: Skill for designing, generating, and validating systems built with 
 This skill is intended for tasks where a system **is explicitly treated or must be treated as a tree of nodes** in terms of **Tree-Oriented Programming (TOP)**.
 
 Within the TOP product line, this is the foundational architecture skill. Use `top-prompt-cleaner` for single-prompt cleanup and `top-skill-factory` for governed skill lifecycle work.
+
+---
+
+## Runtime hydration (mandatory on every invocation)
+
+The packaged `SKILL.md` is the bootstrap and fallback entrypoint — not the full source of truth.
+
+On every invocation, before applying or citing any TOP canon, validation rules, references, prompts, or agent instructions:
+
+1. Identify the skill base directory exposed by the host environment.
+2. Read `hydration-manifest.json` from that directory using the available filesystem read capability and an absolute path.
+3. Read all files listed in the `always` tier of the manifest.
+4. Determine the active task type and read the corresponding `task` tier. For validation, maintenance, or release tasks, read the `full` tier instead.
+
+**If hydration fails:** If the host environment does not expose a skill base directory, or direct file reading is unavailable, report that runtime freshness cannot be verified and continue with the packaged fallback only if the user accepts that risk.
+
+The hydrated filesystem state is the preferred source of truth after hydration succeeds. The packaged content is the fallback only.
 
 ---
 

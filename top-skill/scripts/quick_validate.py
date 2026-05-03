@@ -12,6 +12,7 @@ REQUIRED_PATHS = [
     "CHANGELOG.md",
     "skill.json",
     "release-metadata.json",
+    "hydration-manifest.json",
     "AI_PRELOAD_CONTEXT.md",
     "rules/skill-maintenance-rules.md",
     "canon/architectural-invariants.md",
@@ -88,6 +89,66 @@ def check_manifest_references(root):
         for value in skill.get(key, []):
             if not (root / value).exists():
                 errors.append(f"skill.json {key} reference missing: {value}")
+
+    return errors
+
+
+def collect_hydration_paths(value):
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, list):
+        result = []
+        for item in value:
+            result.extend(collect_hydration_paths(item))
+        return result
+    if isinstance(value, dict):
+        result = []
+        for item in value.values():
+            result.extend(collect_hydration_paths(item))
+        return result
+    return []
+
+
+def check_hydration_manifest(root):
+    errors = []
+    manifest_path = root / "hydration-manifest.json"
+    if not manifest_path.exists():
+        return ["missing hydration-manifest.json"]
+
+    try:
+        manifest = load_json(manifest_path)
+    except Exception as exc:
+        return [f"hydration-manifest.json: invalid JSON: {exc}"]
+
+    skill = load_json(root / "skill.json")
+    release = load_json(root / "release-metadata.json")
+    version = skill.get("version")
+
+    if manifest.get("version") != version:
+        errors.append("hydration-manifest.json version does not match skill.json version")
+    if release.get("hydration_manifest") != "hydration-manifest.json":
+        errors.append("release-metadata.json hydration_manifest does not point to hydration-manifest.json")
+    if release.get("runtime_freshness_strategy") != "hydration-manifest":
+        errors.append("release-metadata.json runtime_freshness_strategy must be hydration-manifest")
+
+    always = manifest.get("always")
+    task = manifest.get("task")
+    full = manifest.get("full")
+    if not isinstance(always, list) or not always:
+        errors.append("hydration-manifest.json always tier must be a non-empty list")
+    if not isinstance(task, dict) or not task:
+        errors.append("hydration-manifest.json task tier must be a non-empty object")
+    if not isinstance(full, list) or not full:
+        errors.append("hydration-manifest.json full tier must be a non-empty list")
+
+    referenced_paths = []
+    referenced_paths.extend(collect_hydration_paths(always))
+    referenced_paths.extend(collect_hydration_paths(task))
+    referenced_paths.extend(collect_hydration_paths(full))
+
+    for item in sorted(set(referenced_paths)):
+        if not (root / item).exists():
+            errors.append(f"hydration-manifest.json reference missing: {item}")
 
     return errors
 
@@ -191,6 +252,7 @@ def run(root):
         ("required paths", check_required_paths),
         ("json parse", check_json_parse),
         ("manifest references", check_manifest_references),
+        ("hydration manifest", check_hydration_manifest),
         ("version consistency", check_version_consistency),
         ("markdown links", check_markdown_links),
         ("required phrases", check_required_phrases),

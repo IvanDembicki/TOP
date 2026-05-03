@@ -1,6 +1,6 @@
 # TOP Skill — Tree-Oriented Programming
 
-**Version:** 1.1.5 | **License:** MIT | **Invocation:** `/top`
+**Version:** 1.1.6 | **License:** MIT | **Invocation:** `/top`
 
 **TOP turns architecture from a weak social norm into a strong machine-verifiable protocol.**
 
@@ -61,6 +61,22 @@ The sufficient operational unit in TOP is the pair **`spec + prompt`**. Code is 
 5. **Full regenerability** — spec and prompts are the source of truth; code can be regenerated at any time on any platform
 6. **Local context per node** — each node is self-contained; AI works effectively without knowing the entire system
 7. **Parallel development by design** — independent branches can be developed simultaneously without conflicts
+
+---
+
+## After updating TOP Skill
+
+**Restarting an AI session is not sufficient after an update.**
+
+When you update TOP Skill files on disk, the AI's loaded skill package may still contain the old version. The skill package is a cached bootstrap snapshot that does not update automatically when files change on disk.
+
+To use the updated version:
+
+1. **Reinstall or refresh the skill package** using the skill refresh mechanism provided by your AI environment.
+2. Start a new AI session only after the refreshed package is available.
+3. Confirm that the agent reports the expected TOP Skill version before continuing serious work.
+
+> A stale package can bootstrap hydration correctly only if it already contains the hydration rule introduced in version 1.1.6. Packages older than 1.1.6 must be reinstalled to enable hydration.
 
 ---
 

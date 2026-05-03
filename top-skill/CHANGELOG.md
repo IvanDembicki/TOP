@@ -7,6 +7,16 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.6] — 2026-05-03
+
+- Added runtime hydration protocol: `SKILL.md` is now the bootstrap and fallback entrypoint; the agent must hydrate from the installed skill filesystem directory on every invocation before applying any canon, validation rules, references, or prompts.
+- Added `hydration-manifest.json` with tiered read paths (`always`, `task`, `full`); the agent reads only what each task requires while guaranteeing freshness of core files.
+- Added `validation` and `migration` as explicit task tiers in the hydration manifest, covering the files previously declared absent in the first validation pass.
+- Extended `rules/startup-update-check.md` with the runtime freshness and hydration policy, version check sequence, and explicit hydration failure reporting rule.
+- Updated `release-metadata.json` with `runtime_freshness_strategy`, `hydration_manifest`, and `hydration_policy` fields.
+- Extended `scripts/quick_validate.py` to require and validate the hydration manifest, its version, metadata linkage, tier structure, and file references.
+- Added post-update reinstall notice to `README.md`; clarifies that restarting a session is insufficient and packages older than 1.1.6 must be reinstalled to enable hydration.
+
 ## [1.1.5] — 2026-05-02
 
 - Added Controller Role Purity as a foundational invariant: controllers must remain non-renderable orchestration boundaries and must not become content-side or platform-renderable artifacts.
