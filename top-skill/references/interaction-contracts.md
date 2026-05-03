@@ -52,6 +52,19 @@ parameter bags, config/options/props-like objects, callbacks/handlers bundles,
 stores, services, or prebuilt fragments.
 
 A Node constructor receives only its parent reference as semantic input.
+Node/Controller public runtime entrypoints must not receive semantic data,
+derived facts, callbacks, handlers, services, stores, child fragments,
+config/options/props-like objects, parameter bags, runtime argument sets, or
+arbitrary props. Parent-derived values must not be tunneled into child
+Nodes/Controllers through target runtime input.
+
+Shared derived facts must not oscillate between invalid forms. If a child
+Node/Controller receives a parent-derived fact through runtime input, repair must
+not make the child independently re-derive the same fact from the same
+cross-cutting source. The fact must be obtained through an explicit typed
+access/update boundary, named controller method, or modeled connector contract,
+or the repair remains blocked.
+
 Content/View receives only a narrow typed access interface implemented by its
 owning controller. All data, actions, state, and child view handles that
 Content/View needs must be requested through explicit methods on that access

@@ -46,6 +46,10 @@ next_step:
 - Only targeted fixes are permitted
 - Unnecessary rewrites are prohibited
 - For non-migration repairs, `behavior_violations_addressed` and `behavior_preservation_fixes` must be explicitly `not_applicable`
+- Repair output must report if a fix leaves a documented core deviation in place; such a deviation is not resolved
+- Repair output must report `CORE-029` if the repair introduced semantic runtime input into a Node/Controller
+- Repair output must report an invalid repair if it replaces `CORE-029` with duplicate derivation of the same shared fact, or replaces Invariant 14 with Node/Controller runtime input tunneling
+- If a shared derived fact cannot be repaired without a new typed access/update boundary, named controller method, or modeled connector contract, repair output must mark the repair blocked instead of proposing a local workaround
 - Free text outside the required structure is prohibited
 
 ## Semantic validity rule

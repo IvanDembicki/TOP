@@ -23,6 +23,7 @@ context:
 result:
 - overall_status
 - core_violations
+- accepted_deviations
 - skill_convention_violations
 - workflow_gaps
 
@@ -61,6 +62,14 @@ next_step:
 
 - Validation must remain a strict pass/fail check
 - `core_violations`, `skill_convention_violations`, and `workflow_gaps` must be separated
+- `accepted_deviations` may document migration waypoints, but it must not remove
+  the corresponding violation from `core_violations`
+- If `core_violations` is non-empty, `overall_status` must be `fail` and
+  `allowed_next_stage` must not be `Final Audit Agent`
+- If `accepted_deviations` contains any core violation, `overall_status` must be
+  `fail` and `allowed_next_stage` must not be `Final Audit Agent`
+- Reporting `pass` with remaining core violations or accepted core deviations is
+  `WF-011`
 - `spec_sync_check` must explicitly report `pass`, `fail`, or `not_applicable`
 - `drift_check` must explicitly report `pass`, `fail`, or `not_applicable`; when applicable it must cover JSON topology, prompts, Expected Materialization, project-local TOP artifacts, and materialized implementation artifacts
 - Topology validation must mention child materialization points, dynamic/library children, prompt paths, and prompt child-interaction rules when applicable

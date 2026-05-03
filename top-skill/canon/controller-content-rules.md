@@ -77,6 +77,18 @@ Visual overlap does not determine ownership. The logical source of the secondary
 surface — the branch that holds the data, triggers the action, and processes the
 result — is the owner.
 
+## Rule 8a — Node/Controller runtime input is not an access contract
+
+A TOP Node/Controller receives only its parent/owner boundary as semantic input.
+
+Target runtime entrypoints such as functions, callables, components, route
+handlers, factories, or equivalent mechanisms must not receive semantic data,
+derived facts, callbacks, services, stores, config/options/props-like objects,
+parameter bags, runtime argument sets, child fragments, or arbitrary props.
+
+Do not repair ownership or derivation defects by pushing a derived value into a
+child Node/Controller through runtime input. That is `CORE-029`.
+
 ## Rule 9 — Content/View construction is pull-based and access-typed
 
 A concrete TOP Content/View constructor receives exactly one semantic argument:

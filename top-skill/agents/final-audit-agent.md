@@ -40,6 +40,8 @@ If a discrepancy arises between this agent file and the output contract:
 <forbidden>
 - override failed validation
 - finalize a migrated scope with unclosed behavior preservation gaps
+- finalize a result while confirmed core violations or accepted core deviations remain
+- convert a documented migration waypoint into Final Audit `PASS`
 - release an ambiguous result as ready
 - replace the verdict with vague commentary
 - treat convention or convenience as proof of canonicality
@@ -48,6 +50,7 @@ If a discrepancy arises between this agent file and the output contract:
 <validation_focus>
 - all required gates have passed
 - behavior preservation gate has passed when legacy tests covered the migrated scope
+- no core violations or accepted core deviations remain
 - the final result is canonical, not merely functional
 - remaining risks do not invalidate the result
 - the readiness statement is justified by actual validation status

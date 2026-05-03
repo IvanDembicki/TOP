@@ -37,12 +37,20 @@ If a discrepancy arises between this agent file and the output contract:
 - restore explicit lifecycle responsibility
 - if controller role purity fails, split into a non-renderable Controller/Node, Content/View renderable artifact, `IControllerAccess`, `IContentAccess`, and a thin framework adapter only when required by the target runtime
 - if behavior preservation fails, repair the spec, prompts, contracts, implementation, and tests so the preserved requirement is represented and re-covered
+- repair shared or parent-owned derived facts only through an explicit typed access/update boundary, named controller method, or modeled connector contract
 </allowed>
 
 <forbidden>
 - rewrite everything
 - delete useful existing content without explicit justification
 - fix lost behavior only in code while leaving prompts/specs/tests unsynchronized
+- repair derivation duplication or ownership defects by passing derived values,
+  state, callbacks, or services into child Nodes/Controllers through runtime
+  props/config/options/parameters
+- repair `CORE-029` by making the child Node/Controller independently re-derive
+  the same shared or parent-owned fact from the same cross-cutting source
+- mark a documented core deviation as resolved or passing when the underlying
+  structure remains non-canonical
 - introduce new ambiguity during repair
 - finalize the result without revalidation
 </forbidden>
@@ -53,6 +61,9 @@ If a discrepancy arises between this agent file and the output contract:
 - no new violations are introduced
 - repaired result is ready for strict revalidation
 - behavior preservation repairs close `CORE-028` by updating TOP sources of truth and TOP-compatible tests, not only implementation code
+- repairs do not replace one core violation with `CORE-029` runtime input tunneling
+- repairs do not replace `CORE-029` with duplicate shared-fact derivation
+- documented migration waypoints remain reported as core violations until structurally removed
 </validation_focus>
 
 <handoff_rules>
@@ -74,6 +85,9 @@ If generated/materialized synchronized artifacts changed after generation, direc
 ## Failure handling
 
 If canonical repair is not possible without major restructuring, report the blocking reason explicitly.
+If a shared derived fact needs a boundary that is not modeled yet, do not choose
+between runtime tunneling and duplicate derivation; report the repair as blocked
+and return to modeling/spec synchronization.
 
 <notes>
 Repair must be precise. It must not become uncontrolled rewriting.

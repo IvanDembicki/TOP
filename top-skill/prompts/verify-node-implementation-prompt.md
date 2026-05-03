@@ -60,7 +60,10 @@ Check:
 - if the content-to-controller protocol artifact is empty, explicit confirmation that this is a zero-contract implemented by the owning controller and not a separate dummy runtime object;
 - confirmation that controller fields/references to content are typed through `IContentAccess`, not through the concrete Content/View class where the technology permits;
 - confirmation that the public node/controller artifact is not itself a renderable framework component, widget, composable, render/build function, platform UI lifecycle object, or equivalent target-renderable entity;
+- confirmation that documented renderable-controller waypoints remain reported as `CORE-026` and do not produce validation/final-audit pass;
 - confirmation that render output is produced only by content/view or adapter-side artifacts;
+- confirmation that child Nodes/Controllers do not receive semantic runtime input such as parent-derived values, state, callbacks, services, props/config/options, parameter bags, or runtime argument sets (`CORE-029`);
+- confirmation that shared derived fact repairs do not swap `CORE-029` and Invariant 14: no parent-derived runtime input, no duplicate child derivation from the same cross-cutting source, and an explicit typed access/update boundary or connector if the fact is shared;
 - confirmation that any public runtime input object/value used to materialize Content is exactly the narrow content-to-controller owner access contract and not a merged `IContentAccess & IControllerAccess` bundle or general props/config/data/composition bag;
 - confirmation that `IContentAccess` is not used as a data/view-model/state/callback bag for Content;
 - confirmation that `IControllerAccess` methods exposed to Content are controller-boundary methods owned by the controller, not raw imported functions, external method references, service methods, store actions, or callbacks;
@@ -85,6 +88,9 @@ Categorize them as:
 - platform-specific leakage;
 - missing prompt representation for a migrated behavior requirement;
 - missing TOP-compatible test coverage for a prompt requirement;
+- invalid pass with remaining accepted core deviation (`WF-011`);
+- Node/Controller semantic runtime input (`CORE-029`);
+- invalid shared derived fact repair that swaps `CORE-029` with Invariant 14 or Invariant 14 with `CORE-029`;
 - instability / ambiguity in prompt;
 - artifact placement mismatch.
 

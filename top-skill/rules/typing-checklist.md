@@ -45,7 +45,28 @@ Violation signal:
 
 ---
 
-### 1a. Content/View constructor access parameter
+### 1a. Node/Controller public runtime input
+
+**What to check:**
+In targets with function, callable, component, route, factory, or equivalent
+runtime entrypoints, a Node/Controller runtime entrypoint must not become a
+semantic input channel.
+
+Violation signal:
+- parent-derived facts passed into a child Node/Controller through props,
+  config/options, parameters, or runtime argument sets
+- callbacks, services, stores, child fragments, or arbitrary props passed into a
+  Node/Controller runtime entrypoint
+- derivation duplication repaired by tunneling the derived value into the child
+  Node/Controller
+- Node/Controller runtime input repaired by making the child independently
+  re-derive the same shared fact from the same cross-cutting source
+
+Violation code: `CORE-029`.
+
+---
+
+### 1b. Content/View constructor access parameter
 
 **What to check:**
 Each concrete TOP Content/View public constructor receives exactly one semantic argument:
@@ -80,7 +101,7 @@ Violation signal:
 
 ---
 
-### 1b. Controller access to Content/View
+### 1c. Controller access to Content/View
 
 **What to check:**
 If a node has a separate content class/object, the controller stores and uses it

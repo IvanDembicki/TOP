@@ -51,6 +51,7 @@ Examples:
 - unresolved ambiguity
 - missing checklist pass
 - invalid task mode routing
+- reporting pass/readiness while confirmed core violations remain
 
 A workflow gap relates to process validity, not to TOP Core itself.
 

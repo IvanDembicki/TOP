@@ -7,6 +7,14 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.9] — 2026-05-03
+
+- Added `CORE-029` for semantic runtime input into Nodes/Controllers, closing the repair loophole where derivation duplication was replaced by prop/config/parameter tunneling into a child node.
+- Added `WF-011` for validation/final-audit results that report pass/readiness while confirmed core violations or accepted core deviations remain.
+- Added shared derived fact repair rules: agents must not repair `CORE-029` by restoring duplicate derivation, and must not repair Invariant 14 by runtime input tunneling.
+- Tightened migration, validation, final-audit, repair, functional-composition, typing, and review rules so documented migration waypoints remain core violations until structurally fixed.
+- Clarified that FC-6 renderable-controller waypoints may be tracked as known migration deviations, but cannot produce Validation `PASS` or Final Audit `PASS`.
+
 ## [1.1.8] — 2026-05-03
 
 - Added Behavior Preservation Agent and output contract for migration flows where legacy tests cover the migrated scope.

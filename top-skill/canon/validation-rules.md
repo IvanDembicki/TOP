@@ -22,6 +22,11 @@ Local functionality does not override TOP rules.
 ## Construction and locality validation
 - Every TOP object is constructed at its architectural position in the tree.
 - Node constructors receive only the parent reference as their semantic argument; root `null`/`RootContext` is allowed only as a root ownership/bootstrap marker, not as dependency injection.
+- Node/Controller public runtime entrypoints must not receive semantic data,
+  derived facts, callbacks, handlers, services, stores, child fragments,
+  config/options/props-like objects, parameter bags, runtime argument sets, or
+  arbitrary props. Passing a parent-derived value into a child Node/Controller
+  through target runtime input is `CORE-029`.
 - Content/View constructors receive exactly one semantic argument: a narrow typed access interface implemented by the owning Node/Controller.
 - Content/View is not typed against, imported as, downcast to, or stored as the concrete controller class.
 - Empty content-to-controller zero-contracts are narrow access interfaces implemented by the owning controller, not separate dummy runtime objects.
@@ -30,6 +35,12 @@ Local functionality does not override TOP rules.
 - TOP spec props are declarative metadata, not runtime inputs.
 - If a technology materializes Content through one public runtime input object/value, that input is exactly the narrow content-to-controller owner access contract (`IControllerAccess` or target-equivalent), not a merged `IContentAccess & IControllerAccess` bundle or a general props/config/data/composition bag.
 - `IControllerAccess` methods are controller-boundary methods owned by the controller; raw imported functions, externally owned method references, service methods, store actions, or callbacks are not exposed directly to Content as access methods.
+
+## Shared derived fact repair validation
+- A repair must not replace derivation duplication with parent-to-child runtime input tunneling.
+- A repair must not replace Node/Controller semantic runtime input (`CORE-029`) with independent duplicate derivation of the same fact from the same cross-cutting source.
+- Shared or parent-owned derived facts must move through an explicit typed access/update boundary, named controller method, or modeled connector contract after the child exists at its tree position.
+- If that boundary is not present in the current model, validation must keep the repair blocked or incomplete; it must not accept a local workaround that merely swaps `CORE-029` and Invariant 14.
 
 ## Validation freshness
 
@@ -84,6 +95,16 @@ Behavioral analysis and typing analysis are independent passes. The absence of b
 - A legacy test may be discarded only if its behavior is declared obsolete by explicit decision or re-covered through a normalized TOP requirement.
 - Missing Behavior Preservation Agent execution is `WF-010`.
 - Lost, weakened, unmapped, unprompted, or uncovered test-covered behavior is `CORE-028`.
+
+## Validation verdict rule
+- `overall_status` must be `fail` when any confirmed core violation remains.
+- A documented migration waypoint or accepted core deviation remains in
+  `core_violations`; documentation explains the state but does not convert the
+  result into `pass`.
+- Validation must not route to Final Audit while confirmed core violations or
+  accepted core deviations remain.
+- Reporting `pass`, `ready`, or `ready_for_use` with remaining core violations
+  is `WF-011`.
 
 ## Source-platform leakage validation
 - DOM, CSS, Flutter widgets, UIKit/Android classes, framework APIs, and source-specific event APIs must not appear in Layer B.

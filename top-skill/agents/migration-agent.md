@@ -161,7 +161,13 @@ ownership rules above are explicitly satisfied.
 
 If a migrated branch still uses a renderable source artifact as the Node/Controller,
 mark it as a known migration deviation and report `CORE-026`. It may be a staged
-repair waypoint, but it is not a TOP-conformant final structure.
+repair waypoint, but it is not a TOP-conformant final structure and must not
+produce Validation `PASS` or Final Audit `PASS`.
+
+Do not repair cross-branch derivation duplication by passing the derived value
+into a child Node/Controller through target runtime props, config/options,
+parameters, or other public runtime input. That is `CORE-029`, not a valid
+migration repair.
 ---
 
 ## Safety protocol (mandatory before any migration step)

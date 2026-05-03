@@ -48,6 +48,9 @@ A result is not valid until all checklist items pass.
 
 - TOP objects are born at their architectural position in the tree
 - node constructors receive only the parent reference as semantic input
+- Node/Controller public runtime entrypoints do not receive semantic data,
+  parent-derived facts, callbacks, services, stores, config/options/props-like
+  objects, parameter bags, runtime argument sets, or arbitrary props
 - root `RootContext`, if present, is not a dependency injection container
 - Content/View constructors receive exactly one narrow typed owner access interface
 - Content/View is not typed against or downcast to the concrete controller
@@ -59,6 +62,8 @@ A result is not valid until all checklist items pass.
 - no externally assembled access bundle replaces the narrow owner access interface implemented by the owning controller
 - access methods exposed to Content are controller-boundary methods owned by the controller, even when they delegate internally
 - raw imported functions, externally owned method references, service methods, store actions, and callbacks are not exposed directly to Content as access methods
+- shared derived fact repairs do not replace Invariant 14 with `CORE-029`, or `CORE-029` with duplicate derivation from the same cross-cutting source
+- shared derived facts move through explicit typed access/update boundaries, named controller methods, or modeled connector contracts; otherwise repair is blocked
 - Content pulls from owner; owner pulls from children when child output is required; children expose opaque handles
 - child-output access methods are named by semantic branch/output, not by generic slot/children/render/builder terminology
 - artificial `Handle`/`ViewHandle` suffixes are not required; `Section` is used only when the branch is actually modeled as a section
@@ -80,6 +85,7 @@ A result is not valid until all checklist items pass.
 - controller does not receive framework/runtime props, config, or options as component input
 - framework UI lifecycle APIs, hooks, callbacks, or equivalent target lifecycle mechanisms are not used as controller lifecycle
 - renderable-controller migration waypoints are marked as known deviations and still report `CORE-026`
+- accepted core deviations and migration waypoints do not produce validation pass or final-audit pass
 - content remains passive
 - no architectural logic in content
 

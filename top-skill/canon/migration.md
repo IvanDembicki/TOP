@@ -41,7 +41,10 @@ purity violation until the branch is split into:
 - explicit `IControllerAccess` and `IContentAccess` accounting.
 
 This waypoint is useful for tracking staged repair work. It must not be reported
-as validated TOP architecture and must not be used as a generation target.
+as validated TOP architecture, must not produce Validation `PASS` or Final Audit
+`PASS`, and must not be used as a generation target. The deviation remains listed
+under `core_violations` until the renderable/controller split is actually
+performed.
 
 ---
 
@@ -116,6 +119,20 @@ runtime parameters, parameter bags, config/options/props-like objects,
 composition entrypoints, or render/build callbacks has not reached
 TOP architecture. It has only changed the platform syntax of the same push-based
 composition.
+
+Derived facts, owner state, and cross-cutting values must not be tunneled into
+child Nodes/Controllers through target runtime input. A repair that removes
+duplicate derivation by passing the derived value into a child Node/Controller
+through props/config/options/parameters has only replaced the original violation
+with `CORE-029`.
+
+The opposite repair is also invalid. A repair that removes `CORE-029` by making
+the child independently re-derive the same parent-owned or shared fact from the
+same cross-cutting source has only restored the Invariant 14 violation. Migration
+repair must introduce or use an explicit typed access/update boundary, named
+controller method, or modeled connector contract. If no such boundary exists in
+the current model, the migration remains blocked or in a declared waypoint; the
+agent must not invent a props-based or duplicate-derivation workaround.
 
 ---
 

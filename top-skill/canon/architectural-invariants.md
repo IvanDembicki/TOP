@@ -65,6 +65,12 @@ This invariant is foundational. It is not tied to any particular language, platf
 ### Construction rule
 
 - A Node constructor receives exactly one semantic argument: its Parent reference.
+- A Node/Controller public runtime entrypoint must not receive semantic data,
+  derived facts, callbacks, handlers, services, stores, child fragments,
+  config/options/props-like objects, parameter bags, runtime argument sets, or
+  arbitrary props. In targets where a Node/Controller is materialized through a
+  function, callable, component, route, adapter, factory, or equivalent runtime
+  entrypoint, that entrypoint is not a semantic input channel.
 - For a root node, the parent may be `null` or a special `RootContext`.
 - `RootContext` is only a root ownership/bootstrap marker. It must not become a generic dependency injection container and must not pass application data, callbacks, services, stores, child instances, view fragments, or arbitrary props into the tree.
 - A parent Node/Controller owns its direct children and is responsible for constructing them.
@@ -93,6 +99,13 @@ Incorrect direction:
 ```text
 Parent/root/external code creates data/actions/children/fragments outside the tree
 -> pushes them into Content through constructor parameters, runtime parameters, parameter bags, callbacks, handlers, config/options/props-like objects, child-output getter bundles, or prebuilt handles
+```
+
+Also incorrect:
+
+```text
+Parent/root/external code derives a fact or obtains state/action references
+-> pushes them into a child Node/Controller through target runtime input
 ```
 
 When a parent View needs to render a child, the parent View asks its owning Node/Controller through its narrow access interface. The owning Node/Controller then asks the direct child Node/Controller for its public opaque view handle. The child Node/Controller returns its own view handle through its public API. The View may place returned opaque handles, but must not construct, import, inspect, downcast, or directly own child nodes.
@@ -517,3 +530,24 @@ Forbidden:
 - two controllers independently computing the same typed fact from the same raw source;
 - distributing raw integration data to multiple controllers so each independently
   performs the same derivation.
+
+### Shared derived fact repair rule
+
+Repair must not trade one ownership violation for the other.
+
+If a shared or parent-owned derived fact is duplicated in multiple controllers,
+repair must not pass the derived value into a child Node/Controller through
+constructors, public runtime parameters, config/options/props-like objects,
+parameter bags, callbacks, handlers, or prebuilt fragments. That repair only
+replaces Invariant 14 with `CORE-029`.
+
+If a child Node/Controller receives a parent-derived fact through a public
+runtime input, repair must not make the child independently derive the same fact
+from the same cross-cutting source. That repair only replaces `CORE-029` with
+Invariant 14.
+
+The valid direction is to introduce or use an explicit typed access/update
+boundary, named controller method, or modeled connector contract after the child
+exists at its tree position. If that boundary is not yet modeled, the repair is
+blocked and must report the remaining violation instead of inventing a local
+workaround.

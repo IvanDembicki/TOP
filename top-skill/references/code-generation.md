@@ -91,6 +91,19 @@ test-covered behavior is invalid and reports `CORE-028`.
 Generation that proceeds for a tested migration scope without a Behavior
 Preservation Plan reports `WF-010`.
 
+Generation must not repair ownership or derivation problems by adding semantic
+runtime inputs to child Nodes/Controllers. Parent-derived values, state,
+callbacks, services, stores, config/options/props-like objects, parameter bags,
+or runtime argument sets passed into a child Node/Controller are `CORE-029`.
+
+Generation must not repair `CORE-029` by making the child independently
+re-derive the same shared or parent-owned fact from the same cross-cutting
+source. That only restores the derivation duplication defect. Generated
+structure must use an explicit typed access/update boundary, named controller
+method, or modeled connector contract for shared derived facts; if the model
+lacks that boundary, generation must report the block instead of inventing a
+local workaround.
+
 ## 3.2. Pull-Based Construction / Locality of Object Birth
 
 Generated code must construct every TOP object at the exact place where it
@@ -100,6 +113,11 @@ Node constructors receive exactly one semantic argument: the parent reference.
 For root materialization, `null` or `RootContext` is permitted only as a root
 ownership/bootstrap marker. `RootContext` must not become a dependency injection
 container.
+
+Node/Controller target runtime entrypoints must not receive semantic data,
+derived facts, callbacks, handlers, services, stores, child fragments,
+config/options/props-like objects, parameter bags, runtime argument sets, or
+arbitrary props.
 
 Content/View constructors receive exactly one semantic argument: a narrow typed
 access interface implemented by the owning controller. The concrete controller

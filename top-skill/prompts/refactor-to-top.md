@@ -21,5 +21,15 @@ rules:
 - split them into non-renderable controller plus content/view or a thin adapter where the target runtime requires one
 - classify unsplit renderable Node/Controller artifacts as `CORE-026`
 - classify loss or weakening of test-covered behavior as `CORE-028`
+- classify parent-derived values, state, callbacks, or services pushed into child
+  Nodes/Controllers through runtime props/config/options/parameters as `CORE-029`
+- do not repair `CORE-029` by making the child independently re-derive the same
+  shared fact from the same source; this only restores Invariant 14
+- do not repair Invariant 14 by passing the derived fact through child
+  Node/Controller runtime input; this only creates `CORE-029`
+- use an explicit typed access/update boundary, named controller method, or
+  modeled connector contract for shared derived facts; if none exists, report the
+  repair as blocked
 - classify migration past tested legacy scope without a Behavior Preservation Plan as `WF-010`
+- do not mark documented `CORE-026` or other accepted core deviations as validation pass; classify that verdict error as `WF-011`
 - preserve valid internal platform/base constructor mechanics, but do not expose them as public TOP constructor inputs

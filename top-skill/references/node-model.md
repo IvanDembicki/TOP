@@ -65,7 +65,15 @@ Node construction:
 - for a root node, the parent may be `null` or `RootContext`;
 - `RootContext` is only a root ownership/bootstrap marker, not a dependency
   injection container;
-- the parent Node/Controller owns and constructs its direct children.
+- the parent Node/Controller owns and constructs its direct children;
+- Node/Controller public runtime entrypoints must not receive semantic data,
+  parent-derived facts, callbacks, services, stores, child fragments,
+  config/options/props-like objects, parameter bags, runtime argument sets, or
+  arbitrary props.
+- Shared derived facts are not repaired by choosing between duplicate derivation
+  and runtime input tunneling. They require an explicit typed access/update
+  boundary, named controller method, or modeled connector contract after the
+  child exists at its tree position.
 
 Content/View construction:
 - a Content/View constructor receives exactly one semantic argument: a narrow

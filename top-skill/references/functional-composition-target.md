@@ -215,7 +215,7 @@ migration deviation.
 This waypoint does not satisfy TOP controller role purity. Validators must still
 report `CORE-026`; the migration status may explain that the violation is
 accepted temporarily, but it must not classify the branch as TOP-conformant final
-structure.
+structure and must not produce Validation `PASS` or Final Audit `PASS`.
 
 The target repair direction is:
 - extract a non-renderable Controller/Node orchestration boundary;
@@ -223,3 +223,38 @@ The target repair direction is:
 - keep any required framework-boundary file as a thin adapter only;
 - account for `IControllerAccess` and `IContentAccess` without using runtime
   props/config/options as semantic injection.
+
+---
+
+## FC-7. Child Node runtime input is not a TOP access boundary
+
+In functional composition targets, target syntax may make it easy to pass values
+into a child component/function at the point where the parent places it. That
+syntax is not a TOP access boundary.
+
+A child Node/Controller must not receive parent-derived state, derived facts,
+callbacks, handlers, services, stores, config/options/props-like objects,
+parameter bags, runtime argument sets, or arbitrary props through its target
+runtime entrypoint.
+
+Forbidden:
+- a parent deriving a fact and passing it into a child `SomeNode` as runtime
+  input;
+- repairing derivation duplication by moving the derived value into a child
+  Node/Controller prop/config/options object;
+- repairing Node/Controller runtime input tunneling by making the child
+  independently re-derive the same shared fact from the same source;
+- treating a framework component prop as the child controller's owner access
+  contract.
+
+Correct direction:
+- the child Node/Controller is born at its tree position without semantic runtime
+  inputs beyond its parent/owner boundary;
+- shared or parent-owned derived facts are exposed through explicit pull access
+  methods, named update methods, or modeled connector contracts after the child
+  exists at its tree position;
+- if no canonical channel exists yet, the repair must report the remaining
+  violation instead of introducing target runtime input tunneling or duplicate
+  derivation.
+
+Violation code: `CORE-029`.

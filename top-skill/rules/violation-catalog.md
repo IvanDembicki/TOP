@@ -41,6 +41,7 @@ Affect architectural correctness. Always block finalization.
 | CORE-026 | Controller role purity violation | Controller is materialized as a content-side or platform-renderable artifact, render/build function, platform UI lifecycle object, public runtime input receiver for content composition, or otherwise becomes the node's rendered content instead of remaining a controller-only orchestration boundary. |
 | CORE-027 | IContentAccess data bag misuse | `IContentAccess` is used as a carrier for view-model values, state flags, callbacks, child-output handles, or data fields that Content reads from the controller. Content must request controller-owned data/actions/output through `IControllerAccess`; `IContentAccess` is only the controller-to-content command/request boundary or an explicit zero-contract. |
 | CORE-028 | Test-covered behavior loss | A migrated TOP branch loses, weakens, or fails to represent behavior that was covered by legacy tests. This includes cases where legacy test-covered behavior was not extracted, normalized, mapped to TOP nodes/contracts, reflected in spec/prompts, or re-covered by preserved, adapted, or newly generated TOP-compatible tests. |
+| CORE-029 | Node/Controller semantic runtime input | A TOP Node/Controller receives semantic data, derived facts, callbacks, services, stores, child fragments, config/options/props-like objects, parameter bags, runtime argument sets, or any public runtime input other than its parent/owner boundary. Parent/root/external code must not tunnel state or behavior into a child Node/Controller through target runtime input. Repair must not replace this with duplicate derivation of the same shared fact from the same cross-cutting source. |
 
 ---
 
@@ -75,6 +76,7 @@ Violations of the execution process. Affect pipeline validity, not TOP Core itse
 | WF-008 | Missing semantic interpretation stage | Generation pipeline reached target adaptation or generation without a valid Semantic Interpreter output. |
 | WF-009 | Missing target adaptation stage | Generation pipeline reached Generation without a valid Target Adaptation output for the active target. |
 | WF-010 | Missing behavior preservation pass | A migration scope has legacy tests or executable behavior evidence, but Behavior Preservation Agent did not run and no Behavior Preservation Plan was produced before modeling, generation, validation, or final audit. |
+| WF-011 | Core deviation marked as pass | Validation or Final Audit reports `pass`, `ready`, or `ready_for_use` while confirmed core violations or accepted core deviations remain. A documented migration waypoint may be tracked, but it cannot be converted into a passing TOP validation result. |
 
 ---
 

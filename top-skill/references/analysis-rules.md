@@ -81,6 +81,13 @@ Required:
 - verify that the constructor/factory/method parameter accepting an access artifact is explicitly typed where the language permits;
 - verify that the field/reference holding the access artifact is explicitly typed where the language permits;
 - verify that the controller does not bypass the content boundary via direct access to the concrete implementation;
+- verify that Node/Controller public runtime entrypoints do not receive semantic
+  data, parent-derived facts, callbacks, services, stores, child fragments,
+  config/options/props-like objects, parameter bags, runtime argument sets, or
+  arbitrary props;
+- verify that repairs of shared derived facts do not merely swap parent-to-child
+  runtime input tunneling with duplicate derivation from the same cross-cutting
+  source;
 - verify that the controller itself is not materialized as content, view, component, renderable artifact, render/build function, platform UI lifecycle object, or public runtime input receiver for content composition;
 - verify that a target runtime does not mount, register, invoke, or execute the controller itself as the rendered content artifact;
 - do not treat a public/base-class primitive getter as proof of a correct boundary: if the controller uses it for attach/wiring/update/read of the concrete implementation, this is a possible or confirmed bypass depending on the evidence;

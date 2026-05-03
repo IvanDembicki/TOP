@@ -25,6 +25,7 @@ result:
 - final_status
 - canonicality_statement
 - core_violations
+- accepted_deviations
 - skill_convention_violations
 - workflow_gaps
 
@@ -47,10 +48,15 @@ next_step:
 ## Rules
 
 - Final audit cannot override failed validation
+- Final audit cannot mark the result ready if `core_violations` is non-empty
+- Final audit cannot mark the result ready if `accepted_deviations` contains a
+  core violation or migration waypoint
 - Final audit cannot mark the result ready if unresolved drift remains between spec, prompts, project-local TOP artifacts, and materialized implementation artifacts
 - Final audit cannot mark a migrated scope ready if test-covered legacy behavior lacks a Behavior Preservation Plan, prompt representation, or TOP-compatible test coverage
 - For non-migration tasks, `behavior_preservation_plan`, `behavior_preservation_gate`, and `test_covered_behavior_preserved` must be explicitly `not_applicable`
 - Violation types must be separated into three categories
+- Reporting `pass`, `ready`, or `ready_for_use` with remaining core violations
+  or accepted core deviations is `WF-011`
 - The final verdict must be explicit
 - Free text outside the required structure is prohibited
 

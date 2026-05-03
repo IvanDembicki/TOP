@@ -70,6 +70,16 @@ Canonical correction direction:
 Required checks:
 - every Node constructor has exactly one semantic argument: its parent reference;
 - a root constructor using `null` or `RootContext` treats it only as a root ownership/bootstrap marker, not as a dependency injection container;
+- Node/Controller public runtime entrypoints do not receive semantic data,
+  derived facts, callbacks, handlers, services, stores, child fragments,
+  config/options/props-like objects, parameter bags, runtime argument sets, or
+  arbitrary props;
+- parent/root/external code does not repair duplication or ownership defects by
+  pushing derived values into child Nodes/Controllers through target runtime
+  input;
+- child Nodes/Controllers do not repair parent-derived runtime input defects by
+  independently re-deriving the same shared fact from the same cross-cutting
+  source;
 - every Content/View public constructor has exactly one semantic argument: a narrow typed access interface implemented by its owning controller;
 - Content/View constructor parameters, fields, and stored references are typed as the narrow access interface, not as the concrete controller class;
 - content-to-controller zero-contracts are empty owner access interfaces implemented by the owning controller;
@@ -88,6 +98,12 @@ Required checks:
 Canonical correction direction:
 - move child construction to the owning parent controller at the child position in the tree;
 - replace pushed constructor/runtime inputs with explicit access methods on a narrow access interface;
+- replace pushed Node/Controller runtime inputs with explicit pull access/update
+  methods or modeled connector contracts; if no canonical channel exists, report
+  the remaining violation instead of tunneling the value;
+- do not accept repairs that merely swap Invariant 14 and `CORE-029`; shared
+  derived facts require an explicit typed access/update boundary, named
+  controller method, or modeled connector contract;
 - type Content/View only against the access interface;
 - remove downcasts/imports back to concrete controller types;
 - classify legacy runtime parameters, parameter bags, config/options/props-like objects, and composition entrypoints as wrapped legacy until they are removed from the TOP-conformant path.
@@ -253,7 +269,18 @@ Canonical correction direction:
 
 ---
 
-## 11. Validation outcome
+## 11. Validation verdict and outcome
+
+Required checks:
+- confirmed core violations remain listed as core violations even when they are
+  explicitly documented as migration waypoints;
+- an accepted migration deviation does not change validation status to `pass`;
+- validation does not route to Final Audit while confirmed core violations or
+  accepted core deviations remain.
+
+Violation code:
+- `WF-011` when validation or audit reports `pass`, `ready`, or `ready_for_use`
+  while confirmed core violations or accepted core deviations remain.
 
 The result of a validation must always contain:
 1. the identified class of problem;

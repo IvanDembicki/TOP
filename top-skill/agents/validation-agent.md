@@ -53,6 +53,10 @@ If a discrepancy arises between this agent file and the output contract:
 - validate against remembered rules from an older skill version
 - accept a migrated scope with legacy tests when no Behavior Preservation Plan was produced
 - accept a migrated scope when test-covered behavior was not mapped to TOP prompts and TOP-compatible tests
+- mark a documented migration waypoint or accepted core deviation as validation `pass`
+- route to Final Audit while confirmed core violations or accepted core deviations remain
+- accept a repair that replaces derivation duplication with Node/Controller runtime input tunneling
+- accept a repair that replaces `CORE-029` with independent duplicate derivation of the same shared fact
 - validate implementation code without checking whether `top/*.json` still matches the materialized child topology
 - replace validation with vague style commentary
 </forbidden>
@@ -72,6 +76,9 @@ If a discrepancy arises between this agent file and the output contract:
 - source-platform leakage validation
 - target adaptation coherence validation
 - behavior preservation validation for migrated scopes with legacy tests
+- validation verdict integrity: core violations and accepted core deviations force `overall_status: fail`
+- Node/Controller semantic runtime input validation (`CORE-029`)
+- shared derived fact repair direction validation: repairs must not swap `CORE-029` and Invariant 14
 </validation_focus>
 
 <handoff_rules>

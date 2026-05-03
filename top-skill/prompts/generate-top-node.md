@@ -22,6 +22,7 @@ rules:
 - enforce Pull-Based Construction / Locality of Object Birth
 - enforce Controller Role Purity
 - node constructor receives only the parent reference as semantic input
+- do not generate Node/Controller runtime inputs for semantic data, parent-derived facts, callbacks, services, stores, props/config/options, parameter bags, or runtime argument sets; use explicit pull access/update methods or modeled connector contracts instead
 - do not generate the Node/Controller as a framework-rendered component, widget, composable, render/build function, platform UI lifecycle object, or equivalent target-renderable entity
 - renderable target artifacts belong to Content/View or thin adapters, not to the controller
 - Content/View constructor receives exactly one narrow typed access interface implemented by the owning controller
@@ -33,5 +34,6 @@ rules:
 - if the target materializes Content through one public runtime input object/value, generate that input as exactly the narrow content-to-controller owner access contract and nothing else; do not generate a merged `IContentAccess & IControllerAccess` input
 - do not replace `IControllerAccess` with an externally assembled access bundle, even when the bundle contains correctly named methods
 - generate `IControllerAccess` methods as controller-boundary methods owned by the controller; they may delegate internally, but do not expose raw imported functions, external method references, service methods, store actions, or callbacks directly to Content as access methods
+- for shared derived facts, do not generate either duplicate derivation in multiple controllers or parent-to-child runtime input tunneling; generate an explicit typed access/update boundary, named controller method, or modeled connector contract, or report the model as blocked
 - Content pulls from owner; owner pulls from children when child output is required; children expose opaque handles
 - name child-output access methods by semantic branch/output, for example `getAccountIdentityView()`; do not require `Handle`/`ViewHandle`, do not use `slot`, and avoid generic `children`/`render`/`builder` names
