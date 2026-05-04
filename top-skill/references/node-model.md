@@ -75,16 +75,18 @@ Node construction:
   boundary, named controller method, or modeled connector contract after the
   child exists at its tree position.
 
-Content/View construction:
-- a Content/View constructor receives exactly one semantic argument: a narrow
-  typed access interface implemented by its owning Node/Controller;
+Content construction:
+- a Content constructor receives exactly one semantic argument: the owning
+  controller instance typed only through the narrow `IControllerAccess` or
+  target-equivalent interface, not an
+  adapter/facade, method bag, or decomposed prop set;
 - the constructor must not be typed as the concrete controller class;
-- the runtime object must be the owning controller instance, but Content/View must store
+- the runtime object must be the owning controller instance, but Content must store
   and use it only through the narrow access interface;
 - if the access interface has no methods, it is an empty zero-contract
   implemented by the owning controller, not a separate dummy access object;
-- Content/View must not import, inspect, or downcast to the concrete controller;
-- Content/View must not receive additional data, callbacks, handlers, flags,
+- Content must not import, inspect, or downcast to the concrete controller;
+- Content must not receive additional data, callbacks, handlers, flags,
   state, stores, services, child components, slots, prebuilt view fragments,
   platform child views, child view handles, child-output getter bundles,
   view-model objects, config/options/props-like objects, parameter bags,
@@ -115,7 +117,7 @@ layout/style/animation/content artifact, platform UI lifecycle object, or
 runtime input receiver for content composition.
 
 If the target runtime needs a renderable entrypoint, that entrypoint is
-Content/View or a thin framework adapter. It may host or delegate to the TOP
+Content or a thin framework adapter. It may host or delegate to the TOP
 branch, but it is not the controller identity and must not accumulate
 controller logic.
 
@@ -225,7 +227,7 @@ These are not the external API of the node and have no relation to the public no
 If a node has a separate content class/object, separate explicit access artifacts for these boundaries are mandatory.
 Such artifacts may be an interface, a nested interface, an abstract contract, an adapter, a wrapper, a proxy, or a separate access class.
 An implicit object without a separate contract artifact does not qualify as a complete materialization of the protocol.
-If the language supports explicit typing, these artifacts must be materialized in signatures as well: a constructor/factory/method parameter that accepts an artifact must have an explicit contract type; the field/reference storing the artifact must also be explicitly typed. For Content/View, the public constructor receives exactly one semantic argument, and that argument must be typed as the narrow access interface. The concrete controller class is not an acceptable Content/View constructor type even if the controller implements the interface. The owning controller implements even an empty content-to-controller zero-contract and passes itself as `this` typed only as that interface; a separate zero-access runtime object is not a correct substitute. The controller stores content through `IContentAccess`, not through the concrete content class. An anonymous/untyped parameter such as `constructor(facing)` is not a correct implementation of a protocol boundary. Anything else is categorically prohibited.
+If the language supports explicit typing, these artifacts must be materialized in signatures as well: a constructor/factory/method parameter that accepts an artifact must have an explicit contract type; the field/reference storing the artifact must also be explicitly typed. For Content, the public constructor receives exactly one semantic argument, and that argument must be typed as the narrow access interface. The concrete controller class is not an acceptable Content constructor type even if the controller implements the interface. The owning controller implements even an empty content-to-controller zero-contract and passes itself as `this` typed only as that interface; a separate zero-access runtime object is not a correct substitute. The controller stores content through `IContentAccess`, not through the concrete content class. An anonymous/untyped parameter such as `constructor(facing)` is not a correct implementation of a protocol boundary. Anything else is categorically prohibited.
 
 Through `IControllerAccess`, only the following is permitted:
 - obtaining data that the content needs for its own construction and update;

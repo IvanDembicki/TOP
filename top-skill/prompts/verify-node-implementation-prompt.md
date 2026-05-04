@@ -58,13 +58,15 @@ Check:
 - explicit typing of the field/reference storing the artifact, if the language allows;
 - absence of empty formal protocol objects where content access to controller is permitted;
 - if the content-to-controller protocol artifact is empty, explicit confirmation that this is a zero-contract implemented by the owning controller and not a separate dummy runtime object;
-- confirmation that controller fields/references to content are typed through `IContentAccess`, not through the concrete Content/View class where the technology permits;
+- confirmation that controller fields/references to content are typed through `IContentAccess`, not through the concrete Content class where the technology permits;
 - confirmation that the public node/controller artifact is not itself a renderable framework component, widget, composable, render/build function, platform UI lifecycle object, or equivalent target-renderable entity;
 - confirmation that documented renderable-controller waypoints remain reported as `CORE-026` and do not produce validation/final-audit pass;
-- confirmation that render output is produced only by content/view or adapter-side artifacts;
+- confirmation that render output is produced only by Content or adapter-side artifacts;
 - confirmation that child Nodes/Controllers do not receive semantic runtime input such as parent-derived values, state, callbacks, services, props/config/options, parameter bags, or runtime argument sets (`CORE-029`);
 - confirmation that shared derived fact repairs do not swap `CORE-029` and Invariant 14: no parent-derived runtime input, no duplicate child derivation from the same cross-cutting source, and an explicit typed access/update boundary or connector if the fact is shared;
-- confirmation that any public runtime input object/value used to materialize Content is exactly the narrow content-to-controller owner access contract and not a merged `IContentAccess & IControllerAccess` bundle or general props/config/data/composition bag;
+- confirmation that any public runtime input object/value used to materialize Content carries exactly one value: the owning controller instance typed only as `IControllerAccess`/target-equivalent, optionally inside a target-required technical envelope;
+- confirmation that Content does not receive decomposed `IControllerAccess` members as separate props/parameters/JSX attributes, method bags, facade/adapters, or inline object literals (`CORE-030`);
+- confirmation that Controller does not receive decomposed `IContentAccess` members as method bags, facade/adapters, concrete Content types, platform primitives, or inline object literals (`CORE-031`);
 - confirmation that `IContentAccess` is not used as a data/view-model/state/callback bag for Content;
 - confirmation that `IControllerAccess` methods exposed to Content are controller-boundary methods owned by the controller, not raw imported functions, external method references, service methods, store actions, or callbacks;
 - absence of controller bypass to concrete implementation;
@@ -92,6 +94,8 @@ Categorize them as:
 - ad hoc accepted-deviation label for a core violation with no TOP-canon-defined
   waypoint (`WF-012`);
 - Node/Controller semantic runtime input (`CORE-029`);
+- decomposed owner access input into Content (`CORE-030`);
+- decomposed content access input into Controller (`CORE-031`);
 - invalid shared derived fact repair that swaps `CORE-029` with Invariant 14 or Invariant 14 with `CORE-029`;
 - instability / ambiguity in prompt;
 - artifact placement mismatch.

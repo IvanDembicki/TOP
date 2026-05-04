@@ -55,7 +55,7 @@ Object Birth invariant. Prompt wording that describes mounting child views refer
 to parent-owned materialization of direct child opaque handles, not to React-style
 slots, runtime props, external child injection, or prebuilt fragment passing.
 
-During generation, Content/View constructors must receive exactly one narrow typed
+During generation, Content constructors must receive exactly one narrow typed
 owner access interface implemented by the owning controller. Empty zero-contracts
 are empty owner access interfaces, not separate dummy access objects. Child nodes are constructed by their owning parent
 controllers at their tree positions. Legacy-looking target syntax such as DOM

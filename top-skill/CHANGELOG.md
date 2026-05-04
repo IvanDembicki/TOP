@@ -7,6 +7,12 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.11] — 2026-05-03
+
+- Added `CORE-030` for decomposed owner access input and `CORE-031` for decomposed content access input.
+- Made both canonical internal directions explicit: Content receives only the owning controller instance typed through `IControllerAccess`/target-equivalent, and Controller receives/stores/uses only its own Content instance typed through `IContentAccess`/target-equivalent.
+- Forbid method bags, access adapters/facades, inline closure objects, decomposed JSX props, and decomposed content command bags as substitutes for real controller/content instances.
+
 ## [1.1.10] — 2026-05-03
 
 - Added `WF-012` for ad hoc accepted-deviation labels on core violations that have no TOP-canon-defined migration waypoint.
@@ -49,7 +55,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 - Added Controller Role Purity as a foundational invariant: controllers must remain non-renderable orchestration boundaries and must not become content-side or platform-renderable artifacts.
 - Added `CORE-026` for controller role leakage and extended validation, review, generation, target adaptation, migration, and repair guidance to detect and correct renderable controllers.
-- Clarified that target-required renderable entrypoints belong to Content/View or thin framework adapters, not to controller identity.
+- Clarified that target-required renderable entrypoints belong to Content or thin framework adapters, not to controller identity.
 
 ## [1.1.4] — 2026-05-02
 
@@ -80,7 +86,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 - Added migration canon refinements for residual responsibility, legacy composition, and target adaptation.
 - Added Pull-Based Construction / Locality of Object Birth as a foundational ownership invariant.
-- Strengthened Content/View constructor rules: one narrow owner access interface, no semantic injection through constructors, runtime props, slots, builders, callbacks, stores, services, child handles, or prebuilt fragments.
+- Strengthened Content constructor rules: one narrow owner access interface, no semantic injection through constructors, runtime props, slots, builders, callbacks, stores, services, child handles, or prebuilt fragments.
 - Clarified that `RootContext` is only a root ownership/bootstrap marker and that TOP spec `props` are declarative metadata, not runtime props.
 - Added validation catalog entries and checklists for pull-based construction, concrete controller exposure, pushed child composition, View child ownership, RootContext misuse, and spec/runtime props confusion.
 - Clarified semantic child-output access method naming: names identify the child branch/output and do not require artificial `Handle`, `ViewHandle`, `Section`, or `slot` terminology.

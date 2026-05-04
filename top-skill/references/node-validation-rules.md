@@ -24,7 +24,7 @@ the current validation pass.
 
 Required checks:
 - if the node has a separate content, the controller does not bypass the content boundary through direct access to the concrete implementation;
-- controller fields/references to content are typed as `IContentAccess` or the target-equivalent narrow contract, not as the concrete Content/View class where the technology permits that boundary;
+- controller fields/references to content are typed as `IContentAccess` or the target-equivalent narrow contract, not as the concrete Content class where the technology permits that boundary;
 - if the controller performs any operation on its own content implementation, it does so only through explicitly named `this.content.<command>(...)` methods on `IContentAccess`;
 - controller code does not use the node's own render/view/native primitive, its platform API, or an equivalent exposed primitive handle, except inside the implementation of `getView()` itself and parent-owned placement/composition code that treats a child view as an opaque handle (detection examples for DOM-like targets: `this.el`, `this.getView().classList`, `this.getView().style`, `this.getView().addEventListener`, `this.getView().removeEventListener`, `this.getView().setAttribute`, `this.getView().querySelector`, `content.getView()`);
 - if a child view is obtained through `getView()`, it is used only as an opaque materialization handle for mount/unmount/insert/reorder/replace/placement through the parent's content boundary;
@@ -80,15 +80,23 @@ Required checks:
 - child Nodes/Controllers do not repair parent-derived runtime input defects by
   independently re-deriving the same shared fact from the same cross-cutting
   source;
-- every Content/View public constructor has exactly one semantic argument: a narrow typed access interface implemented by its owning controller;
-- Content/View constructor parameters, fields, and stored references are typed as the narrow access interface, not as the concrete controller class;
+- every Content public constructor has exactly one semantic argument: the owning
+  controller instance typed only through the narrow `IControllerAccess` or
+  target-equivalent interface;
+- Content constructor parameters, fields, and stored references are typed as the narrow access interface, not as the concrete controller class;
 - content-to-controller zero-contracts are empty owner access interfaces implemented by the owning controller;
-- Content/View does not import, reference, inspect, or downcast to the concrete controller type;
-- Content/View does not receive data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props;
+- Content does not import, reference, inspect, or downcast to the concrete controller type;
+- Content does not receive data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props;
 - the same semantic inputs are not moved into any public runtime parameter, render/build parameter, component/native/platform field, composition mechanism, or other technology-specific entrypoint;
-- if the technology materializes Content through one public runtime input object/value, that input is exactly the narrow content-to-controller owner access contract (`IControllerAccess` or target-equivalent) and not a merged `IContentAccess & IControllerAccess` bundle or general props/config/data/composition bag;
+- if the technology materializes Content through one public runtime input object/value, that input carries exactly one value: the owning controller instance typed only as the narrow content-to-controller owner access contract (`IControllerAccess` or target-equivalent), not a merged `IContentAccess & IControllerAccess` bundle or general props/config/data/composition bag;
+- Content does not receive `IControllerAccess` members decomposed as separate runtime props/parameters, JSX attributes, named function arguments, method bags, facade/adapters, or object literals assembled at a render/composition call site (`CORE-030`);
 - `IContentAccess` is not used as a view-model/data field carrier for content;
 - no externally assembled access bundle replaces `IControllerAccess`, even when it contains correctly named methods;
+- controller receives, stores, and uses its own Content instance typed only
+  as `IContentAccess`/target-equivalent, not decomposed content command methods,
+  method bags, facade/adapters, closure objects, concrete Content types,
+  platform primitives, or objects assembled outside the controller/content
+  construction boundary (`CORE-031`);
 - `IControllerAccess` methods are controller-boundary methods owned by the controller;
 - `IControllerAccess` methods may delegate internally, but Content does not receive raw imported functions, externally owned method references, service methods, store actions, or callbacks as access methods;
 - Content requests data/actions/permitted output handles from its owning controller through explicit access methods;
@@ -104,7 +112,7 @@ Canonical correction direction:
 - do not accept repairs that merely swap Invariant 14 and `CORE-029`; shared
   derived facts require an explicit typed access/update boundary, named
   controller method, or modeled connector contract;
-- type Content/View only against the access interface;
+- type Content only against the access interface;
 - remove downcasts/imports back to concrete controller types;
 - classify legacy runtime parameters, parameter bags, config/options/props-like objects, and composition entrypoints as wrapped legacy until they are removed from the TOP-conformant path.
 
@@ -131,7 +139,7 @@ target runtime mechanism that makes the controller itself the renderable/content
 artifact is a controller role purity violation.
 
 Canonical correction direction:
-- split the artifact into a non-renderable Controller/Node object and a Content/View renderable artifact;
+- split the artifact into a non-renderable Controller/Node object and a Content renderable artifact;
 - add `IControllerAccess` and `IContentAccess` boundaries where content exists;
 - move any controller-owned data exposed through `IContentAccess` into explicit `IControllerAccess` access methods;
 - use a thin framework adapter only when the target runtime requires a renderable entrypoint;
@@ -234,13 +242,13 @@ Required checks:
 - the content class is not a thin formal stub with actual platform logic remaining in the controller;
 - the controller does not construct platform primitives inline as a substitute for the content layer;
 - all platform-primitive construction is inside the content class, not in the controller.
-- generated declarations follow architectural depth from outside to inside: controller/node first, internal access boundary artifact(s) next, content/view implementation last.
+- generated declarations follow architectural depth from outside to inside: controller/node first, internal access boundary artifact(s) next, Content implementation last.
 
 Canonical correction direction:
 - create a separate content class;
 - move platform construction into it;
 - controller accesses content through `IContentAccess`.
-- reorder declarations so the access boundary stands between the controller and the hidden content/view implementation.
+- reorder declarations so the access boundary stands between the controller and the hidden Content implementation.
 
 ---
 

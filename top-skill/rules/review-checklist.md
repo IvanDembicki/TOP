@@ -52,14 +52,16 @@ A result is not valid until all checklist items pass.
   parent-derived facts, callbacks, services, stores, config/options/props-like
   objects, parameter bags, runtime argument sets, or arbitrary props
 - root `RootContext`, if present, is not a dependency injection container
-- Content/View constructors receive exactly one narrow typed owner access interface
-- Content/View is not typed against or downcast to the concrete controller
+- Content constructors receive exactly one semantic value: the owning controller instance typed only as the narrow `IControllerAccess`/target-equivalent interface
+- Content is not typed against or downcast to the concrete controller
 - content-to-controller zero-contracts are empty owner access interfaces implemented by the owning controller, not separate dummy runtime objects
-- controller access to content is typed through `IContentAccess`, not through the concrete Content/View class
+- controller access to content is typed through `IContentAccess`, not through the concrete Content class
+- controller receives/stores/uses its own Content instance typed through `IContentAccess`, not decomposed content command bags, facade/adapters, platform primitives, or inline closure objects (`CORE-031`)
 - `IContentAccess` is not used as a data/view-model/state/callback/child-output bag for content
 - public runtime parameters, composition entrypoints, parameter bags, config/options/props-like objects, callbacks/handlers bundles, stores, services, and prebuilt fragments are not used as semantic injection channels
-- any single public runtime input object/value used to materialize Content is exactly the narrow content-to-controller owner access contract, not a merged `IContentAccess & IControllerAccess` bundle or general props/config/data/composition bag
-- no externally assembled access bundle replaces the narrow owner access interface implemented by the owning controller
+- any single public runtime input object/value used to materialize Content carries exactly one controller-typed value, not a merged `IContentAccess & IControllerAccess` bundle or general props/config/data/composition bag
+- no decomposed `IControllerAccess` members are passed as separate props/parameters/JSX attributes or assembled into inline method bags (`CORE-030`)
+- no externally assembled access bundle, adapter/facade, or closure object replaces the owning controller typed as the narrow owner access interface
 - access methods exposed to Content are controller-boundary methods owned by the controller, even when they delegate internally
 - raw imported functions, externally owned method references, service methods, store actions, and callbacks are not exposed directly to Content as access methods
 - shared derived fact repairs do not replace Invariant 14 with `CORE-029`, or `CORE-029` with duplicate derivation from the same cross-cutting source

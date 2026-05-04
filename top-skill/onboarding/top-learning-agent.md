@@ -724,7 +724,7 @@ Correct: `this.openChild(tab)` — through the canonical path.
 
 **Anti-pattern 3: Content accessing architectural state**
 
-Content/view reads `openedChild`, `isEditMode`, or other architectural state directly.
+Content reads `openedChild`, `isEditMode`, or other architectural state directly.
 
 ```
 // pseudocode — violation

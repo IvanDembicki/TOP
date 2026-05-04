@@ -134,7 +134,7 @@ be declared as an empty `IControllerAccess` zero-contract implemented by the
 owning controller, not as a separate dummy access object. If controller-to-content
 has no permitted calls, this must be declared as an empty `IContentAccess`
 zero-contract where the technology can express it. The controller must store and
-use content through `IContentAccess`, not through the concrete Content/View class.
+use content through `IContentAccess`, not through the concrete Content class.
 
 ---
 

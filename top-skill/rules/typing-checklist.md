@@ -66,15 +66,16 @@ Violation code: `CORE-029`.
 
 ---
 
-### 1b. Content/View constructor access parameter
+### 1b. Content constructor access parameter
 
 **What to check:**
-Each concrete TOP Content/View public constructor receives exactly one semantic argument:
-a narrow typed access interface implemented by the owning Node/Controller.
+Each concrete TOP Content public constructor receives exactly one semantic
+argument: the owning controller instance typed only through the narrow
+`IControllerAccess` or target-equivalent interface.
 
-The constructor parameter, stored field, and all Content/View references must be typed
+The constructor parameter, stored field, and all Content references must be typed
 as the access interface, not as the concrete controller class. The runtime object must
-be the owning controller instance, but Content/View must not import, reference,
+be the owning controller instance, but Content must not import, reference,
 inspect, or downcast to the concrete controller type.
 
 If the access interface has no permitted methods, it is an empty zero-contract
@@ -82,41 +83,45 @@ implemented by the owning controller. It must not be replaced by a separate dumm
 runtime object such as `ControllerAccessZero`.
 
 Violation signal:
-- Content/View constructor has no declared access-interface type
-- Content/View constructor is typed as the concrete controller class
-- Content/View constructor has additional semantic parameters: data, callbacks, handlers, flags,
+- Content constructor has no declared access-interface type
+- Content constructor is typed as the concrete controller class
+- Content constructor has additional semantic parameters: data, callbacks, handlers, flags,
   state, stores, services, child components, slots, platform child views, child view handles,
   child-output getter bundles, view-model objects, config/options/props-like objects,
   parameter bags, runtime argument sets, prebuilt fragments, or arbitrary props
 - The same semantic inputs are moved to any public runtime parameter, render/build parameter,
   component/native/platform field, composition mechanism, or other technology-specific entrypoint
 - An externally assembled access bundle is passed instead of the owning controller typed as the owner access interface
-- Content/View imports or downcasts to the concrete controller type
+- `IControllerAccess` members are decomposed into separate props/parameters/JSX attributes, named function arguments, a method bag, facade/adapter, or an inline object literal instead of passing the owning controller typed as `IControllerAccess`
+- Content imports or downcasts to the concrete controller type
 - A public runtime input object/value contains anything beyond the narrow owner access contract
 - A public runtime input object/value merges `IContentAccess` and `IControllerAccess`
 - An `IControllerAccess` method is a raw imported function, externally owned method reference, service method, store action, or callback exposed directly to Content rather than a controller-boundary method
 - A separate dummy zero-access object is passed instead of the owning controller typed as the zero-contract interface
 
-*Platform implementation notes: internal platform/base constructor mechanics inside the Content/View implementation are allowed when they are not public TOP constructor inputs and do not become semantic injection channels.*
+*Platform implementation notes: internal platform/base constructor mechanics inside the Content implementation are allowed when they are not public TOP constructor inputs and do not become semantic injection channels.*
 
 ---
 
-### 1c. Controller access to Content/View
+### 1c. Controller access to Content
 
 **What to check:**
 If a node has a separate content class/object, the controller stores and uses it
 through a narrow `IContentAccess` or target-equivalent interface.
 
-The controller field/reference must not be typed as the concrete Content/View class
+The controller field/reference must not be typed as the concrete Content class
 when the technology can express a narrower boundary. This is especially important
 when content wraps a platform component, native view, widget, or third-party object
 with many public methods; the controller is allowed to see only the methods exposed
 by `IContentAccess`.
 
 Violation signal:
-- Controller field is typed as the concrete Content/View class instead of `IContentAccess`
+- Controller field is typed as the concrete Content class instead of `IContentAccess`
 - Controller calls methods that are public on the concrete content class but absent from `IContentAccess`
 - Concrete content implementation details are exposed to controller code through typing
+- Controller receives/stores/uses decomposed content command methods, method bags,
+  facade/adapters, platform primitives, or inline closure objects instead of its
+  own Content instance typed as `IContentAccess`
 - `IContentAccess` contains view-model values, state flags, callbacks, child-output handles, or data fields that content reads from the controller
 
 *Platform implementation notes: if the target language cannot hide the concrete runtime object completely, use the strongest available interface, protocol, abstract class, adapter, or wrapper boundary and document the fallback.*

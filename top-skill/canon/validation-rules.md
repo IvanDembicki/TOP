@@ -27,13 +27,16 @@ Local functionality does not override TOP rules.
   config/options/props-like objects, parameter bags, runtime argument sets, or
   arbitrary props. Passing a parent-derived value into a child Node/Controller
   through target runtime input is `CORE-029`.
-- Content/View constructors receive exactly one semantic argument: a narrow typed access interface implemented by the owning Node/Controller.
-- Content/View is not typed against, imported as, downcast to, or stored as the concrete controller class.
+- Content constructors receive exactly one semantic argument: the owning controller instance typed only through the narrow `IControllerAccess`/target-equivalent interface.
+- Content is not typed against, imported as, downcast to, or stored as the concrete controller class.
 - Empty content-to-controller zero-contracts are narrow access interfaces implemented by the owning controller, not separate dummy runtime objects.
-- No data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt fragments, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props are pushed into Content/View through constructors or any public runtime/composition entrypoint.
+- No data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt fragments, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props are pushed into Content through constructors or any public runtime/composition entrypoint.
 - Content pulls from owner; owner pulls from children when child output is required; children expose opaque handles.
 - TOP spec props are declarative metadata, not runtime inputs.
-- If a technology materializes Content through one public runtime input object/value, that input is exactly the narrow content-to-controller owner access contract (`IControllerAccess` or target-equivalent), not a merged `IContentAccess & IControllerAccess` bundle or a general props/config/data/composition bag.
+- If a technology materializes Content through one public runtime input object/value, that input carries exactly one value: the owning controller instance typed only as the narrow content-to-controller owner access contract (`IControllerAccess` or target-equivalent), not a merged `IContentAccess & IControllerAccess` bundle or a general props/config/data/composition bag.
+- Content does not receive `IControllerAccess` members decomposed as separate runtime props/parameters, JSX attributes, named function arguments, or an ad hoc object literal assembled at the render/composition call site. Decomposed owner access input is `CORE-030`.
+- The owner access runtime value is the owning controller itself typed through the narrow interface. It is not an adapter/facade object, externally assembled method bag, or inline closure bundle. If a target cannot pass controller identity at all, this is a non-final target adapter constraint and must be validated as a deviation, not as canonical TOP.
+- Controller receives, stores, and uses its own Content instance typed only as `IContentAccess`/target-equivalent. Controller does not receive decomposed content command members, method bags, facade/adapters, closure objects, concrete Content types, platform primitives, or objects assembled outside the controller/content construction boundary as substitutes for `IContentAccess`. Decomposed content access input is `CORE-031`.
 - `IControllerAccess` methods are controller-boundary methods owned by the controller; raw imported functions, externally owned method references, service methods, store actions, or callbacks are not exposed directly to Content as access methods.
 
 ## Shared derived fact repair validation

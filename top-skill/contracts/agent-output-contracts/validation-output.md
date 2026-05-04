@@ -73,6 +73,14 @@ next_step:
   `fail` and `allowed_next_stage` must not be `Final Audit Agent`
 - Reporting `pass` with remaining core violations or accepted core deviations is
   `WF-011`
+- Validation must report `CORE-030` when Content receives decomposed
+  `IControllerAccess` members as separate props/parameters, method bags,
+  facade/adapters, or inline object literals instead of the owning controller
+  typed through the narrow interface
+- Validation must report `CORE-031` when Controller receives, stores, or uses
+  decomposed content commands, method bags, facade/adapters, concrete Content
+  types, platform primitives, or inline objects instead of its own Content
+  instance typed through `IContentAccess`
 - `spec_sync_check` must explicitly report `pass`, `fail`, or `not_applicable`
 - `drift_check` must explicitly report `pass`, `fail`, or `not_applicable`; when applicable it must cover JSON topology, prompts, Expected Materialization, project-local TOP artifacts, and materialized implementation artifacts
 - Topology validation must mention child materialization points, dynamic/library children, prompt paths, and prompt child-interaction rules when applicable

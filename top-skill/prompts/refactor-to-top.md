@@ -16,9 +16,12 @@ rules:
 - do not discard a legacy test until its behavioral meaning is extracted, normalized, mapped to TOP nodes/contracts/prompts, and re-covered or explicitly declared obsolete
 - when replacing legacy composition, converge toward pull-based TOP construction
 - classify runtime parameters, parameter bags, config/options/props-like objects, composition entrypoints, and callback/handler bundles as wrapped legacy unless removed from the TOP-conformant final path
-- replace pushed Content/View inputs with narrow owner access methods
+- replace pushed Content inputs with narrow owner access methods
+- Content must receive only the owning controller instance typed as
+  `IControllerAccess`/target-equivalent; do not decompose access methods into
+  separate props or inline method bags (`CORE-030`)
 - detect framework/renderable artifacts that currently combine controller and content roles
-- split them into non-renderable controller plus content/view or a thin adapter where the target runtime requires one
+- split them into non-renderable controller plus Content or a thin adapter where the target runtime requires one
 - classify unsplit renderable Node/Controller artifacts as `CORE-026`
 - classify loss or weakening of test-covered behavior as `CORE-028`
 - classify parent-derived values, state, callbacks, or services pushed into child

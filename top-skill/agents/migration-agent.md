@@ -137,7 +137,7 @@ They are not TOP-conformant final structure.
 
 When migrating from component-based or renderable-artifact-based source
 frameworks, do not preserve the source renderable artifact as the TOP controller.
-Treat the source artifact as evidence for content/view behavior and extract a
+Treat the source artifact as evidence for Content behavior and extract a
 non-renderable controller around it.
 
 A migrated branch is not TOP-conformant while its Node/Controller is still a
@@ -147,7 +147,8 @@ output.
 For each migrated branch, the agent must plan the final ownership direction:
 - the parent Node/Controller constructs direct child nodes at their tree positions;
 - a Node constructor receives only its parent reference;
-- Content/View receives exactly one narrow typed owner access interface;
+- Content receives exactly one semantic value: the owning controller instance
+  typed only through `IControllerAccess`/target-equivalent;
 - any public runtime input object/value used to materialize Content is exactly the narrow content-to-controller owner access contract and nothing else;
 - `IContentAccess` is not used as a view-model/data/state/callback bag for Content;
 - access methods exposed to Content are controller-boundary methods owned by the controller, even when they delegate internally;

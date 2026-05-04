@@ -3,7 +3,7 @@
 Materialization guidance for TOP branches deployed to targets where a branch's
 view output is represented as an opaque composable value — an opaque typed view
 handle that the parent controller obtains from the child controller, exposes
-through a named owner-access method, and allows its own Content/View to place
+through a named owner-access method, and allows its own Content to place
 without inspection.
 
 This file describes how existing TOP semantics materialize in functional
@@ -26,20 +26,20 @@ transfer.
 The pull direction remains canonical:
 
 ```text
-Content/View -> asks owning controller for a named child-view endpoint
+Content -> asks owning controller for a named child-view endpoint
 Owning controller -> asks direct child controller for its public opaque handle
 Child controller -> returns its own opaque handle
-Owning controller -> returns the opaque handle to its own Content/View for placement
+Owning controller -> returns the opaque handle to its own Content for placement
 ```
 
 The parent controller:
 - constructs the child branch at the child's tree position;
 - obtains the child's opaque view handle only from the direct child controller;
-- makes that handle available to its own Content/View through an explicit named
+- makes that handle available to its own Content through an explicit named
   access method on the narrow access interface;
 - never treats the handle as an inspectable platform object.
 
-Content/View:
+Content:
 - requests the handle from the owning controller through the narrow access interface;
 - places the returned handle into the layout at the position designated by its own
   node contract;
@@ -82,7 +82,7 @@ cannot be relocated to align with the TOP branch root.
 When this constraint applies, the canonical form is:
 
 - The framework-boundary file contains only a thin adapter or re-export to a
-  renderable artifact owned by Content/View or by an explicit adapter.
+  renderable artifact owned by Content or by an explicit adapter.
 - The framework-boundary file is not a TOP node. It has no controller logic, no
   contracts, and no state.
 - The TOP branch root controller remains a non-renderable controller; the
@@ -145,7 +145,7 @@ artifact, or render/build function is not a TOP controller.
 
 A TOP controller may provide access methods, own child construction, coordinate
 lifecycle, and expose opaque handles where canon allows it. The renderable
-function/component/composable belongs to Content/View or to a thin framework
+function/component/composable belongs to Content or to a thin framework
 adapter.
 
 Forbidden:
@@ -166,19 +166,24 @@ function SomeNode(props) {
 
 Correct direction:
 - keep the TOP controller as a non-renderable orchestration boundary;
-- put render output in Content/View or a thin adapter;
+- put render output in Content or a thin adapter;
 - keep adapter logic minimal and free of controller responsibilities.
 
 ---
 
-## FC-5. Single runtime input is the owner access contract
+## FC-5. Single owning controller input, not decomposed props
 
-Functional composition targets often materialize Content/View through one public
-runtime input object/value. That object/value is valid only when its semantic
-surface is exactly the narrow content-to-controller owner access contract
-(`IControllerAccess` or target-equivalent) implemented by the owning controller.
+Functional composition targets often materialize Content through one public
+runtime input object/value. A target-required props/options envelope is a
+technical adapter shape only. Semantically, it is valid only when it contains
+exactly one value: the owning controller instance typed only as the narrow
+content-to-controller owner access contract (`IControllerAccess` or
+target-equivalent).
 
 It must not be:
+- decomposed `IControllerAccess` members passed as separate props, JSX
+  attributes, named function arguments, or a method object literal assembled at
+  the render/composition call site;
 - a merged `IContentAccess & IControllerAccess` bundle;
 - a view-model/data field carrier;
 - a callback or handler bag;
@@ -196,12 +201,40 @@ only for that zero direction. It is not permission to collapse both directions
 into one data/method props object.
 
 Correct direction:
-- Content/View receives one owner access value typed as `IControllerAccess` or
-  target-equivalent;
+- Content receives one value: the owning controller instance typed as
+  `IControllerAccess` or target-equivalent, optionally inside a target-required
+  envelope with exactly one semantic field such as `access` or `controller`;
+- the runtime value is the owning controller itself typed through the narrow
+  interface;
 - data, state, actions, and child-output handles are requested through explicit
   controller-owned methods/accessors on that owner access;
 - controller-to-content commands, if any, are modeled separately through
   `IContentAccess` or target-equivalent.
+
+Forbidden React-like shape:
+
+```tsx
+<AccountScreenView
+  getIsLoading={() => isLoading}
+  onRetry={handleRetry}
+/>
+```
+
+Valid React-like shape:
+
+```tsx
+<AccountScreenView access={accountScreenAccess} />
+```
+
+where `accountScreenAccess` is the owning controller typed as
+`IAccountScreenControllerAccess`. The access object is not an adapter/facade and
+is not assembled inline from arbitrary closures.
+
+If a target cannot pass controller identity to Content at all, the target
+adapter must report a non-final deviation. It must not present a facade, method
+bag, or closure bundle as canonical TOP.
+
+Violation code: `CORE-030`.
 
 ---
 
@@ -219,7 +252,7 @@ structure and must not produce Validation `PASS` or Final Audit `PASS`.
 
 The target repair direction is:
 - extract a non-renderable Controller/Node orchestration boundary;
-- keep target-renderable output in Content/View or an explicit thin adapter;
+- keep target-renderable output in Content or an explicit thin adapter;
 - keep any required framework-boundary file as a thin adapter only;
 - account for `IControllerAccess` and `IContentAccess` without using runtime
   props/config/options as semantic injection.

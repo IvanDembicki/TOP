@@ -235,7 +235,7 @@ Pull-Based Construction / Locality of Object Birth:
 
 * TOP objects are constructed where they architecturally belong in the tree
 * Node constructors receive only their parent reference
-* Content/View constructors receive exactly one semantic argument: a narrow owner access interface implemented by the owning controller
+* Content constructors receive exactly one semantic argument: a narrow owner access interface implemented by the owning controller
 * a content-to-controller zero-contract is an empty owner access interface implemented by the controller, not a separate dummy object
 * if content exists, both internal directions are explicit: controller-to-content through `IContentAccess`, content-to-controller through `IControllerAccess`
 * controller code uses content only through `IContentAccess`, never through the concrete content class

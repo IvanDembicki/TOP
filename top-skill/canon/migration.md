@@ -37,7 +37,7 @@ is explicitly declared as a known migration deviation.
 This is not TOP-conformant structure. It remains a `CORE-026` controller role
 purity violation until the branch is split into:
 - a non-renderable Controller/Node orchestration boundary;
-- Content/View or an explicit thin adapter for renderable target materialization;
+- Content or an explicit thin adapter for renderable target materialization;
 - explicit `IControllerAccess` and `IContentAccess` accounting.
 
 This waypoint is useful for tracking staged repair work. It must not be reported
@@ -121,8 +121,9 @@ They are not TOP-conformant final structure.
 
 The target migration direction is pull-based construction:
 - a Node constructor receives only its parent reference;
-- a Content/View constructor receives exactly one narrow typed owner access interface;
-- Content/View is not typed against the concrete controller;
+- a Content constructor receives exactly one semantic value: the owning controller
+  instance typed only through `IControllerAccess`/target-equivalent;
+- Content is not typed against the concrete controller;
 - Node/Controller artifacts are non-renderable orchestration boundaries, not preserved source framework renderable artifacts;
 - parent Nodes/Controllers construct direct children at their tree positions;
 - Content asks its owner for data, actions, and permitted output handles;

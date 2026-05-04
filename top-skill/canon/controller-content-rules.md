@@ -53,12 +53,15 @@ and any other types that originate outside the node's own domain — must not ap
 in content.
 
 The controller is responsible for receiving integration data and deriving a
-typed view-model from it. Content receives only the derived view-model.
+typed view-model from it. Content requests the derived view-model only through
+`IControllerAccess`; the view-model is not pushed into Content as a constructor,
+props, parameter, or method-bag input.
 Content must have no structural dependency on integration-layer types:
 no structural reference, no implicit shape compatibility.
 
-The view-model is the only integration artifact that crosses the
-controller/content boundary.
+The view-model is the only integration-derived artifact that may be exposed
+through the controller/content boundary, and only through the narrow
+content-to-controller access interface.
 
 ## Rule 8 — Secondary surface belongs entirely within the branch that owns it
 
@@ -89,21 +92,22 @@ parameter bags, runtime argument sets, child fragments, or arbitrary props.
 Do not repair ownership or derivation defects by pushing a derived value into a
 child Node/Controller through runtime input. That is `CORE-029`.
 
-## Rule 9 — Content/View construction is pull-based and access-typed
+## Rule 9 — Content construction is pull-based and access-typed
 
-A concrete TOP Content/View constructor receives exactly one semantic argument:
-a narrow typed access interface implemented by its owning Node/Controller.
+A concrete TOP Content constructor receives exactly one semantic argument:
+the owning controller instance typed only through the narrow
+`IControllerAccess`/target-equivalent interface.
 
-The Content/View must not be typed against the concrete controller class. The
+The Content must not be typed against the concrete controller class. The
 runtime object must be the owning controller instance, but the field, constructor
-parameter, and all Content/View references must use the narrow access interface.
+parameter, and all Content references must use the narrow access interface.
 Downcasting, importing the concrete controller type for view access, or storing
 the concrete controller as such is a boundary violation.
 
-If Content/View has no permitted calls to the controller, the access interface is
+If Content has no permitted calls to the controller, the access interface is
 an empty zero-contract implemented by the owning controller. The correct
 materialization is still `new Content(this)` with `this` typed only as that
-interface from the Content/View side. A separate dummy `ControllerAccessZero`
+interface from the Content side. A separate dummy `ControllerAccessZero`
 object is not a valid substitute for owner access.
 
 The constructor must not receive data, callbacks, handlers, flags, state, stores,
@@ -115,10 +119,18 @@ render/build parameter, component/native/platform field, composition mechanism,
 or other technology-specific entrypoint is still the same violation.
 
 If a technology materializes Content through one public runtime input
-object/value, that input must be exactly the narrow content-to-controller owner
-access contract (`IControllerAccess` or target-equivalent) and nothing else. It
-must not be a merged `IContentAccess & IControllerAccess` bundle or a general
-props/config/data/composition bag.
+object/value, that input must carry exactly one value: the owning controller
+instance typed only as the narrow content-to-controller owner access contract
+(`IControllerAccess` or target-equivalent). A target-required technical envelope
+is allowed only when it contains that single controller-typed value.
+
+Do not decompose the owner access contract into separate runtime props,
+parameters, JSX attributes, named function arguments, or an ad hoc object literal
+assembled at the render/composition call site. That is `CORE-030`.
+
+The input must not be a merged `IContentAccess & IControllerAccess` bundle, an
+access adapter/facade, a method bag, or a general props/config/data/composition
+bag.
 
 A semantic bundle with correctly named methods is not valid owner access unless
 it is the narrow `IControllerAccess` implemented by the owning controller itself.
@@ -129,14 +141,22 @@ utilities, services, stores, or platform APIs, but Content must not receive a ra
 imported function, externally owned method reference, service method, store
 action, or callback as the access method itself.
 
-If Content/View needs state, actions, data, or child view handles, it requests
+If Content needs state, actions, data, or child view handles, it requests
 them from the owning controller through the narrow access interface. The owning
 controller may then ask direct child controllers for opaque public handles and
-return those handles to its own Content/View for placement only.
+return those handles to its own Content for placement only.
+
+The reverse direction is symmetrical. When a controller uses its own
+Content, it must receive, store, and call the Content instance typed
+only as `IContentAccess`/target-equivalent. It must not receive decomposed
+content command members, method bags, facade/adapters, closure objects, concrete
+Content types, platform primitives, or objects assembled outside the
+controller/content construction boundary as substitutes for `IContentAccess`.
+That is `CORE-031`.
 
 The reverse direction is equally strict. The controller must store and use its
 content through a narrow `IContentAccess` contract, not through the concrete
-Content/View class. This is required even when the concrete content wraps a
+Content class. This is required even when the concrete content wraps a
 large platform component, widget, native view, or third-party object with many
 public methods: the controller sees only the small allowed boundary, and every
 other concrete method remains invisible.
@@ -156,7 +176,7 @@ executed by a target runtime as the visual/content entity of the node.
 
 If target syntax requires a framework component, composable, widget, route file,
 screen artifact, render function, or any equivalent renderable entrypoint, that
-artifact belongs to Content/View or to a thin framework adapter, not to the
+artifact belongs to Content or to a thin framework adapter, not to the
 controller itself.
 
 The adapter may delegate to the controller or content boundary, but it must not

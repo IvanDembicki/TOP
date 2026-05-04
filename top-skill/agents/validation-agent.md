@@ -80,6 +80,8 @@ If a discrepancy arises between this agent file and the output contract:
 - behavior preservation validation for migrated scopes with legacy tests
 - validation verdict integrity: core violations and accepted core deviations force `overall_status: fail`
 - Node/Controller semantic runtime input validation (`CORE-029`)
+- decomposed owner access input validation (`CORE-030`)
+- decomposed content access input validation (`CORE-031`)
 - shared derived fact repair direction validation: repairs must not swap `CORE-029` and Invariant 14
 - accepted deviation admissibility validation (`WF-012`)
 </validation_focus>

@@ -59,7 +59,7 @@ The owning controller asks direct child controllers for opaque public handles.
 
 Forbidden:
 - constructing data/actions/children/fragments externally and pushing them into
-  Content/View through constructors, public runtime parameters, composition
+  Content through constructors, public runtime parameters, composition
   entrypoints, parameter bags, config/options/props-like objects, callbacks,
   handlers, stores, services, or arbitrary props
 - passing concrete child components or platform child views into a TOP View

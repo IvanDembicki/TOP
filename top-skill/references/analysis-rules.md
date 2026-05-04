@@ -76,6 +76,9 @@ Required:
 - verify that the public node surface, `IContentAccess`, and `IControllerAccess` are separated, and that the public surface is not substituted by an internal access contract;
 - verify that content does not access the public node surface;
 - verify that `IContentAccess` and `IControllerAccess` are explicitly and maximally strictly typed where the language permits;
+- verify that Content receives the owning controller instance typed as
+  `IControllerAccess`/target-equivalent, not decomposed access methods, method
+  bags, facade/adapters, or inline closure objects (`CORE-030`);
 - verify that, where a separate content exists, a materialization internal access boundary is present;
 - verify that access artifacts are materialized as named contract artifacts or other explicitly designated typed boundaries, not as anonymous object shapes;
 - verify that the constructor/factory/method parameter accepting an access artifact is explicitly typed where the language permits;

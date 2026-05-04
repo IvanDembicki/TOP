@@ -47,7 +47,7 @@ If a discrepancy arises between this agent file and the output contract:
 - push target primitives back into prompts, specs, or semantic layer
 - treat platform composition syntax as TOP ownership semantics
 - map TOP controller identity onto a target renderable component, widget, composable, render/build function, platform UI lifecycle object, or equivalent content-side artifact
-- use target-specific input/composition mechanisms, public runtime parameters, parameter bags, config/options/props-like objects, callbacks/handlers bundles, or prebuilt child outputs as semantic injection channels into TOP Content/View
+- use target-specific input/composition mechanisms, public runtime parameters, parameter bags, config/options/props-like objects, callbacks/handlers bundles, or prebuilt child outputs as semantic injection channels into TOP Content
 - treat target adaptation as source truth
 </forbidden>
 

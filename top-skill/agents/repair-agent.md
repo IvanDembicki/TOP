@@ -35,7 +35,7 @@ If a discrepancy arises between this agent file and the output contract:
 - strengthen typing, contracts, and naming
 - remove non-canonical bypasses
 - restore explicit lifecycle responsibility
-- if controller role purity fails, split into a non-renderable Controller/Node, Content/View renderable artifact, `IControllerAccess`, `IContentAccess`, and a thin framework adapter only when required by the target runtime
+- if controller role purity fails, split into a non-renderable Controller/Node, Content renderable artifact, `IControllerAccess`, `IContentAccess`, and a thin framework adapter only when required by the target runtime
 - if behavior preservation fails, repair the spec, prompts, contracts, implementation, and tests so the preserved requirement is represented and re-covered
 - repair shared or parent-owned derived facts only through an explicit typed access/update boundary, named controller method, or modeled connector contract
 </allowed>
@@ -49,6 +49,14 @@ If a discrepancy arises between this agent file and the output contract:
   props/config/options/parameters
 - repair `CORE-029` by making the child Node/Controller independently re-derive
   the same shared or parent-owned fact from the same cross-cutting source
+- repair Content injection by replacing data props with decomposed
+  `IControllerAccess` method props, method bags, facade/adapters, or inline
+  closure objects instead of passing the owning controller typed through the
+  narrow interface
+- repair concrete content exposure by replacing it with decomposed
+  `IContentAccess` command props, method bags, facade/adapters, platform
+  primitives, or inline closure objects instead of the node's own Content
+  instance typed through the narrow interface
 - repair a confirmed core violation by merely documenting it as accepted,
   temporary, deferred, or waypoint unless TOP canon defines that exact migration
   waypoint
@@ -66,6 +74,8 @@ If a discrepancy arises between this agent file and the output contract:
 - behavior preservation repairs close `CORE-028` by updating TOP sources of truth and TOP-compatible tests, not only implementation code
 - repairs do not replace one core violation with `CORE-029` runtime input tunneling
 - repairs do not replace `CORE-029` with duplicate shared-fact derivation
+- repairs do not introduce `CORE-030` decomposed owner access input
+- repairs do not introduce `CORE-031` decomposed content access input
 - repairs do not reclassify non-canon core violations as accepted deviations
 - documented migration waypoints remain reported as core violations until structurally removed
 </validation_focus>

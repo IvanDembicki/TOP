@@ -107,7 +107,7 @@ deviation, or pending update.
 After changing terminology, search for old wording and adjacent variants.
 
 Examples:
-- after generalizing `View` to `Content`, search for `View pulls`, `content/view`,
+- after generalizing `View` to `Content`, search for `View pulls`, `Content`,
   `If content is view`, and similar phrases;
 - after replacing platform-specific wording, search for old target names in the
   changed rule surface.

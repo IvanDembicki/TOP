@@ -12,7 +12,7 @@ This example is derived from the node spec and implementation prompts. The code 
 - Switchable state holder with two visual child states
 - Controller / Content split with named access contracts
 - Parent-owned child view placement through the switchable mechanism
-- Pull-based Content/View access through narrow typed owner interfaces
+- Pull-based Content access through narrow typed owner interfaces
 - Content-local low-level activation subscriptions
 - Full pipeline: `spec → prompt → code`
 
@@ -147,4 +147,4 @@ For untyped library insertion where that ancestor is not guaranteed, the node mu
 
 ## Known example scope
 
-The TypeScript files in `code/` are a branch fragment extracted from the larger Tree Editor example. They demonstrate narrow Content/View access interfaces and one-argument Content constructors, but their Node constructor parent types still use runtime base types because the concrete host branch is not included in this standalone artifact. In a full TOP materialization, replace those parent types with the concrete owning parent type or a root `RootContext`/`null` case where this branch is truly the root.
+The TypeScript files in `code/` are a branch fragment extracted from the larger Tree Editor example. They demonstrate narrow Content access interfaces and one-argument Content constructors, but their Node constructor parent types still use runtime base types because the concrete host branch is not included in this standalone artifact. In a full TOP materialization, replace those parent types with the concrete owning parent type or a root `RootContext`/`null` case where this branch is truly the root.

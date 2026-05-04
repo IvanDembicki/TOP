@@ -65,23 +65,29 @@ cross-cutting source. The fact must be obtained through an explicit typed
 access/update boundary, named controller method, or modeled connector contract,
 or the repair remains blocked.
 
-Content/View receives only a narrow typed access interface implemented by its
-owning controller. All data, actions, state, and child view handles that
-Content/View needs must be requested through explicit methods on that access
+Content receives only its owning controller instance typed through the narrow
+`IControllerAccess`/target-equivalent interface. All data, actions, state, and child view handles that
+Content needs must be requested through explicit methods on that access
 interface.
 
 If a technology materializes Content through one public runtime input
-object/value, that input is valid only when it is exactly the narrow owner access
-contract (`IControllerAccess` or target-equivalent) and nothing else. It must not
-become a general props/config/data container, a merged `IContentAccess &
-IControllerAccess` bundle, or a composition channel.
+object/value, that input is valid only when it carries exactly one value: the
+owning controller instance typed only as the narrow owner access contract
+(`IControllerAccess` or target-equivalent). A target-required technical envelope
+may contain that one controller-typed value. It must not become a general
+props/config/data container, a merged `IContentAccess & IControllerAccess`
+bundle, a method bag, an adapter/facade, or a composition channel.
+
+Content must not receive decomposed access methods as separate props,
+parameters, JSX attributes, or inline closure object literals. That is
+`CORE-030`, even when the method names match `IControllerAccess`.
 
 Methods exposed through `IControllerAccess` are controller-boundary methods
 owned by the controller. The method body may delegate internally, but Content
 must not receive a raw imported function, externally owned method reference,
 service method, store action, or callback as the access method itself.
 
-If Content/View has no permitted calls to the controller, the access interface is
+If Content has no permitted calls to the controller, the access interface is
 an empty zero-contract implemented by the owning controller. It is not a separate
 dummy dependency object.
 

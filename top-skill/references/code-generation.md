@@ -119,34 +119,41 @@ derived facts, callbacks, handlers, services, stores, child fragments,
 config/options/props-like objects, parameter bags, runtime argument sets, or
 arbitrary props.
 
-Content/View constructors receive exactly one semantic argument: a narrow typed
-access interface implemented by the owning controller. The concrete controller
-must be the runtime object passed to the constructor, but Content/View must be
-typed only against the narrow access interface. If the content-to-controller
+Content constructors receive exactly one semantic argument: the owning
+controller instance typed only through the narrow `IControllerAccess` or
+target-equivalent interface. Content must be typed only against that narrow
+access interface. If the content-to-controller
 direction has no permitted methods, the zero-contract is an empty access
 interface implemented by the owning controller; generation must not create a
-separate dummy `ControllerAccessZero` object. Generated Content/View code must
+separate dummy `ControllerAccessZero` object. Generated Content code must
 not import, reference, inspect, store, or downcast to the concrete controller type.
 
 Generated code must not pass data, callbacks, handlers, flags, state, stores,
 services, child components, slots, prebuilt view fragments, platform child views,
 child view handles, child-output getter bundles, view-model objects,
 config/options/props-like objects, parameter bags, runtime argument sets, or
-arbitrary props into Content/View constructors. It must also not move the same
+arbitrary props into Content constructors. It must also not move the same
 semantic injection into any public runtime parameter, render/build parameter,
 component/native/platform field, composition mechanism, or other
 technology-specific entrypoint.
 
 If the target materializes Content through one public runtime input object/value,
-that input must be exactly the narrow content-to-controller owner access contract
-(`IControllerAccess` or target-equivalent) and nothing else. It must not become a
-general props/config/data/composition bag, a view-model/data carrier, or a merged
-`IContentAccess & IControllerAccess` bundle.
+that input must carry exactly one value: the owning controller instance typed
+only as the narrow content-to-controller owner access contract
+(`IControllerAccess` or target-equivalent). A target-required technical envelope
+is allowed only when it contains that single controller-typed value. It must not
+become a general props/config/data/composition bag, a view-model/data carrier, a
+method bag, an adapter/facade, or a merged `IContentAccess & IControllerAccess`
+bundle.
 
 Generated code must not treat an externally assembled access bundle as a valid
 replacement for `IControllerAccess`. Even if that bundle contains correctly named
 methods, it is invalid unless the runtime object is the owning controller
 instance typed only as the narrow owner access interface.
+
+Generated code must not decompose `IControllerAccess` members into separate
+runtime props/parameters, JSX attributes, named function arguments, or object
+literals assembled at a render/composition call site. This is `CORE-030`.
 
 Generated `IControllerAccess` methods must be controller-boundary methods owned
 by the controller. A controller-boundary method may delegate internally, but
@@ -181,7 +188,7 @@ must not implement a TOP controller as a target framework renderable entity,
 render/build function, route/screen component, widget/composable equivalent, or
 platform UI lifecycle object.
 
-If the target requires such an entity, generate it as Content/View or as a thin
+If the target requires such an entity, generate it as Content or as a thin
 framework-boundary adapter, not as the controller itself. The adapter may
 instantiate, locate, or delegate to the TOP branch, but it must not accumulate
 controller logic.
@@ -191,14 +198,20 @@ Generated architecture must preserve the public node surface and two distinct in
 - `IControllerAccess` for content access to the controller via a narrow private contract;
 - `IContentAccess` for controller access to content via a narrow private contract.
 
-Content/View must be constructed and stored against the narrow `IControllerAccess`
+Content must be constructed and stored against the narrow `IControllerAccess`
 contract, not against the concrete controller class. The public constructor of
-the concrete TOP Content/View receives exactly that one semantic argument.
+the concrete TOP Content receives exactly that one semantic argument.
 
-The controller must store and use content through the narrow `IContentAccess`
-contract, not through the concrete Content/View class. This protects the
-controller from accidentally depending on methods exposed by a large platform
-component, native view, widget, or third-party object wrapped inside content.
+The controller must receive, store, and use its own Content instance through
+the narrow `IContentAccess` contract, not through the concrete Content
+class. This protects the controller from accidentally depending on methods
+exposed by a large platform component, native view, widget, or third-party object
+wrapped inside content.
+
+Generated code must not replace the Content instance typed as
+`IContentAccess` with decomposed content command methods, method bags,
+facade/adapters, closure objects, platform primitives, or objects assembled
+outside the controller/content construction boundary. This is `CORE-031`.
 
 Content must not access the public node surface. Anything else is strictly prohibited.
 
@@ -274,13 +287,13 @@ convention may require one-class-per-file, separate contract files, or split con
 For one-file materialization, the order of appearance is:
 1. public controller/node class;
 2. internal access boundaries (`IContentAccess` and `IControllerAccess`, or explicit zero-contract declarations);
-3. hidden content/view implementation.
+3. hidden Content implementation.
 
 For split materialization, the same outside-to-inside dependency direction must be preserved in
 file structure and exports:
 1. public controller/node artifact;
 2. internal contract artifact(s);
-3. hidden content/view artifact(s).
+3. hidden Content artifact(s).
 
 The implementation prompt's `Expected Materialization` section must declare whether the node uses
 one-file default materialization or companion artifacts.
@@ -423,9 +436,9 @@ Typical errors include:
 - relocation performed without updating spec/prompt paths;
 - generation mixes controller and concrete content;
 - generation leaves controller code directly manipulating its own platform primitive instead of calling named `IContentAccess` commands;
-- generation passes semantic inputs into Content/View through extra constructor arguments, public runtime parameters, composition entrypoints, parameter bags, config/options/props-like objects, callbacks/handlers bundles, stores, services, child components, platform child views, child-output getter bundles, or prebuilt fragments;
-- generation types Content/View against the concrete controller or downcasts/imports back to that concrete type;
-- generation places hidden content/view declarations before the internal access boundary that stands between the controller and content;
+- generation passes semantic inputs into Content through extra constructor arguments, public runtime parameters, composition entrypoints, parameter bags, config/options/props-like objects, callbacks/handlers bundles, stores, services, child components, platform child views, child-output getter bundles, or prebuilt fragments;
+- generation types Content against the concrete controller or downcasts/imports back to that concrete type;
+- generation places hidden Content declarations before the internal access boundary that stands between the controller and content;
 - generation makes non-visual content publicly accessible;
 - generation loses the distinction between `view` and `component`.
 
@@ -436,7 +449,7 @@ Typical errors include:
 The verification loop must check not only behavior but also the architectural contract of generation:
 - whether the controller/content split is maintained;
 - whether a node with content has turned into a single mixed class;
-- whether generated declaration order follows architectural depth: controller/node first, internal access boundary artifact(s) next, hidden content/view implementation last;
+- whether generated declaration order follows architectural depth: controller/node first, internal access boundary artifact(s) next, hidden Content implementation last;
 - whether the meaning of `props.contentType` is preserved;
 - whether non-visual concrete content is exposed externally;
 - whether the rule of a single external interface for a node is violated.

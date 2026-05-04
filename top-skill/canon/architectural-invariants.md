@@ -74,15 +74,27 @@ This invariant is foundational. It is not tied to any particular language, platf
 - For a root node, the parent may be `null` or a special `RootContext`.
 - `RootContext` is only a root ownership/bootstrap marker. It must not become a generic dependency injection container and must not pass application data, callbacks, services, stores, child instances, view fragments, or arbitrary props into the tree.
 - A parent Node/Controller owns its direct children and is responsible for constructing them.
-- A Content/View constructor receives exactly one semantic argument: a narrow typed access interface implemented by its owning Node/Controller.
-- The Content/View constructor must not receive the concrete Node/Controller as its concrete class type. The runtime object must be the owning controller instance, but the Content/View must be typed only against the narrow access interface.
-- If Content/View has no permitted calls to the controller, the content-to-controller zero-contract is an empty narrow access interface implemented by the owning controller. A separate dummy `ControllerAccessZero` object is not a valid owner access object.
-- The Content/View constructor must not receive additional data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props.
+- A Content constructor receives exactly one semantic argument: the owning
+  controller instance typed only as the narrow `IControllerAccess` access
+  interface. Content must not receive any semantic value other than its
+  owning controller through that interface.
+- The Content constructor must not receive the concrete Node/Controller as its concrete class type. The runtime object must be the owning controller instance, but the Content must be typed only against the narrow access interface.
+- If Content has no permitted calls to the controller, the content-to-controller zero-contract is an empty narrow access interface implemented by the owning controller. A separate dummy `ControllerAccessZero` object is not a valid owner access object.
+- The Content constructor must not receive additional data, callbacks, handlers, flags, state, stores, services, child components, slots, prebuilt view fragments, platform child views, child view handles, child-output getter bundles, view-model objects, config/options/props-like objects, parameter bags, runtime argument sets, or arbitrary props.
 - This restriction is technology-independent. Moving injection from constructor parameters into any public runtime parameter, render/build parameter, component/native/platform field, composition mechanism, or other technology-specific entrypoint is still the same violation.
-- If a technology materializes Content through one public runtime input object/value, that input must be exactly the narrow content-to-controller owner access contract (`IControllerAccess` or target-equivalent) and nothing else. It must not be a merged `IContentAccess & IControllerAccess` bundle, a view-model/data field carrier, or a general props/config/data/composition bag.
+- If a technology materializes Content through one public runtime input object/value, that input must carry exactly one value: the owning controller instance typed only as the narrow content-to-controller owner access contract (`IControllerAccess` or target-equivalent). A target-required technical envelope is allowed only when it contains that single controller-typed value.
+- Content must not receive the members of `IControllerAccess` decomposed as separate runtime props/parameters, JSX attributes, named function arguments, or an ad hoc object literal assembled at the render/composition call site. This is `CORE-030`.
+- The owner access runtime value must be the owning controller itself typed through the narrow interface. It must not be an access adapter, facade object, externally assembled method bag, or inline closure bundle unless the target cannot pass controller identity at all; that exception must be documented as a non-final target adapter constraint and validated as a deviation, not as canonical TOP.
+- The input must not be a merged `IContentAccess & IControllerAccess` bundle, a view-model/data field carrier, or a general props/config/data/composition bag.
 - A semantic bundle with correctly named methods is not valid owner access unless it is the narrow `IControllerAccess` implemented by the owning controller itself.
 - Methods exposed through `IControllerAccess` must be controller-boundary methods owned by the controller. They may delegate internally, but a raw imported function, externally owned method reference, service method, store action, or callback must not be exposed directly to Content as the access method itself.
 - For any node with separate content, controller-to-content access must also go through a narrow `IContentAccess` or equivalent interface. The controller must store and use content through this interface, not through the concrete content class. `IContentAccess` is not a data channel into content.
+- The controller-side runtime value for that direction must be the node's own
+  Content instance typed only as `IContentAccess`/target-equivalent. The
+  controller must not receive decomposed content command members, method bags,
+  facade/adapters, closure objects, concrete Content types, platform
+  primitives, or objects assembled outside the controller/content construction
+  boundary as substitutes for `IContentAccess`. This is `CORE-031`.
 
 ### Pull direction
 
@@ -116,11 +128,11 @@ TOP spec props are declarative metadata in the TOP specification. `props.source`
 
 ### Platform mechanics clarification
 
-The phrase "exactly one semantic argument" applies to the public constructor of the concrete TOP Content/View. Inside the Content/View implementation, it may create internal platform objects or pass internal objects to protected/base constructors when required by the platform abstraction. External code must not pass platform primitives, flags, tokens, children, slots, callbacks, handlers, stores, services, parameter bags, config/options/props-like objects, child-output getter bundles, or prebuilt fragments into the TOP Content/View constructor.
+The phrase "exactly one semantic argument" applies to the public constructor of the concrete TOP Content. Inside the Content implementation, it may create internal platform objects or pass internal objects to protected/base constructors when required by the platform abstraction. External code must not pass platform primitives, flags, tokens, children, slots, callbacks, handlers, stores, services, parameter bags, config/options/props-like objects, child-output getter bundles, or prebuilt fragments into the TOP Content constructor.
 
 ### Internal access symmetry clarification
 
-The controller/content boundary is bidirectional. Content/View depends on the owning controller only through `IControllerAccess`; the controller depends on content only through `IContentAccess`.
+The controller/content boundary is bidirectional. Content depends on the owning controller only through `IControllerAccess`; the controller depends on content only through `IContentAccess`.
 
 `IControllerAccess` is the only direction through which content requests controller-owned data, state, actions, and permitted child/output handles. `IContentAccess` is the controller-to-content command/request boundary only. It must not contain view-model values, state flags, callbacks, child handles, or data fields for content to read.
 
@@ -165,7 +177,7 @@ rendering lifecycle.
 
 If a target runtime requires a renderable entrypoint, route file, component,
 widget, composable, screen artifact, render function, or equivalent executable
-render surface, that artifact belongs to Content/View or to a thin framework
+render surface, that artifact belongs to Content or to a thin framework
 adapter. It is not the TOP controller. The adapter must not accumulate
 controller logic.
 
@@ -258,7 +270,7 @@ Any other node — whether an ancestor at any level above or a sibling — does 
 A node does not "give" its view to anyone — it exposes `getView()` and the caller is bound by tree position.
 
 Permitted:
-- an owning parent controller calling `getView()` on its direct children only as part of pull-based, parent-owned materialization, then handing the opaque handles to its own content/view through an explicit local boundary for placement.
+- an owning parent controller calling `getView()` on its direct children only as part of pull-based, parent-owned materialization, then handing the opaque handles to its own Content through an explicit local boundary for placement.
 
 Forbidden:
 - calling `getView()` on a node from any position other than its direct parent;
@@ -324,9 +336,9 @@ Generated node implementation declarations must follow architectural depth from 
 
 The controller/node is the external surface of the node and must be the first declaration for that node's implementation unit.
 
-Internal access boundary artifacts stand between the controller and the hidden content/view implementation. Therefore they must be declared after the controller/node and before the content/view implementation. Both internal directions are part of this ordering rule: controller-to-content (`IContentAccess` or equivalent) and content-to-controller (`IControllerAccess` or equivalent). If one direction has no permitted calls, an explicit zero-contract must be declared according to the target technology or project convention.
+Internal access boundary artifacts stand between the controller and the hidden Content implementation. Therefore they must be declared after the controller/node and before the Content implementation. Both internal directions are part of this ordering rule: controller-to-content (`IContentAccess` or equivalent) and content-to-controller (`IControllerAccess` or equivalent). If one direction has no permitted calls, an explicit zero-contract must be declared according to the target technology or project convention.
 
-The hidden content/view implementation is the deepest implementation part and must be declared after the boundary artifact that mediates access to it.
+The hidden Content implementation is the deepest implementation part and must be declared after the boundary artifact that mediates access to it.
 
 For a one-file node implementation, the canonical order is:
 
@@ -334,15 +346,15 @@ For a one-file node implementation, the canonical order is:
 Controller/Node
 IContentAccess or technology-specific controller-to-content boundary
 IControllerAccess or technology-specific content-to-controller boundary
-Content/View
+Content
 ```
 
 If a direction is intentionally empty, the zero-contract declaration belongs in the same boundary layer.
 
-If a target technology requires separate files or a project convention uses split materialization, the same public-to-private organization must be preserved in file structure and exports: external controller/node artifact first, internal boundary artifacts next, hidden content/view implementation artifacts last.
+If a target technology requires separate files or a project convention uses split materialization, the same public-to-private organization must be preserved in file structure and exports: external controller/node artifact first, internal boundary artifacts next, hidden Content implementation artifacts last.
 
 **Violation:**
-- content/view declared before the access boundary that stands between controller and content;
+- Content declared before the access boundary that stands between controller and content;
 - `IControllerAccess` omitted silently when content can report or request semantic actions from controller;
 - raw callbacks, handlers, anonymous objects, externally assembled access bundles, parameter bags, or full controller/content references used instead of named internal contract artifacts where the technology can express them;
 - generated file organized from implementation detail outward when the technology does not require it;
@@ -491,7 +503,7 @@ branches read it. Reading a value in multiple branches does not split ownership.
 When cross-cutting state is needed by multiple children, the common ancestor
 derives it once and exposes it through explicit access methods or named update
 methods owned by the relevant controller boundary. It must not push the derived
-value into child constructors, content/view constructors, public runtime parameters,
+value into child constructors, Content constructors, public runtime parameters,
 parameter bags, config/options/props-like objects, callbacks, handlers, or prebuilt fragments. Children consume the derived value
 through explicit local access/update methods after they have been constructed at
 their tree positions; they do not independently derive the same fact from
@@ -519,7 +531,7 @@ from the same underlying source — this is a derivation duplication defect.
 The correct form: one controller derives the fact once; other controllers obtain
 the derived value through explicit access methods or named update methods after
 they have been constructed at their tree positions. The derived value must not be
-pushed through child constructors, content/view constructors, public runtime parameters,
+pushed through child constructors, Content constructors, public runtime parameters,
 parameter bags, config/options/props-like objects, callbacks, handlers, or prebuilt fragments.
 
 This invariant applies regardless of whether the derivation is cheap or expensive.
