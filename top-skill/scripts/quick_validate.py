@@ -386,7 +386,9 @@ def check_required_phrases(root):
         ("canon/architectural-invariants.md", "Controller Role Purity Invariant"),
         ("canon/core-axioms.md", "Presentation content reports intent"),
         ("canon/core-axioms.md", "controllers mutate data"),
+        ("canon/core-axioms.md", "must not derive output values"),
         ("examples/tree-editor/README.md", "canonical for top-skill 1.1.18"),
+        ("rules/pattern-recognition.md", "Output derivation inside locally implemented content"),
     ]
     errors = []
     for file_name, phrase in checks:
@@ -493,7 +495,13 @@ EXAMPLE_INVALID_PATTERN_RE = re.compile(
     r"|applyState\s*\("
     r"|renderWith\s*\("
     r"|commands and data descend"
-    r"|parent passes command",
+    r"|parent passes command"
+    r"|sourceData"
+    r"|mount\s*\([^)]*source"
+    r"|Text content format"
+    r"|__BUILD_TIME__"
+    r"|text content\s+[\"']"
+    r"|content-side derivation",
     re.IGNORECASE,
 )
 

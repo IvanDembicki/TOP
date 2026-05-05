@@ -75,12 +75,18 @@ mutate data content.
 The controller owns all decision logic.
 
 Locally implemented content only materializes a structurally static content
-shape and applies already-resolved primitive values received through its owning
-controller access contract.
+shape and applies already-resolved primitive/output values received through its
+owning controller access contract.
 
-Locally implemented content must not decide, derive, branch, select, toggle, or
-compute which structure, class/style/token, text, icon, visibility, handler,
-child output, platform primitive, representation, or capability should be used.
+Locally implemented content must not decide, derive, branch, select, toggle,
+format, concatenate, hardcode, or compute which structure, class/style/token,
+text, icon, visibility, handler, child output, platform primitive,
+representation, output value, or capability should be used.
+
+Output values include text, labels, counts, formatted strings, icon names,
+style/class/token names, visibility tokens, handler choices, and any
+representation value. They are resolved by the owning controller before content
+asks for them.
 
 Any conditional selection construct inside locally implemented content is a hard
 boundary violation when it participates in selection or derivation, including

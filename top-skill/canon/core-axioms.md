@@ -45,16 +45,21 @@ Canonical refactoring: the node becomes an explicit switchable holder with child
 ## Locally implemented content static materialization
 
 Locally implemented content is static implementation material, not a decision
-layer.
+layer. Locally implemented content must not derive output values.
 
-It must not contain conditional selection logic of any kind. It must not decide,
-derive, branch, select, toggle, or compute which structure, class/style/token,
-text, icon, visibility, handler, child output, platform primitive,
-representation, or capability should be used.
+It must not contain conditional selection logic of any kind and must not derive
+output values. It must not decide, derive, branch, select, toggle, format,
+concatenate, hardcode, or compute which structure, class/style/token, text,
+icon, visibility, handler, child output, platform primitive, representation,
+output value, or capability should be used.
 
 Locally implemented content may only materialize a structurally static content
 shape and apply already-resolved primitive values received through its owning
 controller access contract.
+
+Even simple formatting or concatenation belongs to the owning controller. The
+controller resolves the final primitive/output value; locally implemented
+content only asks for that value and applies it.
 
 Controller must not push presentation state or imperative mutation commands into
 locally implemented content. Presentation changes flow as controller state

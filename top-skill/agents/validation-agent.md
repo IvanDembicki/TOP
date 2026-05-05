@@ -77,6 +77,7 @@ If a discrepancy arises between this agent file and the output contract:
 - controller role purity validation
 - content validation
 - locally implemented content conditional selection validation (`CORE-015`)
+- locally implemented content output-derivation validation (`CORE-015`)
 - controller-to-content presentation push validation (`CORE-015`)
 - controller validation
 - lifecycle validation

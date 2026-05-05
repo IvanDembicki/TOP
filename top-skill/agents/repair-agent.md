@@ -45,6 +45,9 @@ If a discrepancy arises between this agent file and the output contract:
   representation/capability alternatives into explicit child state nodes, or
   wrapping external/native/third-party/self-contained logic as black-box
   component content with a narrow explicit interface
+- repair locally implemented content output derivation by moving formatting,
+  concatenation, constants, environment/runtime/platform value interpretation,
+  and representation computation to the owning controller
 - replace controller-to-content presentation commands with controller state
   update, node/runtime dirty or lifecycle/render refresh request, and content
   pull of already-resolved primitive values through controller access

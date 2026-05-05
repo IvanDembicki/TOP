@@ -62,12 +62,15 @@ rules:
 - name child-output access methods by semantic branch/output, for example `getAccountIdentityView()`; do not require `Handle`/`ViewHandle`, do not use `slot`, and avoid generic `children`/`render`/`builder` names
 - do not generate conditional selection logic inside locally implemented
   content. Locally implemented content must not decide, derive, branch, select,
-  toggle, or compute which structure, class/style/token, text, icon, visibility,
-  handler, child output, platform primitive, representation, or capability
-  should be used.
+  toggle, format, concatenate, hardcode, or compute which structure,
+  class/style/token, text, icon, visibility, handler, child output, platform
+  primitive, representation, output value, or capability should be used.
 - generated locally implemented content may only materialize a structurally
-  static content shape and apply already-resolved primitive values received
-  through the owning controller access contract
+  static content shape and apply already-resolved primitive/output values
+  received through the owning controller access contract
+- do not generate content-side output derivation from constants, runtime data,
+  props, config, environment values, platform values, or assets. The owning
+  controller resolves the final primitive/output value.
 - do not generate `if`/`else`, `switch`/`case`, ternary selection, conditional
   rendering, conditional returns, multiple return branches, `&&`/`||`
   conditional selection, `match`/`when`/guard branches, or equivalent

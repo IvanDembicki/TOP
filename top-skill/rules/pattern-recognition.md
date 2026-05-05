@@ -35,6 +35,13 @@ construct is a candidate `CORE-015` signal when it participates in selecting or
 deriving structure, class/style/token, text, icon, visibility, handler, child
 output, platform primitive, representation, or capability.
 
+Output derivation inside locally implemented content is also a candidate
+`CORE-015` signal even when no branch is present. Content-side formatting,
+string concatenation, hardcoded display values, style/class/token selection,
+icon selection, visibility value construction, handler choice, or representation
+computation means content is deriving output instead of applying an
+already-resolved primitive from controller access.
+
 Platform-neutral construct signals:
 - `if` / `else`
 - `switch` / `case`
@@ -51,6 +58,8 @@ when the construct participates in content-local selection or derivation.
 Canonical repair:
 - primitive value derivation moves to the owning controller and is requested as
   an already-resolved primitive through controller access;
+- output formatting, concatenation, constants, runtime/environment/platform
+  values, and asset-derived display values move to the owning controller;
 - structural, visibility, handler, representation, or capability alternatives
   become explicit child state nodes;
 - external, native, third-party, or self-contained logic is wrapped as

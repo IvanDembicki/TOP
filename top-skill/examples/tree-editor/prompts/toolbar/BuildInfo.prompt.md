@@ -6,20 +6,27 @@ sourcePath: src/toolbar/build_info.top
 
 ## 1. Node Identity and Role
 
-BuildInfo is an informational leaf node in the editor toolbar. It renders the build timestamp and has no interaction behavior.
+BuildInfo is an informational leaf node in the editor toolbar. It materializes a
+static build-information label and has no interaction behavior.
 
 ## 2. Responsibility
 
-- Create and own a small visual label for build information.
-- Display the current build timestamp provided by the platform build constant.
+- Own the build-information label structure.
+- Resolve the final build-information text in the controller.
+- Expose the already-resolved build-information text through controller access
+  for locally implemented content to apply during materialization/refresh.
 
 ## 3. Inputs and Events
 
-None.
+- `getBuildInfoText()` - returns the final already-resolved display text.
+
+No user interaction events.
 
 ## 4. State Ownership
 
-Owns no runtime state. The displayed value is initialized from `__BUILD_TIME__` when the content boundary is constructed.
+Owns no runtime state. The build metadata source is provided by the declared
+build/asset adapter outside locally implemented content. The controller resolves
+the final primitive text value.
 
 ## 5. Child Interaction Rules
 
@@ -27,13 +34,16 @@ No children.
 
 ## 6. Lifecycle
 
-1. Constructor: creates `BuildInfoContent` and installs it through `setContent(...)`.
-2. `BuildInfoContent` creates the platform visual content for the build info label.
-3. `refresh()` does nothing.
+1. Constructor creates `BuildInfoContent` and installs it through
+   `IContentAccess`.
+2. `BuildInfoContent` creates static label content.
+3. Refresh/materialization pulls `getBuildInfoText()` through
+   `BuildInfoControllerAccess` and applies the already-resolved primitive text
+   value.
 
 ## 7. Side Effects
 
-None beyond rendering the build timestamp text into its own content.
+None.
 
 ## 8. Constraints and Invariants
 
@@ -41,6 +51,8 @@ None beyond rendering the build timestamp text into its own content.
 - Must not handle user interaction.
 - Must not own or change editor mode.
 - Must not trigger tree refresh.
+- Locally implemented content must not format, concatenate, or derive the build
+  text from constants, runtime values, environment values, or platform values.
 
 ## 9. Non-Goals
 
@@ -50,10 +62,9 @@ None beyond rendering the build timestamp text into its own content.
 
 ## 10. Platform Implementation Notes
 
-- Visual element: `span` with CSS class `build-info`.
-- Text content format: `build: ` plus `__BUILD_TIME__`.
-- Extends `DomNode`.
-- Content extends `DomContent`.
+- Visual primitive: static build-information label element.
+- The controller may resolve the final text from target-provided build metadata.
+  Content only applies the returned `getBuildInfoText()` value.
 - Constructor materialization: `this.setContent(new BuildInfoContent(this))`.
 
 ## 11. Expected Materialization
@@ -61,9 +72,8 @@ None beyond rendering the build timestamp text into its own content.
 - Primary artifact stem: `src/toolbar/build_info.top`
 - Public node class: `BuildInfoNode`
 - Base class / base role: `DomNode`
-
 - Materialization policy: one-file default
 - Internal contracts:
-  - Controller-to-content: BuildInfoContentAccess
-  - Content-to-controller: BuildInfoControllerAccess empty zero-contract interface implemented by the owning node/controller
+  - Controller-to-content: `BuildInfoContentAccess`
+  - Content-to-controller: `BuildInfoControllerAccess`
 - Companion artifact stems: none

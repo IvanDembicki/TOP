@@ -221,15 +221,21 @@ the result is non-canonical and must be rejected.
 
 ## Locally implemented content conditional selection
 
-Locally implemented content must contain no conditional selection logic.
+Locally implemented content must contain no conditional selection logic and must
+not derive output values.
 
-It must not decide, derive, branch, select, toggle, or compute which structure,
-class/style/token, text, icon, visibility, handler, child output, platform
-primitive, representation, or capability should be used.
+It must not decide, derive, branch, select, toggle, format, concatenate,
+hardcode, or compute which structure, class/style/token, text, icon,
+visibility, handler, child output, platform primitive, representation, output
+value, or capability should be used.
 
 Locally implemented content may only materialize a structurally static content
 shape and apply already-resolved primitive values received through its owning
 controller access contract.
+
+Constants, runtime values, environment values, platform values, asset values, or
+props/config values are not a loophole. If they affect displayed/output values,
+the owning controller resolves the final primitive first.
 
 Controller must not imperatively command, mutate, update, show, hide,
 configure, or push presentation state into locally implemented content. The

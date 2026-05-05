@@ -105,9 +105,12 @@ A result is not valid until all checklist items pass.
 - locally implemented content contains no conditional selection logic
 - locally implemented content does not select or derive structure,
   class/style/token, text, icon, visibility, handler, child output, platform
-  primitive, representation, or capability
-- locally implemented content applies only already-resolved primitive values
-  received through its owning controller access contract
+  primitive, representation, output value, or capability
+- locally implemented content does not format, concatenate, hardcode, or derive
+  displayed/output values from constants, runtime data, props, config,
+  environment values, platform values, assets, or other local sources
+- locally implemented content applies only already-resolved primitive/output
+  values received through its owning controller access contract
 
 ---
 

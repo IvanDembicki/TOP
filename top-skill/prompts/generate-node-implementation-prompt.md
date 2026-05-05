@@ -106,8 +106,8 @@ Also specify:
 - If the node has a separate content, the controller must not work with the concrete implementation bypassing the content object and its external interface. A public/base-class primitive getter does not legalize such a bypass.
 - If the controller needs a presentation change, the prompt must require
   controller-owned state plus node/runtime dirty or lifecycle/render refresh.
-  Locally implemented content must then pull already-resolved primitive values
-  through controller access during materialization or refresh. Do not require
+  Locally implemented content must then pull already-resolved primitive/output
+  values through controller access during materialization or refresh. Do not require
   named `IContentAccess` presentation command methods. Generated controller code
   must not use the node's own render/view/native primitive, its platform API, or
   an equivalent exposed primitive handle for direct platform primitive access.
@@ -116,6 +116,12 @@ Also specify:
   `this.getView().addEventListener`, `this.getView().setAttribute`,
   `querySelector`, `content.getView()` — use the equivalent native/render
   primitive handle on other platforms.
+- The prompt must prohibit locally implemented content from deriving output
+  values. Text formatting, concatenation, hardcoded display values,
+  style/class/token selection, icon selection, visibility selection, handler
+  selection, and output computation from constants, runtime data, props,
+  config, environment values, platform values, or assets belong to the owning
+  controller.
 - The prompt must require generated declarations/materialization to follow architectural depth from outside to inside: controller/node first, internal access boundary artifact(s) next, hidden Content implementation last. In a one-file implementation this means `Controller/Node` -> `IContentAccess` + `IControllerAccess` (or explicit zero-contracts) -> `Content`. In split-file or one-class-per-file targets, the same dependency direction must be preserved across files and the companion artifact stems must be declared in Expected Materialization.
 - The prompt must include mandatory post-generation validation based on `references/node-validation-rules.md`.
 

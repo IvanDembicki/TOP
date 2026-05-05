@@ -79,11 +79,14 @@ Check:
   visibility, handler, child output, platform primitive, representation, or
   capability;
 - confirmation that locally implemented content materializes a structurally
-  static content shape and applies only already-resolved primitive values
+  static content shape and applies only already-resolved primitive/output values
   received through the owning controller access contract;
+- confirmation that locally implemented content does not format, concatenate,
+  hardcode, or derive output values from constants, runtime data, props, config,
+  environment values, platform values, assets, or other local sources;
 - confirmation that locally implemented content does not derive presentation
   values such as text, class/style/token, icon, visibility, handler, child
-  output, platform primitive, or representation;
+  output, platform primitive, representation, or output value;
 - confirmation that controller does not push show/hide/update/apply-state/
   class/style/render-with commands, presentation state, or imperative mutations
   into locally implemented content;
@@ -127,6 +130,7 @@ Categorize them as:
 - decomposed content access input into Controller (`CORE-031`);
 - context data injection into TOP objects (`CORE-032`);
 - locally implemented content conditional selection logic (`CORE-015`);
+- locally implemented content output derivation (`CORE-015`);
 - controller-to-content presentation command or mutation push into locally
   implemented content (`CORE-015`);
 - invalid shared derived fact repair that swaps `CORE-029` with Invariant 14 or Invariant 14 with `CORE-029`;

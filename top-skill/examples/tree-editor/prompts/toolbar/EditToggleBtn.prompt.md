@@ -6,7 +6,11 @@ sourcePath: src/toolbar/edit_toggle_btn.top
 
 ## 1. Node Identity and Role
 
-EditToggleBtn is a logical switchable node in the toolbar that controls which visual sub-state of the mode toggle action is currently mounted. It has two visual sub-state children: one for view mode (showing the edit-mode action label) and one for edit mode (showing the view-mode action label). The active child is selected from the current editor mode.
+EditToggleBtn is a logical switchable node in the toolbar that controls which
+visual sub-state of the mode toggle action is currently mounted. It has two
+visual sub-state children: one for view mode and one for edit mode. Each state
+controller resolves its own final action label; locally implemented content only
+pulls and applies that already-resolved value.
 
 ## 2. Responsibility
 

@@ -1,13 +1,13 @@
 {
   "type": "App",
-  "doc": "Application root model. Intended runtime composition root; current target may bootstrap TreeEditor directly until AppNode is materialized.",
+  "doc": "Application root model. Intended runtime composition root; current target may attach TreeEditor through a thin host bootstrap adapter until AppNode is materialized. Semantic data is initialized through the declared data/asset branch, not passed into TreeEditor runtime entrypoints.",
   "props": {
     "materializationPolicy": "runtime-composition-root-pending"
   },
   "children": [
     {
       "type": "TreeEditor",
-      "doc": "Root node of the executable tree editor branch. Mounts the editor into a host container, owns the toolbar, mode holder, and pane, and exposes resolved editor state through explicit contracts.",
+      "doc": "Root node of the executable tree editor branch. Attaches the editor to a host boundary, owns the toolbar, mode holder, and pane, and exposes resolved editor state and data through explicit contracts.",
       "prompt": "prompts/TreeEditor.prompt.md",
       "props": {
         "dir": ".",
@@ -31,7 +31,7 @@
               "children": [
                 {
                   "type": "EditToggleBtnViewModeState",
-                  "doc": "Default visual state of EditToggleBtn. Owns the 'Edit mode' action content. Its content owns the low-level activation subscription and forwards a semantic toggle request to TreeEditor.",
+                  "doc": "Default visual state of EditToggleBtn. Owns the edit-action structure, resolves its final action label, and forwards semantic toggle requests to TreeEditor.",
                   "prompt": "prompts/toolbar/EditToggleBtnViewModeState.prompt.md",
                   "props": {
                     "contentType": "view"
@@ -39,7 +39,7 @@
                 },
                 {
                   "type": "EditToggleBtnEditModeState",
-                  "doc": "Edit visual state of EditToggleBtn. Owns the 'View mode' action content. Its content owns the low-level activation subscription and forwards a semantic toggle request to TreeEditor.",
+                  "doc": "Edit visual state of EditToggleBtn. Owns the view-action structure, resolves its final action label, and forwards semantic toggle requests to TreeEditor.",
                   "prompt": "prompts/toolbar/EditToggleBtnEditModeState.prompt.md",
                   "props": {
                     "contentType": "view"
@@ -49,7 +49,7 @@
             },
             {
               "type": "BuildInfo",
-              "doc": "Displays the build timestamp. Informational leaf node, no interaction.",
+              "doc": "Displays controller-resolved build information text. Informational leaf node, no interaction.",
               "prompt": "prompts/toolbar/BuildInfo.prompt.md",
               "props": {
                 "contentType": "view"
@@ -134,7 +134,7 @@
       "children": [
         {
           "type": "DemoTreeData",
-          "doc": "Demo source tree data used by the application entry point.",
+          "doc": "Demo source tree data initialized through the data/asset branch or bootstrap adapter. It is not passed as a semantic packet into TreeEditor.",
           "props": {
             "contentType": "data",
             "assetPath": "assets/demo-tree.json",

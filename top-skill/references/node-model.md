@@ -46,12 +46,13 @@ The controller is the sole external interface of the node.
 Node-level logic must reside in the controller.
 Content is permitted in two forms:
 - **locally implemented static materialization** — content materializes a
-  structurally static content shape and applies already-resolved primitive
-  values received through its owning controller access contract. It contains no
-  conditional selection logic of any kind and must not decide, derive, branch,
-  select, toggle, or compute which structure, class/style/token, text, icon,
-  visibility, handler, child output, platform primitive, representation, or
-  capability should be used.
+  structurally static content shape and applies already-resolved
+  primitive/output values received through its owning controller access
+  contract. It contains no conditional selection logic of any kind and must not
+  decide, derive, branch, select, toggle, format, concatenate, hardcode, or
+  compute which structure, class/style/token, text, icon, visibility, handler,
+  child output, platform primitive, representation, output value, or capability
+  should be used.
 - **black box with an explicit interface** — content encapsulates external,
   native, third-party, or self-contained logic as a black box; the controller
   sees only the explicit interface via `IContentAccess`; the internal
@@ -176,8 +177,9 @@ not to controller identity.
 Locally implemented content of the given node.
 It is subject to the internal rules of the node and is not an independent
 external system. It is static implementation material, not a decision-making
-layer: it may apply already-resolved primitive values, but it must not contain
-conditional selection logic.
+layer: it may apply already-resolved primitive/output values, but it must not
+contain conditional selection logic, formatting, concatenation, hardcoded
+display values, or output derivation.
 
 ### 2.2. `component`
 Content of the given node, treated as a black box.

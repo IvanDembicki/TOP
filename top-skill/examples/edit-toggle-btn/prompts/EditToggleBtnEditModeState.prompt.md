@@ -10,7 +10,9 @@ EditToggleBtnEditModeState is the last child of EditToggleBtn. It represents the
 
 ## 2. Responsibility
 
-- Create and own the "View mode" action content.
+- Create and own the view-action content structure.
+- Resolve the final action label in the controller and expose it through
+  controller access.
 - Own the low-level activation subscription inside its content boundary.
 - Forward the semantic mode-switch request through the controller path; content must not decide editor behavior.
 - Delegate mode-switch requests through the public TreeEditor method `toggleEditMode()`.
@@ -18,10 +20,12 @@ EditToggleBtnEditModeState is the last child of EditToggleBtn. It represents the
 ## 3. Inputs and Events
 
 - User activation → calls `this._editor.toggleEditMode()`.
+- `getActionLabelText()` - returns the already-resolved action label text.
 
 ## 4. State Ownership
 
-Owns no editor mode state. This is a visual/action state node selected by EditToggleBtn.
+Owns no editor mode state. This is a visual/action state node selected by
+EditToggleBtn. The final action label is a controller-resolved primitive value.
 
 ## 5. Child Interaction Rules
 
@@ -44,6 +48,7 @@ Has no child nodes.
 - Must locate `_editor` via `findUpByType(TreeEditorNode)` captured once in the constructor.
 - Must not call EditorModeHolder directly.
 - Must not store the editor mode state locally.
+- Must not let locally implemented content derive or hardcode the visible label.
 - Must not mount or unmount itself manually in `onOpen()` / `onClose()`.
 - Initial default placement by the parent may not call `onOpen()`, so the generated implementation must ensure the action control can receive user activations when it is placed.
 
@@ -55,7 +60,9 @@ Has no child nodes.
 
 ## 10. Platform Implementation Notes
 
-- Visual element: `button` with CSS classes `edit-toggle-btn-state active`, text content "View mode".
+- Visual primitive: static action element.
+- Content pulls `getActionLabelText()` and applies the already-resolved label
+  text. It does not format, concatenate, hardcode, or choose the text.
 - Click request: content forwards a semantic request to the controller access contract; the node calls `this._editor.toggleEditMode()`.
 - Extends `DomNode`.
 

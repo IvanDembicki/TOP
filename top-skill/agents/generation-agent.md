@@ -47,8 +47,11 @@ If a discrepancy arises between this agent file and the output contract:
   and connectors or black-box boundaries receive their explicit boundary
   interface
 - generate locally implemented content as structurally static materialization
-  that applies only already-resolved primitive values received through owning
-  controller access
+  that applies only already-resolved primitive/output values received through
+  owning controller access
+- keep text formatting, string concatenation, hardcoded display values,
+  style/class/token selection, icon selection, visibility selection, handler
+  selection, and output computation out of locally implemented content
 - generate presentation changes as controller state updates plus node/runtime
   dirty or lifecycle/render refresh, followed by content pulling already-resolved
   primitive values through controller access

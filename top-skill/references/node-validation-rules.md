@@ -176,16 +176,19 @@ Required checks:
 - locally implemented content contains no conditional selection logic of any
   kind;
 - locally implemented content does not decide, derive, branch, select, toggle,
-  or compute which structure, class/style/token, text, icon, visibility,
-  handler, child output, platform primitive, representation, or capability
-  should be used;
+  format, concatenate, hardcode, or compute which structure, class/style/token,
+  text, icon, visibility, handler, child output, platform primitive,
+  representation, output value, or capability should be used;
 - locally implemented content has no `if`/`else`, `switch`/`case`, ternary,
   conditional rendering, conditional return, multiple return branch, `&&`/`||`
   conditional selection, `match`/`when`/guard branch, or equivalent construct
   that participates in selection or derivation;
 - locally implemented content materializes a structurally static content shape
-  and applies only already-resolved primitive values received through its owning
-  controller access contract;
+  and applies only already-resolved primitive/output values received through its
+  owning controller access contract;
+- locally implemented content does not derive output values from constants,
+  runtime data, props, config, environment values, platform values, assets, or
+  other local sources;
 - controller does not push presentation state or imperative mutation commands
   into locally implemented content;
 - data-node controller domain methods such as `setAge(value)`,
@@ -197,13 +200,15 @@ Required checks:
   directly;
 - controller changes its own state and marks the node/content/runtime dirty or
   requests lifecycle/render refresh through the node/runtime mechanism;
-- content may execute low-level platform commands on its own implementation material, including subscribe/unsubscribe and analogous platform operations, when those commands are part of content materialization or are requested through the content boundary;
+- content may execute low-level platform operations on its own implementation material, including subscribe/unsubscribe, disposal, local event handling, target-local mechanics, and applying already-resolved primitive values during materialization/refresh. These operations must not encode presentation decisions or receive controller-pushed presentation commands;
 - content does not make lifecycle and structural decisions;
 - content does not interpret its own events as system commands.
 
 Canonical correction direction:
 - move primitive value derivation or selection to the owning controller and let
   content request only the already-resolved value through controller access;
+- move output formatting, concatenation, constant-based display values, and
+  runtime/platform/environment-derived output values to the owning controller;
 - split structural, element, handler, visibility, representation, or capability
   alternatives into explicit child state nodes;
 - wrap external, native, third-party, or self-contained logic as black-box

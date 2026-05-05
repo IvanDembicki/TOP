@@ -14,9 +14,10 @@ holder, and pane.
 ## 2. Responsibility
 
 - Provide the top-level editor content container.
-- Accept `mount(container, sourceData)` as the current host bootstrap boundary.
-- Store the source tree record for the editor branch and expose it to EditorPane
-  through a narrow controller/domain method.
+- Attach its opaque content handle to the host boundary through the current
+  bootstrap adapter.
+- Pull the root tree record through the declared demo-data/asset branch contract
+  and expose it to EditorPane through a narrow controller/domain method.
 - Own drag session state for the currently dragged TreeItem controller.
 - Expose `isEditMode` as a derived read-only property from EditorModeHolder.
 - Expose already-resolved editor presentation tokens through controller access
@@ -26,10 +27,11 @@ holder, and pane.
 
 ## 3. Inputs and Events
 
-- `mount(container, sourceData)` - attaches the editor opaque content handle to
-  the host container and stores `sourceData` as TreeEditor-owned branch data.
+- `attachToHost(hostBoundary)` - attaches the editor opaque content handle to
+  the host integration boundary. It does not receive semantic data.
 - `getRootRecord()` - returns the current root tree record to EditorPane or
-  RootItemHolder through the allowed direct-child chain.
+  RootItemHolder through the allowed direct-child chain. The record is pulled
+  from the declared data/asset context, not injected through this node API.
 - `setDraggedItem(item)` / `getDraggedItem()` / `clearDraggedItem()` - manage
   the current drag session.
 - `requestEditMode(value)` - called by editor mode state controllers. Updates
@@ -40,7 +42,8 @@ holder, and pane.
 
 ## 4. State Ownership
 
-- `rootRecord` - source tree record for this editor branch.
+- `rootRecord` - resolved root record pulled through the declared data/asset
+  context.
 - `draggedItem` - current TreeItem controller being dragged, or null.
 - `isEditMode` - derived live from EditorModeHolder, never cached.
 - Editor-level presentation tokens are resolved by the controller and pulled by
@@ -55,8 +58,9 @@ TreeEditor has exactly three direct children:
 
 Child constructors receive only TreeEditor as parent/context. TreeEditor exposes
 `getRootRecord()`, `isEditMode`, drag-session methods, and refresh methods
-through its controller/domain surface. It does not pass source data, mode flags,
-callbacks, config, or presentation values into child constructors.
+through its controller/domain surface. It does not receive or pass source data,
+mode flags, callbacks, config, or presentation values through constructors or
+runtime entrypoints.
 
 ## 6. Lifecycle
 
@@ -64,15 +68,16 @@ callbacks, config, or presentation values into child constructors.
 2. Constructor creates content typed through `IContentAccess`.
 3. `buildChildren()` creates the three direct children and places their opaque
    handles through parent-owned materialization.
-4. `mount(container, sourceData)` stores the root record, attaches the editor
-   opaque handle to the host container, and requests refresh/materialization of
-   the pane branch.
+4. `attachToHost(hostBoundary)` attaches the editor opaque handle to the host
+   boundary and requests refresh/materialization of the pane branch. Raw demo
+   data is initialized outside the TOP node API through the declared data/asset
+   bootstrap adapter.
 5. `refreshAll()` performs a synchronous depth-first refresh request.
 
 ## 7. Side Effects
 
-- Host attachment during `mount`.
-- Subtree refresh after source data, mode state, drag state, or tree structure
+- Host attachment during `attachToHost`.
+- Subtree refresh after data context, mode state, drag state, or tree structure
   changes.
 
 ## 8. Constraints and Invariants
@@ -80,12 +85,13 @@ callbacks, config, or presentation values into child constructors.
 - TreeEditor does not mutate its presentation content to show/hide/update mode
   state. It resolves presentation tokens and requests refresh.
 - TreeEditor does not pass data/config/callback/state packets into children.
+- TreeEditor public runtime entrypoints do not receive semantic data packets.
 - The host container is an integration boundary, not a TOP child.
 - `isEditMode` is derived live from EditorModeHolder.
 
 ## 9. Non-Goals
 
-- Does not serialize changes back to `sourceData`.
+- Does not serialize changes back to the demo asset/data branch.
 - Does not manage scroll position.
 - Does not own item-level expand/collapse state.
 
@@ -95,6 +101,10 @@ callbacks, config, or presentation values into child constructors.
   controller tokens.
 - A DOM target may attach the editor opaque handle using host integration
   mechanics such as replacing the host's single child.
+- If demo JSON is loaded by target startup code, that loader is an external
+  bootstrap adapter. It initializes the data/asset branch through an explicit
+  data-controller contract before or alongside TreeEditor attachment; it is not
+  a TreeEditor runtime parameter.
 - Edit-mode styling is an already-resolved primitive token pulled by content
   through controller access.
 - `refreshAll()` is a synchronous recursive walk.

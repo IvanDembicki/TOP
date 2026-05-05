@@ -261,13 +261,20 @@ Content creates and encapsulates the concrete implementation material.
 
 Locally implemented content must be structurally and decisionally static.
 It may only materialize a structurally static content shape and apply
-already-resolved primitive values received through its owning controller access
-contract.
+already-resolved primitive/output values received through its owning controller
+access contract.
 
 Generated locally implemented content must not contain conditional selection
-logic. It must not decide, derive, branch, select, toggle, or compute which
-structure, class/style/token, text, icon, visibility, handler, child output,
-platform primitive, representation, or capability should be used.
+logic or output derivation. It must not decide, derive, branch, select, toggle,
+format, concatenate, hardcode, or compute which structure, class/style/token,
+text, icon, visibility, handler, child output, platform primitive,
+representation, output value, or capability should be used.
+
+Generation must not put output derivation inside locally implemented content.
+This includes text formatting, string concatenation, hardcoded display values,
+style/class/token selection, icon selection, visibility selection, handler
+selection, representation computation, or output computation from constants,
+runtime data, props, config, environment values, platform values, or assets.
 
 Forbidden generated constructs inside locally implemented content include
 `if`/`else`, `switch`/`case`, ternary selection, conditional rendering,
@@ -283,10 +290,11 @@ Generation repairs:
 - external, native, third-party, or self-contained logic is wrapped as
   black-box component content with a narrow explicit interface.
 
-Ordinary content may execute low-level platform commands that belong to its own concrete implementation:
+Ordinary content may execute low-level platform operations that belong to its own concrete implementation:
 - subscribe / unsubscribe on its own platform primitive;
 - attach / detach local platform callbacks for its own primitive;
 - respond to platform events by translating them into narrow calls to `IControllerAccess`.
+- apply already-resolved primitive values during materialization/refresh.
 
 Ordinary content must not contain:
 - architectural event interpretation;

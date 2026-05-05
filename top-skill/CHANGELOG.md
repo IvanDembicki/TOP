@@ -7,6 +7,21 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.19] — 2026-05-05
+
+- Tightened locally implemented content static materialization so content must
+  not derive output values by formatting, concatenating, hardcoding, or
+  computing text, labels, style/class/token names, icons, visibility,
+  handlers, representation values, or other output primitives.
+- Corrected the tree-editor canonical example: BuildInfo and toolbar action
+  labels now pull controller-resolved output values, and TreeEditor no longer
+  receives source data through a TOP runtime entrypoint.
+- Clarified that presentation content executes only target-local materialization,
+  refresh, disposal, and event mechanics, not controller-requested presentation
+  commands through `IContentAccess`.
+- Extended quick validation example scanning with platform-neutral candidates
+  for source-data runtime injection and content-side output derivation wording.
+
 ## [1.1.18] — 2026-05-05
 
 - Reconciled the event/request model with context attachment: semantic

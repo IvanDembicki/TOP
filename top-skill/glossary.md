@@ -46,8 +46,8 @@ Ordinary content has no architectural will and does not interact with the outsid
 ## 4.1. `IControllerAccess`
 
 **`IControllerAccess`** — the private protocol for content access to the controller. Through it, content does not receive the full public node surface, but only a narrow, permitted internal access contract.
-Through it, content receives only a narrow, explicitly permitted, and strictly limited access to the data and actions of the controller
-that are genuinely needed for building, updating, and handling content's own events.
+Through it, content receives only a narrow, explicitly permitted, and strictly limited access to already-resolved primitive/output values and semantic event/request methods
+that are genuinely needed for materialization, refresh, and handling content's own events.
 
 `IControllerAccess`:
 - is not an external API of the node;
@@ -65,6 +65,11 @@ If a node has a separate content-class/object, an explicit `IControllerAccess` i
 **`IContentAccess`** — the private protocol for controller access to content. Through it, the controller does not gain access to arbitrary internals of content, but only to the narrow permitted internal access surface.
 Through it, the controller receives only explicitly permitted access to content,
 necessary for obtaining the root view/content result, lifecycle operations, and other strictly permitted internal actions.
+For locally implemented presentation content it is not a presentation command
+channel and must not carry show/hide/update/set/apply/render instructions or
+resolved presentation state. Data content has a separate narrow exception: the
+owning data controller may mutate its own private data content through an
+internal storage boundary.
 
 `IContentAccess`:
 - is not an external API of the node;

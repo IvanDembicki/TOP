@@ -77,12 +77,17 @@ Canonical repair for context data injection:
 - Content does not manage lifecycle.
 - Content does not know or use the full public node surface directly; it interacts with the controller only through `IControllerAccess`.
 - Locally implemented content must contain no conditional selection logic. It
-  must not decide, derive, branch, select, toggle, or compute which structure,
-  class/style/token, text, icon, visibility, handler, child output, platform
-  primitive, representation, or capability should be used.
+  must not decide, derive, branch, select, toggle, format, concatenate,
+  hardcode, or compute which structure, class/style/token, text, icon,
+  visibility, handler, child output, platform primitive, representation, output
+  value, or capability should be used.
 - Locally implemented content may only materialize a structurally static content
   shape and apply already-resolved primitive values received through its owning
   controller access contract.
+- Locally implemented content must not derive output values from constants,
+  runtime data, props, config, environment values, platform values, assets, or
+  other local sources. The owning controller resolves the final primitive/output
+  value and exposes it through controller access.
 - Controller must not imperatively command, mutate, update, show, hide,
   configure, or push presentation state into locally implemented content.
 - Controller-to-content access through `IContentAccess` is lifecycle and
@@ -105,7 +110,7 @@ Canonical repair for context data injection:
   `match`/`when`/guard branch, or equivalent conditional construct inside
   locally implemented content is a hard `CORE-015` validation error when it
   participates in selection or derivation.
-- Content may execute low-level platform commands on its own implementation material, including subscribe/unsubscribe and analogous operations, but it must not interpret those operations as architectural decisions or use them as an external communication channel.
+- Content may execute low-level platform operations on its own implementation material, including subscribe/unsubscribe, disposal, local event handling, target-local mechanics, and applying already-resolved primitive values during materialization/refresh. These operations must not encode presentation decisions, accept controller-pushed presentation commands, or act as an external communication channel.
 
 ## Semantic event/request validation
 - Locally implemented content reports semantic intent to its owning controller
@@ -281,7 +286,7 @@ Classification: `skill_convention_violation`
 - Locally implemented content conditional selection logic is a hard validation
   error (`CORE-015`).
 - There is no presentational exception. Visibility toggles, styling decisions,
-  formatting decisions, text/icon selection, handler selection, conditional
+  formatting/concatenation decisions, text/icon selection, handler selection, conditional
   child output, conditional platform primitive selection, and structural
   selection are controller/tree decisions, not content decisions.
 - Low-level platform-command execution inside content is permitted only when it
@@ -290,6 +295,9 @@ Classification: `skill_convention_violation`
   `IControllerAccess`.
 - If locally implemented content needs an already-resolved primitive, it must
   request that primitive through the owning controller access contract.
+- If locally implemented content forms a displayed/output value from constants,
+  runtime data, props, config, environment values, asset values, or platform
+  values, classify it as content-side output derivation (`CORE-015`).
 - Controller must update its own state and mark the node/content/runtime dirty
   or request lifecycle/render refresh through the node/runtime mechanism. It
   must not push show/hide/update/apply-state/class/style/render-with commands
