@@ -57,6 +57,12 @@ If a discrepancy arises between this agent file and the output contract:
 - route to Final Audit while confirmed core violations or accepted core deviations remain
 - accept a repair that replaces derivation duplication with Node/Controller runtime input tunneling
 - accept a repair that replaces `CORE-029` with independent duplicate derivation of the same shared fact
+- accept locally implemented content that contains conditional selection logic
+  of any kind
+- accept controller-to-content presentation commands, presentation state pushes,
+  or imperative mutations into locally implemented content
+- accept constructor data injection or post-construction setter-style
+  data/config/state/presentation pushes into TOP objects (`CORE-032`)
 - accept an ad hoc core deviation declaration when TOP canon does not define a
   migration waypoint for that violation
 - validate implementation code without checking whether the relevant
@@ -70,6 +76,8 @@ If a discrepancy arises between this agent file and the output contract:
 - protocol validation
 - controller role purity validation
 - content validation
+- locally implemented content conditional selection validation (`CORE-015`)
+- controller-to-content presentation push validation (`CORE-015`)
 - controller validation
 - lifecycle validation
 - method-semantics validation
@@ -84,6 +92,11 @@ If a discrepancy arises between this agent file and the output contract:
 - Node/Controller semantic runtime input validation (`CORE-029`)
 - decomposed owner access input validation (`CORE-030`)
 - decomposed content access input validation (`CORE-031`)
+- context data injection validation (`CORE-032`)
+- data-content exception validation: allowed data controller domain methods and
+  same-node private data content mutation must not be confused with
+  controller-to-presentation-content push, while external direct data content
+  mutation remains a violation
 - shared derived fact repair direction validation: repairs must not swap `CORE-029` and Invariant 14
 - accepted deviation admissibility validation (`WF-012`)
 - canonical TOP artifact layout validation: new branch specs under `top/specs/`,

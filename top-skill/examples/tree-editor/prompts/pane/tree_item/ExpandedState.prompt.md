@@ -14,7 +14,8 @@ ExpandedState is the first (default active) child of ExpandCollapseHolder. When 
 - Create ChildrenList as its static child.
 - Expose `getView()` so the parent switcher can mount the ChildrenList view into ExpandCollapseHolder content.
 - Re-activate ChildrenList in `getView()` if its visual content was previously destroyed by collapse.
-- On `onOpen()`: notify the ancestor TreeItem so its toggle icon can refresh.
+- On `onOpen()`: notify the ancestor TreeItem so resolved toggle/icon tokens can
+  refresh.
 - On `onClose()`: deactivate ChildrenList, preserving logical child TreeItem nodes. The collapsed icon update is performed by CollapsedState after it becomes active.
 
 ## 3. Inputs and Events
@@ -22,8 +23,10 @@ ExpandedState is the first (default active) child of ExpandCollapseHolder. When 
 - `getView()` — called by the parent switcher when ExpandedState is mounted or unmounted.
 - `onOpen()` — fired when this state becomes the active child of ExpandCollapseHolder.
 - `onClose()` — fired when this state is deactivated.
-- `initChildren(data[])` — delegates initialization to ChildrenList.
-- `addChildItem(data)` — delegates child creation to ChildrenList.
+- `requestChildrenRefresh()` - asks ChildrenList to refresh its attached child
+  TreeItems from the owning TreeItem record.
+- `requestAddChild()` - forwards semantic add-child intent to ChildrenList or the
+  owning TreeItem controller through an allowed contract.
 
 ## 4. State Ownership
 
@@ -40,14 +43,15 @@ Owns no independent state. It is itself the expanded state representation. The c
 
 1. `buildChildren()`: creates ChildrenList as its only child.
 2. When placed by the parent switcher: `getView()` returns the live ChildrenList view, activating it if needed.
-3. On `onOpen()`: calls `notifyToggle()` on ancestor TreeItem.
+3. On `onOpen()`: asks ancestor TreeItem to refresh resolved toggle/icon tokens.
 4. On `onClose()`: deactivates ChildrenList content without updating the row icon from the stale outgoing state.
 
 ## 7. Side Effects
 
 - `getView()` may re-create ChildrenList content when the expanded branch is opened again.
 - `onClose()` destroys ChildrenList content while keeping logical child nodes.
-- `onOpen()` calls `notifyToggle()` on ancestor TreeItem, updating the row icon state after the expanded state is active.
+- `onOpen()` asks ancestor TreeItem to refresh resolved toggle/icon tokens after
+  the expanded state is active.
 
 ## 8. Constraints and Invariants
 

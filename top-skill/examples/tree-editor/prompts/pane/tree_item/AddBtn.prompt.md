@@ -6,16 +6,18 @@ sourcePath: src/pane/tree_item/add_btn.top
 
 ## 1. Node Identity and Role
 
-AddBtn is an action control that triggers adding a new child node to the current tree item. It exists only inside TreeItemRowEditStateHoverState — it is architecturally absent from view mode and from the normal (non-hover) edit-state row.
+AddBtn is a static action part inside the hover edit-mode row state.
 
 ## 2. Responsibility
 
-- Render the add-child action control.
-- On user activation, stop local event propagation where the target platform requires it and delegate `_onAddClick()` to the ancestor TreeItem.
+- Materialize the add-child action structure.
+- Pull the already-resolved add affordance token from controller access.
+- Report semantic add-child intent upward through controller access.
 
 ## 3. Inputs and Events
 
-- Click on own view → stops propagation; calls `_onAddClick()` on `this._treeItem` captured in the constructor.
+- `getAddActionToken()` - returns the already-resolved action/affordance token.
+- `requestAddChild()` - semantic request raised by local activation.
 
 ## 4. State Ownership
 
@@ -27,43 +29,41 @@ Has no child nodes.
 
 ## 6. Lifecycle
 
-1. Constructor: captures ancestor TreeItem as `this._treeItem` via `findUpByType`.
-2. Constructor: creates the action control content boundary with `setContent(...)`.
-3. Content owns the low-level activation subscription for its lifetime and forwards a semantic add request through the controller access contract.
-4. No dynamic changes after child materialization.
+1. Constructor receives only parent/context.
+2. Constructor creates static action content.
+3. Refresh/materialization pulls the add action token.
+4. Local activation reports `requestAddChild()`.
 
 ## 7. Side Effects
 
-- Click delegates to `TreeItem._onAddClick()`, which creates a new child, expands the item if collapsed, and triggers a full refresh.
+The button has no direct data mutation side effects. The owning TreeItem
+controller decides whether and how to add child data.
 
 ## 8. Constraints and Invariants
 
-- Must not check `isEditMode` — architectural placement guarantees this node is only present in edit mode hover state.
-- Click propagation must be stopped before delegating.
-- Ancestor TreeItem is captured once in the constructor as `this._treeItem`; must not call `findUpByType` on every activation.
+- No captured TreeItem callback, constructor callback, or handler bundle.
+- No direct call to private ancestor methods.
+- Locally implemented content contains no conditional selection logic.
 
 ## 9. Non-Goals
 
 - Does not create child data directly.
 - Does not manage expand/collapse.
-- Does not manage its own visibility based on mode.
+- Does not decide its own visibility.
 
 ## 10. Platform Implementation Notes
 
-- Visual element: `button` with CSS classes `edit-btn` and `add-btn`, text content `+`, `title` attribute `"Add child"`.
-- View is placed by the parent node during `buildChildren()`.
-- Click: `event.stopPropagation()` then `this._treeItem._onAddClick()`.
-- TypeScript/DOM constructor note: the Content constructor receives exactly one narrow typed controller access interface. Do not pass callbacks or handler bundles as extra constructor arguments; content-local handlers call methods on that access interface.
-- Extends `DomNode`.
+- Visual primitive: static action element.
+- Local event mechanics may stop target-local propagation when required, then
+  report `requestAddChild()` through controller access.
 
 ## 11. Expected Materialization
 
 - Primary artifact stem: `src/pane/tree_item/add_btn.top`
 - Public node class: `AddBtnNode`
 - Base class / base role: `DomNode`
-
 - Materialization policy: one-file default
 - Internal contracts:
-  - Controller-to-content: AddBtnContentAccess
-  - Content-to-controller: AddBtnControllerAccess
+  - Controller-to-content: `AddBtnContentAccess`
+  - Content-to-controller: `AddBtnControllerAccess`
 - Companion artifact stems: none

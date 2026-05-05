@@ -6,67 +6,77 @@ sourcePath: src/pane/root_item_holder.top
 
 ## 1. Node Identity and Role
 
-RootItemHolder is a mutable container holding exactly one root TreeItem instance. It is the entry point for tree data initialization and the direct parent of the root TreeItem in the node tree.
+RootItemHolder is a mutable container holding exactly one root TreeItem instance.
+It attaches the root TreeItem to the tree and exposes the root record through a
+context contract.
 
 ## 2. Responsibility
 
-- Expose `init(sourceData)` to populate the tree from data.
-- Use replace semantics in `init`: remove the existing root TreeItem from both the materialized view and the logical tree before creating the new one, so repeated calls are safe.
-- Create the root TreeItem from the project Library (`lib:pane.TreeItem`) via the library mechanism and call `reset(data)` on it.
+- Maintain exactly one root TreeItem child when a root record exists.
+- Pull the root record from EditorPane through `getRootRecord()`.
+- Create the root TreeItem from the project Library with this node as parent.
+- Record the child-to-record association internally before refresh.
+- Expose `getRecordForTreeItem(child)` to the direct root TreeItem child.
 
 ## 3. Inputs and Events
 
-- `init(sourceData)` — called by EditorPane, which is in turn called by TreeEditor during `mount()`. Clears any existing root TreeItem, then creates a new TreeItem and calls `reset(sourceData)` on it.
+- `refresh()` - pulls the current root record. If the record identity changed,
+  replaces the existing root child and creates a new TreeItem attached only to
+  this holder as parent/context.
+- `getRecordForTreeItem(child)` - returns the record associated with the root
+  child. This is a pull-through contract, not constructor injection.
+- `requestRefresh()` - forwards a refresh request to EditorPane/TreeEditor.
 
 ## 4. State Ownership
 
-Owns no state beyond being the logical parent of the root TreeItem.
+Owns the root-child association map and the single root TreeItem child reference.
+It does not own the source root record itself.
 
 ## 5. Child Interaction Rules
 
-- After `init`, holds exactly one child: the root TreeItem.
-- Creates TreeItem instances from the project Library (`lib:pane.TreeItem`) via the library mechanism (`Library.create`).
-- Calls `reset(data)` on the created TreeItem.
-- On `init`, removes existing children from the materialized view and then removes their nodes from the logical tree before creating the new root.
+- Root TreeItem constructor receives only RootItemHolder as parent/context.
+- No post-construction data setter exists.
+- RootItemHolder may replace its child when the root record identity changes.
+- RootItemHolder places the root child's opaque handle through parent-owned
+  materialization.
 
 ## 6. Lifecycle
 
-1. Constructor: no root item is created.
-2. Constructor: creates the holder content boundary with `setContent(...)`.
-3. On `init(sourceData)`: clears existing children (removing their views and logical nodes), creates a new root TreeItem from `lib:pane.TreeItem` via the library mechanism with this node as parent, obtains its opaque view handle through the child controller, places that handle through the holder content boundary, then calls `reset(sourceData)` as an explicit post-construction data initialization method.
-4. The root TreeItem's view is placed into RootItemHolder's content area through content access.
+1. Constructor creates the holder content boundary.
+2. Constructor creates no root item until a root record is available.
+3. `refresh()` pulls the root record, creates/replaces the root child if needed,
+   records the child-to-record association, places the child opaque handle, and
+   requests the child refresh.
 
 ## 7. Side Effects
 
-- On `init`: replaces the materialized root item view.
+- Root child replacement when root record identity changes.
 
 ## 8. Constraints and Invariants
 
-- Must hold exactly one TreeItem after `init` completes.
-- Must not manage expand/collapse or edit mode logic.
-- Replace semantics: after `init`, no stale children remain in the node tree.
+- Holds at most one root TreeItem.
+- Does not push data into the root TreeItem.
+- Does not manage expand/collapse or edit mode logic.
 
 ## 9. Non-Goals
 
-- Does not manage child trees recursively (that is done by ChildrenList inside each TreeItem).
-- Does not apply indentation.
-- Does not react to mode changes.
+- Does not manage recursive child trees.
+- Does not apply indentation or labels.
 
 ## 10. Platform Implementation Notes
 
-- Visual element: `div` with CSS class `root-item-holder`.
-- Child removal: `child.getView()?.remove(); child.remove()` for each existing child.
-- New root item view: `this.content.mount(item.getView())` is parent-owned placement of a direct child opaque handle, not external view injection.
-- Extends `DomNode`.
+- Visual primitive: static root item holder container.
+- Child removal/rematerialization uses parent-owned lifecycle/removal mechanics.
+- Child handle placement is parent-owned placement of a direct child opaque
+  handle.
 
 ## 11. Expected Materialization
 
 - Primary artifact stem: `src/pane/root_item_holder.top`
 - Public node class: `RootItemHolderNode`
 - Base class / base role: `DomNode`
-
 - Materialization policy: one-file default
 - Internal contracts:
-  - Controller-to-content: RootItemHolderContentAccess
-  - Content-to-controller: RootItemHolderControllerAccess empty zero-contract interface implemented by the owning node/controller
+  - Controller-to-content: `RootItemHolderContentAccess`
+  - Content-to-controller: `RootItemHolderControllerAccess`
 - Companion artifact stems: none

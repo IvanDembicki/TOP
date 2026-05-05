@@ -83,9 +83,9 @@ next_step:
   facade/adapters, or inline object literals instead of the owning controller
   typed through the narrow interface
 - Validation must report `CORE-031` when Controller receives, stores, or uses
-  decomposed content commands, method bags, facade/adapters, concrete Content
-  types, platform primitives, or inline objects instead of its own Content
-  instance typed through `IContentAccess`
+  decomposed content lifecycle/materialization members, method bags,
+  facade/adapters, concrete Content types, platform primitives, or inline
+  objects instead of its own Content instance typed through `IContentAccess`
 - Validation must report `CONV-007` when a new migration branch spec is stored
   as an ad hoc root-level file in `top/` instead of under `top/specs/` without an
   established project convention

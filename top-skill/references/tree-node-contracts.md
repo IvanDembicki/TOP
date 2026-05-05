@@ -115,7 +115,8 @@ In that case these are two distinct roles:
 
 ### Semantic role
 
-Update the display-only parts of a node from the current state of the data model, without changing structure or switching state.
+Synchronize already-resolved primitive output values from the current state of
+the data model, without changing structure or switching state.
 
 ### When invoked
 
@@ -131,7 +132,9 @@ Update the display-only parts of a node from the current state of the data model
 
 ### Allowed operations
 
-- Read from the data model (source of truth) and update display-only output: text, label, count, icon, numeric state.
+- Read from the data model (source of truth) in controller-owned logic and apply
+  already-resolved primitive output values such as text, label, count, icon, or
+  numeric state.
 - Call `refresh()` on children.
 
 ### Forbidden operations

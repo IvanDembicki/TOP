@@ -6,82 +6,87 @@ sourcePath: src/pane/tree_item/children_list.top
 
 ## 1. Node Identity and Role
 
-ChildrenList is a mutable container that holds the child TreeItem instances of a tree item. It is the logical child of ExpandedState, which has no visual content of its own. ExpandedState, as the direct parent of ChildrenList, pulls the ChildrenList opaque view handle through `getView()`; the parent switcher then pulls ExpandedState's public opaque handle and places it into ExpandCollapseHolder content.
-
-ChildrenList follows a **destroy/activate content lifecycle**: its visual content is destroyed when the tree item collapses and re-created when it expands. The logical child nodes (TreeItems) are retained in the node tree across this cycle.
+ChildrenList is a mutable collection node holding TreeItem child instances for
+the currently expanded TreeItem. It attaches child TreeItems to the tree and
+exposes their records through a context contract.
 
 ## 2. Responsibility
 
-- Own and manage the visual container for child tree items.
-- Expose `init(childrenData[])` to populate children from a data array (replace semantics).
-- Expose `addItem(data)` to append a new child TreeItem.
-- Expose `deactivate()` to destroy visual content while keeping logical children.
-- Expose `activate()` to re-create visual content and re-attach all logical child views.
+- Pull child records from the owning TreeItem through the parent/context chain.
+- Maintain an ordered set of child TreeItem controllers.
+- Create child TreeItems from `lib:pane.TreeItem` with only this ChildrenList as
+  parent/context.
+- Maintain a private child-to-record association map.
+- Expose `getRecordForTreeItem(child)` to direct TreeItem children.
+- Support architecturally allowed add/remove/reorder domain methods for child
+  records.
+- Destroy/recreate presentation content on collapse/expand while retaining
+  logical child controllers when policy allows.
 
 ## 3. Inputs and Events
 
-- `init(childrenData[])` — called by `TreeItem.reset()`. Removes all existing child TreeItems from the visual representation and from the logical tree, then creates and resets a new TreeItem for each data entry.
-- `addItem(data)` — creates a new TreeItem via the library mechanism, calls `reset(data)` on it, and appends it to this list.
-- `mountChildAt(item, index)` — inserts an existing TreeItem's view at a specific position; used during drag-and-drop reorder.
-- `deactivate()` — destroys this node's current visual content. Logical children are retained.
-- `activate()` — re-creates this node's visual content, then re-attaches all existing child TreeItem views to the new content.
+- `refresh()` - pulls current child records, reconciles the child controller set,
+  updates child-to-record associations, places direct child opaque handles, and
+  requests child refresh.
+- `addChildRecord(record)` - data-controller/domain method called by the owning
+  TreeItem when add-child is allowed.
+- `removeChild(child)` - removes an existing child and its associated record.
+- `moveChild(child, targetIndex)` - reorders an existing child and its associated
+  record.
+- `activate()` / `deactivate()` - content lifecycle methods for expanded/collapsed
+  materialization.
 
 ## 4. State Ownership
 
-- Manages the mutable ordered set of child TreeItem instances (as the logical children of this node).
-- Owns no other state.
-- **Source of truth policy**: one-way materialization only. Add, delete, and reorder operations modify the runtime node tree. The source data model is never written back.
+Owns the ordered child controller set and child-to-record associations for this
+collection. The source child records are obtained from the owning TreeItem.
 
 ## 5. Child Interaction Rules
 
-- Creates child TreeItem instances from the project Library (`lib:pane.TreeItem`) via the library mechanism (`Library.create`).
-- Calls `reset(data)` on each newly created TreeItem.
-- Child TreeItem views are mounted through the node's content access boundary.
-- On `init`: removes children with `child.detachView(); child.remove()` before creating new ones.
-- On `activate`: re-mounts each existing child's view through the node's content access boundary.
+- Child TreeItem constructors receive only this ChildrenList as parent/context.
+- ChildrenList never calls any post-construction data setter on a child.
+- Child TreeItems pull their record through `getRecordForTreeItem(child)`.
+- Child opaque handles are placed by ChildrenList only as direct child handles.
 
 ## 6. Lifecycle
 
-1. Constructor or `activate()`: creates the child-list content boundary with `setContent(...)`.
-2. `init(data[])` is called during `TreeItem.reset()` to populate the list.
-3. `deactivate()` is called by ExpandedState on collapse: destroys this node's visual content.
-4. `activate()` is called by ExpandedState on expand if visual content is absent: re-creates the visual content and re-attaches child views.
+1. Constructor creates content if the collection is active.
+2. `refresh()` reconciles child controllers against current child records.
+3. `deactivate()` destroys presentation content only; logical children and
+   associations remain according to the declared retention policy.
+4. `activate()` recreates content and places existing direct child opaque
+   handles.
 
 ## 7. Side Effects
 
-- Creating a child TreeItem from `lib:pane.TreeItem` (via `addItem` or `init`) triggers `reset(data)`, which recursively initializes the entire subtree below that child.
-- `deactivate()` removes this node's visual content from the materialized view.
-- `activate()` re-creates this node's visual content so it can be returned by `getView()` as an opaque handle and placed by the parent switcher through parent-owned materialization.
+- Child controller creation/removal/reorder inside this collection.
+- Presentation content destruction/recreation on collapse/expand.
 
 ## 8. Constraints and Invariants
 
-- Content is mounted within this node's own content area; this node does not attach its content directly to ancestor integration surfaces.
-- Logical children must survive `deactivate()` / `activate()` cycles intact.
-- `length` must accurately reflect the number of current logical child nodes.
-- The platform content handle is absent after `deactivate()` and present after constructor materialization or `activate()`.
+- No child data is injected through constructors, props, config, or setters.
+- `length` reflects current logical child controller count.
+- Presentation content is not the data source.
 
 ## 9. Non-Goals
 
-- Does not manage expand/collapse visibility decisions (those are made by ExpandedState).
-- Does not apply indentation (done by `TreeItem._refreshIndent()`).
+- Does not own expand/collapse state.
+- Does not apply indentation or labels.
 
 ## 10. Platform Implementation Notes
 
-- Visual element: `div` with CSS class `children-list`.
-- In the DOM implementation, visual content is represented by the node's `el`.
-- `deactivate()`: calls `this.clearContent()` (base class method that destroys the content and nulls the reference).
-- `activate()`: calls `this.setContent(new ChildrenListContent(this))`, where `this` is typed from the Content side only as the single narrow owner access interface, then re-mounts each direct child's opaque view handle via the parent-owned placement primitive `this.content.mount(child.getView())`.
-- Child TreeItem views are opaque handles returned by direct child controllers through `child.getView()` and mounted through `this.content.mount(...)` for placement only.
-- Extends `DomNode`.
+- Visual primitive: static children list container.
+- Parent-owned placement may mount each direct child opaque handle.
+- `activate()` and `deactivate()` are lifecycle/materialization operations, not
+  presentation state pushes.
 
 ## 11. Expected Materialization
 
 - Primary artifact stem: `src/pane/tree_item/children_list.top`
 - Public node class: `ChildrenListNode`
 - Base class / base role: `DomNode`
-
 - Materialization policy: one-file default
 - Internal contracts:
-  - Controller-to-content: ChildrenListContentAccess
-  - Content-to-controller: ChildrenListControllerAccess empty zero-contract interface implemented by the owning node/controller
+  - Controller-to-content: `ChildrenListContentAccess`
+  - Content-to-controller: `ChildrenListControllerAccess`
 - Companion artifact stems: none

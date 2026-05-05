@@ -91,10 +91,83 @@ This invariant is foundational. It is not tied to any particular language, platf
 - For any node with separate content, controller-to-content access must also go through a narrow `IContentAccess` or equivalent interface. The controller must store and use content through this interface, not through the concrete content class. `IContentAccess` is not a data channel into content.
 - The controller-side runtime value for that direction must be the node's own
   Content instance typed only as `IContentAccess`/target-equivalent. The
-  controller must not receive decomposed content command members, method bags,
-  facade/adapters, closure objects, concrete Content types, platform
+  controller must not receive decomposed content lifecycle/materialization
+  members, method bags, facade/adapters, closure objects, concrete Content types, platform
   primitives, or objects assembled outside the controller/content construction
   boundary as substitutes for `IContentAccess`. This is `CORE-031`.
+
+### Context attachment, not data injection
+
+TOP construction attaches an object to its context; it does not inject the state
+it will use.
+
+Objects are connected to context, not filled with data. A TOP object constructor
+must receive only the narrow contextual reference required to place that object
+inside its ownership boundary:
+- a node receives its parent/context reference;
+- locally implemented content receives its owning controller access contract;
+- a connector or black-box boundary receives its explicit boundary interface.
+
+After attachment, the object requests required information through that
+contextual access contract. The surrounding object is responsible for exposing
+the required values through the contract, but it must not push those values into
+the object during construction or later through imperative setters.
+
+A constructor must not receive data packets, flags, callbacks, config objects,
+stores, services, child views, presentation values, visibility values, style
+values, text values, or runtime state as additional arguments.
+
+Conceptual violations:
+
+```text
+new ChildNode(parent, data, flags, callbacks, config)
+new Content(controllerAccess, title, isVisible, onClick)
+new Content(controllerAccess, styleToken, labelText)
+child.applyConfig(...)
+child.setData(...)
+content.setVisible(...)
+content.updateText(...)
+content.setCallbacks(...)
+```
+
+Correct attachment:
+
+```text
+new ChildNode(parent)
+new LocalContent(controllerAccess)
+```
+
+Then:
+
+```text
+child asks parent/controller/context through its public contract
+content asks controllerAccess for already-resolved values
+```
+
+This keeps TOP objects context-bound instead of parameter-bound. If data,
+flags, callbacks, configuration, presentation values, or runtime state are
+pushed into objects, object behavior depends on construction-time packets and
+imperative updates. This weakens tree locality, creates hidden data-flow paths,
+makes regeneration less predictable, and makes caching/pre-rendering harder.
+
+This does not forbid domain methods on a data node controller, such as
+`setAge(value)` or `replaceRecord(record)`, when access to that data controller
+is architecturally valid. Such methods belong to the data node controller API;
+they are not constructor injection and not a controller-to-presentation-content
+push. The data controller may mutate its own private data content internally.
+External objects still must not mutate data content directly or inject data into
+data content from outside.
+
+Canonical repair:
+- remove additional constructor arguments;
+- add the missing value/request to the appropriate access contract;
+- let the object pull the value through that contract;
+- if pushed values represent different states or structural alternatives, model
+  them as explicit child state nodes;
+- if the pushed object is external component configuration, wrap it behind a
+  black-box boundary with a narrow explicit interface;
+- if the pushed value is a service/store/global dependency, route access through
+  the owning context, parent, or controller contract instead of direct injection.
 
 ### Pull direction
 
@@ -134,13 +207,54 @@ The phrase "exactly one semantic argument" applies to the public constructor of 
 
 The controller/content boundary is bidirectional. Content depends on the owning controller only through `IControllerAccess`; the controller depends on content only through `IContentAccess`.
 
-`IControllerAccess` is the only direction through which content requests controller-owned data, state, actions, and permitted child/output handles. `IContentAccess` is the controller-to-content command/request boundary only. It must not contain view-model values, state flags, callbacks, child handles, or data fields for content to read.
+`IControllerAccess` is the only direction through which content requests controller-owned data, state, actions, and permitted child/output handles. `IContentAccess` is controller-to-content lifecycle/materialization access only. It must not contain view-model values, state flags, callbacks, child handles, presentation commands, mutation commands, or data fields for content to read.
+
+Data content has a narrow exception: if content is the private storage of a data
+node, the owning data controller may use `IContentAccess` or an equivalent
+internal storage boundary to mutate that private data content. Business rules and
+validation stay in the data controller. The exception does not allow
+presentation content mutation, external direct data-content mutation, or
+data/config injection into data content from outside.
 
 This symmetry is mandatory even when one direction currently has no methods. An empty zero-contract is still a named access interface at the boundary. For content-to-controller, that empty interface is implemented by the owning controller and passed as `this` typed only as the interface. It is not materialized as a separate runtime dependency object. For controller-to-content, if the target has no stable runtime content object for the controller to store, the zero direction must still be declared explicitly in the prompt/materialization contract; absence of a runtime reference is acceptable only when there are no permitted controller-to-content calls and the target cannot express such a reference cleanly.
 
 This is especially important when content wraps a large platform component, widget, native view, or third-party object. The concrete content object may expose many public methods, but the controller may be allowed to use only one or two of them. `IContentAccess` cuts off the rest of the concrete surface and keeps the content implementation replaceable, portable, and verifiable.
 
-### Motivation
+### Locally implemented content static materialization clarification
+
+Locally implemented content must contain no conditional selection logic of any
+kind. It must not decide, derive, branch, select, toggle, or compute which
+structure, class/style/token, text, icon, visibility, handler, child output,
+platform primitive, representation, or capability should be used.
+
+Locally implemented content may only materialize a structurally static content
+shape and apply already-resolved primitive values received through its owning
+controller access contract.
+
+Conditional selection constructs inside locally implemented content are hard
+`CORE-015` violations when they participate in selection or derivation. This
+includes `if`/`else`, `switch`/`case`, ternary selection, conditional rendering,
+conditional return, multiple return branches, `&&`/`||` conditional selection,
+`match`/`when`/guard branches, or target-equivalent constructs.
+
+Primitive derivation belongs to the owning controller. Structural, visibility,
+handler, representation, or capability alternatives belong in explicit child
+state nodes. External, native, third-party, or self-contained logic must be
+wrapped as black-box component content behind a narrow explicit interface.
+
+### Motivation for locally implemented content static materialization
+
+This rule preserves deterministic materialization, cacheability,
+pre-rendering, portability, and verifiability. If locally implemented content
+contains selection logic, the system cannot reliably know in advance which
+objects, classes, platform primitives, handlers, or structural shape may exist
+inside that content.
+
+Content with selection logic becomes a hidden decision engine and breaks the
+TOP boundary between controller/tree decision ownership and content
+materialization.
+
+### Motivation for Pull-Based Construction / Locality of Object Birth
 
 This rule keeps the tree real, not decorative. If objects are assembled outside the tree and pushed inward, the visible tree no longer explains who owns what. Ownership direction becomes hidden in external assembly code.
 
@@ -307,7 +421,22 @@ The same encapsulation principle applies in the reverse direction.
 
 The platform primitive owned by the content — the native element, DOM node, or platform-equivalent object — is the content's internal implementation. It is internal to the content and must not be accessed by the controller for behavior, mutation, inspection, event wiring, styling, querying, or any other platform operation. The only exception is an opaque view handle exposed through `getView()` for parent-owned placement/composition.
 
-The controller communicates with content exclusively through explicitly named command methods of `IContentAccess`. Such methods accept commands, parameters, and handlers. They do not expose the platform primitive and do not return a handle to it for controller-side manipulation.
+The controller must not imperatively command, mutate, update, show, hide,
+configure, or push presentation state into locally implemented content through
+`IContentAccess` or any other channel.
+
+Correct flow:
+1. The controller changes its own state.
+2. The controller marks the node/content/runtime as dirty or requests lifecycle
+   or render refresh through the node/runtime mechanism.
+3. The materialization or refresh lifecycle runs.
+4. Locally implemented content pulls already-resolved primitive values from the
+   controller through `IControllerAccess`.
+5. Content applies those values to its static materialization.
+
+Controller-to-content access through `IContentAccess` is lifecycle and
+materialization access only, such as obtaining the root content primitive or
+participating in controlled lifecycle. It is not a presentation command channel.
 
 The only permitted low-level handle exposure is the node's opaque `getView()` result for parent-owned placement/composition. This handle is not part of the controller's permission to operate on its own content primitive.
 
@@ -320,13 +449,18 @@ The prohibition applies not only to usage but also to definition. A base class i
 - controller code using the node's own render/view/native primitive, its platform API, or any equivalent exposed primitive handle for its own content;
 - any class in the controller hierarchy defining a public property or getter that exposes the platform primitive, including in a base class;
 - content exposing its platform primitive through `IContentAccess` for anything other than the narrow opaque `getView()` placement/composition handle.
+- controller pushing presentation state or imperative mutation into locally
+  implemented content, including show/hide, update, configure, class/style,
+  render-with, or apply-state commands.
 
 **Detection examples (DOM-like targets):** `this.el`, `this.getView().classList`, `this.getView().style`, `this.getView().addEventListener`, `this.getView().setAttribute`, `querySelector`, `content.getView()`. On other platforms, the equivalent is any direct handle to the native/render primitive owned by the content.
 
 **Repair:**
-- add a named command method to `IContentAccess`;
-- the controller calls the method, passing the necessary parameter or handler;
-- the content executes the command on its platform primitive internally.
+- move the presentation decision or primitive derivation into controller state;
+- mark the node/content/runtime dirty or request lifecycle/render refresh
+  through the node/runtime mechanism;
+- let locally implemented content pull the already-resolved primitive value
+  through `IControllerAccess` during materialization or refresh.
 
 ---
 

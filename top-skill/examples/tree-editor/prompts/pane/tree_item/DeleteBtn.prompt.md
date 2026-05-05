@@ -6,16 +6,18 @@ sourcePath: src/pane/tree_item/delete_btn.top
 
 ## 1. Node Identity and Role
 
-DeleteBtn is an action control that triggers deletion of the current tree item. It exists only inside TreeItemRowEditStateHoverState, and only for non-root items — it is architecturally absent from view mode, from the normal (non-hover) edit-state row, and from root items.
+DeleteBtn is a static action part inside the hover edit-mode row state.
 
 ## 2. Responsibility
 
-- Render the delete action control.
-- On user activation, stop local event propagation where the target platform requires it and delegate `_onDeleteClick()` to the ancestor TreeItem.
+- Materialize the delete action structure.
+- Pull the already-resolved delete affordance token from controller access.
+- Report semantic delete intent upward through controller access.
 
 ## 3. Inputs and Events
 
-- Click on own view → stops propagation; calls `_onDeleteClick()` on `this._treeItem` captured in the constructor.
+- `getDeleteActionToken()` - returns the already-resolved delete affordance token.
+- `requestDeleteSelf()` - semantic request raised by local activation.
 
 ## 4. State Ownership
 
@@ -27,44 +29,43 @@ Has no child nodes.
 
 ## 6. Lifecycle
 
-1. Constructor: captures ancestor TreeItem as `this._treeItem` via `findUpByType`.
-2. Constructor: creates the action control content boundary with `setContent(...)`.
-3. Content owns the low-level activation subscription for its lifetime and forwards a semantic delete request through the controller access contract.
-4. Created only when `treeItem.isRoot` is false — the parent HoverState node conditionally instantiates it during `buildChildren`.
-5. No dynamic changes after child materialization.
+1. Constructor receives only parent/context.
+2. Constructor creates static action content.
+3. Refresh/materialization pulls the delete action token.
+4. Local activation reports `requestDeleteSelf()`.
 
 ## 7. Side Effects
 
-- Click delegates to `TreeItem._onDeleteClick()`, which removes the item from the materialized view and node tree, notifies the parent TreeItem, and triggers editor refresh through TreeItem.
+The button has no direct removal side effect. The owning TreeItem controller
+decides whether deletion is allowed and routes the mutation to the proper data
+controller/container.
 
 ## 8. Constraints and Invariants
 
-- Must not check `isEditMode` — architectural placement guarantees this node is only present in edit-mode hover state.
-- Must not check `isRoot` dynamically — root exclusion is guaranteed by conditional instantiation in the parent.
-- Click propagation must be stopped before delegating.
-- Ancestor TreeItem is captured once in the constructor as `this._treeItem`; must not call `findUpByType` on every activation.
+- DeleteBtn is structurally present in the hover edit-mode row. Root/non-root
+  availability is represented by a resolved token; content does not decide it.
+- No captured TreeItem callback, constructor callback, or handler bundle.
+- No direct call to private ancestor methods.
+- Locally implemented content contains no conditional selection logic.
 
 ## 9. Non-Goals
 
-- Does not perform removal directly; removal is handled by TreeItem.
-- Does not manage its own visibility based on mode.
+- Does not remove data directly.
+- Does not decide its own visibility.
 
 ## 10. Platform Implementation Notes
 
-- Visual element: `button` with CSS classes `edit-btn` and `delete-btn`, text content `×`, `title` attribute `"Delete node"`.
-- View is placed by the parent node during `buildChildren()`.
-- Click: `event.stopPropagation()` then `this._treeItem._onDeleteClick()`.
-- TypeScript/DOM constructor note: the Content constructor receives exactly one narrow typed controller access interface. Do not pass callbacks or handler bundles as extra constructor arguments; content-local handlers call methods on that access interface.
-- Extends `DomNode`.
+- Visual primitive: static action element.
+- Local event mechanics may stop target-local propagation when required, then
+  report `requestDeleteSelf()` through controller access.
 
 ## 11. Expected Materialization
 
 - Primary artifact stem: `src/pane/tree_item/delete_btn.top`
 - Public node class: `DeleteBtnNode`
 - Base class / base role: `DomNode`
-
 - Materialization policy: one-file default
 - Internal contracts:
-  - Controller-to-content: DeleteBtnContentAccess
-  - Content-to-controller: DeleteBtnControllerAccess
+  - Controller-to-content: `DeleteBtnContentAccess`
+  - Content-to-controller: `DeleteBtnControllerAccess`
 - Companion artifact stems: none

@@ -96,10 +96,12 @@ controller uses it through `IContentAccess`, not through the concrete content
 class. This keeps large platform/widget/component APIs hidden behind the small
 allowed TOP boundary.
 
-`IContentAccess` is not a channel for pushing controller-owned data into content.
-It contains only controller-to-content commands/requests, or an explicit
-zero-contract when that direction has no permitted calls. Content requests data,
-state, actions, and permitted child/output handles through `IControllerAccess`.
+`IContentAccess` is not a channel for pushing controller-owned data,
+presentation state, or imperative mutations into content. It contains only
+controller-to-content lifecycle/materialization access, or an explicit
+zero-contract when that direction has no permitted lifecycle/materialization
+calls. Content requests data, state, actions, and permitted child/output handles
+through `IControllerAccess`.
 
 Root `null` or `RootContext` is allowed only for root ownership/bootstrap. It
 must not become a dependency injection container.

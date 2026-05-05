@@ -275,8 +275,11 @@ All interaction with a node from outside goes only through the controller. Direc
 **Content**
 
 If a node has content (view, data, animation, etc.), it exists in one of two forms:
-- **logic-free** — only creates structure and applies styling; no behavioral logic;
-- **black box** — encapsulates internal presentation logic (animations, scroll state, etc.); the controller sees only the explicit interface.
+- **locally implemented static materialization** — creates a structurally static
+  content shape and applies already-resolved primitive values received through
+  controller access; it contains no conditional selection logic;
+- **black box** — encapsulates external or self-contained logic (animations,
+  scroll state, etc.); the controller sees only the explicit interface.
 
 In both cases, content does not read architectural state, does not modify the tree structure, and does not initiate structural transitions.
 
@@ -511,21 +514,27 @@ They **are not** a mandatory part of canonical switching. The base mechanism doe
 
 **refresh()**
 
-A separate hook for synchronizing display data from the data model. Does not change the structure, does not switch state.
+A separate hook for requesting rematerialization from controller-owned resolved
+values. It does not change structure and does not switch state.
 
-Called when the data that the node displays has changed: text, label, counter, icon. The holder calls `refresh()` on itself and explicitly decides which children to pass it to.
+Called when the data behind resolved values has changed: text, label, counter,
+icon token, affordance token. The controller updates its own resolved state,
+marks the node/runtime dirty, and presentation content pulls already-resolved
+primitive values through controller access during refresh/materialization.
 
 ```
 // pseudocode
 class TreeItemNode extends SwitchableNode {
   refresh() {
-    this.normalState.setText(this.data.label)
-    this.hoverState.setText(this.data.label)
+    this.resolvedLabel = this.resolveLabelFromAttachedRecord()
+    this.requestRefresh()
   }
 }
 ```
 
-`refresh()` must be idempotent: a repeated call updates the display to the current state without accumulating side effects.
+`refresh()` must be idempotent: a repeated call exposes the same resolved values
+for the same controller state without accumulating side effects. It must not
+push presentation data into locally implemented content.
 
 ---
 

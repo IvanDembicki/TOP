@@ -177,7 +177,10 @@ Verify:
 - content itself initiating attach/integrate/mount/remove/show/hide/destroy;
 - controller using the internal content implementation as a communication channel;
 - controller bypassing the content boundary via direct access to the concrete implementation or render/integration primitives;
-- controller directly mutating or wiring its own platform primitive instead of calling named `this.content.<command>(...)` methods;
+- controller directly mutating or wiring its own platform primitive, or pushing
+  presentation mutation into locally implemented content instead of using
+  controller state, dirty/render refresh, and content pull of already-resolved
+  values;
 - a child node performing self-mounting in `onOpen()`, `constructor`, or any lifecycle hook — calling `parent.content.mount()`, any parent platform integration method (e.g., `parent.el.appendChild()` for DOM), or any equivalent on its own view (violation of Parent-Owned Materialization Invariant — see `canon/architectural-invariants.md` §11);
 - constructor used as an init bucket merging content creation, child materialization, and activation phases — these must be separate semantic methods (violation of Phase Separation Invariant — see `canon/architectural-invariants.md` §9);
 - a node with declared `contentType` lacking a separate content class, with platform construction inlined in the controller (violation of Content Materialization Invariant — see `canon/architectural-invariants.md` §11);

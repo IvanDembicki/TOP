@@ -42,6 +42,20 @@ If a discrepancy arises between this agent file and the output contract:
 - preserve architectural ownership boundaries
 - materialize explicit protocols and lifecycle rules
 - generate or adapt tests needed to re-cover preserved behavior requirements
+- generate TOP object construction as context attachment only: nodes receive
+  parent/context, locally implemented content receives owning controller access,
+  and connectors or black-box boundaries receive their explicit boundary
+  interface
+- generate locally implemented content as structurally static materialization
+  that applies only already-resolved primitive values received through owning
+  controller access
+- generate presentation changes as controller state updates plus node/runtime
+  dirty or lifecycle/render refresh, followed by content pulling already-resolved
+  primitive values through controller access
+- generate data mutation only through architecturally allowed data controller
+  domain methods; a data controller may mutate its own private data content, but
+  presentation content must report intent and must not access data content
+  directly
 - write generated TOP implementation artifacts only under the declared
   implementation source root (`top_src/` by default), except thin framework
   adapters explicitly declared by the integration contract
@@ -57,6 +71,12 @@ If a discrepancy arises between this agent file and the output contract:
 - drop, weaken, or silently reinterpret behavior captured by the Behavior Preservation Plan
 - copy source-platform primitives instead of following target adaptation decisions
 - introduce target behavior that has no semantic source in Layer B
+- generate conditional selection logic inside locally implemented content
+- generate controller-to-content imperative presentation updates into locally
+  implemented content
+- generate presentation content that directly reads or mutates data content
+- generate constructor data injection or post-construction setter-style
+  data/config/state/presentation pushes into TOP objects
 - scatter generated TOP implementation files into legacy source directories when
   no approved integration contract or source-root declaration permits it
 - in migration mode, generate without following the current migration workflow
@@ -72,6 +92,11 @@ Generate only what the spec and prompt explicitly define. Do not add features, a
 - typing remains strong and explicit
 - names remain clear and descriptive
 - ownership boundaries remain intact
+- locally implemented content contains no conditional selection logic
+- controller does not push presentation commands/state/mutations into locally
+  implemented content
+- TOP objects are attached to context rather than filled with constructor data,
+  config, callbacks, state, services, stores, child views, or presentation values
 - no local convenience weakens canon
 - generated target artifacts preserve semantic intent without source-platform leakage
 - generated or adapted tests cover each mapped preserved behavior requirement

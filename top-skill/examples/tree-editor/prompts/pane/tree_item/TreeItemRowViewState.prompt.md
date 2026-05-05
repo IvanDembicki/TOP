@@ -6,35 +6,40 @@ sourcePath: src/pane/tree_item/tree_item_row_view_state.top
 
 ## 1. Node Identity and Role
 
-TreeItemRowViewState is the first child of TreeItemRow. It provides the visual row for view mode. It contains NodeIcon and NodeLabel as its children. Drag capability and edit controls are architecturally absent from this state — not hidden or disabled, but genuinely not present.
+TreeItemRowViewState is the view-mode row representation for a TreeItem. It
+contains NodeIcon and NodeLabel as static children.
 
 ## 2. Responsibility
 
-- Create and own the view-mode row visual content.
-- Apply indentation via `setPaddingLeft`.
-- Expose `updateToggle(hasChildren, isExpanded)` by delegating to NodeIcon.
-- Expose `setText(text)` by delegating to NodeLabel.
+- Materialize the view-mode row structure.
+- Expose resolved label, indentation, and icon values to child controllers by
+  delegating to TreeItemRow.
+- Forward semantic toggle intent from NodeIcon upward when requested.
 
 ## 3. Inputs and Events
 
-- `setPaddingLeft(px)` — sets left indentation on the row view.
-- `setText(text)` — delegated to NodeLabel.
-- `updateToggle(hasChildren, isExpanded)` — delegated to NodeIcon.
+- `refresh()` - requests child refresh after pulling current resolved values from
+  parent/context.
+- `getLabelText()` / `getIndentToken()` / `getIconToken()` - delegated pull
+  methods.
+- `requestToggle()` - forwards to the owning TreeItem through the parent chain.
 
 ## 4. State Ownership
 
-Owns no state. Does not read `isEditMode` — this node IS the view mode representation.
+Owns no state. This node is the view-mode representation.
 
 ## 5. Child Interaction Rules
 
-- Two children: NodeIcon and NodeLabel.
-- Children's views are placed into this node's content area during child materialization.
+- Static children: NodeIcon and NodeLabel.
+- Child constructors receive only TreeItemRowViewState as parent/context.
+- No setter-style updates are sent to NodeIcon or NodeLabel.
 
 ## 6. Lifecycle
 
-1. Constructor: creates the row content boundary with `setContent(...)`.
-2. `buildChildren()`: creates NodeIcon and NodeLabel as children and places their views through the row content boundary.
-3. Placement and removal of this node's own view are handled by the parent TreeItemRow's base switchable mechanism.
+1. Constructor creates static row content.
+2. `buildChildren()` creates NodeIcon and NodeLabel and places their opaque
+   handles.
+3. `refresh()` requests children to pull current resolved values.
 
 ## 7. Side Effects
 
@@ -42,28 +47,26 @@ None.
 
 ## 8. Constraints and Invariants
 
-- Must not contain DragHandle, AddBtn, or DeleteBtn.
-- Must not read `isEditMode`.
+- No DragHandle, AddBtn, or DeleteBtn.
+- Does not read `isEditMode`.
+- Locally implemented content has no conditional selection logic.
 
 ## 9. Non-Goals
 
-- Does not manage drag interactions.
-- Does not manage expand/collapse.
-- Does not enable drag capability.
+- Does not manage drag interactions or edit actions.
 
 ## 10. Platform Implementation Notes
 
-- Visual element: `div` with CSS class `tree-item-row`.
-- Extends `DomNode`.
+- Visual primitive: static row container.
+- Indentation token is pulled by local content through controller access.
 
 ## 11. Expected Materialization
 
 - Primary artifact stem: `src/pane/tree_item/tree_item_row_view_state.top`
 - Public node class: `TreeItemRowViewStateNode`
 - Base class / base role: `DomNode`
-
 - Materialization policy: one-file default
 - Internal contracts:
-  - Controller-to-content: TreeItemRowViewStateContentAccess
-  - Content-to-controller: TreeItemRowViewStateControllerAccess empty zero-contract interface implemented by the owning node/controller
+  - Controller-to-content: `TreeItemRowViewStateContentAccess`
+  - Content-to-controller: `TreeItemRowViewStateControllerAccess`
 - Companion artifact stems: none

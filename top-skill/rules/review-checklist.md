@@ -47,6 +47,18 @@ A result is not valid until all checklist items pass.
 ## 4a. Pull-Based Construction
 
 - TOP objects are born at their architectural position in the tree
+- TOP construction attaches objects to context; it does not inject the state
+  they will use
+- constructors receive only the narrow contextual reference for their boundary:
+  node parent/context, locally implemented content owning controller access, or
+  connector/black-box boundary interface
+- no constructor data packets, flags, callbacks, config/options/props-like
+  objects, stores, services, child views, presentation values, visibility
+  values, style values, text values, runtime state, handlers, or arbitrary extra
+  arguments (`CORE-032`)
+- no post-construction setter-style data/config/state/presentation pushes into
+  child nodes, locally implemented content, connectors, or black-box boundaries
+  (`CORE-032`)
 - node constructors receive only the parent reference as semantic input
 - Node/Controller public runtime entrypoints do not receive semantic data,
   parent-derived facts, callbacks, services, stores, config/options/props-like
@@ -56,7 +68,7 @@ A result is not valid until all checklist items pass.
 - Content is not typed against or downcast to the concrete controller
 - content-to-controller zero-contracts are empty owner access interfaces implemented by the owning controller, not separate dummy runtime objects
 - controller access to content is typed through `IContentAccess`, not through the concrete Content class
-- controller receives/stores/uses its own Content instance typed through `IContentAccess`, not decomposed content command bags, facade/adapters, platform primitives, or inline closure objects (`CORE-031`)
+- controller receives/stores/uses its own Content instance typed through `IContentAccess`, not decomposed content lifecycle/materialization bags, facade/adapters, platform primitives, or inline closure objects (`CORE-031`)
 - `IContentAccess` is not used as a data/view-model/state/callback/child-output bag for content
 - public runtime parameters, composition entrypoints, parameter bags, config/options/props-like objects, callbacks/handlers bundles, stores, services, and prebuilt fragments are not used as semantic injection channels
 - any single public runtime input object/value used to materialize Content carries exactly one controller-typed value, not a merged `IContentAccess & IControllerAccess` bundle or general props/config/data/composition bag
@@ -90,6 +102,12 @@ A result is not valid until all checklist items pass.
 - accepted core deviations and migration waypoints do not produce validation pass or final-audit pass
 - content remains passive
 - no architectural logic in content
+- locally implemented content contains no conditional selection logic
+- locally implemented content does not select or derive structure,
+  class/style/token, text, icon, visibility, handler, child output, platform
+  primitive, representation, or capability
+- locally implemented content applies only already-resolved primitive values
+  received through its owning controller access contract
 
 ---
 

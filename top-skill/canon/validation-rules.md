@@ -21,6 +21,16 @@ Local functionality does not override TOP rules.
 
 ## Construction and locality validation
 - Every TOP object is constructed at its architectural position in the tree.
+- TOP construction attaches objects to context; it does not inject the state
+  they will use.
+- A TOP object constructor receives only the narrow contextual reference required
+  to place that object inside its ownership boundary. Data packets, flags,
+  callbacks, config/options/props-like objects, stores, services, child views,
+  presentation values, visibility values, style values, text values, runtime
+  state, and arbitrary additional arguments are `CORE-032`.
+- Post-construction data/config/state/presentation pushing into child nodes,
+  locally implemented content, connectors, or black-box boundaries through
+  setter-style calls is `CORE-032`.
 - Node constructors receive only the parent reference as their semantic argument; root `null`/`RootContext` is allowed only as a root ownership/bootstrap marker, not as dependency injection.
 - Node/Controller public runtime entrypoints must not receive semantic data,
   derived facts, callbacks, handlers, services, stores, child fragments,
@@ -36,8 +46,18 @@ Local functionality does not override TOP rules.
 - If a technology materializes Content through one public runtime input object/value, that input carries exactly one value: the owning controller instance typed only as the narrow content-to-controller owner access contract (`IControllerAccess` or target-equivalent), not a merged `IContentAccess & IControllerAccess` bundle or a general props/config/data/composition bag.
 - Content does not receive `IControllerAccess` members decomposed as separate runtime props/parameters, JSX attributes, named function arguments, or an ad hoc object literal assembled at the render/composition call site. Decomposed owner access input is `CORE-030`.
 - The owner access runtime value is the owning controller itself typed through the narrow interface. It is not an adapter/facade object, externally assembled method bag, or inline closure bundle. If a target cannot pass controller identity at all, this is a non-final target adapter constraint and must be validated as a deviation, not as canonical TOP.
-- Controller receives, stores, and uses its own Content instance typed only as `IContentAccess`/target-equivalent. Controller does not receive decomposed content command members, method bags, facade/adapters, closure objects, concrete Content types, platform primitives, or objects assembled outside the controller/content construction boundary as substitutes for `IContentAccess`. Decomposed content access input is `CORE-031`.
+- Controller receives, stores, and uses its own Content instance typed only as `IContentAccess`/target-equivalent. Controller does not receive decomposed content lifecycle/materialization members, method bags, facade/adapters, closure objects, concrete Content types, platform primitives, or objects assembled outside the controller/content construction boundary as substitutes for `IContentAccess`. Decomposed content access input is `CORE-031`.
 - `IControllerAccess` methods are controller-boundary methods owned by the controller; raw imported functions, externally owned method references, service methods, store actions, or callbacks are not exposed directly to Content as access methods.
+
+Canonical repair for context data injection:
+- remove additional constructor arguments;
+- add the missing value/request to the appropriate access contract;
+- let the object pull the value through that contract;
+- split pushed state/structural alternatives into explicit child state nodes;
+- wrap external component configuration behind a black-box boundary with a
+  narrow explicit interface;
+- route service/store/global dependency access through the owning context,
+  parent, or controller contract.
 
 ## Shared derived fact repair validation
 - A repair must not replace derivation duplication with parent-to-child runtime input tunneling.
@@ -56,7 +76,49 @@ Local functionality does not override TOP rules.
 - Content has no architectural will.
 - Content does not manage lifecycle.
 - Content does not know or use the full public node surface directly; it interacts with the controller only through `IControllerAccess`.
+- Locally implemented content must contain no conditional selection logic. It
+  must not decide, derive, branch, select, toggle, or compute which structure,
+  class/style/token, text, icon, visibility, handler, child output, platform
+  primitive, representation, or capability should be used.
+- Locally implemented content may only materialize a structurally static content
+  shape and apply already-resolved primitive values received through its owning
+  controller access contract.
+- Controller must not imperatively command, mutate, update, show, hide,
+  configure, or push presentation state into locally implemented content.
+- Controller-to-content access through `IContentAccess` is lifecycle and
+  materialization access only, such as obtaining the root content primitive or
+  participating in controlled lifecycle. It is not a presentation command
+  channel.
+- For locally implemented presentation content, `IContentAccess` must not expose
+  show/hide, set-visible, set-text, set-style, set-class, apply-state,
+  render-with, update-from-state, or equivalent imperative presentation
+  commands.
+- For data content, validation must not misclassify a data node controller
+  domain method such as `setAge(value)`, `updateName(value)`, or
+  `replaceRecord(record)` as a presentation-content push when access to that
+  data controller is architecturally valid. The data controller may mutate its
+  own private data content internally through `IContentAccess` or an equivalent
+  storage boundary. External direct data-content mutation and presentation
+  content direct access to data content remain violations.
+- Any `if`/`else`, `switch`/`case`, ternary operator, conditional rendering,
+  conditional return, multiple return branch, `&&`/`||` conditional selection,
+  `match`/`when`/guard branch, or equivalent conditional construct inside
+  locally implemented content is a hard `CORE-015` validation error when it
+  participates in selection or derivation.
 - Content may execute low-level platform commands on its own implementation material, including subscribe/unsubscribe and analogous operations, but it must not interpret those operations as architectural decisions or use them as an external communication channel.
+
+## Semantic event/request validation
+- Locally implemented content reports semantic intent to its owning controller
+  through methods such as `requestAgeChange(value)`, `onAgeInputCommitted(value)`,
+  `requestToggleMode()`, or `requestSubmit()`.
+- Locally implemented content must not decide where the data goes or mutate data
+  models directly.
+- A controller may call another controller's typed public/domain method only
+  when the relationship is architecturally allowed: direct parent, direct/static
+  child controller through public contract, guaranteed typed ancestor, connector
+  boundary, or explicitly declared data-tree reference.
+- If the current controller is not the owner of the decision, it raises or
+  passes a semantic event upward instead of directly mutating an unrelated node.
 
 ## Controller validation
 - Controller owns behavior, lifecycle, orchestration, branching.
@@ -216,7 +278,24 @@ Classification: `skill_convention_violation`
 
 ## Logic in content check
 
-- Display-only logic inside content is permitted.
-- Low-level platform-command execution inside content is permitted when it is limited to the content's own implementation material and forwards semantic events only through `IControllerAccess`.
-- Behavioural or architectural decision logic inside content is considered a violation.
-- If a conditional branch inside content affects ownership, lifecycle, orchestration, or protocol interaction, it is a violation.
+- Locally implemented content conditional selection logic is a hard validation
+  error (`CORE-015`).
+- There is no presentational exception. Visibility toggles, styling decisions,
+  formatting decisions, text/icon selection, handler selection, conditional
+  child output, conditional platform primitive selection, and structural
+  selection are controller/tree decisions, not content decisions.
+- Low-level platform-command execution inside content is permitted only when it
+  is limited to the content's own implementation material, contains no
+  selection/derivation decision, and forwards semantic events only through
+  `IControllerAccess`.
+- If locally implemented content needs an already-resolved primitive, it must
+  request that primitive through the owning controller access contract.
+- Controller must update its own state and mark the node/content/runtime dirty
+  or request lifecycle/render refresh through the node/runtime mechanism. It
+  must not push show/hide/update/apply-state/class/style/render-with commands
+  into locally implemented content.
+- If locally implemented content needs alternative structures, elements,
+  handlers, visibility modes, representations, or capabilities, the alternatives
+  must be modeled as explicit child state nodes.
+- External, native, third-party, or self-contained logic may be wrapped only as
+  black-box component content with a narrow explicit interface.

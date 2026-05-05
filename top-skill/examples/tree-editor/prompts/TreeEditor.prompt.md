@@ -6,85 +6,106 @@ sourcePath: src/tree_editor.top
 
 ## 1. Node Identity and Role
 
-TreeEditor is the executable editor branch root. In the current target it is bootstrapped directly by the host entry point; after AppNode materialization it should be created by the application composition root. It owns the editor toolbar, mode holder, and pane. It is the integration point between the editor branch and the host container, not the root of all project branches.
+TreeEditor is the executable editor branch root. In the current target it is
+bootstrapped by the host entry point; after AppNode materialization it should be
+created by the application composition root. It owns the editor toolbar, mode
+holder, and pane.
 
 ## 2. Responsibility
 
-- Provide the top-level visual container for the editor.
-- Accept `mount(container, sourceData)` to attach the editor to the host environment and seed the tree with data.
-- Own the drag-and-drop session state (which item is currently being dragged).
-- Expose `isEditMode` as a derived read-only property for descendant nodes.
-- Expose `setEditMode(value)` to apply the editor-level visual mode marker through its content boundary.
-- Expose `refreshAll()` to trigger a full recursive refresh of every node in the subtree.
+- Provide the top-level editor content container.
+- Accept `mount(container, sourceData)` as the current host bootstrap boundary.
+- Store the source tree record for the editor branch and expose it to EditorPane
+  through a narrow controller/domain method.
+- Own drag session state for the currently dragged TreeItem controller.
+- Expose `isEditMode` as a derived read-only property from EditorModeHolder.
+- Expose already-resolved editor presentation tokens through controller access
+  so locally implemented content can apply them during refresh.
+- Expose `refreshAll()` to request a full subtree refresh after state or data
+  changes.
 
 ## 3. Inputs and Events
 
-- `mount(container, sourceData)` — current target bootstrap entry point. Attaches the editor branch view to the host container, then delegates data initialization to RootItemHolder. In a materialized AppNode target this call may be delegated by the application composition root.
-- `setDraggedItem(item)` — called by drag-aware descendants to register the item being dragged.
-- `getDraggedItem()` — called by descendants during drag events to query the current dragged item.
-- `clearDraggedItem()` — called at drag end to reset drag state.
-- `setEditMode(value)` — called by editor mode states to update the editor-level visual mode marker; the controller delegates this operation to content through `IContentAccess`.
-- `refreshAll()` — may be called by any descendant to cascade a refresh to all nodes.
+- `mount(container, sourceData)` - attaches the editor opaque content handle to
+  the host container and stores `sourceData` as TreeEditor-owned branch data.
+- `getRootRecord()` - returns the current root tree record to EditorPane or
+  RootItemHolder through the allowed direct-child chain.
+- `setDraggedItem(item)` / `getDraggedItem()` / `clearDraggedItem()` - manage
+  the current drag session.
+- `requestEditMode(value)` - called by editor mode state controllers. Updates
+  mode state through EditorModeHolder and requests refresh; it does not command
+  content to toggle classes.
+- `refreshAll()` - requests every node in the subtree to refresh from current
+  controller/data state.
 
 ## 4. State Ownership
 
-- **draggedItem** — the tree node currently being dragged, or null. The only mutable state owned directly by TreeEditor.
-- **isEditMode** (derived) — computed from EditorModeHolder's active child. TreeEditor never caches this value; it always derives it live.
+- `rootRecord` - source tree record for this editor branch.
+- `draggedItem` - current TreeItem controller being dragged, or null.
+- `isEditMode` - derived live from EditorModeHolder, never cached.
+- Editor-level presentation tokens are resolved by the controller and pulled by
+  TreeEditor content during materialization/refresh.
 
 ## 5. Child Interaction Rules
 
-TreeEditor has exactly three direct children, created in this order:
+TreeEditor has exactly three direct children:
 1. EditorToolbar
 2. EditorModeHolder
 3. EditorPane
 
-TreeEditor queries EditorModeHolder via the private `_editorModeHolder` reference when computing `isEditMode`. It delegates data initialization during `mount` to EditorPane via the private `_editorPane` reference, which in turn delegates to RootItemHolder. Children's views are placed by TreeEditor into its own content area during the child materialization phase.
+Child constructors receive only TreeEditor as parent/context. TreeEditor exposes
+`getRootRecord()`, `isEditMode`, drag-session methods, and refresh methods
+through its controller/domain surface. It does not pass source data, mode flags,
+callbacks, config, or presentation values into child constructors.
 
 ## 6. Lifecycle
 
-1. Constructor: initializes TreeEditor-owned runtime state only.
-2. Constructor: creates the editor content boundary with `setContent(...)`.
-3. `buildChildren()`: creates EditorToolbar, EditorModeHolder, and EditorPane in the declared order; obtains direct child opaque view handles from those child controllers and places them through TreeEditor's own content boundary.
-4. `mount(container, sourceData)`: attaches the editor view to the host container; delegates data initialization to EditorPane, which in turn calls `rootItemHolder.init(sourceData)`.
-5. `refreshAll()`: performs a synchronous depth-first traversal of the full node subtree and calls `refresh()` on each node.
+1. Constructor initializes TreeEditor-owned state only.
+2. Constructor creates content typed through `IContentAccess`.
+3. `buildChildren()` creates the three direct children and places their opaque
+   handles through parent-owned materialization.
+4. `mount(container, sourceData)` stores the root record, attaches the editor
+   opaque handle to the host container, and requests refresh/materialization of
+   the pane branch.
+5. `refreshAll()` performs a synchronous depth-first refresh request.
 
 ## 7. Side Effects
 
-- Attaching the editor view to the host container during `mount`.
-- `refreshAll()` causes the subtree to re-evaluate and update its materialized presentation where needed.
+- Host attachment during `mount`.
+- Subtree refresh after source data, mode state, drag state, or tree structure
+  changes.
 
 ## 8. Constraints and Invariants
 
-- Exactly one EditorModeHolder, one EditorToolbar, and one EditorPane exist as direct children at all times.
-- `draggedItem` is null outside of an active drag operation.
-- `isEditMode` is always derived live; never stored as a cached boolean.
-- `refreshAll()` must visit all nodes in the subtree, not only direct children.
-- Controller code must not mutate the editor visual primitive directly when changing edit-mode presentation; it must call a named content command.
+- TreeEditor does not mutate its presentation content to show/hide/update mode
+  state. It resolves presentation tokens and requests refresh.
+- TreeEditor does not pass data/config/callback/state packets into children.
+- The host container is an integration boundary, not a TOP child.
+- `isEditMode` is derived live from EditorModeHolder.
 
 ## 9. Non-Goals
 
-- Does not manage item selection.
-- Does not serialize or deserialize tree data.
+- Does not serialize changes back to `sourceData`.
 - Does not manage scroll position.
-- Does not observe external resize events.
+- Does not own item-level expand/collapse state.
 
 ## 10. Platform Implementation Notes
 
-- Visual element: `div` with CSS class `tree-editor`.
-- Edit-mode marker: content command toggles CSS class `edit-mode` on the editor element.
-- `isEditMode` reads `this._editorModeHolder.isEditMode`.
-- `mount` attaches the editor branch view to the host container; a DOM target may use `replaceChildren(this.getView())` to keep the host surface single-rooted.
-- `refreshAll()` is a synchronous recursive walk; no async scheduling.
-- Extends `DomNode`.
+- Visual primitive: `div` with role/class generated from already-resolved
+  controller tokens.
+- A DOM target may attach the editor opaque handle using host integration
+  mechanics such as replacing the host's single child.
+- Edit-mode styling is an already-resolved primitive token pulled by content
+  through controller access.
+- `refreshAll()` is a synchronous recursive walk.
 
 ## 11. Expected Materialization
 
 - Primary artifact stem: `src/tree_editor.top`
 - Public node class: `TreeEditorNode`
 - Base class / base role: `DomNode`
-
 - Materialization policy: one-file default
 - Internal contracts:
-  - Controller-to-content: TreeEditorContentAccess
-  - Content-to-controller: TreeEditorControllerAccess empty zero-contract interface implemented by the owning node/controller
+  - Controller-to-content: `TreeEditorContentAccess`
+  - Content-to-controller: `TreeEditorControllerAccess`
 - Companion artifact stems: none

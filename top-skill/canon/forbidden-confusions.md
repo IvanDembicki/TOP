@@ -219,31 +219,65 @@ Forbidden:
 If a decision or implementation relies on merging two separated concepts,
 the result is non-canonical and must be rejected.
 
-## Logic in content
+## Locally implemented content conditional selection
 
-- Content may only perform display-only logic.
-- Display-only logic includes:
-  - visibility toggles
-  - styling decisions
-  - formatting decisions
-  - simple presentational branching that does not change behavior
+Locally implemented content must contain no conditional selection logic.
 
-- Logic in content is considered a violation if the branching:
-  - makes behavioral decisions
-  - changes orchestration
-  - manages lifecycle
-  - determines cross-boundary interaction
-  - selects an architectural scenario based on state, props, or context
+It must not decide, derive, branch, select, toggle, or compute which structure,
+class/style/token, text, icon, visibility, handler, child output, platform
+primitive, representation, or capability should be used.
 
-Forbidden:
-- state-driven behaviour decisions inside content
-- orchestration decisions inside content
-- lifecycle decisions inside content
-- protocol-routing decisions inside content
+Locally implemented content may only materialize a structurally static content
+shape and apply already-resolved primitive values received through its owning
+controller access contract.
 
-Clarification:
-- `if` or `switch` by themselves are not a violation
-- The violation is specifically behavioral or architectural decision logic inside content
+Controller must not imperatively command, mutate, update, show, hide,
+configure, or push presentation state into locally implemented content. The
+controller updates its own state and marks the node/content/runtime dirty or
+requests lifecycle/render refresh; content then pulls already-resolved values
+through controller access during materialization or refresh.
+
+Forbidden inside locally implemented content:
+- `if` / `else` selection
+- `switch` / `case` selection
+- ternary selection
+- conditional rendering or conditional return
+- multiple return branches
+- `&&` / `||` conditional selection
+- `match` / `when` / guard branches
+- any equivalent conditional construct that participates in selection or
+  derivation
+
+This is a hard validation error when the construct participates in selection or
+derivation. It is not a warning or deep-audit case.
+
+Motivation:
+- deterministic materialization
+- cacheability
+- pre-rendering
+- portability
+- verifiability
+
+If locally implemented content contains selection logic, the system cannot
+reliably know in advance which objects, classes, platform primitives, handlers,
+or structural shape may exist inside that content. The content becomes a hidden
+decision engine and breaks the TOP boundary between controller/tree decision
+ownership and content materialization.
+
+Canonical repair:
+- If locally implemented content computes or selects a primitive value, move
+  that derivation to the owning controller. The content may request only the
+  already-resolved value through controller access.
+- If locally implemented content selects between different structures,
+  elements, handlers, visibility modes, representations, or capabilities, split
+  the alternatives into explicit child state nodes.
+- If the logic belongs to an external, native, third-party, or self-contained
+  implementation, wrap it as black-box component content and expose only a
+  narrow explicit interface.
+- If controller code pushes presentation commands or mutation state into locally
+  implemented content, replace that push with controller-owned state plus a
+  dirty/render/lifecycle refresh path and content pull of already-resolved
+  values.
 
 ---
 

@@ -11,12 +11,16 @@ CollapsedState is the last child of ExpandCollapseHolder. When active, it repres
 ## 2. Responsibility
 
 - Exist as the collapsed state within ExpandCollapseHolder.
-- Notify the ancestor TreeItem when this state becomes active so the row icon refreshes after `openedChild` has already changed to collapsed.
+- Notify the ancestor TreeItem when this state becomes active so resolved
+  toggle/icon tokens refresh after `openedChild` has already changed to
+  collapsed.
 - Do not deactivate ChildrenList; that is handled by ExpandedState's `onClose()`.
 
 ## 3. Inputs and Events
 
-- `onOpen()` — fired when this state becomes the active child of ExpandCollapseHolder; calls `notifyToggle()` on ancestor TreeItem.
+- `onOpen()` - fired when this state becomes the active child of
+  ExpandCollapseHolder; asks ancestor TreeItem to refresh resolved toggle/icon
+  tokens.
 - `onClose()` — no action required.
 
 ## 4. State Ownership
@@ -35,7 +39,7 @@ Has no child nodes.
 
 ## 7. Side Effects
 
-Updates the row icon to the collapsed folder state.
+Requests refresh of the controller-owned resolved icon token.
 
 ## 8. Constraints and Invariants
 

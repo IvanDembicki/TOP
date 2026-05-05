@@ -184,8 +184,13 @@ A child or subtree is not materialized immediately but is created later on a run
 ## 6. Inherited Context
 
 ### Definition
-A node receives part of its configuration, path, environment, or placement rules
-from an ancestor node through inheritance.
+A node accesses inherited context such as path, environment, placement policy, or
+shared configuration through an explicit ancestor/context contract.
+
+The node is attached to context and pulls what it needs through the allowed
+contract. It must not receive inherited configuration as constructor data,
+props, config/options objects, callbacks, services, stores, or post-construction
+setter packets.
 
 ### When to use
 - descendants must share a common context;
@@ -200,6 +205,7 @@ from an ancestor node through inheritance.
 - the source of the inherited context is clear;
 - override rules are understood;
 - descendants do not interpret inheritance in contradictory ways.
+- inherited context travels through explicit contracts, not injection packets.
 
 ### Common confusion
 - inheritance is perceived as a local property of the child;

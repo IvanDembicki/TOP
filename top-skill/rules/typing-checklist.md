@@ -66,6 +66,31 @@ Violation code: `CORE-029`.
 
 ---
 
+### 1a-1. Context attachment, not data injection
+
+**What to check:**
+Every TOP object constructor receives only the narrow contextual reference
+required to attach the object to its ownership boundary.
+
+Valid constructor inputs:
+- node: parent/context reference;
+- locally implemented content: owning controller access contract;
+- connector or black-box boundary: explicit boundary interface.
+
+Violation signal:
+- constructor receives data packets, flags, callbacks, config/options/props-like
+  objects, stores, services, child views, presentation values, visibility
+  values, style values, text values, runtime state, handlers, or arbitrary
+  additional arguments
+- child/content/connector objects are configured after construction through
+  setter-style data/config/state/presentation injection
+- a service/store/global dependency is injected directly instead of being
+  requested through the owning context, parent, or controller contract
+
+Violation code: `CORE-032`.
+
+---
+
 ### 1b. Content constructor access parameter
 
 **What to check:**
@@ -119,7 +144,7 @@ Violation signal:
 - Controller field is typed as the concrete Content class instead of `IContentAccess`
 - Controller calls methods that are public on the concrete content class but absent from `IContentAccess`
 - Concrete content implementation details are exposed to controller code through typing
-- Controller receives/stores/uses decomposed content command methods, method bags,
+- Controller receives/stores/uses decomposed content lifecycle/materialization members, method bags,
   facade/adapters, platform primitives, or inline closure objects instead of its
   own Content instance typed as `IContentAccess`
 - `IContentAccess` contains view-model values, state flags, callbacks, child-output handles, or data fields that content reads from the controller

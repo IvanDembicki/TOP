@@ -6,76 +6,77 @@ sourcePath: src/pane/tree_item/tree_item_row.top
 
 ## 1. Node Identity and Role
 
-TreeItemRow is a switchable container node that holds two row representations for a tree item: one for view mode (TreeItemRowViewState) and one for edit mode (TreeItemRowEditState). It has its own content area into which the active child's view is mounted.
+TreeItemRow is a switchable container node that holds the view-mode row
+representation and the edit-mode row representation for one TreeItem.
 
 ## 2. Responsibility
 
-- Maintain the correct active child based on the current editor mode.
-- Delegate `setPaddingLeft`, `setText`, and `updateToggle` to both children unconditionally so that both are always up-to-date regardless of which is currently active.
-- Expose row measurement and drop-hint commands through its content boundary for drag-and-drop coordination.
+- Own the active row state selection between TreeItemRowViewState and
+  TreeItemRowEditState.
+- Pull `isEditMode` from the guaranteed TreeEditor ancestor and switch the active
+  child accordingly during refresh.
+- Expose resolved row geometry/drop values to TreeItem through typed methods.
+- Expose TreeItem-derived primitive values to row state children through
+  pull-through methods.
 
 ## 3. Inputs and Events
 
-- `refresh()` — reads `isEditMode` from the ancestor TreeEditor; if the active child does not match the mode, opens the matching child through the base switchable mechanism.
-- `setPaddingLeft(px)` — forwarded to both TreeItemRowViewState and TreeItemRowEditState.
-- `setText(text)` — forwarded to both children's label sub-nodes.
-- `updateToggle(hasChildren, isExpanded)` — forwarded to both children's icon sub-nodes.
-- `getRowMidpointY()` — asks content for the row midpoint in host/platform coordinates.
-- `setDropHint(position)` — asks content to materialize the current drop hint.
-- `clearDropHint()` — asks content to clear any materialized drop hint.
+- `refresh()` - selects the active child state and requests child refresh.
+- `getLabelText()` - delegates to owning TreeItem.
+- `getIndentToken()` - delegates to owning TreeItem.
+- `getIconToken()` - delegates to owning TreeItem.
+- `getDragToken()` - delegates to owning TreeItem.
+- `getDropHintToken()` - delegates to owning TreeItem.
+- `requestRowMidpoint()` - asks content for measurement through lifecycle/
+  materialization access only.
 
 ## 4. State Ownership
 
-- Owns the view/edit row split via `openedChild`.
-- Does not own the editor mode; reads it only to make the switching decision.
+Owns only the active row representation child. Does not own item data, editor
+mode, or drop state.
 
 ## 5. Child Interaction Rules
 
-- Two children: TreeItemRowViewState (`_viewState`, default) and TreeItemRowEditState (`_editState`).
-- During initial child materialization, assign `_viewState` as the active child and place its view without firing child lifecycle hooks.
-- All data updates (`setPaddingLeft`, `setText`, `updateToggle`) are sent to both children regardless of which is active.
-- Switching is performed via `openChild(target)` in `refresh()`. The base switchable mechanism mounts and unmounts the active child's view automatically.
+- Two children: TreeItemRowViewState and TreeItemRowEditState.
+- Child constructors receive only TreeItemRow as parent/context.
+- TreeItemRow does not push label, indentation, icon, or toggle values into
+  children. Children pull resolved values through their parent/context contract.
 
 ## 6. Lifecycle
 
-1. Constructor: captures the ancestor TreeEditor reference if required by the generated implementation.
-2. Constructor: creates the row-holder content boundary with `setContent(...)`.
-3. `buildChildren()`: creates both children. `_viewState` is assigned as the default active child and its view is placed into the content area without calling `openChild()`.
-4. On `refresh()`: if `isEditMode` is true, calls `openChild(this._editState)`; if false, calls `openChild(this._viewState)`. No switch is made if the correct child is already active.
+1. Constructor creates row holder content.
+2. `buildChildren()` creates both row states and places the default child.
+3. `refresh()` opens the correct child state and requests active child refresh.
 
 ## 7. Side Effects
 
-- Switching `openedChild` in `refresh()` via `openChild()`: the base switcher unmounts the outgoing child's view and mounts the incoming child's view.
+- Switches active child through the base switchable mechanism.
 
 ## 8. Constraints and Invariants
 
-- `isEditMode` must only be read for the purpose of switching `openedChild`; no other logic should depend on it at this level.
-- Both children must receive all data updates regardless of active state.
-- Initial default-child assignment must not call child `onOpen()` because the surrounding tree may still be materializing.
-- Controller code must not inspect or mutate the row holder primitive directly for measurement or drop-hint presentation; it must use named content commands.
+- No setter-style propagation into children.
+- No presentation command methods for drop hints. Drop hint is a resolved token
+  pulled by content.
+- `isEditMode` is used only by the controller to select the child state.
 
 ## 9. Non-Goals
 
-- Does not manage expand/collapse.
-- Does not handle drag events.
+- Does not own expand/collapse.
+- Does not handle drag semantics directly.
 
 ## 10. Platform Implementation Notes
 
-- Visual element: `div` with CSS class `tree-item-row-holder`.
-- Row midpoint: content reads the holder element geometry and returns the vertical midpoint.
-- Drop hint: content toggles CSS classes `drop-top` and `drop-bottom` on the holder element.
-- Ancestor lookup: `this._editor = this.findUpByType(TreeEditorNode)` captured in constructor; `refresh()` reads `this._editor?.isEditMode ?? false`.
-- On `refresh()`: `const target = isEdit ? this._editState : this._viewState; if (this.openedChild !== target) this.openChild(target);`
-- Extends `DomNode`.
+- Visual primitive: static row-state holder container.
+- Drop-hint presentation is an already-resolved primitive token pulled by
+  content.
 
 ## 11. Expected Materialization
 
 - Primary artifact stem: `src/pane/tree_item/tree_item_row.top`
 - Public node class: `TreeItemRowNode`
 - Base class / base role: `DomNode`
-
 - Materialization policy: one-file default
 - Internal contracts:
-  - Controller-to-content: TreeItemRowContentAccess
-  - Content-to-controller: TreeItemRowControllerAccess empty zero-contract interface implemented by the owning node/controller
+  - Controller-to-content: `TreeItemRowContentAccess`
+  - Content-to-controller: `TreeItemRowControllerAccess`
 - Companion artifact stems: none

@@ -22,34 +22,109 @@ Both passes are mandatory. The absence of code signals (pass 1) does not exempt 
 
 The following signals indicate that a node contains hidden state — regardless of the specific pattern.
 
-### Group A — Visibility and style manipulation
+Platform-specific examples in this section are examples for semantic review
+only. They must not be copied into platform-neutral quick validation scripts.
+Quick validation scripts must detect only language/syntax-level conditional
+constructs and must remain independent of DOM, React, Flutter, Compose, SwiftUI,
+Android, iOS, or any other target framework.
+
+### Group A — Locally implemented content conditional selection
+
+Inside a locally implemented content boundary, any language-level conditional
+construct is a candidate `CORE-015` signal when it participates in selecting or
+deriving structure, class/style/token, text, icon, visibility, handler, child
+output, platform primitive, representation, or capability.
+
+Platform-neutral construct signals:
+- `if` / `else`
+- `switch` / `case`
+- ternary or conditional-expression syntax
+- conditional return or multiple return branches
+- boolean short-circuit selection such as `&&` or `||`
+- `match` / `when` / guard branches
+- equivalent language constructs that choose between alternatives
+
+The prefilter does not make the final architectural verdict by itself. It
+reports candidates for Validation Agent review. Validation confirms `CORE-015`
+when the construct participates in content-local selection or derivation.
+
+Canonical repair:
+- primitive value derivation moves to the owning controller and is requested as
+  an already-resolved primitive through controller access;
+- structural, visibility, handler, representation, or capability alternatives
+  become explicit child state nodes;
+- external, native, third-party, or self-contained logic is wrapped as
+  black-box component content with a narrow explicit interface.
+
+### Group A2 — Context data injection
+
+TOP construction attaches objects to context; it does not inject the state they
+will use. Platform-neutral recognition should look for constructor signatures,
+factory calls, or runtime entrypoints for known TOP object roles that receive
+more than the allowed context argument.
+
+Candidate signals:
+- constructors for nodes with arguments beyond parent/context;
+- constructors for locally implemented content with arguments beyond the owning
+  controller access contract;
+- constructors or factories for connectors or black-box boundaries with data,
+  config/options/props-like objects, callbacks, handlers, flags, stores,
+  services, state, text, visibility, style, presentation values, child views, or
+  platform primitives as additional inputs;
+- post-construction setter-style injection into child/content objects, such as
+  apply-config, set-data, set-visible, update-text, set-style, set-callbacks, or
+  equivalent calls.
+
+The prefilter reports these as possible `CORE-032` candidates for Validation
+Agent review. It must not make the final semantic verdict by itself.
+
+Do not classify an architecturally allowed data node controller domain method
+such as `setAge(value)`, `updateName(value)`, or `replaceRecord(record)` as a
+controller-to-presentation-content push. The violation is direct mutation of raw
+data content from outside the owning data controller, constructor data
+injection, or setter-style packet pushing into child/content objects.
+
+Canonical repair:
+- remove additional constructor arguments;
+- expose the missing value/request through the appropriate access contract;
+- let the object pull the value through that contract after attachment;
+- model pushed state or structural alternatives as explicit child state nodes;
+- wrap external component configuration behind a black-box boundary with a
+  narrow explicit interface;
+- route service/store/global dependency access through the owning context,
+  parent, or controller contract.
+
+### Group B — Visibility and style manipulation
 
 - `el.style.display = 'none' / 'block'` — conditional hiding based on mode (not model data)
 - `classList.add/remove/toggle` with names reflecting state (`active`, `hover`, `pressed`, `edit-mode`)
 - `el.style.opacity`, `el.style.visibility`, `el.style.pointerEvents` — conditionally toggled
 - `el.hidden = condition`
 
-Important: if a style is set from model data (color from `data.color`) — this is not a violation. A violation is when a style reflects the mode or internal state of the node itself.
+Important: inside locally implemented content, style/class/token selection is
+not permitted even when it looks presentational. The owning controller must
+provide already-resolved primitive values, or the alternatives must become
+explicit child state nodes.
 
-### Group B — Dynamic DOM manipulation
+### Group C — Dynamic DOM manipulation
 
 - `appendChild` / `removeChild` / `insertBefore` called inside `refresh()` — structure changes conditionally
 - platform visual primitives created inside `refresh()` instead of the content materialization phase
 - A node has two DOM elements with overlapping visual roles (`_viewEl` and `_editEl`, two sets of buttons)
 
-### Group C — Internal state flags
+### Group D — Internal state flags
 
 - Field `_isHovered`, `_isPressed`, `_isExpanded`, `_isActive`, `_currentState` — the node tracks its own visual state
 - Pattern `_listenersAdded = false` with a check before `addEventListener` — conditional handler registration
 - Any boolean/enum field that changes rendering or behavior, not model data
 
-### Group D — Dynamic handler registration
+### Group E — Dynamic handler registration
 
 - `addEventListener` / `removeEventListener` called in `refresh()` — not during initialization
 - One handler registered with different functions depending on mode
 - Handlers for opposite sides of a state transition in the same node (see Pattern #2)
 
-### Group E — Behavior-altering attributes
+### Group F — Behavior-altering attributes
 
 - `el.draggable = condition` — toggled in `refresh()`
 - `el.disabled = condition`
@@ -57,12 +132,12 @@ Important: if a style is set from model data (color from `data.color`) — this 
 
 These are not model data. If they are toggled based on mode — this is hidden behavioral state.
 
-### Group F — Structural branching in refresh()
+### Group G — Structural branching in refresh()
 
 - `if/else` in `refresh()` where branches change not data but visibility, structure, or available actions
 - Different child nodes active in different branches
 
-### Group G — Delegation to state objects (State pattern)
+### Group H — Delegation to state objects (State pattern)
 
 - Node stores a field `_state`, `_currentState`, `_strategy` — a reference to an object managing behavior or rendering
 - Node delegates rendering, content materialization, or event handling to the state object
@@ -73,7 +148,7 @@ The State pattern does not eliminate the problem — it encapsulates it. Behavio
 
 In TOP terms: if a node needs the State pattern — this is a signal that a switchable holder is needed with explicit state nodes as tree children, not objects inside a single node.
 
-### Group H — Multiple states described in spec
+### Group I — Multiple states described in spec
 
 A node has two or more mutually exclusive visual representations or sets of available actions, conditioned by any external context — regardless of the nature of that context or the mechanism for detecting it.
 
@@ -125,8 +200,12 @@ Both conditions must hold simultaneously:
 
 ### Not a violation
 
-- The node only updates model data (label text, counter, color from data)
-- Node behavior is the same in both states — only styling changes
+- The controller only updates already-resolved model data exposed through a
+  narrow access contract and node behavior is identical in both states.
+
+Inside locally implemented content, text/color/style/visibility/handler or
+representation selection is still not allowed. The content may apply the
+already-resolved primitive value, but it must not select or derive that value.
 
 ### Architectural problem
 

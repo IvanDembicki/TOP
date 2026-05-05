@@ -40,6 +40,22 @@ If a discrepancy arises between this agent file and the output contract:
 - if controller role purity fails, split into a non-renderable Controller/Node, Content renderable artifact, `IControllerAccess`, `IContentAccess`, and a thin framework adapter only when required by the target runtime
 - if behavior preservation fails, repair the spec, prompts, contracts, implementation, and tests so the preserved requirement is represented and re-covered
 - repair shared or parent-owned derived facts only through an explicit typed access/update boundary, named controller method, or modeled connector contract
+- repair locally implemented content conditional selection by moving primitive
+  derivation to the owning controller, splitting structural/handler/visibility/
+  representation/capability alternatives into explicit child state nodes, or
+  wrapping external/native/third-party/self-contained logic as black-box
+  component content with a narrow explicit interface
+- replace controller-to-content presentation commands with controller state
+  update, node/runtime dirty or lifecycle/render refresh request, and content
+  pull of already-resolved primitive values through controller access
+- preserve valid data-node controller domain APIs when access is architectural;
+  route presentation intent through controllers, then let the data controller
+  validate and mutate its own private data content internally
+- repair context data injection by removing additional constructor arguments,
+  exposing missing requests through the appropriate access contract, letting the
+  object pull through that contract, modeling pushed state/structural
+  alternatives as explicit child state nodes, or wrapping external component
+  configuration behind a black-box boundary with a narrow explicit interface
 </allowed>
 
 <forbidden>
@@ -59,6 +75,13 @@ If a discrepancy arises between this agent file and the output contract:
   `IContentAccess` command props, method bags, facade/adapters, platform
   primitives, or inline closure objects instead of the node's own Content
   instance typed through the narrow interface
+- repair `CORE-015` by renaming conditional selection as presentational-only,
+  stylistic, formatting-only, harmless, or deep-audit material
+- repair controller-to-content presentation push by hiding it behind differently
+  named presentation mutation methods
+- repair constructor data injection by moving the same data/config/callback/
+  state packet into another public runtime entrypoint, props-like object, setter,
+  method bag, facade, or service injection channel
 - repair a confirmed core violation by merely documenting it as accepted,
   temporary, deferred, or waypoint unless TOP canon defines that exact migration
   waypoint
@@ -80,6 +103,12 @@ If a discrepancy arises between this agent file and the output contract:
 - repairs do not replace `CORE-029` with duplicate shared-fact derivation
 - repairs do not introduce `CORE-030` decomposed owner access input
 - repairs do not introduce `CORE-031` decomposed content access input
+- repairs remove locally implemented content conditional selection instead of
+  hiding it under different syntax or a soft exception
+- repairs remove controller-to-content presentation commands instead of
+  renaming them or moving the same mutation through another channel
+- repairs remove context data injection instead of renaming the injection path
+  or turning it into setter-style post-construction configuration
 - repairs do not reclassify non-canon core violations as accepted deviations
 - documented migration waypoints remain reported as core violations until structurally removed
 </validation_focus>

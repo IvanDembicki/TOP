@@ -14,22 +14,33 @@ Events do not violate tree discipline:
 
 ---
 
-## Event propagation directions
+## Event/request propagation directions
 
 ### Bottom-up (bubbling)
 
-A child node generates an event and passes it to the parent.
-The parent handles or forwards the event further up.
+A child node or locally implemented content reports a semantic event/request to
+its owning controller or parent controller through the declared contract. The
+controller handles the request or forwards it further up through allowed
+controller contracts.
 
 Example: a child node signals to the parent that data loading is complete.
 The parent responds by switching state.
 
-### Top-down (propagation)
+### Allowed parent-to-child calls
 
-A parent or another owner node may pass a command or notification to child nodes.
-Such top-down propagation is possible, including for `onBranchOpen(node)` and
-`onBranchClose(node)`, but the specific propagation policy is not automatically
-defined by the base canon.
+A parent or owner may invoke explicitly declared child controller lifecycle or
+domain methods when that relationship is allowed by TOP access rules, for
+example direct parent-to-child lifecycle hooks such as `onBranchOpen(node)` and
+`onBranchClose(node)`.
+
+This is not a data/config/presentation push channel. Events/requests may move
+through the tree, but data packets, config, presentation state, callbacks,
+props, stores, services, and imperative mutation commands must not be pushed
+into child nodes or locally implemented content.
+
+If a child needs data, it pulls it through its contextual contract. If a child
+reports user/system intent, it sends a semantic event/request to its controller
+or upward through allowed controller contracts.
 
 ---
 
@@ -81,11 +92,19 @@ When switching a specific switchable node:
 
 ## Event handling rules
 
-- Do not access remote nodes directly to transfer data.
-  Use events or the module interface.
+- Do not access remote nodes directly to transfer data. Use semantic
+  events/requests, typed controller/domain methods, or the module interface.
 - A child must not know about the structure above its parent.
 - A parent must not know about the internal structure of a child beyond the first level.
 - Events between non-adjacent nodes are passed through the chain of parent nodes.
+- Parent/owner code must not push arbitrary state, props, config, callbacks,
+  presentation values, mutation packets, or data packets into child objects.
+- A data node controller may expose typed domain methods such as `setAge(value)`
+  or `replaceRecord(record)` when the relationship is architecturally allowed.
+  The data controller validates and mutates its own private data content; callers
+  do not mutate that content directly.
+- Presentation content reports intent. Controllers make decisions. Data
+  controllers mutate data. Presentation content later pulls resolved values.
 
 ---
 

@@ -208,8 +208,9 @@ Correct direction:
   interface;
 - data, state, actions, and child-output handles are requested through explicit
   controller-owned methods/accessors on that owner access;
-- controller-to-content commands, if any, are modeled separately through
-  `IContentAccess` or target-equivalent.
+- controller-to-content lifecycle/materialization access, if any, is modeled
+  separately through `IContentAccess` or target-equivalent; presentation
+  decisions are not pushed into content.
 
 Forbidden React-like shape:
 

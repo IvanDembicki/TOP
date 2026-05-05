@@ -60,9 +60,13 @@ next_step:
   facade/adapters, or inline closure objects instead of the owning controller
   typed through the narrow interface
 - Repair output must report `CORE-031` if the repair replaces concrete content
-  exposure with decomposed `IContentAccess` command methods, method bags,
+  exposure with decomposed `IContentAccess` lifecycle/materialization members, method bags,
   facade/adapters, platform primitives, or inline closure objects instead of the
   node's own Content instance typed through the narrow interface
+- Repair output must report `CORE-032` if the repair leaves or introduces
+  constructor data injection or setter-style post-construction data/config/
+  state/presentation pushing into TOP objects instead of context attachment and
+  pull-through contracts
 - If a shared derived fact cannot be repaired without a new typed access/update boundary, named controller method, or modeled connector contract, repair output must mark the repair blocked instead of proposing a local workaround
 - Repair output must not treat documentation of a core violation as repair. A
   core violation may be listed in `accepted_deviations` only when TOP canon

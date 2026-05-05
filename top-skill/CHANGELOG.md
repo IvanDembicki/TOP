@@ -7,6 +7,70 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.18] — 2026-05-05
+
+- Reconciled the event/request model with context attachment: semantic
+  events/requests may move through allowed contracts, but data/config/
+  presentation packets and imperative mutation commands must not be pushed into
+  child nodes or locally implemented presentation content.
+- Clarified the distinction between locally implemented presentation content and
+  data content: presentation content reports intent and pulls resolved values;
+  data controllers may mutate their own private data content through internal
+  storage boundaries.
+- Updated tree-editor from a previously noncanonical example to the current
+  canonical flow: child nodes attach to parent/context, item records are pulled
+  through owner contracts, and presentation nodes pull resolved label/icon/
+  indentation/drop/drag values.
+
+## [1.1.17] — 2026-05-05
+
+- Added `CORE-032` for context data injection: TOP objects are attached to
+  context and must not be filled with constructor data, config, callbacks,
+  state, services, stores, child views, or presentation values.
+- Extended canon, node model, validation, generation, repair, and verification
+  rules so nodes receive parent/context only, locally implemented content
+  receives owning controller access only, and connectors/black-box boundaries
+  receive only their explicit boundary interface.
+- Added platform-neutral quick validation candidates for constructor data
+  injection and setter-style post-construction pushing, while keeping semantic
+  verdicts in Validation Agent.
+- Marked earlier tree-editor examples that used reset/data/setter-style
+  materialization as invalid under the context-attachment invariant. Those
+  examples are canonical again as of 1.1.18.
+
+## [1.1.16] — 2026-05-05
+
+- Fixed the locally implemented content motivation placement in architectural
+  invariants and gave static materialization its own cacheability,
+  pre-rendering, portability, and verifiability rationale.
+- Strengthened controller/content flow: controller must not push presentation
+  commands, state, or mutations into locally implemented content; presentation
+  changes flow through controller state, dirty/render refresh, and content pull
+  of already-resolved values.
+- Updated hydration tiers so generation, validation, and repair agents are
+  loaded in workflows that depend on their rule changes.
+- Changed quick validation conditional-content detection into a separate
+  agent-review candidate channel rather than a final architectural verdict.
+- Clarified that platform-specific pattern examples are semantic review
+  examples only and must not be copied into platform-neutral quick validation.
+
+## [1.1.15] — 2026-05-05
+
+- Added a cross-cutting canonical rule that locally implemented content must
+  contain no conditional selection logic of any kind.
+- Tightened `CORE-015` so conditional selection inside locally implemented
+  content is a hard validation error, including structure, class/style/token,
+  text, icon, visibility, handler, child output, platform primitive,
+  representation, and capability selection.
+- Updated canon, node model, validation, generation, repair, verifier, and
+  pattern-recognition guidance with the canonical repairs: move primitive
+  derivation to the owning controller, split structural alternatives into child
+  state nodes, or wrap external/self-contained logic as black-box component
+  content.
+- Added a platform-neutral quick validation prefilter for conditional constructs
+  inside locally implemented content boundaries, reporting candidates for
+  Validation Agent review without making the final architectural verdict.
+
 ## [1.1.14] — 2026-05-04
 
 - Applied TOP Skill Factory governance rules to `top-skill` itself by adding `top/spec.json`, `top/artifact-manifest.json`, `top/modes/mode-manifest.json`, `top/validation/output-rules.md`, `top/shared-rules/skill-governance.md`, and `top/provenance.json`.
@@ -35,7 +99,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 - Added `CORE-030` for decomposed owner access input and `CORE-031` for decomposed content access input.
 - Made both canonical internal directions explicit: Content receives only the owning controller instance typed through `IControllerAccess`/target-equivalent, and Controller receives/stores/uses only its own Content instance typed through `IContentAccess`/target-equivalent.
-- Forbid method bags, access adapters/facades, inline closure objects, decomposed JSX props, and decomposed content command bags as substitutes for real controller/content instances.
+- Forbid method bags, access adapters/facades, inline closure objects, decomposed JSX props, and decomposed content lifecycle/materialization bags as substitutes for real controller/content instances.
 
 ## [1.1.10] — 2026-05-03
 
@@ -60,7 +124,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [1.1.7] — 2026-05-03
 
-- Clarified that `IContentAccess` is only the controller-to-content command/request boundary and must not be used as a data bag for view-model values, state flags, callbacks, or child-output handles.
+- Clarified that `IContentAccess` is a controller-to-content lifecycle/materialization boundary and must not be used as a data bag for view-model values, state flags, callbacks, or child-output handles.
 - Clarified functional composition target materialization: a single public runtime input object/value must be the narrow content-to-controller owner access contract, not a merged `IContentAccess & IControllerAccess` props/data bundle.
 - Clarified migration status for renderable controllers: they may be explicitly tracked as a known migration deviation, but are not TOP-conformant final structure and still report `CORE-026`.
 - Added `CORE-027` for `IContentAccess` data bag misuse and extended validation, generation, migration, and checklist wording to detect the direction-confusion loophole.

@@ -121,6 +121,22 @@ local workaround.
 Generated code must construct every TOP object at the exact place where it
 architecturally belongs in the tree.
 
+Generated construction attaches objects to context; it does not inject the state
+they will use. Objects are connected to context, not filled with data.
+
+Generated node, locally implemented content, connector, and black-box boundary
+constructors must receive only the narrow contextual reference required to place
+the object inside its ownership boundary. They must not receive data packets,
+flags, callbacks, config/options/props-like objects, stores, services, child
+views, presentation values, visibility values, style values, text values,
+runtime state, handlers, or arbitrary additional arguments.
+
+Generated code must not configure child nodes, locally implemented content,
+connectors, or black-box boundaries after construction through setter-style
+data/config/state/presentation injection. If an object needs a value, generation
+must expose that request through the appropriate access contract and let the
+object pull the value after attachment.
+
 Node constructors receive exactly one semantic argument: the parent reference.
 For root materialization, `null` or `RootContext` is permitted only as a root
 ownership/bootstrap marker. `RootContext` must not become a dependency injection
@@ -221,7 +237,7 @@ exposed by a large platform component, native view, widget, or third-party objec
 wrapped inside content.
 
 Generated code must not replace the Content instance typed as
-`IContentAccess` with decomposed content command methods, method bags,
+`IContentAccess` with decomposed content lifecycle/materialization members, method bags,
 facade/adapters, closure objects, platform primitives, or objects assembled
 outside the controller/content construction boundary. This is `CORE-031`.
 
@@ -243,10 +259,33 @@ Generated code must not use a child view handle to attach event listeners, mutat
 ### Content responsibilities
 Content creates and encapsulates the concrete implementation material.
 
+Locally implemented content must be structurally and decisionally static.
+It may only materialize a structurally static content shape and apply
+already-resolved primitive values received through its owning controller access
+contract.
+
+Generated locally implemented content must not contain conditional selection
+logic. It must not decide, derive, branch, select, toggle, or compute which
+structure, class/style/token, text, icon, visibility, handler, child output,
+platform primitive, representation, or capability should be used.
+
+Forbidden generated constructs inside locally implemented content include
+`if`/`else`, `switch`/`case`, ternary selection, conditional rendering,
+conditional return, multiple return branches, `&&`/`||` conditional selection,
+`match`/`when`/guard branches, and target-equivalent constructs when they
+participate in selection or derivation.
+
+Generation repairs:
+- primitive value derivation belongs in the owning controller and is exposed as
+  an already-resolved value through controller access;
+- structural, element, handler, visibility, representation, or capability
+  alternatives become explicit child state nodes;
+- external, native, third-party, or self-contained logic is wrapped as
+  black-box component content with a narrow explicit interface.
+
 Ordinary content may execute low-level platform commands that belong to its own concrete implementation:
 - subscribe / unsubscribe on its own platform primitive;
 - attach / detach local platform callbacks for its own primitive;
-- show / hide / update its own implementation material when commanded through the content boundary;
 - respond to platform events by translating them into narrow calls to `IControllerAccess`.
 
 Ordinary content must not contain:
@@ -262,7 +301,16 @@ Ordinary content must not contain:
 Semantic event interpretation, state changes, lifecycle decisions, and orchestration are the responsibility of the controller.
 Low-level listener registration may be executed by content only for its own platform primitive and only as implementation material hidden behind the content boundary.
 The controller interacts with content only through its explicitly defined external interface.
-When a controller needs its own content to perform a visual/platform operation, generation must create a named command method on `IContentAccess` and call it as `this.content.<command>(...)`.
+When a controller needs a presentation change, generation must update
+controller-owned state and mark the node/content/runtime dirty or request
+lifecycle/render refresh through the node/runtime mechanism. During
+materialization or refresh, locally implemented content pulls already-resolved
+primitive values through `IControllerAccess` and applies those values to its
+static materialization.
+
+Generation must not create controller-to-content presentation command methods
+such as show/hide/update/apply-state/class/style/render-with commands on
+`IContentAccess`.
 Generated controller code must not use the node's own render/view/native primitive, its platform API, or any equivalent exposed primitive handle for its own content. Detection examples for DOM-like targets: `this.el`, `this.getView().classList`, `this.getView().style`, `this.getView().addEventListener`, `this.getView().setAttribute`, `querySelector`, `content.getView()` — use the equivalent native/render primitive handle on other platforms.
 The controller manages the content lifecycle and does not use the internal content implementation as a communication channel.
 If a node has a separate content object, generation must not leave direct controller access to the concrete implementation bypassing the content boundary. Anything else is strictly prohibited.
@@ -272,12 +320,20 @@ Generation must create for nodes with a separate content only explicitly defined
 If a node has a separate content class/object, generation must materialize separate explicit access artifacts for both directions where the technology permits. Anything else is strictly prohibited.
 
 Both directions must be accounted for:
-- `IContentAccess` / controller-to-content: what the controller may command or request from its own content;
+- `IContentAccess` / controller-to-content: lifecycle/materialization access,
+  not presentation commands or mutation state;
 - `IControllerAccess` / content-to-controller: what content may report or request from its own controller.
 
 `IContentAccess` must not contain controller-owned data, state flags, view-model
 values, callbacks, child-output handles, or data fields read by content. Content
 gets those through `IControllerAccess` methods/accessors.
+
+For locally implemented presentation content, `IContentAccess` is not a
+presentation command channel. Generation must not add show/hide/set-text/
+set-style/apply-state/render-with methods. For data content, a data node
+controller may mutate its own private data content through an internal storage
+boundary, but external objects still interact with the data node controller API
+and presentation content must not directly access or mutate data content.
 
 If a direction has no permitted calls, generation must materialize or explicitly document a zero-contract for that direction according to the target technology. Silent omission is not valid. For the content-to-controller direction, the zero-contract is an empty narrow access interface implemented by the owning controller and passed as `this` typed only as that interface. It is not a separate runtime access object. For the controller-to-content direction, if the target has no stable runtime content object for the controller to store, generation must explicitly document the zero direction in contracts or materialization notes instead of inventing a data bag or dummy runtime object.
 Raw callbacks, handlers, anonymous objects, externally assembled access bundles, parameter bags, full controller references, full concrete controller types, full concrete content references, or public runtime inputs are not valid substitutes for a named internal contract where the technology can express one.
@@ -457,11 +513,24 @@ Typical errors include:
 - AI generates code without checking the effective dir path;
 - relocation performed without updating spec/prompt paths;
 - generation mixes controller and concrete content;
-- generation leaves controller code directly manipulating its own platform primitive instead of calling named `IContentAccess` commands;
+- generation leaves controller code directly manipulating its own platform
+  primitive or pushing presentation mutation through `IContentAccess` instead
+  of using controller state, dirty/render refresh, and content pull of
+  already-resolved values;
 - generation passes semantic inputs into Content through extra constructor arguments, public runtime parameters, composition entrypoints, parameter bags, config/options/props-like objects, callbacks/handlers bundles, stores, services, child components, platform child views, child-output getter bundles, or prebuilt fragments;
+- generation fills TOP objects with data/config/callback/state packets through
+  constructor arguments or post-construction setter-style injection instead of
+  attaching them to context and letting them pull through explicit contracts;
 - generation types Content against the concrete controller or downcasts/imports back to that concrete type;
 - generation places hidden Content declarations before the internal access boundary that stands between the controller and content;
 - generation makes non-visual content publicly accessible;
+- generation places conditional selection logic inside locally implemented
+  content instead of moving primitive derivation to the controller, splitting
+  alternatives into state nodes, or wrapping external logic as black-box
+  component content;
+- generation creates controller-to-content presentation commands or mutation
+  commands instead of controller state update, dirty/render request, and content
+  pull of already-resolved values;
 - generation loses the distinction between `view` and `component`.
 
 ---
@@ -474,7 +543,14 @@ The verification loop must check not only behavior but also the architectural co
 - whether generated declaration order follows architectural depth: controller/node first, internal access boundary artifact(s) next, hidden Content implementation last;
 - whether the meaning of `props.contentType` is preserved;
 - whether non-visual concrete content is exposed externally;
-- whether the rule of a single external interface for a node is violated.
+- whether the rule of a single external interface for a node is violated;
+- whether locally implemented content is structurally and decisionally static,
+  with no conditional selection logic;
+- whether controller-to-content flow is limited to lifecycle/materialization
+  access and never pushes presentation state or imperative mutations into
+  locally implemented content.
+- whether TOP object construction is context attachment only, with no constructor
+  data injection or setter-style post-construction data/config/state pushing.
 
 ---
 

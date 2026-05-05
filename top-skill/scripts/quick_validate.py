@@ -20,12 +20,15 @@ REQUIRED_PATHS = [
     "canon/forbidden-confusions.md",
     "canon/validation-rules.md",
     "rules/violation-catalog.md",
+    "rules/pattern-recognition.md",
     "rules/spec-sync-rules.md",
     "rules/review-checklist.md",
     "contracts/top-folder-contract.md",
     "rules/typing-checklist.md",
     "references/node-model.md",
     "references/code-generation.md",
+    "references/event-model.md",
+    "references/pattern-cards.md",
     "references/node-validation-rules.md",
     "prompts/generate-top-node.md",
     "prompts/generate-top-tree.md",
@@ -34,6 +37,9 @@ REQUIRED_PATHS = [
     "agents/migration-planning-agent.md",
     "agents/migration-agent.md",
     "agents/behavior-preservation-agent.md",
+    "agents/generation-agent.md",
+    "agents/validation-agent.md",
+    "agents/repair-agent.md",
     "agents/target-adaptation-agent.md",
     "contracts/agent-output-contracts/migration-infrastructure-output.md",
     "contracts/agent-output-contracts/migration-plan-output.md",
@@ -316,6 +322,11 @@ def check_required_phrases(root):
         ("rules/violation-catalog.md", "CORE-029"),
         ("rules/violation-catalog.md", "CORE-030"),
         ("rules/violation-catalog.md", "CORE-031"),
+        ("rules/violation-catalog.md", "CORE-032"),
+        ("rules/violation-catalog.md", "Locally implemented content"),
+        ("rules/pattern-recognition.md", "Locally implemented content conditional selection"),
+        ("rules/pattern-recognition.md", "Context data injection"),
+        ("rules/pattern-recognition.md", "reports candidates for Validation Agent review"),
         ("rules/violation-catalog.md", "CONV-007"),
         ("rules/violation-catalog.md", "CONV-008"),
         ("rules/violation-catalog.md", "WF-010"),
@@ -355,8 +366,27 @@ def check_required_phrases(root):
         ("QUICKSTART_MIN_READS.md", "agents/migration-planning-agent.md"),
         ("QUICKSTART_MIN_READS.md", "top/schemas/migration-workflow.schema.json"),
         ("SKILL.md", "IContentAccess` is not a data channel"),
+        ("SKILL.md", "Locally implemented content must contain no conditional selection logic"),
+        ("canon/forbidden-confusions.md", "Locally implemented content must contain no conditional selection logic"),
+        ("canon/validation-rules.md", "Locally implemented content conditional selection logic is a hard validation"),
+        ("references/node-validation-rules.md", "locally implemented content contains no conditional selection logic"),
+        ("references/code-generation.md", "Locally implemented content must be structurally and decisionally static"),
+        ("references/event-model.md", "Presentation content reports intent"),
+        ("references/pattern-cards.md", "explicit ancestor/context contract"),
+        ("prompts/generate-top-node.md", "do not generate conditional selection logic inside locally implemented"),
+        ("prompts/verify-node-implementation-prompt.md", "locally implemented content contains no conditional"),
+        ("agents/validation-agent.md", "locally implemented content conditional selection validation"),
+        ("agents/validation-agent.md", "controller-to-content presentation push validation"),
+        ("agents/repair-agent.md", "repair locally implemented content conditional selection"),
+        ("agents/repair-agent.md", "replace controller-to-content presentation commands"),
+        ("canon/controller-content-rules.md", "Controller must not imperatively command"),
+        ("prompts/verify-node-implementation-prompt.md", "controller does not push show/hide/update"),
         ("canon/architectural-invariants.md", "Objects are not assembled outside the tree and pushed inward"),
+        ("canon/architectural-invariants.md", "Context attachment, not data injection"),
         ("canon/architectural-invariants.md", "Controller Role Purity Invariant"),
+        ("canon/core-axioms.md", "Presentation content reports intent"),
+        ("canon/core-axioms.md", "controllers mutate data"),
+        ("examples/tree-editor/README.md", "canonical for top-skill 1.1.18"),
     ]
     errors = []
     for file_name, phrase in checks:
@@ -369,7 +399,6 @@ def check_required_phrases(root):
 def check_known_risky_patterns(root):
     errors = []
     patterns = [
-        (r"new\s+\w+Content\s*\([^)]*,", "extra Content constructor argument"),
         (r"new\s+ControllerAccessZero\s*\(", "dummy ControllerAccessZero construction"),
         (r"new\s+\w+Content\s*\(\s*access\s*\)", "externally named access object passed to Content"),
         (r"should usually|canon change usually", "weak maintenance wording"),
@@ -385,8 +414,224 @@ def check_known_risky_patterns(root):
     return errors
 
 
+CONTENT_SOURCE_SUFFIXES = {
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".mjs",
+    ".cjs",
+    ".py",
+    ".kt",
+    ".swift",
+    ".dart",
+    ".java",
+    ".cs",
+    ".go",
+    ".rs",
+}
+
+SKIP_PREFILTER_DIRS = {
+    ".git",
+    "node_modules",
+    "dist",
+    "build",
+    "coverage",
+    ".next",
+    ".expo",
+}
+
+CONTENT_BOUNDARY_RE = re.compile(
+    r"\b(class|function|struct|object)\s+[A-Za-z_][A-Za-z0-9_]*Content\b"
+    r"|\b[A-Za-z_][A-Za-z0-9_]*Content\s*[:=]\s*(function|\(|class\b)"
+)
+
+CONDITIONAL_CONSTRUCT_RE = re.compile(
+    r"\bif\s*\("
+    r"|\belse\b"
+    r"|\bswitch\s*\("
+    r"|\bcase\b"
+    r"|\bmatch\b"
+    r"|\bwhen\b"
+    r"|\bguard\b"
+    r"|\?.*:"
+    r"|&&"
+    r"|\|\|"
+)
+
+TOP_OBJECT_CONSTRUCTOR_RE = re.compile(
+    r"\bnew\s+[A-Za-z_][A-Za-z0-9_]*(Node|Content|Connector|Boundary)\s*\(([^)]*)\)"
+)
+
+CONSTRUCTOR_SIGNATURE_RE = re.compile(r"\bconstructor\s*\(([^)]*)\)")
+
+SUSPICIOUS_ARG_NAME_RE = re.compile(
+    r"\b(data|config|options|props|callbacks?|handlers?|state|flags?|services?|stores?|title|label|text|visible|visibility|token|children|child|view)\b",
+    re.IGNORECASE,
+)
+
+POST_CONSTRUCTION_PUSH_RE = re.compile(
+    r"\.\s*(applyConfig|applyState|setData|setCallbacks|setVisible|setText|setStyle|setClass|setPaddingLeft|updateText|updateFromState|updateToggle|renderWith)\s*\("
+)
+
+EXAMPLE_TEXT_SUFFIXES = {".md", ".json", ".ts", ".tsx", ".js", ".jsx"}
+
+EXAMPLE_INVALID_PATTERN_RE = re.compile(
+    r"legacy-invalid"
+    r"|legacy invalid"
+    r"|named content command"
+    r"|content command"
+    r"|\bContent/View\b"
+    r"|setText\s*\("
+    r"|setVisible\s*\("
+    r"|setStyle\s*\("
+    r"|setClass\s*\("
+    r"|setPaddingLeft\s*\("
+    r"|updateText\s*\("
+    r"|updateFromState\s*\("
+    r"|updateToggle\s*\("
+    r"|applyState\s*\("
+    r"|renderWith\s*\("
+    r"|commands and data descend"
+    r"|parent passes command",
+    re.IGNORECASE,
+)
+
+EXPLICIT_INVALID_MARKER_RE = re.compile(
+    r"invalid|failure case|anti-pattern|anti pattern|not canonical",
+    re.IGNORECASE,
+)
+
+
+def is_within_skipped_dir(path, root):
+    try:
+        parts = path.relative_to(root).parts
+    except ValueError:
+        return True
+    return any(part in SKIP_PREFILTER_DIRS for part in parts)
+
+
+def is_content_candidate_path(path):
+    stem = path.stem.lower()
+    return stem.endswith("content") or "-content" in stem or "_content" in stem
+
+
+def iter_content_boundary_lines(text, scan_entire_file):
+    lines = text.splitlines()
+    if scan_entire_file:
+        for line_number, line in enumerate(lines, start=1):
+            yield line_number, line
+        return
+
+    inside = False
+    depth = 0
+    for line_number, line in enumerate(lines, start=1):
+        if not inside and CONTENT_BOUNDARY_RE.search(line):
+            inside = True
+            depth = 0
+
+        if inside:
+            yield line_number, line
+            depth += line.count("{") - line.count("}")
+            if depth <= 0 and "{" in line:
+                inside = False
+
+
+def check_locally_implemented_content_conditional_prefilter(root):
+    """Platform-neutral candidate scan only; Validation Agent makes verdicts."""
+    candidates = []
+    for path in sorted(root.glob("**/*")):
+        if path.is_dir() or is_within_skipped_dir(path, root):
+            continue
+        if path.suffix.lower() not in CONTENT_SOURCE_SUFFIXES:
+            continue
+
+        text = read_text(path)
+        scan_entire_file = is_content_candidate_path(path)
+        if not scan_entire_file and not CONTENT_BOUNDARY_RE.search(text):
+            continue
+
+        for line_number, line in iter_content_boundary_lines(text, scan_entire_file):
+            if CONDITIONAL_CONSTRUCT_RE.search(line):
+                candidates.append(
+                    f"{rel(path, root)}:{line_number}: candidate locally implemented "
+                    "content conditional selection construct; Validation Agent must review"
+                )
+
+    return candidates
+
+
+def has_multiple_args(args_text):
+    stripped = args_text.strip()
+    if not stripped:
+        return False
+    return "," in stripped
+
+
+def check_context_attachment_prefilter(root):
+    """Platform-neutral candidate scan only; Validation Agent makes verdicts."""
+    candidates = []
+    for path in sorted(root.glob("**/*")):
+        if path.is_dir() or is_within_skipped_dir(path, root):
+            continue
+        if path.suffix.lower() not in CONTENT_SOURCE_SUFFIXES:
+            continue
+
+        text = read_text(path)
+        for line_number, line in enumerate(text.splitlines(), start=1):
+            for match in TOP_OBJECT_CONSTRUCTOR_RE.finditer(line):
+                args_text = match.group(2)
+                if has_multiple_args(args_text) or SUSPICIOUS_ARG_NAME_RE.search(args_text):
+                    candidates.append(
+                        f"{rel(path, root)}:{line_number}: candidate context data injection "
+                        "in TOP object construction; Validation Agent must review"
+                    )
+
+            for match in CONSTRUCTOR_SIGNATURE_RE.finditer(line):
+                args_text = match.group(1)
+                if has_multiple_args(args_text) and SUSPICIOUS_ARG_NAME_RE.search(args_text):
+                    candidates.append(
+                        f"{rel(path, root)}:{line_number}: candidate constructor data/config/state "
+                        "injection; Validation Agent must review"
+                    )
+
+            if POST_CONSTRUCTION_PUSH_RE.search(line):
+                candidates.append(
+                    f"{rel(path, root)}:{line_number}: candidate setter-style post-construction "
+                    "data/config/state push; Validation Agent must review"
+                )
+
+    return candidates
+
+
+def check_example_consistency_prefilter(root):
+    """Example/documentation scan only; Validation Agent reviews architecture."""
+    candidates = []
+    examples_root = root / "examples"
+    if not examples_root.exists():
+        return candidates
+
+    for path in sorted(examples_root.glob("**/*")):
+        if path.is_dir() or is_within_skipped_dir(path, root):
+            continue
+        if path.suffix.lower() not in EXAMPLE_TEXT_SUFFIXES:
+            continue
+        text = read_text(path)
+        for line_number, line in enumerate(text.splitlines(), start=1):
+            if not EXAMPLE_INVALID_PATTERN_RE.search(line):
+                continue
+            if EXPLICIT_INVALID_MARKER_RE.search(line):
+                continue
+            candidates.append(
+                f"{rel(path, root)}:{line_number}: example may demonstrate an old "
+                "content-command/data-injection pattern; Validation Agent must review"
+            )
+
+    return candidates
+
+
 def run(root):
-    checks = [
+    hard_checks = [
         ("required paths", check_required_paths),
         ("json parse", check_json_parse),
         ("manifest references", check_manifest_references),
@@ -398,10 +643,15 @@ def run(root):
         ("risky patterns", check_known_risky_patterns),
     ]
     all_errors = []
-    for name, check in checks:
+    for name, check in hard_checks:
         errors = check(root)
         if errors:
             all_errors.append((name, errors))
+
+    agent_review_candidates = []
+    agent_review_candidates.extend(check_locally_implemented_content_conditional_prefilter(root))
+    agent_review_candidates.extend(check_context_attachment_prefilter(root))
+    agent_review_candidates.extend(check_example_consistency_prefilter(root))
 
     if all_errors:
         print("quick_validate: FAILED")
@@ -409,11 +659,25 @@ def run(root):
             print(f"\n[{name}]")
             for error in errors:
                 print(f"- {error}")
+        if agent_review_candidates:
+            print("\n[agent review candidates]")
+            for candidate in agent_review_candidates:
+                print(f"- {candidate}")
         return 1
+
+    if agent_review_candidates:
+        print("quick_validate: REVIEW REQUIRED")
+        print(f"validated: {root}")
+        print(f"hard_checks: {len(hard_checks)}")
+        print("\n[agent review candidates]")
+        for candidate in agent_review_candidates:
+            print(f"- {candidate}")
+        return 0
 
     print("quick_validate: OK")
     print(f"validated: {root}")
-    print(f"checks: {len(checks)}")
+    print(f"hard_checks: {len(hard_checks)}")
+    print("agent_review_candidates: 0")
     return 0
 
 

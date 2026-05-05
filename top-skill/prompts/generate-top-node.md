@@ -27,7 +27,21 @@ rules:
   integration contract declares them explicitly
 - enforce Pull-Based Construction / Locality of Object Birth
 - enforce Controller Role Purity
+- generate context attachment, not data injection: TOP object construction
+  attaches the object to its ownership context and does not fill it with values
 - node constructor receives only the parent reference as semantic input
+- locally implemented content receives only the owning controller access
+  contract as semantic input
+- connectors and black-box boundaries receive only their explicit boundary
+  interface as semantic input
+- do not generate constructor arguments or public runtime inputs for data
+  packets, flags, callbacks, config/options/props-like objects, stores,
+  services, child views, presentation values, visibility values, style values,
+  text values, runtime state, handlers, or arbitrary additional values
+- do not generate setter-style post-construction injection such as
+  apply-config, set-data, set-visible, update-text, set-style, set-callbacks,
+  or target-equivalent calls into child nodes, locally implemented content,
+  connectors, or black-box boundaries
 - do not generate Node/Controller runtime inputs for semantic data, parent-derived facts, callbacks, services, stores, props/config/options, parameter bags, or runtime argument sets; use explicit pull access/update methods or modeled connector contracts instead
 - do not generate the Node/Controller as a framework-rendered component, widget, composable, render/build function, platform UI lifecycle object, or equivalent target-renderable entity
 - renderable target artifacts belong to Content or thin adapters, not to the controller
@@ -35,7 +49,7 @@ rules:
 - zero-contract content-to-controller access is an empty owner access interface implemented by the controller; do not generate `ControllerAccessZero` dummy objects
 - controller stores and uses content through `IContentAccess`, not through the concrete Content class
 - controller receives/stores/uses its own Content instance typed through
-  `IContentAccess`; do not generate decomposed content command bags,
+  `IContentAccess`; do not generate decomposed content lifecycle/materialization bags,
   facade/adapters, platform primitive handles, or inline closure objects
 - do not generate `IContentAccess` as a data/view-model/state/callback bag for Content; Content pulls controller-owned data through `IControllerAccess`
 - do not type Content against the concrete controller, and do not import/downcast back to it
@@ -46,3 +60,36 @@ rules:
 - for shared derived facts, do not generate either duplicate derivation in multiple controllers or parent-to-child runtime input tunneling; generate an explicit typed access/update boundary, named controller method, or modeled connector contract, or report the model as blocked
 - Content pulls from owner; owner pulls from children when child output is required; children expose opaque handles
 - name child-output access methods by semantic branch/output, for example `getAccountIdentityView()`; do not require `Handle`/`ViewHandle`, do not use `slot`, and avoid generic `children`/`render`/`builder` names
+- do not generate conditional selection logic inside locally implemented
+  content. Locally implemented content must not decide, derive, branch, select,
+  toggle, or compute which structure, class/style/token, text, icon, visibility,
+  handler, child output, platform primitive, representation, or capability
+  should be used.
+- generated locally implemented content may only materialize a structurally
+  static content shape and apply already-resolved primitive values received
+  through the owning controller access contract
+- do not generate `if`/`else`, `switch`/`case`, ternary selection, conditional
+  rendering, conditional returns, multiple return branches, `&&`/`||`
+  conditional selection, `match`/`when`/guard branches, or equivalent
+  constructs inside locally implemented content when they participate in
+  selection or derivation
+- if a primitive value must be computed or selected, generate that derivation in
+  the owning controller and expose the already-resolved primitive through
+  controller access
+- if structures, elements, handlers, visibility modes, representations, or
+  capabilities vary, generate explicit child state nodes for the alternatives
+- if selection logic belongs to an external, native, third-party, or
+  self-contained implementation, wrap it as black-box component content behind a
+  narrow explicit interface
+- do not generate controller-to-content imperative presentation updates. The
+  controller must not command, mutate, update, show, hide, configure, set
+  class/style, apply state, or render-with into locally implemented content
+- for presentation changes, generate controller state updates plus a
+  node/runtime dirty or lifecycle/render refresh request; locally implemented
+  content then pulls already-resolved primitive values through controller access
+  during materialization or refresh
+- presentation content reports semantic intent only. Controllers make decisions.
+  Data controllers mutate their own private data content through internal
+  storage boundaries when the relationship is architecturally allowed.
+- do not generate presentation content that directly reads or mutates data
+  content

@@ -35,9 +35,86 @@ Detection criterion — both conditions must hold simultaneously:
 The number of explicit child nodes is irrelevant. A hidden switchable may be a monolithic node whose internal elements and handlers change.
 
 Not a violation:
-- A node changes only model data (label text, color from data) — behavior is identical in both states.
+- A controller changes only already-resolved model data exposed through a narrow
+  access contract while node behavior is identical in both states. Locally
+  implemented content still may not derive or select label text, color, style,
+  visibility, structure, handlers, or representation by itself.
 
 Canonical refactoring: the node becomes an explicit switchable holder with child state nodes. Each state node fully owns its own representation and behavior. A state node does not read the external mode — it is itself the representation of that mode.
+
+## Locally implemented content static materialization
+
+Locally implemented content is static implementation material, not a decision
+layer.
+
+It must not contain conditional selection logic of any kind. It must not decide,
+derive, branch, select, toggle, or compute which structure, class/style/token,
+text, icon, visibility, handler, child output, platform primitive,
+representation, or capability should be used.
+
+Locally implemented content may only materialize a structurally static content
+shape and apply already-resolved primitive values received through its owning
+controller access contract.
+
+Controller must not push presentation state or imperative mutation commands into
+locally implemented content. Presentation changes flow as controller state
+updates plus node/runtime dirty or lifecycle/render refresh, followed by content
+pulling already-resolved primitive values through controller access.
+
+This preserves deterministic materialization, cacheability, pre-rendering,
+portability, and verifiability. If content contains selection logic, it becomes
+a hidden decision engine and breaks the TOP boundary between controller/tree
+decision ownership and content materialization.
+
+## Context attachment, not data injection
+
+TOP objects are context-bound, not parameter-bound.
+
+Construction attaches an object to its ownership context. It does not fill that
+object with the data, flags, callbacks, configuration, presentation values,
+runtime state, services, stores, child views, or handlers it will use.
+
+A TOP object constructor may receive only the narrow contextual reference needed
+to place it inside the tree or boundary:
+- a node receives its parent/context reference;
+- locally implemented content receives its owning controller access contract;
+- a connector or black-box boundary receives its explicit boundary interface.
+
+After attachment, the object requests required information through that
+contract. The owner remains responsible for exposing the contract, but it does
+not push changing state or presentation decisions into the object through
+constructor arguments or post-construction setters.
+
+This preserves tree locality, predictable regeneration, cacheability,
+pre-rendering, and a single narrow validation path for data flow.
+
+## Presentation content and data content
+
+The no-push presentation rule applies to locally implemented presentation,
+rendering, and materialization content.
+
+Presentation content reports intent. Controllers make decisions. Data
+controllers mutate data. Presentation content later pulls resolved values.
+
+Correct presentation flow:
+1. user input in locally implemented content is reported as a semantic
+   event/request to the owning controller;
+2. the controller validates, interprets, and either updates its own state, calls
+   an architecturally allowed data-node controller API, or raises the semantic
+   event upward;
+3. affected controllers or data controllers update;
+4. the node/runtime marks dirty or requests refresh;
+5. presentation content pulls already-resolved primitive values again.
+
+Data content is different. A data node controller may expose domain methods such
+as `setAge(value)`, `updateName(value)`, or `replaceRecord(record)` when the
+relationship is architecturally allowed. Inside that same data node, the data
+controller may mutate its own private data content through `IContentAccess` or
+an equivalent internal storage boundary. Validation and business rules remain in
+the data controller, not in raw data content.
+
+External objects must not mutate data content directly. Presentation content
+must not directly access or mutate data content.
 
 ## Behavioral coherence
 

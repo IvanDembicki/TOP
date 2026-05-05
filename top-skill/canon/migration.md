@@ -245,9 +245,11 @@ Before declaring a migration slice implemented, verify:
 3. Content obtains view-model values only through the content-to-controller owner
    access contract (`IControllerAccess` or target-equivalent), using explicit
    methods or accessors owned by the controller.
-4. `IContentAccess` is not used as a view-model/data carrier. It contains only
-   controller-to-content commands/requests, or it is explicitly declared as a
-   zero-contract when that direction has no permitted calls.
+4. `IContentAccess` is not used as a view-model/data carrier or presentation
+   command channel. It contains only controller-to-content
+   lifecycle/materialization access, or it is explicitly declared as a
+   zero-contract when that direction has no permitted lifecycle/materialization
+   calls.
 
 If any of these checks fail, the migration is incomplete regardless of whether the
 content is visually correct at runtime.

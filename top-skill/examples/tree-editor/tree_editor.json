@@ -7,7 +7,7 @@
   "children": [
     {
       "type": "TreeEditor",
-      "doc": "Root node of the executable tree editor branch. Mounts the editor into a host container, owns the toolbar, mode holder, and pane, and provides isEditMode derived from EditorModeHolder state.",
+      "doc": "Root node of the executable tree editor branch. Mounts the editor into a host container, owns the toolbar, mode holder, and pane, and exposes resolved editor state through explicit contracts.",
       "prompt": "prompts/TreeEditor.prompt.md",
       "props": {
         "dir": ".",
@@ -67,12 +67,12 @@
           "children": [
             {
               "type": "ViewModeState",
-              "doc": "State node for view mode. onOpen(): applies view-mode presentation to TreeEditor and calls refreshAll().",
+              "doc": "State node for view mode. onOpen(): updates controller-owned mode state and requests refresh; presentation content later pulls resolved values.",
               "prompt": "prompts/toolbar/ViewModeState.prompt.md"
             },
             {
               "type": "EditModeState",
-              "doc": "State node for edit mode. onOpen(): applies edit-mode presentation to TreeEditor and calls refreshAll().",
+              "doc": "State node for edit mode. onOpen(): updates controller-owned mode state and requests refresh; presentation content later pulls resolved values.",
               "prompt": "prompts/toolbar/EditModeState.prompt.md"
             }
           ]
@@ -88,7 +88,7 @@
           "children": [
             {
               "type": "RootItemHolder",
-              "doc": "Mutable container holding the single root TreeItem instance. Initialises the tree from source data.",
+              "doc": "Container holding the single root TreeItem instance. It pulls the root record through EditorPane context and attaches TreeItem to context only.",
               "prompt": "prompts/pane/RootItemHolder.prompt.md",
               "props": {
                 "contentType": "view"
@@ -96,7 +96,7 @@
               "children": [
                 {
                   "type": "lib:pane.TreeItem",
-                  "doc": "Runtime root item created by RootItemHolder from source data.",
+                  "doc": "Runtime root item attached to RootItemHolder context. The root record is pulled through the parent contract.",
                   "props": {
                     "materializationPolicy": "runtime-library-reference"
                   }

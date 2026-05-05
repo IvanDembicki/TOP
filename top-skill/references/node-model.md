@@ -45,13 +45,24 @@ The controller is the sole external interface of the node.
 
 Node-level logic must reside in the controller.
 Content is permitted in two forms:
-- **logic-free implementation material** — content only creates structure and applies styling; it contains no behavioral logic of its own; all behavior is delegated to the controller via `IControllerAccess`;
-- **black box with an explicit interface** — content encapsulates internal presentation logic (animations, scroll state, focus management, etc.) as a black box; the controller sees only the explicit interface via `IContentAccess`; the internal implementation is inaccessible.
+- **locally implemented static materialization** — content materializes a
+  structurally static content shape and applies already-resolved primitive
+  values received through its owning controller access contract. It contains no
+  conditional selection logic of any kind and must not decide, derive, branch,
+  select, toggle, or compute which structure, class/style/token, text, icon,
+  visibility, handler, child output, platform primitive, representation, or
+  capability should be used.
+- **black box with an explicit interface** — content encapsulates external,
+  native, third-party, or self-contained logic as a black box; the controller
+  sees only the explicit interface via `IContentAccess`; the internal
+  implementation is inaccessible.
 
 In both cases, content is prohibited from:
 - reading architectural state (openedChild, isEditMode, lifecycle phase);
 - modifying the tree structure;
-- initiating structural transitions.
+- initiating structural transitions;
+- becoming a hidden decision engine;
+- receiving controller-pushed presentation state or imperative mutation commands.
 
 ---
 
@@ -59,6 +70,16 @@ In both cases, content is prohibited from:
 
 A TOP object is constructed at the exact place where it architecturally belongs
 in the tree. Objects are not assembled outside the tree and pushed inward.
+
+TOP construction attaches an object to its context; it does not inject the state
+it will use. Objects are connected to context, not filled with data. After
+attachment, a node, locally implemented content object, connector, or black-box
+boundary requests required values through its contextual access contract.
+
+Constructor arguments and post-construction setter-style calls must not be used
+as hidden data-flow paths for data packets, flags, callbacks, configuration,
+stores, services, child views, presentation values, visibility values, style
+values, text values, runtime state, or handlers.
 
 Node construction:
 - a Node constructor receives exactly one semantic argument: its parent reference;
@@ -131,7 +152,9 @@ structural violation.
 If a node has content, it must have exactly one concrete content class.
 
 Content is not the architectural owner of node behavior.
-It either contains no logic of its own at all, or encapsulates internal logic as a black box accessible to the controller only through an explicit interface.
+It either contains no conditional selection logic of its own at all, or
+encapsulates external, native, third-party, or self-contained logic as a black
+box accessible to the controller only through an explicit interface.
 
 This content class, when explicit type recording is required, is described via `props.contentType`.
 
@@ -151,7 +174,10 @@ not to controller identity.
 
 ### 2.1. `view`
 Locally implemented content of the given node.
-It is subject to the internal rules of the node and is not an independent external system.
+It is subject to the internal rules of the node and is not an independent
+external system. It is static implementation material, not a decision-making
+layer: it may apply already-resolved primitive values, but it must not contain
+conditional selection logic.
 
 ### 2.2. `component`
 Content of the given node, treated as a black box.
@@ -261,6 +287,22 @@ child-output handles are requested by content through `IControllerAccess`.
 An `IContentAccess` interface containing fields that content reads is a direction
 collapse, not a TOP access boundary.
 
+`IContentAccess` must not become a presentation command channel. Controller must
+not imperatively command, mutate, update, show, hide, configure, set class/style,
+apply state, or render-with into locally implemented content. The controller
+updates its own state and marks the node/content/runtime dirty or requests
+lifecycle/render refresh through the node/runtime mechanism. During
+materialization or refresh, content pulls already-resolved primitive values
+through `IControllerAccess` and applies them to its static materialization.
+
+Data content has a separate storage role. A data node controller may expose
+typed domain methods such as `setAge(value)`, `updateName(value)`, or
+`replaceRecord(record)` when access is architectural, and inside that same node
+it may mutate its own private data content through `IContentAccess` or an
+equivalent internal storage boundary. This does not permit external direct data
+content mutation, presentation content direct data access, constructor data
+injection, or presentation mutation channels.
+
 `IContentAccess` must not become a channel through which the controller manually bypasses the content boundary or pushes child nodes/content concrete implementation.
 It is also the boundary that hides any larger concrete content/component API from
 the controller. Even if the concrete content wraps a native view, framework widget,
@@ -284,9 +326,11 @@ Content does not interact with the outside world other than through `IController
 
 The controller does not interact with the internal implementation of content other than through the content object and its explicitly defined external interface. If a node has a separate content object, any direct controller bypass to the concrete implementation is a violation. A public/base-class primitive getter, an inherited primitive member, or any other low-level handle-reference does not legalize such a bypass. Anything else is categorically prohibited.
 
-For the controller of the node's own content, the required form is an explicitly named command on `IContentAccess`,
-for example `this.content.setDragging(value)` or `this.content.setDropPosition(position)`.
-The content executes the platform operation internally.
+For the controller of the node's own content, `IContentAccess` is limited to
+lifecycle/materialization access, such as obtaining the root content primitive or
+participating in controlled lifecycle. It is not a channel for presentation
+commands, mutation commands, style/class updates, state application, or
+render-with instructions.
 
 The following platform-specific DOM-like forms in controller code are detection examples of a confirmed boundary violation:
 - `this.el...`;

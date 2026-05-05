@@ -61,9 +61,36 @@ Check:
 - absence of empty formal protocol objects where content access to controller is permitted;
 - if the content-to-controller protocol artifact is empty, explicit confirmation that this is a zero-contract implemented by the owning controller and not a separate dummy runtime object;
 - confirmation that controller fields/references to content are typed through `IContentAccess`, not through the concrete Content class where the technology permits;
+- confirmation that TOP object constructors attach objects to context and do not
+  inject data packets, flags, callbacks, config/options/props-like objects,
+  stores, services, child views, presentation values, visibility values, style
+  values, text values, runtime state, handlers, or arbitrary additional values;
+- confirmation that child nodes, locally implemented content, connectors, and
+  black-box boundaries are not configured after construction through
+  setter-style data/config/state/presentation injection (`CORE-032`);
 - confirmation that the public node/controller artifact is not itself a renderable framework component, widget, composable, render/build function, platform UI lifecycle object, or equivalent target-renderable entity;
 - confirmation that documented renderable-controller waypoints remain reported as `CORE-026` and do not produce validation/final-audit pass;
 - confirmation that render output is produced only by Content or adapter-side artifacts;
+- confirmation that locally implemented content contains no conditional
+  selection logic: no `if`/`else`, `switch`/`case`, ternary selection,
+  conditional rendering, conditional return, multiple return branches,
+  `&&`/`||` conditional selection, `match`/`when`/guard branches, or equivalent
+  constructs that decide or derive structure, class/style/token, text, icon,
+  visibility, handler, child output, platform primitive, representation, or
+  capability;
+- confirmation that locally implemented content materializes a structurally
+  static content shape and applies only already-resolved primitive values
+  received through the owning controller access contract;
+- confirmation that locally implemented content does not derive presentation
+  values such as text, class/style/token, icon, visibility, handler, child
+  output, platform primitive, or representation;
+- confirmation that controller does not push show/hide/update/apply-state/
+  class/style/render-with commands, presentation state, or imperative mutations
+  into locally implemented content;
+- confirmation that controller presentation changes use controller state update
+  plus node/runtime dirty or lifecycle/render refresh, and that content pulls
+  already-resolved primitive values through controller access during
+  materialization or refresh;
 - confirmation that child Nodes/Controllers do not receive semantic runtime input such as parent-derived values, state, callbacks, services, props/config/options, parameter bags, or runtime argument sets (`CORE-029`);
 - confirmation that shared derived fact repairs do not swap `CORE-029` and Invariant 14: no parent-derived runtime input, no duplicate child derivation from the same cross-cutting source, and an explicit typed access/update boundary or connector if the fact is shared;
 - confirmation that any public runtime input object/value used to materialize Content carries exactly one value: the owning controller instance typed only as `IControllerAccess`/target-equivalent, optionally inside a target-required technical envelope;
@@ -98,6 +125,10 @@ Categorize them as:
 - Node/Controller semantic runtime input (`CORE-029`);
 - decomposed owner access input into Content (`CORE-030`);
 - decomposed content access input into Controller (`CORE-031`);
+- context data injection into TOP objects (`CORE-032`);
+- locally implemented content conditional selection logic (`CORE-015`);
+- controller-to-content presentation command or mutation push into locally
+  implemented content (`CORE-015`);
 - invalid shared derived fact repair that swaps `CORE-029` with Invariant 14 or Invariant 14 with `CORE-029`;
 - instability / ambiguity in prompt;
 - artifact placement mismatch.

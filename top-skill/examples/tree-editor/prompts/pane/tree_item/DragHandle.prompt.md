@@ -6,17 +6,18 @@ sourcePath: src/pane/tree_item/drag_handle.top
 
 ## 1. Node Identity and Role
 
-DragHandle is a visual affordance that signals to the user that a tree item row can be dragged. It exists only inside TreeItemRowEditStateNormalState and TreeItemRowEditStateHoverState — it is architecturally absent from view mode. It is only created for non-root items.
+DragHandle is a static affordance node inside edit-mode row states.
 
 ## 2. Responsibility
 
-- Render the drag affordance visual.
-- Provide a grab-cursor signal to the user.
-- Carry no interaction logic; drag events are handled by the parent row state node.
+- Materialize the drag affordance structure.
+- Pull the already-resolved drag affordance token from the owning controller
+  access contract.
+- Carry no drag/drop decision logic.
 
 ## 3. Inputs and Events
 
-None. DragHandle has no event handlers.
+None. Drag events are reported by the containing row state content.
 
 ## 4. State Ownership
 
@@ -28,9 +29,9 @@ Has no child nodes.
 
 ## 6. Lifecycle
 
-1. Constructor: creates the visual content boundary with `setContent(...)`.
-2. Created only when `treeItem.isRoot` is false — the parent row node conditionally instantiates it during `buildChildren`.
-3. No dynamic changes after child materialization.
+1. Constructor receives only parent/context.
+2. Constructor creates static content.
+3. Refresh pulls the current drag affordance token.
 
 ## 7. Side Effects
 
@@ -38,28 +39,26 @@ None.
 
 ## 8. Constraints and Invariants
 
-- Must not check `isEditMode` — this node is architecturally present only in edit-state row nodes, so the check is redundant and forbidden.
-- Must not initiate drag; drag is handled entirely by the containing row state node.
+- Must not check `isEditMode` or `isRoot`.
+- Must not decide visibility or interactivity.
+- Locally implemented content contains no conditional selection logic.
 
 ## 9. Non-Goals
 
 - Does not initiate or handle drag operations.
-- Does not manage visibility dynamically — visibility is guaranteed by architectural placement (only created for non-root items in edit-state rows).
 
 ## 10. Platform Implementation Notes
 
-- Visual element: `span` with CSS class `drag-handle`, text content `⠿`.
-- View is placed by the parent node during `buildChildren()`.
-- Extends `DomNode`.
+- Visual primitive: static affordance element.
+- Display token is pulled as an already-resolved primitive.
 
 ## 11. Expected Materialization
 
 - Primary artifact stem: `src/pane/tree_item/drag_handle.top`
 - Public node class: `DragHandleNode`
 - Base class / base role: `DomNode`
-
 - Materialization policy: one-file default
 - Internal contracts:
-  - Controller-to-content: DragHandleContentAccess
-  - Content-to-controller: DragHandleControllerAccess empty zero-contract interface implemented by the owning node/controller
+  - Controller-to-content: `DragHandleContentAccess`
+  - Content-to-controller: `DragHandleControllerAccess`
 - Companion artifact stems: none

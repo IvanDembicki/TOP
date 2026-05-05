@@ -6,21 +6,26 @@ sourcePath: src/pane/tree_item/node_label.top
 
 ## 1. Node Identity and Role
 
-NodeLabel is a read-only text visual part that displays the type name of a tree item. It is a child of TreeItemRowViewState and the edit-state row sub-nodes. It has no interactivity.
+NodeLabel is a static label part inside a tree item row.
 
 ## 2. Responsibility
 
-- Render the text of the item's type name.
-- Expose `setText(text)` to update the displayed text.
+- Materialize the label structure.
+- Pull the already-resolved label text from the owning controller access
+  contract during refresh/materialization.
+- Own no decision logic and no label derivation.
 
 ## 3. Inputs and Events
 
-- `setText(text)` — called by TreeItemRow delegating from TreeItem; updates the visible label.
-- No user interaction events.
+- `getLabelText()` - returns the already-resolved label text by delegating through
+  the parent/context chain.
+
+No user interaction events.
 
 ## 4. State Ownership
 
-Owns no explicit state. The displayed text is held implicitly by the visual content.
+Owns no state. The label text is owned by the TreeItem controller that resolves
+the primitive value from its attached data context.
 
 ## 5. Child Interaction Rules
 
@@ -28,8 +33,10 @@ Has no child nodes.
 
 ## 6. Lifecycle
 
-1. Constructor: creates the label content boundary with `setContent(...)`.
-2. Text is set on initial `reset` via `setText` and may be updated at any time thereafter.
+1. Constructor receives only parent/context.
+2. Constructor creates static label content.
+3. Refresh/materialization pulls `getLabelText()` through controller access and
+   applies the primitive text value to the static label structure.
 
 ## 7. Side Effects
 
@@ -37,29 +44,29 @@ None.
 
 ## 8. Constraints and Invariants
 
-- Must only display text; no interactive behavior.
-- Must not allow inline editing.
+- No text setter or equivalent presentation mutation method.
+- No constructor text, data, config, callbacks, props, stores, or services.
+- Locally implemented content contains no conditional selection logic.
 
 ## 9. Non-Goals
 
-- Does not support inline editing of the node type.
-- Does not manage its own visibility.
+- Does not support inline editing.
+- Does not decide visibility, style, or label text.
 
 ## 10. Platform Implementation Notes
 
-- Visual element: `span` with CSS class `node-label`.
-- `setText(text)`: delegated through `NodeLabelContentAccess`; sets `el.textContent = text` on the content.
-- View is placed by the parent node during `buildChildren()`.
-- Extends `DomNode`.
+- Visual primitive: static label element.
+- Text is an already-resolved primitive pulled through `NodeLabelControllerAccess`.
+- Content-local mechanics may apply the pulled primitive value to the static
+  materialization, but must not derive it.
 
 ## 11. Expected Materialization
 
 - Primary artifact stem: `src/pane/tree_item/node_label.top`
 - Public node class: `NodeLabelNode`
 - Base class / base role: `DomNode`
-
 - Materialization policy: one-file default
 - Internal contracts:
-  - Controller-to-content: NodeLabelContentAccess
-  - Content-to-controller: NodeLabelControllerAccess empty zero-contract interface implemented by the owning node/controller
+  - Controller-to-content: `NodeLabelContentAccess`
+  - Content-to-controller: `NodeLabelControllerAccess`
 - Companion artifact stems: none

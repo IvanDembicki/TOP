@@ -25,7 +25,12 @@ the current validation pass.
 Required checks:
 - if the node has a separate content, the controller does not bypass the content boundary through direct access to the concrete implementation;
 - controller fields/references to content are typed as `IContentAccess` or the target-equivalent narrow contract, not as the concrete Content class where the technology permits that boundary;
-- if the controller performs any operation on its own content implementation, it does so only through explicitly named `this.content.<command>(...)` methods on `IContentAccess`;
+- controller-to-content access through `IContentAccess` is limited to
+  lifecycle/materialization access such as obtaining the root content primitive
+  or participating in controlled lifecycle;
+- controller does not imperatively command, mutate, update, show, hide,
+  configure, set class/style, apply state, or render-with into locally
+  implemented content;
 - controller code does not use the node's own render/view/native primitive, its platform API, or an equivalent exposed primitive handle, except inside the implementation of `getView()` itself and parent-owned placement/composition code that treats a child view as an opaque handle (detection examples for DOM-like targets: `this.el`, `this.getView().classList`, `this.getView().style`, `this.getView().addEventListener`, `this.getView().removeEventListener`, `this.getView().setAttribute`, `this.getView().querySelector`, `content.getView()`);
 - if a child view is obtained through `getView()`, it is used only as an opaque materialization handle for mount/unmount/insert/reorder/replace/placement through the parent's content boundary;
 - the parent/controller does not attach event listeners to a child view, mutate its styles/classes/attributes, query inside it, or use its platform API as a behavior or communication channel;
@@ -36,7 +41,9 @@ Required checks:
 Canonical correction direction:
 - move interaction into an explicit external interface of the content;
 - remove direct controller bypass;
-- replace direct platform primitive access with named content commands on `IContentAccess`;
+- replace direct platform primitive access with controller state changes,
+  dirty/render refresh through the node/runtime mechanism, and locally
+  implemented content pulling already-resolved values through `IControllerAccess`;
 - restrict `getView()` usage to parent-owned placement/composition only;
 - close any surrogate channels.
 
@@ -69,6 +76,14 @@ Canonical correction direction:
 
 Required checks:
 - every Node constructor has exactly one semantic argument: its parent reference;
+- every TOP object constructor attaches the object to context and does not inject
+  data packets, flags, callbacks, config/options/props-like objects, stores,
+  services, child views, presentation values, visibility values, style values,
+  text values, runtime state, or handlers as additional arguments (`CORE-032`);
+- child nodes, locally implemented content, connectors, and black-box boundaries
+  are not configured after construction through setter-style data/config/state/
+  presentation injection such as apply-config, set-data, set-visible,
+  update-text, set-style, set-callbacks, or target-equivalent calls (`CORE-032`);
 - a root constructor using `null` or `RootContext` treats it only as a root ownership/bootstrap marker, not as a dependency injection container;
 - Node/Controller public runtime entrypoints do not receive semantic data,
   derived facts, callbacks, handlers, services, stores, child fragments,
@@ -93,10 +108,10 @@ Required checks:
 - `IContentAccess` is not used as a view-model/data field carrier for content;
 - no externally assembled access bundle replaces `IControllerAccess`, even when it contains correctly named methods;
 - controller receives, stores, and uses its own Content instance typed only
-  as `IContentAccess`/target-equivalent, not decomposed content command methods,
-  method bags, facade/adapters, closure objects, concrete Content types,
-  platform primitives, or objects assembled outside the controller/content
-  construction boundary (`CORE-031`);
+  as `IContentAccess`/target-equivalent, not decomposed content
+  lifecycle/materialization members, method bags, facade/adapters, closure
+  objects, concrete Content types, platform primitives, or objects assembled
+  outside the controller/content construction boundary (`CORE-031`);
 - `IControllerAccess` methods are controller-boundary methods owned by the controller;
 - `IControllerAccess` methods may delegate internally, but Content does not receive raw imported functions, externally owned method references, service methods, store actions, or callbacks as access methods;
 - Content requests data/actions/permitted output handles from its owning controller through explicit access methods;
@@ -105,7 +120,12 @@ Required checks:
 
 Canonical correction direction:
 - move child construction to the owning parent controller at the child position in the tree;
+- remove constructor data injection and setter-style post-construction pushes;
 - replace pushed constructor/runtime inputs with explicit access methods on a narrow access interface;
+- let the object pull values through its contextual contract after attachment;
+- model pushed state/structural alternatives as explicit child state nodes;
+- wrap external component configuration behind a black-box boundary with a
+  narrow explicit interface;
 - replace pushed Node/Controller runtime inputs with explicit pull access/update
   methods or modeled connector contracts; if no canonical channel exists, report
   the remaining violation instead of tunneling the value;
@@ -153,13 +173,47 @@ Canonical correction direction:
 Required checks:
 - content has no architectural will;
 - content does not decide to attach/integrate/mount/remove/show/hide/destroy as an architectural or lifecycle action;
+- locally implemented content contains no conditional selection logic of any
+  kind;
+- locally implemented content does not decide, derive, branch, select, toggle,
+  or compute which structure, class/style/token, text, icon, visibility,
+  handler, child output, platform primitive, representation, or capability
+  should be used;
+- locally implemented content has no `if`/`else`, `switch`/`case`, ternary,
+  conditional rendering, conditional return, multiple return branch, `&&`/`||`
+  conditional selection, `match`/`when`/guard branch, or equivalent construct
+  that participates in selection or derivation;
+- locally implemented content materializes a structurally static content shape
+  and applies only already-resolved primitive values received through its owning
+  controller access contract;
+- controller does not push presentation state or imperative mutation commands
+  into locally implemented content;
+- data-node controller domain methods such as `setAge(value)`,
+  `updateName(value)`, or `replaceRecord(record)` are treated separately from
+  presentation-content push. They are valid only when access is architectural,
+  validation/business rules remain in the data controller, and mutation is
+  limited to that controller's own private data content;
+- external objects and presentation content do not mutate raw data content
+  directly;
+- controller changes its own state and marks the node/content/runtime dirty or
+  requests lifecycle/render refresh through the node/runtime mechanism;
 - content may execute low-level platform commands on its own implementation material, including subscribe/unsubscribe and analogous platform operations, when those commands are part of content materialization or are requested through the content boundary;
 - content does not make lifecycle and structural decisions;
 - content does not interpret its own events as system commands.
 
 Canonical correction direction:
-- leave in content only allowed construction/update/platform-command/event-forwarding behavior;
-- return lifecycle and structural decisions to the controller.
+- move primitive value derivation or selection to the owning controller and let
+  content request only the already-resolved value through controller access;
+- split structural, element, handler, visibility, representation, or capability
+  alternatives into explicit child state nodes;
+- wrap external, native, third-party, or self-contained logic as black-box
+  component content with a narrow explicit interface;
+- replace controller-to-content presentation commands with controller state
+  update, dirty/render request through node/runtime, and content pull of
+  already-resolved values through `IControllerAccess`;
+- leave in locally implemented content only static materialization,
+  already-resolved primitive application, permitted platform-command execution,
+  and event forwarding.
 
 ---
 
@@ -170,12 +224,15 @@ Required checks:
 - the controller manages lifecycle and orchestration;
 - the controller does not use concrete implementation as a communication channel;
 - the controller works with the implementation only through the content object and its external interface;
-- the controller never performs visual/platform operations through inherited primitive fields or getters; it delegates such operations to named content commands;
+- the controller never performs visual/platform operations through inherited
+  primitive fields, getters, or presentation commands pushed into content;
 - a public/base-class primitive getter is not used as justification for controller access to the concrete implementation.
 
 Canonical correction direction:
 - move behavior ownership to the controller;
-- move concrete implementation access behind the content boundary.
+- move concrete implementation access behind lifecycle/materialization
+  boundaries and use controller state plus dirty/render refresh for presentation
+  changes.
 
 ---
 

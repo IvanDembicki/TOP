@@ -6,75 +6,73 @@ sourcePath: src/pane/tree_item/tree_item_row_edit_state_normal_state.top
 
 ## 1. Node Identity and Role
 
-TreeItemRowEditStateNormalState is the first (default) child of TreeItemRowEditState. It provides the row visual for edit mode when the mouse is not hovering over the item. It contains DragHandle (for non-root items), NodeIcon, and NodeLabel. It does not show AddBtn or DeleteBtn — those appear only in hover state.
+TreeItemRowEditStateNormalState is the default edit-mode row state. It contains a
+static row structure with DragHandle, NodeIcon, and NodeLabel.
 
 ## 2. Responsibility
 
-- Create and own the normal (non-hover) edit-mode row view.
-- Own low-level drag and mouse-enter subscriptions inside the content boundary; forward semantic events through the controller access contract.
-- On hover enter, request the parent TreeItemRowEditState to switch to hover mode.
-- Expose `setPaddingLeft`, `updateToggle(hasChildren, isExpanded)`, and `setText(text)` for delegation from the parent.
+- Materialize the normal edit-mode row structure.
+- Report hover-enter intent to TreeItemRowEditState.
+- Report drag/drop semantic requests upward through controller access.
+- Expose resolved label, icon, indentation, and drag affordance tokens to local
+  content and child controllers by pulling from parent/context.
 
 ## 3. Inputs and Events
 
-- Hover enter on own view → calls `this.parent.switchToHover()` (switches to HoverState).
-- Drag events (start, end, over, leave, drop) on own view → forwarded to ancestor TreeItem.
-- `setPaddingLeft(px)` — sets left indentation on own view.
-- `setText(text)` — delegated to NodeLabel.
-- `updateToggle(hasChildren, isExpanded)` — delegated to NodeIcon.
+- `requestHoverState()` - forwarded to parent TreeItemRowEditState.
+- `requestDragStart(eventInfo)`, `requestDragEnd(eventInfo)`,
+  `requestDragOver(eventInfo)`, `requestDragLeave(eventInfo)`,
+  `requestDrop(eventInfo)` - forwarded to the owning TreeItem.
+- `getLabelText()` / `getIndentToken()` / `getIconToken()` /
+  `getDragToken()` - pull resolved values from the parent/context chain.
 
 ## 4. State Ownership
 
-Owns no state. Does not read `isEditMode`.
+Owns no model state. This node is the normal edit-mode representation.
 
 ## 5. Child Interaction Rules
 
-- Children created conditionally during child materialization:
-  - DragHandle: created only when `treeItem.isRoot` is false.
-  - NodeIcon: always created.
-  - NodeLabel: always created.
-- Children's views are placed into this node's content area during child materialization.
+- Static children: DragHandle, NodeIcon, NodeLabel.
+- Child constructors receive only this node as parent/context.
+- DragHandle may pull a resolved affordance token. It is not conditionally
+  created for root items.
 
 ## 6. Lifecycle
 
-1. Constructor: creates the row visual content with `setContent(...)`.
-2. `buildChildren()`: captures `_treeItem` via `findUpByType(TreeItemNode)`; enables drag capability only for non-root items; creates children (DragHandle if non-root, NodeIcon, NodeLabel).
-3. Content owns hover-enter and drag subscriptions for the content lifetime; mounting is handled by the parent's base switchable mechanism.
-4. `onClose()` does not perform low-level unsubscription unless the target implementation requires explicit disposal when content is destroyed.
+1. Constructor creates static row content.
+2. `buildChildren()` creates DragHandle, NodeIcon, and NodeLabel and places their
+   opaque handles.
+3. Local content subscriptions report semantic requests through controller
+   access.
 
 ## 7. Side Effects
 
-- Hover enter causes a parent state switch to HoverState.
-- Drag events forwarded to TreeItem may cause item reordering.
+- Hover and drag/drop requests may cause parent/controller state changes.
 
 ## 8. Constraints and Invariants
 
-- Drag and hover-enter are low-level content subscriptions. They forward semantic events through the controller access contract and do not make architectural decisions.
-- Initial default placement by the parent may not call `onOpen()`, so the generated implementation must ensure the initially active normal row can receive hover and drag events.
-- Must not contain AddBtn or DeleteBtn — these belong to HoverState only.
-- Must not read `isEditMode`.
+- Does not read `isEditMode`.
+- Does not create children conditionally based on root/item state.
+- Locally implemented content contains no conditional selection logic.
 
 ## 9. Non-Goals
 
-- Does not implement drag logic; only forwards drag events to TreeItem.
-- Does not show edit action controls (those are in HoverState).
+- Does not implement drag/drop decisions.
+- Does not manage hover state directly.
 
 ## 10. Platform Implementation Notes
 
-- Visual element: `div` with CSS class `tree-item-row`.
-- Draggable: `this.content.setDraggable(!treeItem.isRoot)` called in `buildChildren()`.
-- Mouse enter: content-local subscription forwards a hover request through the controller access contract.
-- Drag forwarding: content-local subscriptions forward drag events through the controller access contract.
-- Extends `DomNode`.
+- Visual primitive: static edit row container.
+- Low-level hover/drag events are translated to semantic requests.
+- Drag affordance and interaction tokens are already-resolved controller values.
 
 ## 11. Expected Materialization
 
 - Primary artifact stem: `src/pane/tree_item/tree_item_row_edit_state_normal_state.top`
 - Public node class: `TreeItemRowEditStateNormalStateNode`
 - Base class / base role: `DomNode`
-
 - Materialization policy: one-file default
 - Internal contracts:
-  - Controller-to-content: TreeItemRowEditStateNormalStateContentAccess
-  - Content-to-controller: TreeItemRowEditStateNormalStateControllerAccess
+  - Controller-to-content: `TreeItemRowEditStateNormalStateContentAccess`
+  - Content-to-controller: `TreeItemRowEditStateNormalStateControllerAccess`
 - Companion artifact stems: none

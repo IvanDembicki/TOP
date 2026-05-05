@@ -102,8 +102,20 @@ Also specify:
 - The prompt must require the controller to store and use content through `IContentAccess`, not through the concrete Content class.
 - The prompt must state that `IContentAccess` is not a data/view-model/state/callback bag for Content. Controller-owned data and actions used by Content belong behind `IControllerAccess` methods/accessors.
 - These access artifacts must be narrow and strongly typed where the language permits. They must be materialized as named contract artifacts or other explicitly designated typed boundaries, and the constructor/factory/method parameter accepting such an artifact must have an explicit contract type. Anonymous/untyped parameters such as `constructor(facing)` without an explicit contract type are not allowed if the language can express it.
+- Construction must attach TOP objects to context, not inject data. A node receives only parent/context, locally implemented content receives only owning controller access, and connectors or black-box boundaries receive only their explicit boundary interface. Do not pass data packets, flags, callbacks, config/options/props-like objects, stores, services, child views, presentation values, visibility values, style values, text values, runtime state, handlers, or arbitrary extra values through constructors, runtime entrypoints, or setter-style post-construction configuration.
 - If the node has a separate content, the controller must not work with the concrete implementation bypassing the content object and its external interface. A public/base-class primitive getter does not legalize such a bypass.
-- If the controller needs a visual/platform operation on its own content, the prompt must require a named `IContentAccess` command method. Generated controller code must not use the node's own render/view/native primitive, its platform API, or an equivalent exposed primitive handle for direct platform primitive access. Detection examples for DOM-like targets: `this.el`, `this.getView().classList`, `this.getView().style`, `this.getView().addEventListener`, `this.getView().setAttribute`, `querySelector`, `content.getView()` — use the equivalent native/render primitive handle on other platforms.
+- If the controller needs a presentation change, the prompt must require
+  controller-owned state plus node/runtime dirty or lifecycle/render refresh.
+  Locally implemented content must then pull already-resolved primitive values
+  through controller access during materialization or refresh. Do not require
+  named `IContentAccess` presentation command methods. Generated controller code
+  must not use the node's own render/view/native primitive, its platform API, or
+  an equivalent exposed primitive handle for direct platform primitive access.
+  Detection examples for DOM-like targets: `this.el`,
+  `this.getView().classList`, `this.getView().style`,
+  `this.getView().addEventListener`, `this.getView().setAttribute`,
+  `querySelector`, `content.getView()` — use the equivalent native/render
+  primitive handle on other platforms.
 - The prompt must require generated declarations/materialization to follow architectural depth from outside to inside: controller/node first, internal access boundary artifact(s) next, hidden Content implementation last. In a one-file implementation this means `Controller/Node` -> `IContentAccess` + `IControllerAccess` (or explicit zero-contracts) -> `Content`. In split-file or one-class-per-file targets, the same dependency direction must be preserved across files and the companion artifact stems must be declared in Expected Materialization.
 - The prompt must include mandatory post-generation validation based on `references/node-validation-rules.md`.
 
