@@ -40,6 +40,11 @@ details:
 - source_reference_check
 - asset_reference_check
 - presentation_reference_check
+- top_layout_check
+- implementation_source_root_check
+- migration_workflow_check
+- migration_plan_check
+- migration_log_check
 - semantic_preservation_check
 - behavior_preservation_check
 - source_platform_leakage_check
@@ -81,8 +86,35 @@ next_step:
   decomposed content commands, method bags, facade/adapters, concrete Content
   types, platform primitives, or inline objects instead of its own Content
   instance typed through `IContentAccess`
+- Validation must report `CONV-007` when a new migration branch spec is stored
+  as an ad hoc root-level file in `top/` instead of under `top/specs/` without an
+  established project convention
+- Validation must report `CONV-008` when implementation prompts or Expected
+  Materialization exist but no implementation source root is declared/prepared
+- Validation must report `WF-013` when a migration/modeling handoff plans or
+  claims future materialization without a canonical materialization plan, source
+  root, and honest phase status
+- Validation must report `WF-014` when a migration-mode task creates or changes
+  TOP artifacts without a current `top/migration/MIGRATION_PLAN.md`
+- Validation must report `WF-015` when a migration-mode handoff or artifact
+  change lacks an appended `top/migration/MIGRATION_LOG.md` entry
+- Validation must report `WF-016` when a migration-mode task creates or changes
+  TOP artifacts without current `top/migration/MIGRATION_WORKFLOW.json`, or when
+  the workflow JSON disagrees with plan/status/log
 - `spec_sync_check` must explicitly report `pass`, `fail`, or `not_applicable`
 - `drift_check` must explicitly report `pass`, `fail`, or `not_applicable`; when applicable it must cover JSON topology, prompts, Expected Materialization, project-local TOP artifacts, and materialized implementation artifacts
+- `top_layout_check` must explicitly report `pass`, `fail`, or `not_applicable`
+  and verify `top/specs/`, `top/prompts/`, and `top/migration/` placement when
+  project-local TOP artifacts exist
+- `implementation_source_root_check` must explicitly report `pass`, `fail`, or
+  `not_applicable` and verify that materialized/generated TOP artifacts and
+  Expected Materialization roots agree
+- `migration_workflow_check` must explicitly report `pass`, `fail`, or
+  `not_applicable`
+- `migration_plan_check` must explicitly report `pass`, `fail`, or
+  `not_applicable`
+- `migration_log_check` must explicitly report `pass`, `fail`, or
+  `not_applicable`
 - Topology validation must mention child materialization points, dynamic/library children, prompt paths, and prompt child-interaction rules when applicable
 - `source_path_check` must verify extensionless `.top` artifact stems and target-specific artifact resolution
 - `source_reference_check`, `asset_reference_check`, and `presentation_reference_check` must verify `props.source`, `props.assetPath`, and `props.presentationPath` references relative to `top/` when applicable

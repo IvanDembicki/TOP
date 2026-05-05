@@ -34,6 +34,9 @@ result:
 - behavior_preservation_mapping_used
 - top_test_coverage_mapping
 - target_adaptation_decisions_applied
+- implementation_source_root_used
+- migration_plan_alignment
+- migration_log_entry
 
 details:
 - architectural_deviations
@@ -76,6 +79,14 @@ spec_sync_handoff:
 - Synchronized artifacts are `src/`, generated/materialized implementation artifacts, JSON specs, implementation prompts, `top/assets/`, `top/presentation/`, `top/semantic/`, and persisted `top/adaptations/` artifacts
 - `requires_drift_check` must be `true` whenever synchronized artifacts changed
 - `discovered_materialization_details` must list target-specific facts that need to be reflected in prompts or Expected Materialization without turning platform-specific implementation details into platform-neutral behavior
+- `implementation_source_root_used` must match the approved model and Expected
+  Materialization. Generated TOP implementation artifacts must be under that root
+  unless they are explicitly declared thin framework adapters.
+- For migration tasks, `migration_plan_alignment` must state how generated
+  artifacts follow `top/migration/MIGRATION_WORKFLOW.json` and
+  `top/migration/MIGRATION_PLAN.md`, and `migration_log_entry`
+  must identify the appended log entry. For non-migration tasks both fields must
+  be explicitly `not_applicable`.
 - Generation is not permitted to override the approved architecture
 - Generation is not permitted to bypass Semantic Interpreter or Target Adaptation outputs in generation-pipeline mode
 - For non-migration tasks, `behavior_preservation_source`, `behavior_preservation_mapping_used`, `top_test_coverage_mapping`, and `behavior_preservation_notes` must be explicitly `not_applicable`

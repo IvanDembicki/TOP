@@ -52,6 +52,8 @@ Check:
 - invariants;
 - forbidden behavior;
 - compliance with `props.dir` and expected directory placement of generated files;
+- compliance with `props.sourceRoot`, canonical `top_src/` source-root layout,
+  and `top/specs/` branch spec placement;
 - presence and correctness of an explicit restricted access artifact for content, if content exists;
 - materialization of the artifact as a named contract type, not an anonymous object shape;
 - explicit typing of the constructor/factory/method parameter receiving the artifact, if the language allows;

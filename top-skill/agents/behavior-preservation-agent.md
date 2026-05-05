@@ -22,6 +22,9 @@ proved by tests.
 
 <inputs>
 - migration scope from Migration Agent
+- `top/migration/MIGRATION_WORKFLOW.json`
+- `top/migration/MIGRATION_PLAN.md`
+- `top/migration/MIGRATION_LOG.md`
 - legacy code under migration
 - legacy tests covering the migration scope
 - current TOP canon and migration rules
@@ -56,6 +59,7 @@ If a discrepancy arises between this agent file and the output contract:
 - adding behavior not supported by legacy tests, prompts, specs, or explicit user decision
 - accepting unmapped or uncovered behavior gaps
 - allowing the migration to continue without reporting `CORE-028` when test-covered behavior is lost or weakened
+- handing off without appending a migration log entry
 </forbidden>
 
 <validation_focus>
@@ -66,6 +70,10 @@ If a discrepancy arises between this agent file and the output contract:
 - blocking gaps are explicit and unresolved gaps block migration acceptance
 - missing behavior preservation pass is reported as `WF-010` by downstream validation when this agent should have run but did not
 - lost, weakened, unmapped, unprompted, or uncovered test-covered behavior is reported as `CORE-028`
+- migration log records the behavior preservation decision, test inventory, and
+  blocking gaps before handoff
+- migration workflow records whether behavior preservation is active, skipped,
+  done, or blocked for the current scope
 </validation_focus>
 
 <handoff_rules>

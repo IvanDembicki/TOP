@@ -41,14 +41,17 @@ A Node Implementation Prompt is a project-local artifact.
 
 It must:
 - be stored inside the project's root `top/` directory;
-- be placed in the `prompts/` directory alongside the JSON tree description or branch description;
+- be placed in the `prompts/` directory and linked from a JSON spec under
+  `top/specs/` unless an established project-local TOP convention declares a
+  different spec location;
 - use the module hierarchy inside `top/` for modular projects.
 
 Examples:
 
 ```text
 top/
-  tree.json
+  specs/
+    tree.json
   prompts/
     TreeItem.prompt.md
 ```
@@ -106,18 +109,22 @@ Platform implementation notes:
 
 The node spec must:
 - reference the prompt via `prompt`;
-- specify `props.dir` as needed for placement of generated class files.
+- specify `props.sourceRoot` and `props.dir` as needed for placement of
+  generated implementation artifacts.
   If `dir` is already set on an ancestor node, it is inherited by descendants by default.
 
 Thus:
 - `prompt` defines where the project-local semantics source resides inside `top/`;
-- `props.dir` defines where generated implementation artifacts should be placed.
+- `props.sourceRoot` defines the implementation source root (`top_src/` by default);
+- `props.dir` defines where generated implementation artifacts should be placed
+  relative to that source root.
 - `sourcePath` in prompt frontmatter binds the prompt to an extensionless primary implementation artifact stem.
   The stem is stable across target technologies; concrete file extensions are target-specific materialization details.
 
 An implementation prompt describes one semantic node, not necessarily one physical file.
 If the target or project convention materializes a node into multiple artifacts, the prompt
 must declare the materialization layout:
+- implementation source root;
 - primary artifact stem;
 - public node/controller class;
 - controller role purity: the public node/controller artifact is non-renderable

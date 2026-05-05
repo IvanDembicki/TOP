@@ -10,7 +10,8 @@ The workflow preserves intent first and adapts implementation second.
 
 Authoritative inputs:
 
-- Layer A: TOP structural truth (`top/*.json`, external branch specs, prompts, assets, presentation, and other project-local TOP source artifacts).
+- Layer A: TOP structural truth (`top/specs/**/*.json` plus any established
+  root index, prompts, assets, presentation, and other project-local TOP source artifacts).
 - Layer B: platform-neutral semantic UI layer stored under `top/semantic/**/*.semantic.json`.
 
 Derived outputs:

@@ -15,6 +15,12 @@ rules:
 - require a Behavior Preservation Plan before modeling or generating replacements for a tested migration scope
 - do not discard a legacy test until its behavioral meaning is extracted, normalized, mapped to TOP nodes/contracts/prompts, and re-covered or explicitly declared obsolete
 - when replacing legacy composition, converge toward pull-based TOP construction
+- for migration/modeling artifacts, use canonical layout: branch specs under
+  `top/specs/`, prompts under `top/prompts/`, status under `top/migration/`,
+  and implementation artifacts under the declared source root (`top_src/<branch-id>/`
+  by default)
+- if implementation prompts or Expected Materialization are created before code
+  generation, create the source root with `.gitkeep` or an equivalent placeholder
 - classify runtime parameters, parameter bags, config/options/props-like objects, composition entrypoints, and callback/handler bundles as wrapped legacy unless removed from the TOP-conformant final path
 - replace pushed Content inputs with narrow owner access methods
 - Content must receive only the owning controller instance typed as

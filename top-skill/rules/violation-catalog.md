@@ -59,6 +59,8 @@ Violations of skill-specific conventions. Do not automatically classify as CORE.
 | CONV-004 | Missing prompt file | A code-generated node has no implementation prompt file in `top/prompts/`. |
 | CONV-005 | Spec storage violation | Spec tree not stored as `.json` inside `top/`. |
 | CONV-006 | Missing props.contentType | Node has content and its type must be explicitly recorded, but `props.contentType` is absent from the spec. |
+| CONV-007 | Noncanonical TOP spec placement | A new migration branch spec is stored as an ad hoc root-level file under `top/` instead of under `top/specs/`, or implementation prompts exist without a matching canonical spec path, and no established project-local TOP convention justifies it. |
+| CONV-008 | Missing TOP implementation source root | Specs or implementation prompts declare future materialization, but the branch has no declared/prepared implementation source root such as `top_src/<branch-id>/`, no placeholder for an empty root, or inconsistent `props.dir` / Expected Materialization roots. |
 
 ---
 
@@ -80,6 +82,10 @@ Violations of the execution process. Affect pipeline validity, not TOP Core itse
 | WF-010 | Missing behavior preservation pass | A migration scope has legacy tests or executable behavior evidence, but Behavior Preservation Agent did not run and no Behavior Preservation Plan was produced before modeling, generation, validation, or final audit. |
 | WF-011 | Core deviation marked as pass | Validation or Final Audit reports `pass`, `ready`, or `ready_for_use` while confirmed core violations or accepted core deviations remain. A documented migration waypoint may be tracked, but it cannot be converted into a passing TOP validation result. |
 | WF-012 | Ad hoc core deviation acceptance | A project prompt, migration status file, validation report, repair report, or final audit labels a confirmed core violation as accepted/temporary/deferred/waypoint without a TOP-canon-defined migration waypoint for that violation. Documentation may track the violation, but it cannot convert it into an accepted deviation or repair. |
+| WF-013 | Missing migration materialization plan | A migration/modeling handoff creates specs/prompts, Expected Materialization, or a generation next step without declaring canonical artifact paths, preparing the implementation source root, and recording an honest phase status such as analysis-only/modeling-only/materialization-pending. |
+| WF-014 | Missing migration plan | A migration-mode task creates or changes TOP artifacts without a current `top/migration/MIGRATION_PLAN.md` that records scope, phases, responsible agents, artifacts, gates, and rollback/stop points. |
+| WF-015 | Missing or stale migration log | A migration-mode agent changes artifacts or hands off to another stage without appending an entry to `top/migration/MIGRATION_LOG.md`, or the log is rewritten instead of append-only. |
+| WF-016 | Missing or stale migration workflow tree | A migration-mode task creates or changes TOP artifacts without a current `top/migration/MIGRATION_WORKFLOW.json`, or the workflow JSON disagrees with the migration plan/status/log about scope, phase order, current phase, gates, or responsible agents. |
 
 ---
 

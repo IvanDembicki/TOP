@@ -15,6 +15,9 @@ Use this agent only after the model has passed canon precheck, semantic interpre
 <inputs>
 - approved TOP model
 - Behavior Preservation Plan when generating a migrated scope with legacy tests
+- `top/migration/MIGRATION_WORKFLOW.json` when task mode is migration
+- `top/migration/MIGRATION_PLAN.md` when task mode is migration
+- `top/migration/MIGRATION_LOG.md` when task mode is migration
 - platform-neutral semantic UI layer
 - target adaptation plan
 - target technology
@@ -39,6 +42,9 @@ If a discrepancy arises between this agent file and the output contract:
 - preserve architectural ownership boundaries
 - materialize explicit protocols and lifecycle rules
 - generate or adapt tests needed to re-cover preserved behavior requirements
+- write generated TOP implementation artifacts only under the declared
+  implementation source root (`top_src/` by default), except thin framework
+  adapters explicitly declared by the integration contract
 </allowed>
 
 <forbidden>
@@ -51,6 +57,10 @@ If a discrepancy arises between this agent file and the output contract:
 - drop, weaken, or silently reinterpret behavior captured by the Behavior Preservation Plan
 - copy source-platform primitives instead of following target adaptation decisions
 - introduce target behavior that has no semantic source in Layer B
+- scatter generated TOP implementation files into legacy source directories when
+  no approved integration contract or source-root declaration permits it
+- in migration mode, generate without following the current migration workflow
+  and plan or without appending a migration log entry for generated artifacts
 
 <avoid_over_engineering>
 Generate only what the spec and prompt explicitly define. Do not add features, abstractions, utilities, or error handling beyond what is specified. Do not design for hypothetical future requirements. Do not add comments or documentation to code not explicitly required by the prompt. The right amount of complexity is the minimum needed to satisfy the node contract — nothing more.

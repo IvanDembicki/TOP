@@ -1,6 +1,6 @@
 # TOP Skill — Tree-Oriented Programming
 
-**Version:** 1.1.11 | **License:** MIT | **Invocation:** `/top`
+**Version:** 1.1.14 | **License:** MIT | **Invocation:** `/top`
 
 **TOP turns architecture from a weak social norm into a strong machine-verifiable protocol.**
 
@@ -49,6 +49,21 @@ This is a complete AI-native development system:
 - **Multi-target generation** — one spec tree generates implementations for Web, Android, React Native, and other platforms
 
 The sufficient operational unit in TOP is the pair **`spec + prompt`**. Code is a derived artifact. The spec and prompts remain the source of truth.
+
+---
+
+## Skill governance
+
+`top-skill` now carries its own TOP governance layer under `top/`:
+
+- `top/spec.json` — skill execution tree and invariants
+- `top/artifact-manifest.json` — required package and migration contracts
+- `top/modes/mode-manifest.json` — stable mode boundaries
+- `top/schemas/migration-workflow.schema.json` — schema for project migration workflow trees
+- `top/validation/output-rules.md` — readiness checks for skill outputs
+
+Migration projects must keep `top/migration/MIGRATION_WORKFLOW.json` alongside
+`MIGRATION_PLAN.md`, `MIGRATION_STATUS.md`, and `MIGRATION_LOG.md`.
 
 ---
 

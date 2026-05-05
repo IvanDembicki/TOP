@@ -1,0 +1,28 @@
+{
+  "schema_version": "0.1",
+  "artifact": "top-skill self-governance layer",
+  "introduced_in": "1.1.14",
+  "date": "2026-05-04",
+  "sources": [
+    {
+      "name": "top-skill-factory",
+      "version": "1.0.0",
+      "evidence": [
+        "SKILL.md execution rule",
+        "top/artifact-manifest.json",
+        "top/modes/mode-manifest.json",
+        "top/spec.json",
+        "top/shared-rules/core-invariants.md",
+        "top/shared-rules/decision-invalidation.md",
+        "top/validation/output-rules.md"
+      ]
+    }
+  ],
+  "applied_rules": [
+    "Skill is a controlled TOP tree, not a free-form prompt.",
+    "Required artifacts cannot be empty placeholders in a ready result.",
+    "Structured workflow artifacts use JSON when a schema exists.",
+    "New requirements invalidate conflicting old decisions.",
+    "Validation failure prevents readiness claims."
+  ]
+}

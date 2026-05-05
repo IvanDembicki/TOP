@@ -7,6 +7,30 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.14] — 2026-05-04
+
+- Applied TOP Skill Factory governance rules to `top-skill` itself by adding `top/spec.json`, `top/artifact-manifest.json`, `top/modes/mode-manifest.json`, `top/validation/output-rules.md`, `top/shared-rules/skill-governance.md`, and `top/provenance.json`.
+- Added `top/schemas/migration-workflow.schema.json` and made project migrations maintain `top/migration/MIGRATION_WORKFLOW.json` as the machine-readable process tree alongside `MIGRATION_PLAN.md`, `MIGRATION_STATUS.md`, and `MIGRATION_LOG.md`.
+- Added `WF-016` for missing or stale migration workflow trees.
+- Updated migration infrastructure, planning, validation, repair, modeling, generation, spec-sync, review, and output contracts so agents cannot treat Markdown-only planning as sufficient for migration control.
+- Added self-governance artifacts to hydration and quick validation so they are loaded and checked as part of the skill package.
+- Synchronized self-governance metadata with runtime skill metadata: `top/spec.json` now lists all skill agents, `skill.json` includes `canon/migration.md`, migration quickstart reads include infrastructure/planning agents and workflow schema, and behavior-preservation status routing is explicit.
+
+## [1.1.13] — 2026-05-04
+
+- Added a mandatory migration control plane: `top/migration/MIGRATION_PLAN.md`, `MIGRATION_STATUS.md`, and append-only `MIGRATION_LOG.md`.
+- Added Migration Infrastructure Agent and Migration Planning Agent so migration starts with baseline/layout setup and an explicit plan before scope analysis, modeling, generation, or validation.
+- Added output contracts for migration infrastructure and migration planning.
+- Added `WF-014` for missing migration plans and `WF-015` for missing or stale migration logs.
+- Updated migration, validation, repair, generation, modeling, spec-sync, review, and hydration rules so each migration-mode agent follows the plan and appends log entries on handoff or persistent artifact changes.
+
+## [1.1.12] — 2026-05-03
+
+- Added canonical migration artifact layout requirements: branch specs under `top/specs/`, prompts under `top/prompts/`, status under `top/migration/`, and materialized TOP implementation artifacts under `top_src/<branch-id>/` by default.
+- Added `CONV-007` for noncanonical TOP spec placement, `CONV-008` for missing TOP implementation source root, and `WF-013` for migration/modeling handoffs that declare future materialization without source-root setup and honest phase status.
+- Updated migration, modeling, generation, validation, spec-sync, prompt, and output-contract rules so analysis/modeling that creates Expected Materialization must also declare and prepare the implementation source root.
+- Added `contracts/top-folder-contract.md` and `rules/spec-sync-rules.md` to hydration tiers so migration and validation agents load the artifact-layout rules before judging project files.
+
 ## [1.1.11] — 2026-05-03
 
 - Added `CORE-030` for decomposed owner access input and `CORE-031` for decomposed content access input.

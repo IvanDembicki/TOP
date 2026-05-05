@@ -57,6 +57,9 @@ Routing meta-agent. No dedicated output contract — produces pipeline routing m
 <handoff_rules>
 - unresolved intake state -> `Intake Agent`
 - unresolved ambiguity -> `Ambiguity Resolver Agent`
+- migration mode with missing/unverified control-plane files -> `Migration Infrastructure Agent`
+- migration infrastructure complete but missing/current workflow or plan unresolved -> `Migration Planning Agent`
+- migration plan complete -> `Migration Agent`
 - clarified task -> `Domain Structuring Agent`
 - structured domain -> `TOP Modeling Agent`
 - modeled structure -> `Canon Precheck Agent`
@@ -70,6 +73,22 @@ Routing meta-agent. No dedicated output contract — produces pipeline routing m
 - repair changed no synchronized artifacts -> `Validation Agent`
 - validation pass -> `Final Audit Agent`
 </handoff_rules>
+
+## Migration control-plane routing
+
+In migration mode, the Orchestrator must not route directly from a user request
+to Migration Agent, TOP Modeling Agent, Generation Agent, Validation Agent, or
+Repair Agent unless:
+
+- `top/migration/MIGRATION_PLAN.md` exists and names the current migration step;
+- `top/migration/MIGRATION_WORKFLOW.json` exists, parses, and names the current
+  migration phase and next permitted stages;
+- `top/migration/MIGRATION_LOG.md` exists;
+- the prior migration-stage handoff appended a log entry;
+- the next stage is consistent with the workflow JSON and plan.
+
+If any condition is missing, route to Migration Infrastructure Agent or Migration
+Planning Agent first.
 
 ## Failure handling
 

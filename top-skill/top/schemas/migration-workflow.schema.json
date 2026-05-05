@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/migration-workflow.schema.json",
+  "title": "TOP Migration Workflow",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "migrationId",
+    "requestedScope",
+    "selectedScope",
+    "branchId",
+    "currentPhase",
+    "phases",
+    "validationGates"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "migrationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "projectPath": {
+      "type": "string"
+    },
+    "requestedScope": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "selectedScope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "branchId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "currentPhase": {
+      "type": "string",
+      "minLength": 1
+    },
+    "phases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/phase"
+      }
+    },
+    "validationGates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/gate"
+      }
+    },
+    "handoffRules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/handoff"
+      }
+    },
+    "decisionTrace": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/decision"
+      }
+    }
+  },
+  "$defs": {
+    "phase": {
+      "type": "object",
+      "required": [
+        "id",
+        "agent",
+        "status",
+        "next"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "active",
+            "blocked",
+            "done",
+            "skipped"
+          ]
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "requiredArtifacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "next": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "blockingReason": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "id",
+        "status",
+        "condition"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "pass",
+            "fail",
+            "not_applicable"
+          ]
+        },
+        "condition": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "handoff": {
+      "type": "object",
+      "required": [
+        "from",
+        "to",
+        "condition"
+      ],
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "condition": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "required": [
+        "decisionId",
+        "status",
+        "reason",
+        "evidence"
+      ],
+      "properties": {
+        "decisionId": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "active",
+            "invalidated",
+            "superseded"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "supersededBy": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
+

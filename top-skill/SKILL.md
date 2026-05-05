@@ -5,8 +5,8 @@ description: Skill for designing, generating, and validating systems built with 
 
 # TOP Skill
 
-**Version:** 1.1.11
-**Last updated:** 2026-05-03 16:36 -07:00
+**Version:** 1.1.14
+**Last updated:** 2026-05-04 01:05 -07:00
 **Invocation:** `/top`
 
 > **Rule for AI:** whenever any top-skill file is modified, update the date and time in this field to the current values.
@@ -14,6 +14,34 @@ description: Skill for designing, generating, and validating systems built with 
 This skill is intended for tasks where a system **is explicitly treated or must be treated as a tree of nodes** in terms of **Tree-Oriented Programming (TOP)**.
 
 Within the TOP product line, this is the foundational architecture skill. Use `top-prompt-cleaner` for single-prompt cleanup and `top-skill-factory` for governed skill lifecycle work.
+
+---
+
+## Skill self-governance
+
+`top-skill` is itself governed as a TOP skill system.
+
+The self-governance source artifacts live under:
+
+- `top/spec.json`
+- `top/artifact-manifest.json`
+- `top/modes/mode-manifest.json`
+- `top/validation/output-rules.md`
+- `top/shared-rules/skill-governance.md`
+- `top/schemas/migration-workflow.schema.json`
+
+These artifacts apply the same factory-style rule used for generated skills:
+a skill is not a loose prompt; it is a controlled tree of responsibilities,
+modes, contracts, schemas, validation rules, and outputs.
+
+For migration projects, the machine-readable process artifact is:
+
+```text
+top/migration/MIGRATION_WORKFLOW.json
+```
+
+Markdown may explain migration intent, but the workflow JSON controls phase
+state, gates, and handoff validation.
 
 ---
 

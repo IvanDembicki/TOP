@@ -48,6 +48,12 @@ examples.
 
 A canon change requires checking every affected part of the rule surface:
 - `SKILL.md`
+- `top/spec.json`
+- `top/artifact-manifest.json`
+- `top/modes/mode-manifest.json`
+- `top/validation/*`
+- `top/shared-rules/*`
+- `top/schemas/*`
 - `canon/*`
 - `references/*`
 - `rules/*`
@@ -156,14 +162,16 @@ When the user asks to push changes:
 1. check `git status`;
 2. increment version;
 3. update changelog;
-4. run validation/tests;
-5. run `git diff --check`;
-6. stage only relevant files;
-7. verify staged files;
-8. commit;
-9. push;
-10. verify final branch/status;
-11. report commit hash, pushed branch, changed files, and validation result.
+4. update self-governance metadata under `top/` when modes, contracts,
+   schemas, validation rules, or readiness claims changed;
+5. run validation/tests;
+6. run `git diff --check`;
+7. stage only relevant files;
+8. verify staged files;
+9. commit;
+10. push;
+11. verify final branch/status;
+12. report commit hash, pushed branch, changed files, and validation result.
 
 Unrelated working-tree changes must not be silently included.
 
@@ -244,3 +252,17 @@ Ask:
 
 If the role-collapse variant is possible, add a separate invariant or violation
 code instead of hiding it under a nearby generic rule.
+
+## 23. Apply skill-factory governance to the skill itself
+
+`top-skill` must follow the same governance standard it expects from generated
+skills:
+
+- skill structure is recorded in `top/spec.json`;
+- readiness contracts are recorded in `top/artifact-manifest.json`;
+- supported modes and maturity are recorded in `top/modes/mode-manifest.json`;
+- structured workflow artifacts use schemas when schemas exist;
+- validation rules must explain how readiness is checked.
+
+Do not add a new stable mode, output contract, migration control artifact, or
+readiness claim without updating the self-governance layer and quick validation.

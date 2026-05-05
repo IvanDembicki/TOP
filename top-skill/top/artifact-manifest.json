@@ -1,0 +1,51 @@
+{
+  "manifest_version": "0.1",
+  "contracts": [
+    {
+      "contract_id": "top_skill_runtime_contract",
+      "applies_to": "The top-skill package as loaded by an AI runtime.",
+      "required_artifacts": [
+        "SKILL.md",
+        "skill.json",
+        "release-metadata.json",
+        "hydration-manifest.json",
+        "AI_PRELOAD_CONTEXT.md",
+        "ENTRY_POINT.md",
+        "QUICKSTART_MIN_READS.md",
+        "agents/index.md",
+        "rules/task-modes.md",
+        "rules/violation-catalog.md",
+        "canon/architectural-invariants.md",
+        "canon/validation-rules.md"
+      ],
+      "readiness_rule": "Use for runtime skill loading and hydrated task execution. Hydration must validate references before stable work begins."
+    },
+    {
+      "contract_id": "top_skill_governance_contract",
+      "applies_to": "The top-skill package when it is being maintained, released, or validated as a skill system.",
+      "required_artifacts": [
+        "top/spec.json",
+        "top/README.md",
+        "top/artifact-manifest.json",
+        "top/modes/mode-manifest.json",
+        "top/validation/output-rules.md",
+        "top/shared-rules/skill-governance.md",
+        "top/schemas/migration-workflow.schema.json",
+        "top/provenance.json"
+      ],
+      "readiness_rule": "Use for top-skill maintenance and release claims. The skill is not release-ready if these artifacts are missing, stale, or contradicted by root package metadata."
+    },
+    {
+      "contract_id": "migration_project_control_plane_contract",
+      "applies_to": "A target project undergoing TOP migration.",
+      "required_artifacts": [
+        "top/migration/MIGRATION_WORKFLOW.json",
+        "top/migration/MIGRATION_PLAN.md",
+        "top/migration/MIGRATION_STATUS.md",
+        "top/migration/MIGRATION_LOG.md"
+      ],
+      "readiness_rule": "Use for migration-mode tasks that create or change TOP artifacts in a target project. The workflow JSON is the machine-readable process graph; the plan is human-readable intent; the log is append-only evidence."
+    }
+  ]
+}
+

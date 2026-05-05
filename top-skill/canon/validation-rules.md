@@ -119,6 +119,55 @@ Behavioral analysis and typing analysis are independent passes. The absence of b
 - Target adaptation must use native target expectations and must not introduce new business logic.
 - Target adaptation must not alter TOP ownership, lifecycle, controller/content boundaries, or structural invariants.
 
+## TOP artifact layout validation
+- New migration branch specs must be stored under `top/specs/` unless an
+  established project-local TOP index explicitly declares another convention.
+- Implementation prompts must live under `top/prompts/` and mirror the semantic
+  branch position.
+- Migration status and tracking artifacts must live under `top/migration/`.
+- If specs or prompts declare future implementation materialization, the branch
+  must declare and prepare an implementation source root. The default for new
+  migration branches is `top_src/<branch-id>/`.
+- Empty source roots created before generation must contain `.gitkeep` or an
+  equivalent placeholder so the materialization path is visible to later agents.
+- Expected Materialization artifact stems, `props.sourceRoot`, and `props.dir`
+  must resolve under the same source root.
+- A migration/modeling result that creates specs/prompts but no implementation
+  must report an honest phase status such as analysis-only, modeled, or
+  materialization-pending. It must not report validated or complete.
+- Noncanonical spec placement is `CONV-007`.
+- Missing or inconsistent implementation source root is `CONV-008`.
+- A migration/materialization handoff without canonical paths, source root, and
+  honest phase status is `WF-013`.
+- A migration-mode task that creates or changes TOP artifacts without
+  `top/migration/MIGRATION_PLAN.md` is `WF-014`.
+- A migration-mode handoff or artifact change without an appended
+  `top/migration/MIGRATION_LOG.md` entry is `WF-015`.
+- A migration-mode task that creates or changes TOP artifacts without current
+  `top/migration/MIGRATION_WORKFLOW.json`, or with workflow JSON that disagrees
+  with plan/status/log, is `WF-016`.
+
+## Migration workflow/plan/log validation
+- `MIGRATION_WORKFLOW.json` must exist before migration scope analysis,
+  modeling, generation, repair, validation, or final audit proceeds.
+- The workflow JSON must parse and record current scope, branch id, current
+  phase, phases, responsible agents, gates, handoffs, and next phases.
+- `MIGRATION_PLAN.md` must exist before migration scope analysis, modeling,
+  generation, repair, validation, or final audit proceeds.
+- The plan must record current scope, branch id, phases, responsible agents,
+  planned artifacts, validation gates, behavior preservation routing, and
+  rollback/stop points.
+- Workflow JSON and plan must agree on selected scope, branch id, phase order,
+  responsible agents, gates, and current phase.
+- If the user specified a starting scope, the plan must preserve that scope or
+  explicitly block with reasons.
+- If the user did not specify a starting scope, the plan must record the
+  selection rationale.
+- `MIGRATION_LOG.md` must exist and contain append-only entries for each
+  migration-mode handoff and persistent artifact change.
+- Each log entry must name timestamp, agent, phase, files read/changed,
+  decisions, validation/self-check result, and next stage.
+
 ## Canon rule
 Only canonical patterns are allowed. Everything else is a violation.
 

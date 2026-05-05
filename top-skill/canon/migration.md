@@ -77,6 +77,84 @@ push-based construction, semantic runtime injection, or access-direction collaps
 
 ---
 
+## Mg-1a. Migration artifact layout must be canonical
+
+A migration pass that creates persistent TOP artifacts must use the canonical
+project layout:
+
+- branch specs under `top/specs/`;
+- implementation prompts under `top/prompts/`;
+- migration status and tracking under `top/migration/`;
+- materialized TOP implementation artifacts under a declared implementation
+  source root, `top_src/<branch-id>/` by default.
+
+Creating `top/<branch-id>.json` as a new branch spec is not canonical unless the
+repository already has an explicit TOP root index or project-local convention
+that records that layout. New migration branches default to
+`top/specs/<branch-id>.json`.
+
+If the pass writes implementation prompts, Expected Materialization, or a
+generation next step, it must prepare the source root before stopping. If no
+code is generated yet, the empty root is recorded with `.gitkeep` or an
+equivalent placeholder.
+
+The phase status must be honest:
+
+- an analysis/modeling pass may report `analysis-only`, `modeled`, or
+  `materialization-pending`;
+- it must not report migration complete, validated, or ready when no
+  materialized implementation and validation pass exist;
+- generation may start only after specs, prompts, and source-root layout agree.
+
+---
+
+## Mg-1b. Migration workflow tree, plan, and action log are mandatory
+
+Migration is a controlled workflow, not a single agent improvisation.
+
+Every migration-mode task that creates or changes project-local TOP artifacts
+must maintain:
+
+```text
+top/migration/MIGRATION_WORKFLOW.json
+top/migration/MIGRATION_PLAN.md
+top/migration/MIGRATION_STATUS.md
+top/migration/MIGRATION_LOG.md
+```
+
+`MIGRATION_WORKFLOW.json` is the machine-readable process tree for the current
+migration. It records phases, responsible agents, current phase, gates, handoff
+rules, and decision trace entries. It must be updated before a new phase starts
+and after any phase changes status.
+
+`MIGRATION_PLAN.md` is required before scope analysis, modeling, generation, or
+repair proceeds. It records:
+
+- the user-requested starting scope, if present;
+- the selected migration scope and branch id;
+- scope selection rationale when the user did not name a starting point;
+- ordered phases and responsible agents;
+- expected specs, prompts, source roots, adapters, tests, and validation gates;
+- behavior preservation routing;
+- rollback and stop points.
+
+`MIGRATION_WORKFLOW.json` and `MIGRATION_PLAN.md` must agree on selected scope,
+branch id, phase order, responsible agents, and current phase. Markdown explains;
+JSON controls routing and validation.
+
+`MIGRATION_LOG.md` is append-only. Each agent operating in migration mode must
+append a log entry before handoff and after any persistent artifact change. The
+entry records timestamp, agent, phase, files read/changed, decisions, validation
+signals, and next stage.
+
+The log is forensic evidence. Agents must not rewrite old entries to hide a bad
+decision. Corrections are appended as new entries.
+
+If these files are missing, stale, contradictory, or not updated for a migration
+handoff, the migration is incomplete even if generated code exists.
+
+---
+
 ## Mg-2. External contract must be preserved
 
 The public interface of the migrated branch must not change as a result of
@@ -191,7 +269,7 @@ meaning is:
 - mapped to TOP nodes, contracts, state, events, or lifecycle responsibilities;
 - reflected in the relevant spec and implementation prompts;
 - re-covered by preserved, adapted, replaced, or newly generated TOP-compatible
-  tests.
+  tests, or explicitly declared obsolete by an approved behavior-level decision.
 
 Migration is incomplete until behavior preserved by legacy tests is represented
 in TOP prompts and covered by TOP-compatible tests.

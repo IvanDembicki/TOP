@@ -1,0 +1,103 @@
+{
+  "manifest_version": "0.1",
+  "modes": [
+    {
+      "mode": "analysis-only",
+      "maturity": "stable",
+      "requires_materialization": false,
+      "required_agents": [
+        "Validation Agent"
+      ],
+      "allowed_next_modes": [
+        "modeling-refactor",
+        "spec-change"
+      ]
+    },
+    {
+      "mode": "modeling-refactor",
+      "maturity": "stable",
+      "requires_materialization": false,
+      "required_agents": [
+        "TOP Modeling Agent",
+        "Canon Precheck Agent",
+        "Validation Agent"
+      ],
+      "allowed_next_modes": [
+        "generation-pipeline",
+        "validation"
+      ]
+    },
+    {
+      "mode": "generation-pipeline",
+      "maturity": "stable",
+      "requires_materialization": true,
+      "required_agents": [
+        "TOP Modeling Agent",
+        "Canon Precheck Agent",
+        "Semantic Interpreter Agent",
+        "Target Adaptation Agent",
+        "Generation Agent",
+        "Spec Sync Agent",
+        "Validation Agent"
+      ],
+      "allowed_next_modes": [
+        "validation",
+        "spec-change"
+      ]
+    },
+    {
+      "mode": "migration",
+      "maturity": "stable",
+      "requires_materialization": "task-dependent",
+      "required_agents": [
+        "Migration Infrastructure Agent",
+        "Migration Planning Agent",
+        "Migration Agent",
+        "TOP Modeling Agent",
+        "Canon Precheck Agent",
+        "Validation Agent"
+      ],
+      "conditional_agents": [
+        "Behavior Preservation Agent",
+        "Generation Agent",
+        "Spec Sync Agent",
+        "Repair Agent"
+      ],
+      "allowed_next_modes": [
+        "validation",
+        "generation-pipeline",
+        "spec-change"
+      ]
+    },
+    {
+      "mode": "spec-change",
+      "maturity": "stable",
+      "requires_materialization": false,
+      "required_agents": [
+        "Spec Change Verification Agent",
+        "Validation Agent"
+      ],
+      "allowed_next_modes": [
+        "validation",
+        "generation-pipeline"
+      ]
+    }
+  ],
+  "supporting_task_tiers": [
+    "validation",
+    "maintenance"
+  ],
+  "hard_rules": [
+    "Mode maturity in this manifest is the source of truth for release labeling.",
+    "A mode cannot skip required agents in its active task path.",
+    "Migration mode must create or update MIGRATION_WORKFLOW.json before scope analysis, modeling, generation, validation, or repair.",
+    "Ready output cannot rely on undocumented memory of prior turns or prior skill versions."
+  ],
+  "stable_release_scope": [
+    "analysis-only",
+    "modeling-refactor",
+    "generation-pipeline",
+    "migration",
+    "spec-change"
+  ]
+}

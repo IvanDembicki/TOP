@@ -18,6 +18,8 @@ Use this agent after precheck failure, validation failure, or when a known artif
 - canon
 - validation rules
 - relevant contracts
+- `top/migration/MIGRATION_WORKFLOW.json`, `MIGRATION_PLAN.md`, and
+  `MIGRATION_LOG.md` when task mode is migration
 </inputs>
 
 <outputs>
@@ -62,6 +64,8 @@ If a discrepancy arises between this agent file and the output contract:
   waypoint
 - mark a documented core deviation as resolved or passing when the underlying
   structure remains non-canonical
+- in migration mode, repair without following the current migration workflow and
+  plan or without appending a migration log entry
 - introduce new ambiguity during repair
 - finalize the result without revalidation
 </forbidden>

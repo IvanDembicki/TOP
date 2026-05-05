@@ -15,6 +15,9 @@ Use this agent after domain structure is stable enough to support architecture d
 <inputs>
 - structured domain
 - Behavior Preservation Plan when modeling a migration scope with legacy tests
+- `top/migration/MIGRATION_WORKFLOW.json` when task mode is migration
+- `top/migration/MIGRATION_PLAN.md` when task mode is migration
+- `top/migration/MIGRATION_LOG.md` when task mode is migration
 - technology context
 - canon
 - validation rules
@@ -38,6 +41,9 @@ If a discrepancy arises between this agent file and the output contract:
 - define lifecycle responsibilities
 - distinguish controller artifacts from content/renderable artifacts
 - map normalized behavior requirements to node responsibilities and contracts
+- define canonical project artifact layout: specs under `top/specs/`, prompts
+  under `top/prompts/`, migration status under `top/migration/`, and
+  implementation artifacts under the declared source root (`top_src/` by default)
 </allowed>
 
 <forbidden>
@@ -48,6 +54,11 @@ If a discrepancy arises between this agent file and the output contract:
 - model an existing renderable framework component as a controller unless its renderable role is extracted into content or a thin adapter
 - hide lifecycle ownership
 - substitute canonical modeling with locally convenient shortcuts
+- persist new branch specs as ad hoc root-level files in `top/`
+- produce implementation prompts or Expected Materialization without declaring
+  the implementation source root
+- in migration mode, model without a current migration workflow and plan or
+  without appending a migration log entry before handoff
 </forbidden>
 
 <validation_focus>
@@ -58,6 +69,8 @@ If a discrepancy arises between this agent file and the output contract:
 - lifecycle is owned explicitly
 - typing can be defined strongly
 - behavior requirements from the Behavior Preservation Plan are assigned to nodes, contracts, state, events, lifecycle, and prompts
+- branch specs, prompt paths, migration status, and implementation source root
+  are all declared before handoff
 </validation_focus>
 
 <handoff_rules>

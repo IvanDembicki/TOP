@@ -26,6 +26,19 @@ Analysis-only output schema is defined in:
 
 Authoritative source of agent output schema remains:
 - `contracts/agent-output-contracts/*`
+
+## Migration contracts
+
+In `migration` mode:
+
+- `migration-infrastructure-output.md` is the authoritative output contract for
+  repository baseline and migration control-plane setup.
+- `migration-plan-output.md` is the authoritative output contract for
+  `top/migration/MIGRATION_WORKFLOW.json` and
+  `top/migration/MIGRATION_PLAN.md` creation and update.
+- `behavior-preservation-output.md` remains mandatory when the migrated scope
+  has legacy tests or executable behavior evidence.
+
 ## Generation-pipeline semantic contracts
 
 In `generation-pipeline` mode:

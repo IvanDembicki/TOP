@@ -63,6 +63,40 @@ Indicators:
 - Incorrect file path
 - Reference to a non-existent base class
 
+### noncanonical_top_layout
+Project-local TOP artifacts were created outside the canonical layout.
+
+Indicators:
+- A new migration branch spec exists as an ad hoc root-level file such as
+  `top/settings-branch.json` instead of `top/specs/settings-branch.json`
+- Implementation prompts exist without a matching branch spec under `top/specs/`
+- Migration status exists outside `top/migration/` without an established
+  project-local convention
+
+### missing_source_root
+Specs or prompts declare implementation materialization, but the implementation
+source root is missing, undeclared, or inconsistent.
+
+Indicators:
+- Expected Materialization sections name artifact stems, but no
+  `props.sourceRoot`, default `top_src/`, or project-approved source root is
+  recorded
+- A migration/modeling pass creates implementation prompts but does not create
+  `top_src/<branch-id>/` or an equivalent declared root
+- `props.dir` paths and prompt artifact stems resolve to different source roots
+
+### missing_migration_control_plane
+A migration-mode task lacks required plan/status/log artifacts or the log was
+not updated for a handoff/change.
+
+Indicators:
+- `top/migration/MIGRATION_PLAN.md` is missing or does not mention the current scope
+- `top/migration/MIGRATION_WORKFLOW.json` is missing, invalid JSON, or does not
+  mention the current scope and phase
+- `top/migration/MIGRATION_LOG.md` is missing
+- artifact changes occurred without a new log entry
+- old log entries were rewritten instead of appending corrections
+
 ### platform_leak
 The prompt contains platform-dependent elements in behavioral sections.
 
@@ -81,6 +115,9 @@ Indicators:
 | structural_mismatch | HIGH | tree in spec does not match the real tree |
 | stale_prompt | HIGH | regeneration from prompt will produce outdated behavior |
 | broken_reference | MEDIUM | generation may create a file with incorrect name/path |
+| noncanonical_top_layout | HIGH | future agents may not hydrate, validate, or regenerate the branch consistently |
+| missing_source_root | HIGH | generation has no canonical place to materialize TOP implementation artifacts |
+| missing_migration_control_plane | HIGH | migration cannot be replayed or diagnosed and downstream agents lack a reliable plan |
 | platform_leak | MEDIUM | prompt is not portable, but may be functionally accurate |
 
 ## Application protocol
@@ -110,6 +147,8 @@ The agent must compare:
    - single-child mutable replacement points.
 
 3. The JSON spec:
+   - new migration branch specs must be under `top/specs/`, unless an existing
+     project-local TOP convention is recorded in a root index;
    - every static child created in code must appear in JSON `children` or in an external subtree resolved through `props.source`;
    - every `props.source` file must exist, be resolved relative to the project `top/` directory, and describe the same node type as the node that references it;
    - every file under `top/assets/` must be described by a node under the model-only `Assets` branch using `props.assetPath`;
@@ -125,7 +164,29 @@ The agent must compare:
 4. The node prompts:
    - child interaction rules must match the actual child topology;
    - lifecycle descriptions must match the actual creation/open/close/mount behavior;
+   - Expected Materialization must declare the implementation source root and
+     artifact stems under that root;
    - `doc` strings must not describe removed or moved responsibilities.
+
+5. The implementation source root:
+   - if implementation prompts or Expected Materialization exist, the declared
+     source root must exist on disk;
+   - for new migration branches, the default is `top_src/<branch-id>/`;
+   - if the root is intentionally empty before generation, it must contain
+     `.gitkeep` or an equivalent placeholder;
+   - generated TOP implementation artifacts must be under that root unless they
+     are thin framework adapters explicitly declared by an integration contract.
+
+6. The migration control plane:
+   - `top/migration/MIGRATION_WORKFLOW.json`, `MIGRATION_PLAN.md`,
+     `MIGRATION_STATUS.md`, and `MIGRATION_LOG.md` must exist for
+     migration-mode artifact changes;
+   - the workflow JSON must name the current migration scope, branch id,
+     current phase, responsible agents, gates, and next phases;
+   - the plan must name the active scope, branch id, agent work packages, planned
+     artifacts, validation gates, and rollback/stop points;
+   - the log must contain entries for each migration-mode handoff and persistent
+     artifact change.
 
 If code creates a new child node and the node is absent from JSON, classify it as both `missing_in_spec` and `structural_mismatch`.
 

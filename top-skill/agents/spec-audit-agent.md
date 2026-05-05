@@ -21,7 +21,8 @@ Can be launched independently at any time.
 <responsibility>
 ### 1. Structural audit
 
-Traverses `top/*.json` and compares against code:
+Traverses `top/specs/**/*.json` plus any established root index and compares
+against code:
 
 - Whether all nodes from JSON exist in code → otherwise `orphan_in_spec`
 - Whether all nodes from code are present in JSON → otherwise `missing_in_spec`

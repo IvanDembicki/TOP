@@ -1,0 +1,102 @@
+{
+  "schema_version": "0.1",
+  "skill_name": "Tree-Oriented Programming Skill",
+  "skill_version": "1.1.14",
+  "status": "stable",
+  "purpose": "Design, model, generate, migrate, and validate systems built with Tree-Oriented Programming.",
+  "core_thesis": "A TOP skill is not a loose prompt. It is a controlled tree of canon, modes, agents, contracts, schemas, validation rules, and outputs.",
+  "root": "TopSkill",
+  "invariants": [
+    "Hydration loads the current filesystem skill artifacts before task execution.",
+    "Mode routing is controlled by task mode, not by generic prompt memory.",
+    "Agent handoff must follow the active mode transition map.",
+    "Output shape is defined by contracts, not by prose in an agent file.",
+    "Required artifacts cannot be empty placeholders in a ready result.",
+    "A validation failure prevents readiness claims.",
+    "Core TOP invariants cannot be disabled by user override or project convenience.",
+    "New requirements invalidate old decisions that conflict with them.",
+    "Every important migration decision must be traceable through plan, workflow, status, or log evidence.",
+    "Structured migration workflow state must be represented in JSON when the schema exists."
+  ],
+  "tree": {
+    "TopSkill": {
+      "type": "root_controller",
+      "children": {
+        "RuntimeHydration": {
+          "type": "controller",
+          "artifacts": [
+            "SKILL.md",
+            "hydration-manifest.json",
+            "release-metadata.json",
+            "rules/startup-update-check.md"
+          ]
+        },
+        "ModeRouting": {
+          "type": "controller",
+          "artifacts": [
+            "rules/task-modes.md",
+            "agents/index.md",
+            "top/modes/mode-manifest.json"
+          ]
+        },
+        "Canon": {
+          "type": "rules",
+          "artifacts": [
+            "canon/core-axioms.md",
+            "canon/architectural-invariants.md",
+            "canon/controller-content-rules.md",
+            "canon/migration.md",
+            "canon/validation-rules.md"
+          ]
+        },
+        "Agents": {
+          "type": "controller_group",
+          "artifacts": [
+            "agents/index.md",
+            "agents/intake-agent.md",
+            "agents/ambiguity-resolver-agent.md",
+            "agents/domain-structuring-agent.md",
+            "agents/migration-infrastructure-agent.md",
+            "agents/migration-planning-agent.md",
+            "agents/migration-agent.md",
+            "agents/behavior-preservation-agent.md",
+            "agents/top-modeling-agent.md",
+            "agents/canon-precheck-agent.md",
+            "agents/semantic-interpreter-agent.md",
+            "agents/target-adaptation-agent.md",
+            "agents/generation-agent.md",
+            "agents/spec-sync-agent.md",
+            "agents/validation-agent.md",
+            "agents/repair-agent.md",
+            "agents/final-audit-agent.md",
+            "agents/orchestrator-agent.md",
+            "agents/spec-audit-agent.md",
+            "agents/spec-change-verification-agent.md"
+          ]
+        },
+        "Contracts": {
+          "type": "contract_group",
+          "artifacts": [
+            "contracts/top-folder-contract.md",
+            "contracts/agent-output-contracts/",
+            "top/artifact-manifest.json",
+            "top/schemas/migration-workflow.schema.json"
+          ]
+        },
+        "Validation": {
+          "type": "validator",
+          "artifacts": [
+            "rules/violation-catalog.md",
+            "rules/spec-sync-rules.md",
+            "rules/review-checklist.md",
+            "scripts/quick_validate.py",
+            "top/validation/output-rules.md"
+          ]
+        }
+      }
+    }
+  },
+  "artifact_contract": "top/artifact-manifest.json",
+  "mode_manifest": "top/modes/mode-manifest.json",
+  "validation_model": "hydrated-filesystem-contract-validation"
+}

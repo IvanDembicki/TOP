@@ -25,7 +25,8 @@ The handoff format is defined in `contracts/agent-output-contracts/generation-ou
 For each change from the handoff, first determine the approved correction direction: update `top/`, update materialized code, or escalate when the source-of-truth decision is ambiguous. Then apply the relevant update:
 
 **New node:**
-1. Add an entry to `top/*.json` at the correct position in the tree
+1. Add an entry to the relevant `top/specs/**/*.json` spec or established root
+   index at the correct position in the tree
 2. Create a prompt file using the template from `rules/prompt-writing-rules.md`
 3. Fill in all required prompt sections based on the current code
 

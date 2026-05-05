@@ -20,7 +20,9 @@ REQUIRED_PATHS = [
     "canon/forbidden-confusions.md",
     "canon/validation-rules.md",
     "rules/violation-catalog.md",
+    "rules/spec-sync-rules.md",
     "rules/review-checklist.md",
+    "contracts/top-folder-contract.md",
     "rules/typing-checklist.md",
     "references/node-model.md",
     "references/code-generation.md",
@@ -28,10 +30,22 @@ REQUIRED_PATHS = [
     "prompts/generate-top-node.md",
     "prompts/generate-top-tree.md",
     "prompts/refactor-to-top.md",
+    "agents/migration-infrastructure-agent.md",
+    "agents/migration-planning-agent.md",
     "agents/migration-agent.md",
     "agents/behavior-preservation-agent.md",
     "agents/target-adaptation-agent.md",
+    "contracts/agent-output-contracts/migration-infrastructure-output.md",
+    "contracts/agent-output-contracts/migration-plan-output.md",
     "contracts/agent-output-contracts/behavior-preservation-output.md",
+    "top/spec.json",
+    "top/README.md",
+    "top/artifact-manifest.json",
+    "top/modes/mode-manifest.json",
+    "top/validation/output-rules.md",
+    "top/shared-rules/skill-governance.md",
+    "top/schemas/migration-workflow.schema.json",
+    "top/provenance.json",
 ]
 
 
@@ -91,6 +105,12 @@ def check_manifest_references(root):
         for value in skill.get(key, []):
             if not (root / value).exists():
                 errors.append(f"skill.json {key} reference missing: {value}")
+
+    top_governance = skill.get("top_governance", {})
+    if isinstance(top_governance, dict):
+        for key, value in top_governance.items():
+            if value and not (root / value).exists():
+                errors.append(f"skill.json top_governance.{key} reference missing: {value}")
 
     return errors
 
@@ -164,10 +184,13 @@ def check_version_consistency(root):
     errors = []
     skill = load_json(root / "skill.json")
     release = load_json(root / "release-metadata.json")
+    top_spec = load_json(root / "top/spec.json")
     version = skill.get("version")
 
     if release.get("current_version") != version:
         errors.append("release-metadata.json current_version does not match skill.json version")
+    if top_spec.get("skill_version") != version:
+        errors.append("top/spec.json skill_version does not match skill.json version")
 
     for item in ["SKILL.md", "README.md", "CHANGELOG.md"]:
         text = read_text(root / item)
@@ -180,6 +203,75 @@ def check_version_consistency(root):
         errors.append("SKILL.md version does not match skill.json version")
     if readme_version and readme_version != version:
         errors.append("README.md version does not match skill.json version")
+
+    return errors
+
+
+def collect_top_spec_artifacts(node):
+    artifacts = []
+    if isinstance(node, dict):
+        for item in node.get("artifacts", []):
+            artifacts.append(item)
+        for value in node.values():
+            artifacts.extend(collect_top_spec_artifacts(value))
+    elif isinstance(node, list):
+        for value in node:
+            artifacts.extend(collect_top_spec_artifacts(value))
+    return artifacts
+
+
+def check_top_governance_consistency(root):
+    errors = []
+    skill = load_json(root / "skill.json")
+    top_spec = load_json(root / "top/spec.json")
+    mode_manifest = load_json(root / "top/modes/mode-manifest.json")
+
+    top_artifacts = set(collect_top_spec_artifacts(top_spec.get("tree", {})))
+    skill_agents = set(skill.get("agents", []))
+    for agent in sorted(skill_agents):
+        if agent not in top_artifacts:
+            errors.append(f"top/spec.json Agents artifacts missing skill.json agent: {agent}")
+
+    if "canon/migration.md" not in skill.get("canon", []):
+        errors.append("skill.json canon missing canon/migration.md")
+
+    stable_modes = {
+        item.get("mode")
+        for item in mode_manifest.get("modes", [])
+        if item.get("maturity") == "stable"
+    }
+    skill_modes = set(skill.get("modes", []))
+    if stable_modes != skill_modes:
+        errors.append(
+            "top/modes/mode-manifest.json stable modes do not match skill.json modes: "
+            f"stable={sorted(stable_modes)} skill={sorted(skill_modes)}"
+        )
+
+    quickstart = read_text(root / "QUICKSTART_MIN_READS.md")
+    required_migration_reads = [
+        "agents/migration-infrastructure-agent.md",
+        "agents/migration-planning-agent.md",
+        "contracts/agent-output-contracts/migration-infrastructure-output.md",
+        "contracts/agent-output-contracts/migration-plan-output.md",
+        "top/schemas/migration-workflow.schema.json",
+    ]
+    for item in required_migration_reads:
+        if item not in quickstart:
+            errors.append(f"QUICKSTART_MIN_READS.md migration minimum missing: {item}")
+
+    behavior_contract = read_text(root / "contracts/agent-output-contracts/behavior-preservation-output.md")
+    for status in [
+        "behavior_preservation_status",
+        "blocked_by_ambiguity",
+        "blocked_by_scope_problem",
+        "blocked_by_existing_top_contradiction",
+        "blocked_by_coverage_gap",
+    ]:
+        if status not in behavior_contract:
+            errors.append(f"behavior-preservation-output.md missing status: {status}")
+
+    if "../CONTRIBUTING.md" in read_text(root / "AGENTS.md"):
+        errors.append("AGENTS.md contains broken ../CONTRIBUTING.md reference")
 
     return errors
 
@@ -224,9 +316,31 @@ def check_required_phrases(root):
         ("rules/violation-catalog.md", "CORE-029"),
         ("rules/violation-catalog.md", "CORE-030"),
         ("rules/violation-catalog.md", "CORE-031"),
+        ("rules/violation-catalog.md", "CONV-007"),
+        ("rules/violation-catalog.md", "CONV-008"),
         ("rules/violation-catalog.md", "WF-010"),
         ("rules/violation-catalog.md", "WF-011"),
         ("rules/violation-catalog.md", "WF-012"),
+        ("rules/violation-catalog.md", "WF-013"),
+        ("rules/violation-catalog.md", "WF-014"),
+        ("rules/violation-catalog.md", "WF-015"),
+        ("rules/violation-catalog.md", "WF-016"),
+        ("contracts/top-folder-contract.md", "top_src/<branch-id>/"),
+        ("contracts/top-folder-contract.md", "top/specs/settings-branch.json"),
+        ("contracts/top-folder-contract.md", "MIGRATION_WORKFLOW.json"),
+        ("contracts/top-folder-contract.md", "MIGRATION_PLAN.md"),
+        ("contracts/top-folder-contract.md", "MIGRATION_LOG.md"),
+        ("canon/migration.md", "Migration artifact layout must be canonical"),
+        ("canon/migration.md", "Migration workflow tree, plan, and action log are mandatory"),
+        ("agents/migration-infrastructure-agent.md", "MIGRATION_PLAN.md"),
+        ("agents/migration-infrastructure-agent.md", "MIGRATION_WORKFLOW.json"),
+        ("agents/migration-planning-agent.md", "MIGRATION_PLAN.md"),
+        ("agents/migration-planning-agent.md", "MIGRATION_WORKFLOW.json"),
+        ("rules/spec-sync-rules.md", "missing_source_root"),
+        ("rules/spec-sync-rules.md", "missing_migration_control_plane"),
+        ("top/shared-rules/skill-governance.md", "A skill is a controlled TOP tree"),
+        ("top/validation/output-rules.md", "Migration-mode project outputs include"),
+        ("top/schemas/migration-workflow.schema.json", "TOP Migration Workflow"),
         ("canon/migration.md", "Legacy tests are requirements evidence"),
         ("canon/migration.md", "no ad hoc accepted deviations"),
         ("canon/validation-rules.md", "accepted core deviation"),
@@ -235,6 +349,11 @@ def check_required_phrases(root):
         ("references/functional-composition-target.md", "Child Node runtime input is not a TOP access boundary"),
         ("agents/behavior-preservation-agent.md", "Behavior Preservation Plan"),
         ("contracts/agent-output-contracts/behavior-preservation-output.md", "Legacy tests are requirements evidence"),
+        ("contracts/agent-output-contracts/behavior-preservation-output.md", "behavior_preservation_status"),
+        ("canon/migration.md", "explicitly declared obsolete by an approved behavior-level decision"),
+        ("QUICKSTART_MIN_READS.md", "agents/migration-infrastructure-agent.md"),
+        ("QUICKSTART_MIN_READS.md", "agents/migration-planning-agent.md"),
+        ("QUICKSTART_MIN_READS.md", "top/schemas/migration-workflow.schema.json"),
         ("SKILL.md", "IContentAccess` is not a data channel"),
         ("canon/architectural-invariants.md", "Objects are not assembled outside the tree and pushed inward"),
         ("canon/architectural-invariants.md", "Controller Role Purity Invariant"),
@@ -273,6 +392,7 @@ def run(root):
         ("manifest references", check_manifest_references),
         ("hydration manifest", check_hydration_manifest),
         ("version consistency", check_version_consistency),
+        ("top governance consistency", check_top_governance_consistency),
         ("markdown links", check_markdown_links),
         ("required phrases", check_required_phrases),
         ("risky patterns", check_known_risky_patterns),

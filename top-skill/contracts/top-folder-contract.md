@@ -7,9 +7,10 @@ Defines the structure and requirements for the `top/` folder in a TOP project.
 `top/` is the single source of truth for the project's architectural model.
 
 Contains:
-- Node tree description (`*.json`)
+- Node tree descriptions (`specs/**/*.json`, plus an optional established root index such as `tree.json`)
 - Optional external subtree spec files referenced by `props.source`
 - Prompt files for each node (`prompts/**/*.md`)
+- Migration workflow, status, plan, and handoff artifacts (`migration/**/*`)
 - Optional project-local source assets (`assets/**/*`) used by prompts, examples, fixtures, or demo data
 - Optional project-local presentation artifacts (`presentation/**/*`) used as source styling/theme/materialization input
 - Platform-neutral semantic artifacts (`semantic/**/*.semantic.json`) produced by Semantic Interpreter Agent
@@ -29,6 +30,118 @@ they are not copied or linked verbatim into generated code. Canonical files unde
 `top/presentation/` use a project/platform-neutral TOP presentation format. Imported styling
 systems are converted into that format before they become canonical TOP presentation
 artifacts.
+
+## Canonical project layout
+
+New TOP projects and new migration branches use this layout unless the repository
+already has an explicit TOP convention recorded in `top/tree.json` or an equivalent
+root index:
+
+```text
+top/
+  specs/
+    <branch-or-tree>.json
+  prompts/
+    <branch-or-tree>/**/*.md
+  migration/
+    MIGRATION_WORKFLOW.json
+    MIGRATION_PLAN.md
+    MIGRATION_STATUS.md
+    MIGRATION_LOG.md
+  assets/
+  presentation/
+  semantic/
+  adaptations/<target>/
+top_src/
+  <branch-or-tree>/
+```
+
+`top/` is source truth. `top_src/` is the default source root for materialized
+TOP implementation artifacts created during migration or generation.
+
+New migration branch specs must be stored under `top/specs/`, for example:
+
+```text
+top/specs/settings-branch.json
+```
+
+Do not create ad hoc root-level branch specs such as `top/settings-branch.json`
+for a new migration branch. A root-level `top/tree.json` may exist as an index or
+aggregate tree, but branch specs belong under `top/specs/` unless an existing
+project-local TOP convention explicitly says otherwise.
+
+When a migration/modeling pass creates specs or prompts for implementation that
+will be materialized later, it must also declare and prepare the implementation
+source root:
+
+- default root: `top_src/`;
+- default branch root: `top_src/<branch-id>/`;
+- branch specs record the root using `props.sourceRoot` at the branch or node
+  level when it differs from the default;
+- node `props.dir` values are resolved relative to the declared source root;
+- implementation prompts' Expected Materialization sections must use artifact
+  stems under the same source root;
+- if no implementation files are generated yet, create the source root directory
+  with `.gitkeep` or an equivalent project placeholder.
+
+An analysis-only audit that creates no specs, prompts, or materialization plan
+does not need a source root. A migration/modeling pass that writes prompts or
+Expected Materialization for future code generation does.
+
+## Migration control plane
+
+Every migration-mode task that creates or changes project-local TOP artifacts
+must maintain these files:
+
+```text
+top/migration/MIGRATION_PLAN.md
+top/migration/MIGRATION_STATUS.md
+top/migration/MIGRATION_LOG.md
+top/migration/MIGRATION_WORKFLOW.json
+```
+
+`MIGRATION_WORKFLOW.json` is the machine-readable migration process tree. It
+must conform to the current `top-skill` schema
+`top/schemas/migration-workflow.schema.json` and record:
+
+- migration id, selected scope, branch id, and current phase;
+- ordered phases with responsible agent, status, gates, outputs, and next phases;
+- validation gates and their status;
+- handoff rules;
+- active, invalidated, or superseded migration decisions when they affect later work.
+
+`MIGRATION_PLAN.md` is the explicit plan for the migration effort. It must
+record:
+
+- user-requested scope, if provided;
+- selected migration scope and branch id;
+- scope selection rationale when the user did not name the starting area;
+- ordered phases and responsible agents;
+- expected specs, prompts, source roots, adapters, tests, and validation gates;
+- behavior preservation requirements;
+- rollback and stop points;
+- current phase status.
+
+`MIGRATION_WORKFLOW.json` and `MIGRATION_PLAN.md` must describe the same phase
+order and current phase. If they disagree, validation treats the migration
+control plane as stale.
+
+`MIGRATION_STATUS.md` records the current state of each branch and validation
+result. It is status, not a plan and not a log.
+
+`MIGRATION_LOG.md` is append-only. Each agent operating in migration mode must
+append an entry before handoff, and after any persistent artifact change. Each
+entry must include:
+
+- timestamp and agent name;
+- migration phase and branch id;
+- files read, created, modified, or deleted;
+- decisions made and why;
+- validation or self-check result;
+- next agent or blocking condition.
+
+The log is for forensic replay. It must not be rewritten to make the migration
+look cleaner after the fact. Corrections are new entries.
 
 
 ## Semantic and adaptation artifact storage
@@ -74,7 +187,8 @@ Each node in `top/tree_editor.json` (or equivalent file) must have:
 
 | Field | Purpose |
 |---|---|
-| `props.dir` | Source file directory relative to `src/` |
+| `props.sourceRoot` | Project-relative source root for materialized TOP implementation artifacts. Defaults to `top_src` when absent. |
+| `props.dir` | Source file directory relative to the declared source root. |
 | `props.contentType` | Content type (`view`, `data`, etc.) |
 | `props.lib` | `true` if the node is a library node |
 | `props.source` | Path to an external spec file for this node, relative to `top/` |
@@ -122,6 +236,7 @@ or risks, but they are not portable behavior requirements and must not be copied
 when generating for another platform.
 
 For a prompt that describes an implementation/materialized node, the "Expected Materialization" section must contain:
+- Implementation source root (`top_src` by default, or the declared project root)
 - Primary artifact stem, without a platform-specific extension
 - Public node class (with `Node` suffix in the default naming convention)
 - Controller role purity: public node/controller class/function is not a renderable platform artifact; renderable artifacts are content-side or adapter-side.
@@ -135,7 +250,7 @@ For a prompt that describes an implementation/materialized node, the "Expected M
 The artifact path/stem names the stable TOP implementation artifact, for example:
 
 ```text
-src/pane/tree_item/tree_item.top
+top_src/pane/tree_item/tree_item.top
 ```
 
 Concrete generated files add the target-platform extension during materialization:
@@ -165,12 +280,18 @@ their roles explicitly.
 ## Invariants
 
 - Every prompt file referenced in JSON must exist on disk
+- Every new migration branch spec must live under `top/specs/` unless an established root index records a different project convention
+- Every migration-mode task that creates or changes TOP artifacts must maintain
+  `top/migration/MIGRATION_WORKFLOW.json`, `MIGRATION_PLAN.md`,
+  `MIGRATION_STATUS.md`, and `MIGRATION_LOG.md`
 - Every `props.source` file referenced in JSON must exist on disk and describe the same node type
 - Every `props.assetPath` file referenced in JSON must exist on disk
 - Every file under `top/assets/` must have a corresponding asset node under the `Assets` branch
 - Every `props.presentationPath` file referenced in JSON must exist on disk
 - Every file under `top/presentation/` must have a corresponding presentation node under the `Presentation` branch
 - Every prompt `sourcePath` must be an extensionless implementation artifact stem; target-specific extensions belong to generation/materialization rules, so validation checks for a materialized artifact must resolve the stem through the active target's extension rules, conceptually `sourcePath + ".*"`
+- Every implementation/materialization prompt must declare the implementation source root and keep all artifact stems under that root
+- Every migration/modeling pass that creates implementation prompts for future materialization must create or update the declared source root directory
 - Every prompt's Expected Materialization must account for the public node artifact, internal access contracts, and any companion artifacts required by the target/project materialization policy
 - Every node materialized through child materialization points must have a corresponding entry in JSON `children`, an external subtree loaded through `props.source`, or an explicit materialization policy that explains deferred, source/model, target-compiled, externally provided, model-only, or other non-runtime materialization
 - `doc` in JSON must not contain platform-dependent elements

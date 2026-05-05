@@ -24,6 +24,7 @@ result:
 - repaired_artifact
 - violations_addressed
 - behavior_violations_addressed
+- migration_log_entry
 
 details:
 - applied_fixes
@@ -46,6 +47,11 @@ next_step:
 - Only targeted fixes are permitted
 - Unnecessary rewrites are prohibited
 - For non-migration repairs, `behavior_violations_addressed` and `behavior_preservation_fixes` must be explicitly `not_applicable`
+- For non-migration repairs, `migration_log_entry` must be explicitly `not_applicable`
+- For migration repairs that change artifacts or hand off to another stage,
+  `migration_log_entry` must identify the appended `top/migration/MIGRATION_LOG.md`
+  entry and any `top/migration/MIGRATION_WORKFLOW.json` phase/status update
+  entry
 - Repair output must report if a fix leaves a documented core deviation in place; such a deviation is not resolved
 - Repair output must report `CORE-029` if the repair introduced semantic runtime input into a Node/Controller
 - Repair output must report an invalid repair if it replaces `CORE-029` with duplicate derivation of the same shared fact, or replaces Invariant 14 with Node/Controller runtime input tunneling

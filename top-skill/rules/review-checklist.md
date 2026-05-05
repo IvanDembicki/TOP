@@ -97,10 +97,35 @@ A result is not valid until all checklist items pass.
 
 - no architecture changes during generation
 - implementation matches model
+- generated TOP implementation artifacts are under the declared implementation
+  source root (`top_src/` by default), except explicitly declared thin adapters
+- Expected Materialization, `props.sourceRoot`, and `props.dir` resolve to the
+  same source root
 
 ---
 
-## 8. Migration Behavior Preservation
+## 8. TOP artifact layout
+
+- new branch specs live under `top/specs/`, not ad hoc root-level JSON files
+- implementation prompts live under `top/prompts/`
+- migration status/tracking lives under `top/migration/`
+- `top/migration/MIGRATION_PLAN.md` exists and names the current scope, phases,
+  responsible agents, planned artifacts, gates, and rollback/stop points
+- `top/migration/MIGRATION_WORKFLOW.json` exists, parses as JSON, and names the
+  same scope, branch id, phase order, current phase, responsible agents, gates,
+  and handoffs as the plan/status
+- `top/migration/MIGRATION_LOG.md` exists and has append-only entries for
+  migration-mode handoffs and artifact changes
+- migration/modeling handoffs that create Expected Materialization also prepare
+  `top_src/<branch-id>/` or the approved equivalent, with `.gitkeep` if empty
+- analysis/modeling outputs use honest phase status and do not call themselves
+  complete/validated before implementation and validation exist
+- report `CONV-007`, `CONV-008`, `WF-013`, `WF-014`, `WF-015`, or `WF-016` when these
+  checks fail
+
+---
+
+## 9. Migration Behavior Preservation
 
 - migration scopes with legacy tests have a Behavior Preservation Plan
 - legacy tests are treated as requirements evidence, not only as files to rerun
@@ -114,7 +139,7 @@ A result is not valid until all checklist items pass.
 
 ---
 
-## 9. Repair correctness
+## 10. Repair correctness
 
 - only targeted fixes applied
 - no unnecessary rewrite
@@ -124,7 +149,7 @@ A result is not valid until all checklist items pass.
 
 ---
 
-## 10. Ambiguity handling
+## 11. Ambiguity handling
 
 - all critical ambiguity resolved or blocked
 - assumptions explicitly stated
@@ -132,7 +157,7 @@ A result is not valid until all checklist items pass.
 
 ---
 
-## 11. Readability
+## 12. Readability
 
 - naming is clear and descriptive
 - no unnecessary abbreviations
@@ -140,7 +165,7 @@ A result is not valid until all checklist items pass.
 
 ---
 
-## 12. Final status
+## 13. Final status
 
 - not just working, but canonical
 - no remaining critical risks

@@ -19,6 +19,10 @@ This file defines the TOP agent pipeline and relationships between agents.
 
 Spec Change Verification Agent — mandatory first step in `spec-change` mode after Intake. See `agents/spec-change-verification-agent.md` and protocol in `references/spec-change-verification.md`.
 
+Migration Infrastructure Agent — mandatory first migration-mode stage. It verifies the repository baseline and creates/validates `top/migration/MIGRATION_WORKFLOW.json`, `MIGRATION_PLAN.md`, `MIGRATION_STATUS.md`, `MIGRATION_LOG.md`, canonical `top/` directories, and planned `top_src/` roots. See `agents/migration-infrastructure-agent.md`.
+
+Migration Planning Agent — mandatory migration-mode stage after infrastructure. It creates or updates the explicit migration plan plus the machine-readable migration workflow tree, and chooses a starting scope when the user did not specify one. See `agents/migration-planning-agent.md`.
+
 Behavior Preservation Agent — mandatory migration sub-flow after Migration Agent when the migrated scope has legacy tests or executable behavior evidence. See `agents/behavior-preservation-agent.md`.
 
 Orchestrator Agent controls transitions between all stages.
@@ -47,6 +51,8 @@ Migration Agent — standalone entry point for incremental migration of existing
 - Intake → Ambiguity Resolver / Domain Structuring
 - Ambiguity Resolver → Domain Structuring / stop
 - Domain Structuring → TOP Modeling
+- Migration Infrastructure Agent → Migration Planning Agent
+- Migration Planning Agent → Migration Agent / Ambiguity Resolver
 - Migration Agent → Behavior Preservation Agent / TOP Modeling
 - Behavior Preservation Agent → TOP Modeling / Ambiguity Resolver / Migration Agent / Repair
 - TOP Modeling → Canon Precheck
@@ -135,6 +141,8 @@ Protocol: `references/spec-change-verification.md`.
 
 ### migration
 
+- Migration Infrastructure Agent → Migration Planning Agent / Ambiguity Resolver
+- Migration Planning Agent → Migration Agent / Ambiguity Resolver
 - Migration Agent → Behavior Preservation Agent (if scope has tests or executable behavior evidence) / TOP Modeling
 - Behavior Preservation Agent → TOP Modeling / Ambiguity Resolver / Migration Agent / Repair
 - TOP Modeling → Canon Precheck
@@ -153,6 +161,9 @@ Generation Agent is used only when the migration task includes materialization. 
 - Validation rules are mandatory at all stages.
 - Contracts must be followed by each agent.
 - No agent may expand its role beyond definition.
+- In migration mode, every agent that changes artifacts or hands off to another
+  migration stage must update `top/migration/MIGRATION_WORKFLOW.json` when phase
+  status changes and append to `top/migration/MIGRATION_LOG.md`.
 
 ## Invalidation rule
 
@@ -235,7 +246,9 @@ Official modes:
 - `analysis-only` does not require `Generation Agent` if the task does not materialize an implementation
 - `modeling-refactor` does not require `Generation Agent` if only an approved model / refactor decision is required
 - `generation-pipeline` requires `Semantic Interpreter Agent`, `Target Adaptation Agent`, and `Generation Agent`
-- `migration` requires `Migration Agent` and requires `Behavior Preservation Agent` when the scope has legacy tests or executable behavior evidence
+- `migration` requires `Migration Infrastructure Agent`, `Migration Planning
+  Agent`, and `Migration Agent`; it requires `Behavior Preservation Agent` when
+  the scope has legacy tests or executable behavior evidence
 
 An analysis-only task must not be declared invalid solely due to the absence of a generation stage.
 

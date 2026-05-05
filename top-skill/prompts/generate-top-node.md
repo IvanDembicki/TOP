@@ -19,6 +19,12 @@ rules:
 - do not lose, weaken, omit from prompts, or leave uncovered behavior proven by legacy tests
 - generate or adapt TOP-compatible tests for each prompt requirement derived from legacy tests
 - classify missing Behavior Preservation Plan as `WF-010` and test-covered behavior loss as `CORE-028`
+- generate only into the approved implementation source root (`top_src/` by
+  default); for new migration branches use `top_src/<branch-id>/` unless the
+  approved model declares another root
+- do not create TOP implementation artifacts in arbitrary legacy directories;
+  only thin framework adapters may be written outside the source root when the
+  integration contract declares them explicitly
 - enforce Pull-Based Construction / Locality of Object Birth
 - enforce Controller Role Purity
 - node constructor receives only the parent reference as semantic input

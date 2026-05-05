@@ -73,6 +73,8 @@ Also specify:
 - where this prompt should be stored in the project;
 - what `prompt` path should be written into the node spec;
 - whether the path follows the convention `prompts/` alongside the JSON spec.
+- the implementation source root (`top_src/` by default) and the primary
+  artifact stem under that root.
 
 ---
 
@@ -81,6 +83,10 @@ Also specify:
 - One prompt — one node.
 - Prompt must be a project-local artifact.
 - Prompt must reside in `prompts/` alongside the JSON tree/branch spec.
+- New branch specs must reside under `top/specs/`; do not create ad hoc
+  root-level branch specs in `top/`.
+- Expected Materialization must name the implementation source root. For new
+  migration branches the default is `top_src/<branch-id>/`.
 - Do not duplicate the entire project.
 - Do not substitute the tree structure.
 - Do not place platform-specific implementation details in behavioral sections.

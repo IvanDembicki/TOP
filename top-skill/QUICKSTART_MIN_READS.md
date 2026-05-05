@@ -55,13 +55,18 @@ Minimum:
 - `canon/validation-rules.md`
 - `rules/violation-catalog.md`
 - `agents/index.md`
+- `agents/migration-infrastructure-agent.md`
+- `agents/migration-planning-agent.md`
 - `agents/migration-agent.md`
 - `agents/behavior-preservation-agent.md`
 - `agents/top-modeling-agent.md`
+- `contracts/agent-output-contracts/migration-infrastructure-output.md`
+- `contracts/agent-output-contracts/migration-plan-output.md`
 - `contracts/agent-output-contracts/behavior-preservation-output.md`
 - `contracts/agent-output-contracts/top-modeling-output.md`
 - `contracts/agent-output-contracts/validation-output.md`
 - `contracts/agent-output-contracts/final-audit-output.md`
+- `top/schemas/migration-workflow.schema.json`
 
 If the migrated scope has no legacy tests or executable behavior evidence,
 Migration Agent records that absence and Behavior Preservation Agent is not

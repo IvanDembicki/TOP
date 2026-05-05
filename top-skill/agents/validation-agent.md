@@ -59,7 +59,9 @@ If a discrepancy arises between this agent file and the output contract:
 - accept a repair that replaces `CORE-029` with independent duplicate derivation of the same shared fact
 - accept an ad hoc core deviation declaration when TOP canon does not define a
   migration waypoint for that violation
-- validate implementation code without checking whether `top/*.json` still matches the materialized child topology
+- validate implementation code without checking whether the relevant
+  `top/specs/**/*.json` specs or established root index still match the
+  materialized child topology
 - replace validation with vague style commentary
 </forbidden>
 
@@ -84,6 +86,12 @@ If a discrepancy arises between this agent file and the output contract:
 - decomposed content access input validation (`CORE-031`)
 - shared derived fact repair direction validation: repairs must not swap `CORE-029` and Invariant 14
 - accepted deviation admissibility validation (`WF-012`)
+- canonical TOP artifact layout validation: new branch specs under `top/specs/`,
+  prompts under `top/prompts/`, status under `top/migration/`, and declared
+  implementation source root under `top_src/` or the project-approved equivalent
+- migration workflow/plan/log validation: `MIGRATION_WORKFLOW.json` is valid and
+  current, `MIGRATION_PLAN.md` agrees with it, and `MIGRATION_LOG.md` has
+  append-only entries for migration-mode handoffs and persistent artifact changes
 </validation_focus>
 
 <handoff_rules>

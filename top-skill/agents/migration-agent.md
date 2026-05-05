@@ -19,6 +19,9 @@ it does not require the standard pipeline to have run first.
 
 <inputs>
 - existing code or description of the existing system (or a fragment)
+- `top/migration/MIGRATION_WORKFLOW.json`
+- `top/migration/MIGRATION_PLAN.md`
+- `top/migration/MIGRATION_LOG.md`
 - legacy tests, snapshots, fixtures, QA scripts, executable examples, or documented test cases covering the scope
 - technology context
 - scope: full project or specific module/area
@@ -49,6 +52,24 @@ No dedicated output contract in `contracts/agent-output-contracts/`. Output stru
 
 5. **Integration contract** — how each migrated TOP branch exposes itself to the legacy codebase
    as a black-box component with an explicit API.
+
+6. **Canonical artifact layout** — the exact project-local files/directories
+   created or planned for the branch:
+   - branch spec path under `top/specs/<branch-id>.json`;
+   - prompt directory under `top/prompts/<branch-id>/` or another path that
+     mirrors the branch position;
+   - migration status path under `top/migration/MIGRATION_STATUS.md`;
+   - implementation source root, defaulting to `top_src/<branch-id>/`;
+   - whether the source root was created now, and if empty, which placeholder
+     file (for example `.gitkeep`) records it.
+
+7. **Migration log entry** — the appended entry in
+   `top/migration/MIGRATION_LOG.md` recording files read, decisions made,
+   artifacts changed, validation signals, and next stage.
+
+8. **Migration workflow update** — the phase/status update written to
+   `top/migration/MIGRATION_WORKFLOW.json`, including the current phase,
+   validation gates, and next phase ids.
 
 ---
 </outputs>
@@ -85,6 +106,17 @@ Root
 `MigrationRegistry` is not the project tree. It is a registry of migrated components.
 Their eventual place in the full TOP tree is determined later, after validation.
 
+Persist the branch spec as a canonical TOP spec under `top/specs/`. For example:
+
+```text
+top/specs/settings-branch.json
+```
+
+Do not create a new ad hoc root-level spec such as `top/settings-branch.json`.
+A root-level `top/tree.json` may index branch specs, but the new migration branch
+spec itself belongs under `top/specs/` unless an existing project-local TOP
+convention explicitly records another location.
+
 ### Migration unit fields
 
 Each entry in `MigrationRegistry` must describe a single migration unit:
@@ -97,7 +129,9 @@ Each entry in `MigrationRegistry` must describe a single migration unit:
 - `local_tree` — the internal TOP tree of this branch only; no claims about the full system
 - `prompt_set_reference` — paths to the prompt files for this branch
 - `assumptions` — hidden dependencies not yet resolved; integration risks not yet cleared
-- `verification_status` — one of: `analysed` / `drafted` / `integrated_experimentally` / `validated` / `rolled_back`
+- `verification_status` — one of: `analyzed` / `modeled` / `materialization_pending` / `integrated_experimentally` / `validated` / `rolled_back`
+- `source_root` — project-relative implementation source root for materialized
+  TOP code; defaults to `top_src/<branch-id>/` for a new migration branch
 
 ### Prompt model per migration branch
 
@@ -120,6 +154,40 @@ Describes how the branch connects to legacy:
 - legacy dependencies not yet eliminated
 
 These two prompts have different concerns and must not be merged into one file.
+
+### Source-root setup during migration modeling
+
+If the migration pass creates implementation prompts, Expected Materialization
+sections, or a generation handoff for future TOP code, it must prepare the
+implementation source root before stopping:
+
+```text
+top_src/<branch-id>/
+```
+
+If no code is generated yet, create the directory with `.gitkeep` or an
+equivalent project placeholder. This is not code generation; it is the
+materialization contract becoming concrete enough for Generation and Validation
+to agree on paths.
+
+If the pass is truly analysis-only and does not create specs, prompts, or
+Expected Materialization, it may omit `top_src/` but must report that no
+materialization plan was created.
+
+### Migration workflow, plan, and log use
+
+Before this agent starts scope analysis, `top/migration/MIGRATION_WORKFLOW.json`
+and `top/migration/MIGRATION_PLAN.md` must exist. Both must name the current
+scope or explain how the current scope is being selected. If the user specified
+the scope, the plan and workflow record that instruction. If the user did not
+specify a scope, Migration Planning Agent records the selection rationale before
+this agent proceeds.
+
+This agent must update `top/migration/MIGRATION_WORKFLOW.json` when phase status
+or next-stage routing changes and append to `top/migration/MIGRATION_LOG.md`
+before handoff. If it creates or modifies persistent artifacts, it appends a log
+entry after those changes as well. The log entry is not a summary for the user;
+it is a forensic record for later diagnosis.
 
 ---
 
@@ -232,10 +300,18 @@ traces of expected behavior, not only as files that should pass.
 - violating canonical TOP rules in the proposed structure
 - producing a plan that cannot be executed one step at a time
 - proceeding without confirmed version control baseline
+- proceeding without `top/migration/MIGRATION_WORKFLOW.json`
+- proceeding without `top/migration/MIGRATION_PLAN.md`
+- handing off without appending to `top/migration/MIGRATION_LOG.md`
 - declaring a fragment isolated without completing the dependency audit
 - continuing past a migration scope with tests without a Behavior Preservation Plan
 - treating legacy tests only as verification files rather than requirements evidence
 - silently applying changes when behavioural verification fails
+- writing new migration branch specs outside `top/specs/`
+- creating implementation prompts or Expected Materialization without declaring
+  and preparing the implementation source root
+- calling a modeling/analysis-only pass a completed migration when no
+  materialized implementation exists
 </forbidden>
 
 <validation_focus>
@@ -244,6 +320,7 @@ traces of expected behavior, not only as files that should pass.
 - the connector interface between TOP branch and legacy code is explicit and minimal
 - migrated branches are self-contained: they can be developed and tested with a mock parent
 - migration steps are ordered so each step produces a working system
+- specs/prompts/status/source-root paths follow the canonical TOP project layout
 - migrated public API is behaviourally equivalent to the original
 - test-covered behavior is either mapped through a Behavior Preservation Plan or the absence of tests is explicitly reported
 - all hidden dependencies have been surfaced and resolved before migration

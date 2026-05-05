@@ -1,7 +1,7 @@
 {
   "name": "top-skill",
   "displayName": "Tree-Oriented Programming Skill",
-  "version": "1.1.11",
+  "version": "1.1.14",
   "description": "Skill for designing, analyzing, generating and validating systems built with Tree-Oriented Programming (TOP) paradigm.",
   "author": {
     "name": "Ivans Dembickis",
@@ -13,6 +13,12 @@
   "invocation": "/top",
   "onboarding": "onboarding/top-learning-agent.md",
   "changelog": "CHANGELOG.md",
+  "top_governance": {
+    "spec": "top/spec.json",
+    "artifact_manifest": "top/artifact-manifest.json",
+    "mode_manifest": "top/modes/mode-manifest.json",
+    "validation_rules": "top/validation/output-rules.md"
+  },
   "language": "en",
   "modes": [
     "analysis-only",
@@ -36,6 +42,8 @@
     "agents/final-audit-agent.md",
     "agents/orchestrator-agent.md",
     "agents/spec-audit-agent.md",
+    "agents/migration-infrastructure-agent.md",
+    "agents/migration-planning-agent.md",
     "agents/migration-agent.md",
     "agents/behavior-preservation-agent.md",
     "agents/spec-change-verification-agent.md"
@@ -47,7 +55,8 @@
     "canon/forbidden-confusions.md",
     "canon/controller-content-rules.md",
     "canon/forbidden-interpretations.md",
-    "canon/architectural-invariants.md"
+    "canon/architectural-invariants.md",
+    "canon/migration.md"
   ],
   "examples": [
     "examples/edit-toggle-btn/README.md",

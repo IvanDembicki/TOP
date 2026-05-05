@@ -78,6 +78,10 @@ Recommended file names:
 - `agents/repair-agent.md`
 - `agents/final-audit-agent.md`
 - `agents/orchestrator-agent.md`
+- `agents/migration-infrastructure-agent.md`
+- `agents/migration-planning-agent.md`
+- `agents/migration-agent.md`
+- `agents/behavior-preservation-agent.md`
 
 ## Contract source of truth
 

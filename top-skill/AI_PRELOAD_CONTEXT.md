@@ -165,8 +165,8 @@ AI is expected to:
 
 To apply this system:
 
-1. Define system structure in `top/*.json` (tree)
-2. Define behavior via node prompts (`prompts/`)
+1. Define system structure in `top/specs/**/*.json` or an established root index
+2. Define behavior via node prompts (`top/prompts/`)
 3. Load canon (rules)
 4. Generate code using AI
 5. Validate generated code against rules

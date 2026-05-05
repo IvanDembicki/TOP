@@ -53,8 +53,20 @@ Spec and prompt files are project-local TOP artifacts.
 They must:
 - be stored inside the project;
 - reside in `top/`;
+- store branch specs under `top/specs/`;
+- store implementation prompts under `top/prompts/`;
 - be linked to the corresponding tree or branch;
 - not be stored inside the skill itself.
+
+Generated TOP implementation artifacts must be stored under the declared
+implementation source root. The default root is `top_src/`; a new migration
+branch defaults to `top_src/<branch-id>/`. Thin framework-boundary adapters may
+remain in legacy framework paths only when the integration contract declares
+them explicitly.
+
+Generation must not invent a new source root such as `lib/top/<branch>` or
+scatter TOP implementation artifacts into legacy source directories unless the
+approved model declares that root and validation accepts it.
 
 ---
 
@@ -343,12 +355,15 @@ The `props.dir` field is used not only as a technical path for generated code,
 but also as a **semantic branch anchor**.
 
 This means:
-- `props.dir` fixes the directory anchor for a node or subtree;
+- `props.sourceRoot` fixes the implementation source root (`top_src/` by default);
+- `props.dir` fixes the directory anchor for a node or subtree relative to that
+  source root;
 - descendants inherit the effective dir path until a new local `props.dir` is set;
 - the effective dir path must reflect the semantic branch structure of the project, not the accidental history of file moves.
 
 ### Canonical rule
-The directory tree of code artifacts must be derived from the tree model through semantic branches and the effective `props.dir`.
+The directory tree of code artifacts must be derived from the tree model through
+semantic branches, the implementation source root, and the effective `props.dir`.
 
 ---
 
@@ -356,9 +371,11 @@ The directory tree of code artifacts must be derived from the tree model through
 
 For each node, an **effective directory path** is computed:
 
-1. if the node has a local `props.dir` — it is used as the anchor;
-2. if there is no local `props.dir` — the effective dir of the nearest ancestor is used;
-3. if no ancestor in the chain has `props.dir` — the path is determined by the root/project-level convention.
+1. determine the effective source root from `props.sourceRoot`, inherited
+   `props.sourceRoot`, or the default `top_src/`;
+2. if the node has a local `props.dir` — it is used as the anchor under that root;
+3. if there is no local `props.dir` — the effective dir of the nearest ancestor is used;
+4. if no ancestor in the chain has `props.dir` — the path is determined by the root/project-level convention.
 
 ### Important
 Not every node needs a separate folder.
@@ -418,6 +435,7 @@ A good generation pipeline must be able to produce:
 - semantic branch map;
 - effective dir map;
 - target code directory tree;
+- implementation source root and branch root;
 - target prompt directory tree;
 - relocation map `old path → new path` if the project is being reorganized;
 - required spec updates if `props.dir` needs to be added or corrected;
@@ -428,6 +446,10 @@ A good generation pipeline must be able to produce:
 ## 12. Typical errors
 
 Typical errors include:
+- new branch spec written as an ad hoc `top/<branch>.json` instead of
+  `top/specs/<branch>.json`;
+- implementation prompts created without a declared/prepared `top_src/<branch>/`
+  source root;
 - `props.dir` used only as an arbitrary path, not as a semantic anchor;
 - code layout and prompt layout diverge in branch structure;
 - a separate folder created for each node without a semantic reason;

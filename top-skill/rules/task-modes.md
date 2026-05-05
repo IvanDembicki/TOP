@@ -62,12 +62,18 @@ Execution steps:
 2. Restore or design the tree model.
 3. Determine the controller/content split for nodes with content.
 4. Record `props.contentType` if the content type must be explicitly defined.
-5. Identify nodes, branches, states, and module boundaries.
-6. Perform composite decomposition.
-7. Determine the owner state.
-8. Determine logical ownership, render attachment rules, and source of truth.
-9. Form node specs and the spec tree.
-10. Prepare refactoring recommendations if needed.
+5. Determine the canonical TOP artifact layout: JSON specs under `top/specs/`,
+   prompts under `top/prompts/`, migration/status artifacts under
+   `top/migration/`, and the implementation source root (`top_src/` by default)
+   if materialization is planned.
+6. Identify nodes, branches, states, and module boundaries.
+7. Perform composite decomposition.
+8. Determine the owner state.
+9. Determine logical ownership, render attachment rules, and source of truth.
+10. Form node specs and the spec tree.
+11. If implementation prompts or Expected Materialization are produced, create
+    or update the declared source root directory before handoff.
+12. Prepare refactoring recommendations if needed.
 
 ---
 
@@ -94,16 +100,20 @@ Required stages:
 Execution steps:
 1. Confirm that the tree model is already defined.
 2. Verify that nodes have defined: `type`, `doc`, `props.contentType` (if content exists), `prompt`, `props`, `children`.
-3. Verify that the JSON spec is stored as `.json` inside `top/`.
+3. Verify that new JSON branch specs are stored under `top/specs/` unless an
+   established project TOP index declares another convention.
 4. Verify that node prompt files will be stored inside `top/` in project-local `prompts/` folders alongside the corresponding tree or branch description.
-5. Prepare a separate implementation prompt for each code-generated node.
-6. Specify `props.dir` for generated class files for each node as needed.
-7. Perform code generation.
-8. Run node validation rules without fail: detect violations, classify them, choose the canonical correction direction, and perform re-validation after each fix.
-9. Run the mandatory drift check: compare JSON topology, prompt behavior/materialization rules, project-local `top/` artifacts, and generated/materialized implementation artifacts.
-10. Run the verification loop.
-11. On mismatch — fix the prompt/spec and protocol artifacts first, not just the code.
-12. After reaching the attempt limit — perform escalation.
+5. Verify that the implementation source root is declared and exists (`top_src/`
+   by default, branch root `top_src/<branch-id>/` for new migration branches).
+6. Prepare a separate implementation prompt for each code-generated node.
+7. Specify `props.sourceRoot` and `props.dir` for generated implementation
+   artifacts as needed.
+8. Perform code generation.
+9. Run node validation rules without fail: detect violations, classify them, choose the canonical correction direction, and perform re-validation after each fix.
+10. Run the mandatory drift check: compare JSON topology, prompt behavior/materialization rules, project-local `top/` artifacts, and generated/materialized implementation artifacts.
+11. Run the verification loop.
+12. On mismatch — fix the prompt/spec and protocol artifacts first, not just the code.
+13. After reaching the attempt limit — perform escalation.
 
 Repair Agent is used in a loop on failed validation. If repair changes synchronized artifacts, the loop must pass through Spec Sync Agent before Validation.
 
@@ -117,6 +127,8 @@ Used for:
 - preserving behavior while extracting TOP nodes, prompts, and tests.
 
 Required stages:
+- Migration Infrastructure Agent
+- Migration Planning Agent
 - Migration Agent
 - Behavior Preservation Agent if the scope has legacy tests or executable behavior evidence
 - TOP Modeling Agent
@@ -128,15 +140,37 @@ Generation Agent, Semantic Interpreter Agent, Target Adaptation Agent, and Spec 
 
 Execution steps:
 1. Confirm a recoverable version-control baseline.
-2. Define the migration scope and dependency boundary.
-3. Discover legacy tests and executable behavior evidence covering the scope.
-4. Produce a Behavior Preservation Plan when test evidence exists.
-5. Extract a TOP model that preserves normalized behavior requirements.
-6. Update specs, prompts, contracts, and tests together.
-7. Validate TOP canon and behavior preservation before final audit.
+2. Prepare migration infrastructure: `top/specs/`, `top/prompts/`,
+   `top/migration/`, `MIGRATION_WORKFLOW.json`, `MIGRATION_PLAN.md`,
+   `MIGRATION_STATUS.md`, `MIGRATION_LOG.md`, and planned
+   `top_src/<branch-id>/` roots.
+3. Create or update the explicit migration plan. If the user named a starting
+   scope, use it. If not, choose the starting scope by isolation, risk,
+   dependency visibility, and behavior evidence.
+4. Create or update the machine-readable migration workflow tree so phases,
+   gates, handoffs, responsible agents, and current phase are explicit JSON.
+5. Append a migration log entry for every migration-mode stage handoff and every
+   persistent artifact change.
+6. Define the migration scope and dependency boundary.
+7. Discover legacy tests and executable behavior evidence covering the scope.
+8. Produce a Behavior Preservation Plan when test evidence exists.
+9. Extract a TOP model that preserves normalized behavior requirements.
+10. Persist migration specs under `top/specs/`, prompts under `top/prompts/`,
+   and migration status under `top/migration/`.
+11. If the migration task creates implementation prompts or materialization
+   expectations, declare and prepare the implementation source root before
+   generation (`top_src/<branch-id>/` by default, with `.gitkeep` if empty).
+12. Update specs, prompts, contracts, and tests together.
+13. Validate TOP canon, migration workflow/plan/log integrity, and behavior preservation
+    before final audit.
 
 Skipping Behavior Preservation Agent for a tested migration scope is `WF-010`.
 Losing, weakening, or failing to represent test-covered behavior is `CORE-028`.
+Creating migration specs/prompts outside the canonical layout is a convention
+violation. Omitting the materialization source root for a migration that declares
+future implementation artifacts is `WF-013`.
+Missing `MIGRATION_PLAN.md` is `WF-014`. Missing or stale `MIGRATION_LOG.md` is
+`WF-015`. Missing or stale `MIGRATION_WORKFLOW.json` is `WF-016`.
 
 ---
 
