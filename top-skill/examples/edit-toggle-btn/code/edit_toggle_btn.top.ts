@@ -39,6 +39,7 @@ interface EditToggleBtnControllerAccess {}
 class EditToggleBtnContent extends DomContent implements EditToggleBtnContentAccess {
   constructor(_controller: EditToggleBtnControllerAccess) {
     const el = document.createElement("div");
+    // Immutable structural mount class, not a semantic state or presentation token.
     el.className = "edit-toggle-btn";
     super(el);
   }

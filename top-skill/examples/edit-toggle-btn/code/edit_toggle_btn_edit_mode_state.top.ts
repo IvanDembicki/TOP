@@ -15,6 +15,14 @@ export class EditToggleBtnEditModeStateNode extends DomNode implements EditToggl
   requestToggleMode(): void {
     this._editor.toggleEditMode();
   }
+
+  getActionLabelText(): string {
+    return "View mode";
+  }
+
+  getActionClassToken(): string {
+    return "edit-toggle-btn-state active";
+  }
 }
 
 interface EditToggleBtnEditModeStateContentAccess {
@@ -22,14 +30,16 @@ interface EditToggleBtnEditModeStateContentAccess {
 }
 
 interface EditToggleBtnEditModeStateControllerAccess {
+  getActionLabelText(): string;
+  getActionClassToken(): string;
   requestToggleMode(): void;
 }
 
 class EditToggleBtnEditModeStateContent extends DomContent implements EditToggleBtnEditModeStateContentAccess {
   constructor(private readonly controller: EditToggleBtnEditModeStateControllerAccess) {
     const el = document.createElement("button");
-    el.className = "edit-toggle-btn-state active";
-    el.textContent = "View mode";
+    el.className = controller.getActionClassToken();
+    el.textContent = controller.getActionLabelText();
     super(el);
     el.addEventListener("click", (event) => this.onClick(event));
   }

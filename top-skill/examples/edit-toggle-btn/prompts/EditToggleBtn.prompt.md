@@ -60,7 +60,9 @@ EditToggleBtn is a logical switchable node in the toolbar that controls which vi
 
 ## 10. Platform Implementation Notes
 
-- Visual element: `div` with CSS class `edit-toggle-btn`.
+- Visual element: static holder `div` with immutable structural class
+  `edit-toggle-btn`; this class is only the target-local mount container shape,
+  not a semantic presentation decision or state token.
 - Extends `SwitchableNode`.
 - Ancestor lookup: `this._editor = this.findUpByType(TreeEditorNode)` captured in constructor.
 - Constructor materialization: `this.setContent(new EditToggleBtnContent(this))`.

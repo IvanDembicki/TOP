@@ -21,11 +21,13 @@ EditToggleBtnViewModeState is the first child of EditToggleBtn. It represents th
 
 - User activation → calls `this._editor.toggleEditMode()`.
 - `getActionLabelText()` - returns the already-resolved action label text.
+- `getActionClassToken()` - returns the already-resolved action class/token.
 
 ## 4. State Ownership
 
 Owns no editor mode state. This is a visual/action state node selected by
-EditToggleBtn. The final action label is a controller-resolved primitive value.
+EditToggleBtn. The final action label and action class/token are
+controller-resolved primitive values.
 
 ## 5. Child Interaction Rules
 
@@ -48,7 +50,8 @@ Has no child nodes.
 - Must locate `_editor` via `findUpByType(TreeEditorNode)` captured once in the constructor.
 - Must not call EditorModeHolder directly.
 - Must not store the editor mode state locally.
-- Must not let locally implemented content derive or hardcode the visible label.
+- Must not let locally implemented content derive or hardcode the visible label
+  or semantic class/token.
 - Must not mount or unmount itself manually in `onOpen()` / `onClose()`.
 - Initial default placement by the parent may not call `onOpen()`, so the generated implementation must ensure the initially active action control can receive user activations.
 
@@ -61,8 +64,9 @@ Has no child nodes.
 ## 10. Platform Implementation Notes
 
 - Visual primitive: static action element.
-- Content pulls `getActionLabelText()` and applies the already-resolved label
-  text. It does not format, concatenate, hardcode, or choose the text.
+- Content pulls `getActionLabelText()` and `getActionClassToken()` and applies
+  the already-resolved label text and class/token. It does not format,
+  concatenate, hardcode, or choose the text/class/token.
 - Click request: content forwards a semantic request to the controller access contract; the node calls `this._editor.toggleEditMode()`.
 - Extends `DomNode`.
 

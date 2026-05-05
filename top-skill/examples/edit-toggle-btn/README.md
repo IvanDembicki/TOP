@@ -22,8 +22,8 @@ This example is derived from the node spec and implementation prompts. The code 
 
 ```text
 EditToggleBtn                         ← switchable holder, owns openedChild
-  ├── EditToggleBtnViewModeState      ← default state, "Edit mode" action
-  └── EditToggleBtnEditModeState      ← active in edit mode, "View mode" action
+  ├── EditToggleBtnViewModeState      ← default state, controller resolves "Edit mode" action output
+  └── EditToggleBtnEditModeState      ← active in edit mode, controller resolves "View mode" action output
 ```
 
 ---
@@ -85,6 +85,17 @@ Target-specific details are declared in prompt §10 and may differ across platfo
 ### Child content owns low-level activation
 
 `EditToggleBtnViewModeStateContent` and `EditToggleBtnEditModeStateContent` own their platform activation subscriptions. In the current DOM target this is a `click` listener.
+
+### Child content pulls resolved output values
+
+State content does not hardcode or derive visible labels or semantic class tokens.
+Each state controller exposes `getActionLabelText()` and `getActionClassToken()`;
+content pulls those already-resolved primitive values and applies them to its static
+action element.
+
+`EditToggleBtnContent` keeps the immutable structural holder class `edit-toggle-btn`.
+That class is the target-local mount container shape, not a semantic presentation
+decision, state token, or locally derived output value.
 
 ### Semantic requests cross through controller access
 
