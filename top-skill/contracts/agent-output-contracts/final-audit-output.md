@@ -42,7 +42,7 @@ validation_signals:
 - no_unresolved_drift
 
 next_step:
-- ready_for_use
+- readiness_status
 - recommended_followup
 
 ## Rules
@@ -57,6 +57,14 @@ next_step:
 - Violation types must be separated into three categories
 - Reporting `pass`, `ready`, or `ready_for_use` with remaining core violations
   or accepted core deviations is `WF-011`
+- `readiness_status` must be one of:
+  `not_ready`, `ready_for_generation`, `ready_for_integration`,
+  `ready_for_manual_QA`, or `ready_for_production_candidate`.
+- Do not use unqualified `ready_for_use`. A spec/prompt model can be
+  `ready_for_generation`; generated code can be `ready_for_integration` only
+  after post-generation architectural validation; integrated app changes can be
+  `ready_for_manual_QA`; production candidate requires runtime/behavior
+  validation evidence.
 - Labeling a core violation accepted/temporary/deferred/waypoint without a
   TOP-canon-defined migration waypoint is `WF-012`
 - The final verdict must be explicit

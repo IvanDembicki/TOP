@@ -36,12 +36,14 @@ result:
 - target_adaptation_decisions_applied
 - implementation_source_root_used
 - migration_plan_alignment
+- post_generation_architectural_self_check
 - migration_log_entry
 
 details:
 - architectural_deviations
 - behavior_preservation_notes
 - self_check_notes
+- generated_source_files_reviewed
 
 validation_signals:
 - model_fidelity_preserved
@@ -82,6 +84,13 @@ spec_sync_handoff:
 - `implementation_source_root_used` must match the approved model and Expected
   Materialization. Generated TOP implementation artifacts must be under that root
   unless they are explicitly declared thin framework adapters.
+- `post_generation_architectural_self_check` must cover actual generated source
+  files: controller files, locally implemented content files, contracts, bridge
+  components, helper components, modal files, adapters, and generated
+  constants/helpers. Type-check success does not satisfy this field.
+- `generated_source_files_reviewed` must list the files read for the
+  post-generation architectural self-check, or explain why generation produced
+  no source files.
 - For migration tasks, `migration_plan_alignment` must state how generated
   artifacts follow `top/migration/MIGRATION_WORKFLOW.json` and
   `top/migration/MIGRATION_PLAN.md`, and `migration_log_entry`

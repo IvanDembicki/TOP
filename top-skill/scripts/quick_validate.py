@@ -231,6 +231,7 @@ def check_top_governance_consistency(root):
     skill = load_json(root / "skill.json")
     top_spec = load_json(root / "top/spec.json")
     mode_manifest = load_json(root / "top/modes/mode-manifest.json")
+    hydration = load_json(root / "hydration-manifest.json")
 
     top_artifacts = set(collect_top_spec_artifacts(top_spec.get("tree", {})))
     skill_agents = set(skill.get("agents", []))
@@ -259,11 +260,53 @@ def check_top_governance_consistency(root):
         "agents/migration-planning-agent.md",
         "contracts/agent-output-contracts/migration-infrastructure-output.md",
         "contracts/agent-output-contracts/migration-plan-output.md",
+        "contracts/agent-output-contracts/generation-output.md",
+        "contracts/agent-output-contracts/spec-sync-output.md",
+        "contracts/agent-output-contracts/repair-output.md",
+        "prompts/generate-top-node.md",
         "top/schemas/migration-workflow.schema.json",
     ]
     for item in required_migration_reads:
         if item not in quickstart:
             errors.append(f"QUICKSTART_MIN_READS.md migration minimum missing: {item}")
+
+    required_modeling_reads = [
+        "canon/migration.md",
+        "agents/canon-precheck-agent.md",
+        "contracts/agent-output-contracts/migration-infrastructure-output.md",
+        "contracts/agent-output-contracts/migration-plan-output.md",
+        "contracts/agent-output-contracts/top-modeling-output.md",
+        "contracts/agent-output-contracts/repair-output.md",
+        "contracts/top-folder-contract.md",
+        "top/schemas/migration-workflow.schema.json",
+    ]
+    for item in required_modeling_reads:
+        if item not in quickstart:
+            errors.append(f"QUICKSTART_MIN_READS.md modeling-refactor minimum missing: {item}")
+
+    task_hydration = hydration.get("task", {})
+    hydration_required = {
+        "migration": [
+            "contracts/agent-output-contracts/generation-output.md",
+            "contracts/agent-output-contracts/spec-sync-output.md",
+            "contracts/agent-output-contracts/repair-output.md",
+            "prompts/generate-top-node.md",
+        ],
+        "modeling-refactor": [
+            "canon/migration.md",
+            "references/migration-heuristics.md",
+            "agents/canon-precheck-agent.md",
+            "contracts/agent-output-contracts/migration-infrastructure-output.md",
+            "contracts/agent-output-contracts/migration-plan-output.md",
+            "contracts/agent-output-contracts/top-modeling-output.md",
+            "contracts/agent-output-contracts/repair-output.md",
+        ],
+    }
+    for task_name, required_items in hydration_required.items():
+        hydrated_items = set(task_hydration.get(task_name, []))
+        for item in required_items:
+            if item not in hydrated_items:
+                errors.append(f"hydration-manifest.json task.{task_name} missing: {item}")
 
     behavior_contract = read_text(root / "contracts/agent-output-contracts/behavior-preservation-output.md")
     for status in [
@@ -336,17 +379,29 @@ def check_required_phrases(root):
         ("rules/violation-catalog.md", "WF-014"),
         ("rules/violation-catalog.md", "WF-015"),
         ("rules/violation-catalog.md", "WF-016"),
+        ("rules/violation-catalog.md", "WF-017"),
+        ("rules/violation-catalog.md", "WF-018"),
+        ("rules/violation-catalog.md", "WF-019"),
         ("contracts/top-folder-contract.md", "top_src/<branch-id>/"),
         ("contracts/top-folder-contract.md", "top/specs/settings-branch.json"),
         ("contracts/top-folder-contract.md", "MIGRATION_WORKFLOW.json"),
         ("contracts/top-folder-contract.md", "MIGRATION_PLAN.md"),
         ("contracts/top-folder-contract.md", "MIGRATION_LOG.md"),
+        ("contracts/top-folder-contract.md", "The active migration workspace is agent-owned"),
         ("canon/migration.md", "Migration artifact layout must be canonical"),
         ("canon/migration.md", "Migration workflow tree, plan, and action log are mandatory"),
+        ("canon/migration.md", "Migration means discovering and externalizing hidden structure"),
+        ("canon/migration.md", "Scope is not node boundary"),
+        ("canon/migration.md", "Recursive decomposition is mandatory"),
+        ("canon/migration.md", "PanelDisplayStyle is not decomposition"),
+        ("canon/migration.md", "Runtime Branch Binding Pattern"),
+        ("canon/migration.md", "Active migration workspace ownership"),
         ("agents/migration-infrastructure-agent.md", "MIGRATION_PLAN.md"),
         ("agents/migration-infrastructure-agent.md", "MIGRATION_WORKFLOW.json"),
         ("agents/migration-planning-agent.md", "MIGRATION_PLAN.md"),
         ("agents/migration-planning-agent.md", "MIGRATION_WORKFLOW.json"),
+        ("agents/migration-agent.md", "Migration means discovering and externalizing hidden structure"),
+        ("agents/validation-agent.md", "post-generation source validation"),
         ("rules/spec-sync-rules.md", "missing_source_root"),
         ("rules/spec-sync-rules.md", "missing_migration_control_plane"),
         ("top/shared-rules/skill-governance.md", "A skill is a controlled TOP tree"),
@@ -389,6 +444,10 @@ def check_required_phrases(root):
         ("canon/core-axioms.md", "must not derive output values"),
         ("examples/tree-editor/README.md", "canonical for top-skill 1.1.18"),
         ("rules/pattern-recognition.md", "Output derivation inside locally implemented content"),
+        ("rules/pattern-recognition.md", "Migration wrapper and giant-node signals"),
+        ("references/migration-heuristics.md", "Giant controller access surface"),
+        ("references/pattern-cards.md", "Runtime Branch Binding Pattern"),
+        ("contracts/agent-output-contracts/final-audit-output.md", "readiness_status"),
     ]
     errors = []
     for file_name, phrase in checks:

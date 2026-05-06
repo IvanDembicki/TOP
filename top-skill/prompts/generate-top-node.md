@@ -15,6 +15,20 @@ rules:
 - no architecture change
 - generate from Layer B semantic intent and Layer C target adaptation, not from source-platform primitives
 - for migrated scopes, generate from normalized requirements in the Behavior Preservation Plan as well as Layer B and Layer C
+- for migrated scopes, preserve the approved recursive decomposition. Do not
+  collapse a modeled branch back into a single hub wrapper around the legacy
+  screen/component/file.
+- do not use `PanelDisplayStyle` or equivalent display-token getters as a
+  substitute for generating modeled state nodes, modal/form/list nodes,
+  capability branches, async process branches, or data ownership boundaries.
+- isolate required hook/target bridge residuals as bridge components,
+  connectors, black-box boundaries, data bridge nodes, or adapter residuals; do
+  not place workflow logic, mutation body construction, routing decisions,
+  alerts, store writes, or pending action execution into locally implemented
+  content.
+- runtime-created branches must follow the Runtime Branch Binding Pattern:
+  entity context binding preferred, identity key binding when the branch resolves
+  its context, typed DTO binding only when converted to owned data early.
 - do not invent behavior absent from the semantic layer
 - do not lose, weaken, omit from prompts, or leave uncovered behavior proven by legacy tests
 - generate or adapt TOP-compatible tests for each prompt requirement derived from legacy tests

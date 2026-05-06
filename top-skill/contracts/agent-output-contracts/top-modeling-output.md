@@ -29,6 +29,9 @@ result:
 - lifecycle_model
 - ownership_map
 - behavior_requirement_mapping
+- decomposition_evidence
+- reusable_pattern_candidates
+- helper_component_classification
 - canonical_artifact_layout
 - migration_plan_alignment
 - migration_log_entry
@@ -37,6 +40,11 @@ details:
 - type_definitions
 - typing_strength
 - structural_assumptions
+- single_node_proof
+- giant_node_review
+- panel_display_style_justification
+- bridge_residual_register
+- accepted_deviation_register
 - prompt_update_requirements_from_behavior
 - implementation_source_root
 - expected_materialization_roots
@@ -60,6 +68,15 @@ next_step:
   source root (`top_src/<branch-id>/` by default)
 - If no implementation materialization is planned, `implementation_source_root`
   and `expected_materialization_roots` must be explicitly `not_applicable`
+- For migration tasks, `decomposition_evidence` must distinguish migration scope
+  root from final node boundaries and must classify hidden objects, state
+  alternatives, data boundaries, async workflows, forms, modals, lists/list
+  items, bridge boundaries, and repeated structures.
+- `single_node_proof` is required when the model keeps a user-named scope as one
+  node; otherwise it must be `not_applicable`.
+- `giant_node_review`, `panel_display_style_justification`,
+  `bridge_residual_register`, and `accepted_deviation_register` must be
+  explicit for migration tasks, even when empty.
 - For migration tasks, `migration_plan_alignment` must state how the model
   follows `top/migration/MIGRATION_WORKFLOW.json` and
   `top/migration/MIGRATION_PLAN.md`, and `migration_log_entry` must

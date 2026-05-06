@@ -20,11 +20,22 @@ Minimum:
 - `SKILL.md`
 - `rules/task-modes.md`
 - `canon/core-axioms.md`
+- `canon/migration.md`
 - `canon/validation-rules.md`
 - `agents/index.md`
+- `agents/canon-precheck-agent.md`
+- `agents/top-modeling-agent.md`
+- `agents/validation-agent.md`
+- `agents/repair-agent.md`
 - `contracts/agent-output-contracts/intake-output.md`
+- `contracts/agent-output-contracts/migration-infrastructure-output.md`
+- `contracts/agent-output-contracts/migration-plan-output.md`
+- `contracts/agent-output-contracts/top-modeling-output.md`
 - `contracts/agent-output-contracts/canon-precheck-output.md`
 - `contracts/agent-output-contracts/validation-output.md`
+- `contracts/agent-output-contracts/repair-output.md`
+- `contracts/top-folder-contract.md`
+- `top/schemas/migration-workflow.schema.json`
 
 ## 3. generation-pipeline
 
@@ -64,13 +75,23 @@ Minimum:
 - `contracts/agent-output-contracts/migration-plan-output.md`
 - `contracts/agent-output-contracts/behavior-preservation-output.md`
 - `contracts/agent-output-contracts/top-modeling-output.md`
+- `contracts/agent-output-contracts/generation-output.md`
+- `contracts/agent-output-contracts/spec-sync-output.md`
 - `contracts/agent-output-contracts/validation-output.md`
+- `contracts/agent-output-contracts/repair-output.md`
 - `contracts/agent-output-contracts/final-audit-output.md`
+- `prompts/generate-top-node.md`
+- `prompts/verify-node-implementation-prompt.md`
 - `top/schemas/migration-workflow.schema.json`
 
 If the migrated scope has no legacy tests or executable behavior evidence,
 Migration Agent records that absence and Behavior Preservation Agent is not
 required.
+
+If migration includes materialization, generation repair, or spec sync, the
+generation, spec-sync, validation, and repair output contracts above are
+mandatory reads. A migration task must not rely on `Generation Agent` hydration
+without also loading `generation-output.md` and the generation prompt.
 
 ## 5. spec-change
 

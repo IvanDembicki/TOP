@@ -37,6 +37,7 @@ If a discrepancy arises between this agent file and the output contract:
 - create missing canonical directories: `top/specs/`, `top/prompts/`, `top/migration/`, and planned `top_src/<branch-id>/`
 - create initial `top/migration/MIGRATION_WORKFLOW.json`, `top/migration/MIGRATION_PLAN.md`, `top/migration/MIGRATION_STATUS.md`, and `top/migration/MIGRATION_LOG.md` when absent
 - add `.gitkeep` or an equivalent placeholder to empty source roots
+- declare the active migration workspace for the selected branch
 - record an initial migration log entry
 </allowed>
 
@@ -53,6 +54,11 @@ If a discrepancy arises between this agent file and the output contract:
 - canonical migration control-plane files exist
 - `MIGRATION_WORKFLOW.json` exists and is valid JSON for the current migration
 - source-root path is declared or explicitly pending
+- active migration workspace is declared: `top/specs/<branch-id>.json`,
+  `top/prompts/<branch-id>/**`, `top/migration/**`, `top/assets/**`,
+  `top/semantic/**`, and `top_src/<branch-id>/**` are agent-owned for the
+  active workflow, while legacy application files remain user-owned except
+  explicitly logged thin adapters/integration wiring
 - initial log entry exists
 - no noncanonical TOP layout is introduced
 </validation_focus>

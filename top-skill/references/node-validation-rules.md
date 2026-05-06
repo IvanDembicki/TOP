@@ -339,6 +339,56 @@ Canonical correction direction:
 
 ---
 
+## 10a. Migration Decomposition Validation
+
+Required checks for migration branches:
+- the migration scope root is not treated as a final TOP node boundary merely
+  because it came from one screen, route, file, tab, section, or component;
+- hidden objects, state holders, state alternatives, data ownership boundaries,
+  runtime entities, async workflows, forms, modals, lists, list items, bridge
+  boundaries, black-box components, and repeated structures are inventoried and
+  classified;
+- single-node migrations include explicit proof that no internal candidate
+  should be a node, state node, data node, connector, black-box component, or
+  library node;
+- large `IControllerAccess`/target-equivalent surfaces, many display-style
+  methods, many bridge hooks, many pending actions/mutations, and many unrelated
+  modal/form/list/workflow responsibilities trigger giant-node review;
+- `PanelDisplayStyle` or equivalent display-token methods are not hiding state
+  alternatives, workflows, modal/form/list ownership, async process states,
+  permission-gated capabilities, or data ownership boundaries;
+- hook/target bridges inside locally implemented content are isolated and do
+  not own orchestration, mutation construction, routing, alerts, pending action
+  execution, or store writes;
+- direct global store access is not labeled canonical TOP access unless modeled
+  as a connector/data boundary; otherwise it is a migration residual with target
+  repair and expiry;
+- helper components, modals, forms, cards, rows, tiles, list items, banners,
+  selectors, status panels, action panels, and repeated structures are
+  classified as local details, nodes, state nodes, black boxes, or reusable
+  library nodes.
+
+Violation codes:
+- `WF-017` for missing or insufficient decomposition review;
+- `WF-018` for accepted deviations without target repair/expiry/owner phase;
+- `CORE-015` when locally implemented content owns orchestration or output
+  derivation;
+- `CORE-032` when dynamic branches receive scattered constructor data instead
+  of following the Runtime Branch Binding Pattern.
+
+Canonical correction direction:
+- return to modeling when the fix changes tree structure;
+- split hidden states/workflows/forms/modals/lists into explicit nodes or state
+  branches;
+- extract reusable repeated structures into library nodes when the role is
+  stable and the interface remains narrow;
+- isolate target hooks as bridge components, connectors, black-box boundaries,
+  data bridge nodes, or adapter residuals;
+- replace global store access with store connector, data node, data controller,
+  adapter context, or a narrow access contract.
+
+---
+
 ## 11. Validation verdict and outcome
 
 Required checks:

@@ -55,8 +55,14 @@ If a discrepancy arises between this agent file and the output contract:
 - plan has explicit scope, branch id, phases, owners/agents, artifacts, gates, and rollback points
 - workflow JSON mirrors the plan and names phase ids, responsible agents,
   statuses, gates, outputs, and next phases
-- if user named a starting scope, the plan starts there unless impossible and explains why
+- if user named a starting scope, the plan treats it as the migration scope root,
+  not as a final TOP node boundary, and starts there unless impossible and
+  explains why
 - if user did not name a starting scope, the plan records the selection rationale
+- plan includes a recursive decomposition work package: hidden object/state
+  discovery, candidate classification, giant-node review, reusable pattern
+  extraction, modal/form/list candidate analysis, bridge residual classification,
+  and single-node proof when applicable
 - plan includes Behavior Preservation Agent routing when tests or executable behavior evidence exist
 - plan includes validation and repair loop gates
 - plan references `MIGRATION_LOG.md`

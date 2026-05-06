@@ -133,15 +133,52 @@ result. It is status, not a plan and not a log.
 append an entry before handoff, and after any persistent artifact change. Each
 entry must include:
 
-- timestamp and agent name;
-- migration phase and branch id;
-- files read, created, modified, or deleted;
-- decisions made and why;
+- timestamp and `timestamp_source` (`real` or `placeholder`);
+- agent name;
+- migration phase, branch id, and migration id;
+- files read;
+- files created;
+- files modified;
+- files deleted;
+- commands run;
+- key decisions and why;
+- accepted deviations;
+- unable-to-verify items;
+- potential canon risks or needs-later-validation notes;
 - validation or self-check result;
-- next agent or blocking condition.
+- next agent, next action, or blocking condition.
+
+If a real timestamp is unavailable, write `timestamp_source: placeholder` and do
+not invent identical fake forensic timestamps.
 
 The log is for forensic replay. It must not be rewritten to make the migration
 look cleaner after the fact. Corrections are new entries.
+
+## Active migration workspace ownership
+
+The active migration workspace is agent-owned. The legacy application remains
+user-owned.
+
+Agents may create, modify, replace, and delete files required by the active
+migration workflow inside:
+
+```text
+top/specs/<branch-id>.json
+top/prompts/<branch-id>/**
+top/migration/**
+top/assets/**
+top/semantic/**
+top_src/<branch-id>/**
+```
+
+This authority is scoped to the active branch and current
+`MIGRATION_WORKFLOW.json`/`MIGRATION_PLAN.md`. It does not include unrelated
+legacy source files, unrelated `top_src/` branches, package manifests or lock
+files, native iOS/Android files, environment/secrets files, git push, or remote
+operations.
+
+Legacy app files may be modified only for explicitly required thin adapter or
+integration wiring. Such writes must be logged and validated as in-scope.
 
 
 ## Semantic and adaptation artifact storage

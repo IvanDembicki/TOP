@@ -151,10 +151,14 @@ Execution steps:
    gates, handoffs, responsible agents, and current phase are explicit JSON.
 5. Append a migration log entry for every migration-mode stage handoff and every
    persistent artifact change.
-6. Define the migration scope and dependency boundary.
+6. Define the migration scope and dependency boundary. The user-named scope is
+   the analysis root, not proof of one TOP node.
 7. Discover legacy tests and executable behavior evidence covering the scope.
 8. Produce a Behavior Preservation Plan when test evidence exists.
-9. Extract a TOP model that preserves normalized behavior requirements.
+9. Extract a TOP model that preserves normalized behavior requirements by
+   recursively discovering hidden objects, state holders, state alternatives,
+   data owners, async workflows, forms, modals, lists/list items, bridge
+   boundaries, black boxes, and reusable structures.
 10. Persist migration specs under `top/specs/`, prompts under `top/prompts/`,
    and migration status under `top/migration/`.
 11. If the migration task creates implementation prompts or materialization
@@ -171,6 +175,9 @@ violation. Omitting the materialization source root for a migration that declare
 future implementation artifacts is `WF-013`.
 Missing `MIGRATION_PLAN.md` is `WF-014`. Missing or stale `MIGRATION_LOG.md` is
 `WF-015`. Missing or stale `MIGRATION_WORKFLOW.json` is `WF-016`.
+Missing recursive decomposition or giant-node review is `WF-017`.
+Undisciplined accepted deviations are `WF-018`. Writes outside the active
+migration workspace without explicit adapter/integration allowance are `WF-019`.
 
 ---
 

@@ -51,6 +51,15 @@ If a discrepancy arises between this agent file and the output contract:
 - typing can be defined strongly and explicitly
 - the structure stays within canonical TOP patterns
 - prompt paths and code paths reflect the same semantic position in the tree (Structural Correspondence Rule)
+- in migration mode, user-named scope is not treated as final node boundary
+- recursive decomposition evidence exists for hidden states, data owners,
+  async workflows, forms, modals, lists/list items, bridge boundaries, and
+  reusable structures
+- giant-node review blocks precheck when a large controller access surface,
+  many display-style methods, many bridge hooks, or many unrelated
+  modal/form/list/workflow responsibilities lack decomposition proof
+- `PanelDisplayStyle` or equivalent display-token use is justified only for
+  stable structural sections and is not hiding state branches or workflows
 </validation_focus>
 
 <handoff_rules>

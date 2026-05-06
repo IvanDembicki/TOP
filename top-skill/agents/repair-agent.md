@@ -59,6 +59,18 @@ If a discrepancy arises between this agent file and the output contract:
   object pull through that contract, modeling pushed state/structural
   alternatives as explicit child state nodes, or wrapping external component
   configuration behind a black-box boundary with a narrow explicit interface
+- repair wrapped-legacy migration failures by returning to modeling when the
+  fix requires recursive decomposition, child state extraction, data-node
+  extraction, connector modeling, black-box boundaries, or reusable library nodes
+- repair excessive `PanelDisplayStyle` use by extracting hidden state branches,
+  modal/form/list nodes, async process nodes, capability branches, or data
+  boundaries instead of adding more display-token getters
+- repair hook bridge orchestration by isolating bridge logic as a connector,
+  bridge component, black-box boundary, data bridge node, or adapter residual
+  and moving workflow decisions out of locally implemented content
+- repair direct global store access by modeling an explicit store connector,
+  data node, data controller, adapter context, or narrow access contract, or by
+  recording a disciplined migration residual with target repair and expiry
 </allowed>
 
 <forbidden>
@@ -88,6 +100,12 @@ If a discrepancy arises between this agent file and the output contract:
 - repair a confirmed core violation by merely documenting it as accepted,
   temporary, deferred, or waypoint unless TOP canon defines that exact migration
   waypoint
+- repair a giant-node/wrapped-legacy failure by adding documentation while
+  keeping the single hub node unchanged
+- repair hidden state branches by replacing booleans with `PanelDisplayStyle`
+  or equivalent display-token getters
+- keep accepted deviations that lack exact locations, target repair, expiry
+  condition, and owner phase
 - mark a documented core deviation as resolved or passing when the underlying
   structure remains non-canonical
 - in migration mode, repair without following the current migration workflow and

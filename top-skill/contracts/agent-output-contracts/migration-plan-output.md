@@ -30,12 +30,14 @@ result:
 - planned_artifacts
 - workflow_phase_updates
 - agent_work_packages
+- decomposition_work_packages
 - validation_gates
 - rollback_points
 - migration_log_entry
 
 details:
 - scope_selection_rationale
+- scope_root_vs_node_boundary_policy
 - dependency_scan_plan
 - behavior_evidence_scan_plan
 - materialization_plan
@@ -60,5 +62,12 @@ next_step:
   and next phases written to the workflow JSON.
 - `planned_artifacts` must include spec, prompt, status, log, and source-root
   paths when materialization is planned.
+- `decomposition_work_packages` must include hidden architecture discovery,
+  recursive decomposition, giant-node review, reusable pattern extraction,
+  modal/form/list candidate analysis, hook bridge residual classification,
+  accepted deviation discipline, and post-generation source validation gates.
+- `scope_root_vs_node_boundary_policy` must state that a user-named screen,
+  route, tab, section, component, or file is the migration scope root, not proof
+  of a single TOP node.
 - `migration_log_entry` must identify the log entry appended for this planning pass.
 - Free text outside the required structure is prohibited.

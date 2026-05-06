@@ -121,6 +121,29 @@ the data controller, not in raw data content.
 External objects must not mutate data content directly. Presentation content
 must not directly access or mutate data content.
 
+## Migration decomposition axiom
+
+Migration is architectural extraction, not wrapping.
+
+A legacy screen, route, file, tab, section, or component names the analysis
+scope. It does not prove that the result is one TOP node.
+
+Migration must discover hidden objects, state holders, state alternatives,
+runtime entities, async processes, forms, modals, lists, list items, data
+owners, connectors, bridge boundaries, black-box components, and repeated
+structures. The result must be an explicit tree of responsibilities.
+
+A node with a giant controller access surface, many display-style methods, many
+bridge hooks, many pending actions/mutations, or multiple independent
+modal/form/list/workflow responsibilities is not "complete" by having a large
+contract. It is a decomposition-risk signal until proven otherwise.
+
+`PanelDisplayStyle` is not a substitute for node decomposition. It may represent
+an already-resolved display value for a stable structural section, but it must
+not conceal state alternatives, lifecycle-bearing branches, independent
+workflows, forms, modals, permission-gated capabilities, or data ownership
+boundaries.
+
 ## Behavioral coherence
 
 A node must not simultaneously own capabilities with mutually exclusive preconditions.

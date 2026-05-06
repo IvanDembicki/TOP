@@ -8,6 +8,268 @@ replace — the universal TOP canon (`canon/architectural-invariants.md`,
 
 ---
 
+## Mg-0. Migration discovers hidden architecture
+
+Migration modeling is not wrapping existing code into TOP-shaped files.
+
+The primary goal of migration modeling is to discover the hidden object/state
+architecture inside the legacy implementation and re-express it as an explicit
+TOP tree.
+
+Migration means discovering and externalizing hidden structure. It does not mean
+wrapping legacy code.
+
+The migration agent must identify hidden candidates including:
+- domain objects;
+- UI/presentation objects;
+- data objects and data ownership boundaries;
+- state holders and state alternatives;
+- runtime entities;
+- async processes and workflow fragments;
+- forms, modals, lists, list items, cards, rows, tiles, banners, selectors,
+  status panels, and action panels;
+- repeated structures and reusable patterns;
+- external integration boundaries;
+- black-box components;
+- hook/target bridge boundaries.
+
+For each discovered candidate, the agent must classify it as one of:
+- TOP node;
+- child state node;
+- data node;
+- runtime/lib node;
+- connector;
+- black-box component;
+- reusable library node;
+- local implementation detail.
+
+Migration is successful only when the legacy structure is re-modeled as an
+explicit TOP tree, not when the old component is wrapped behind one large
+controller/content pair.
+
+## Mg-0a. Scope is not node boundary
+
+A user-named migration scope is an analysis root, not a final node boundary.
+
+When the user says "migrate Account section", "migrate Settings section",
+"migrate screen X", "migrate route Y", or "migrate component Z", the named
+thing defines the migration scope root. It does not define the final TOP node
+count.
+
+Single route, single screen, single file, or single framework component does
+not imply single TOP node. Legacy file boundaries are evidence, not TOP node
+boundaries. Screen boundaries are host/context boundaries, not necessarily node
+boundaries.
+
+The agent must create a candidate root branch for the scope and then recursively
+decompose the internal structure.
+
+## Mg-0b. Recursive decomposition is mandatory
+
+Migration modeling must be recursive.
+
+The agent must inspect the legacy implementation and split hidden
+responsibilities into child nodes, child state nodes, data nodes, connectors,
+black-box boundaries, and reusable library nodes until each remaining node has:
+- one clear responsibility;
+- a small and role-focused controller access surface;
+- no hidden state alternatives;
+- no independent async workflow hidden inside locally implemented content;
+- no internal forms, modals, list items, cards, or rows that deserve separate
+  ownership;
+- no data ownership boundary hidden inside a presentation node;
+- no large bridge cluster inside locally implemented content;
+- no repeated helper component pattern that should become a reusable node.
+
+The recursion stops only when each node can be understood and regenerated in
+isolation.
+
+Before approving a single-node migration, the agent must prove all of the
+following:
+1. no independent state holders exist inside the scope;
+2. no lifecycle-bearing sub-objects exist;
+3. no repeated runtime entities exist;
+4. no independent async processes exist;
+5. no forms or modals with their own behavior exist;
+6. no lists or list items should be runtime/lib nodes;
+7. no data ownership boundaries are hidden inside the visual scope;
+8. no reusable repeated structures exist;
+9. the controller access surface remains small and role-focused.
+
+If this proof cannot be made, a single-node model must not pass precheck.
+
+## Mg-0c. Giant node detection
+
+A large node is a migration smell. It is not automatically a core violation, but
+it is a mandatory decomposition review trigger.
+
+Trigger decomposition review when a modeled or generated node has any of:
+- a very large `IControllerAccess`/target-equivalent surface;
+- many `PanelDisplayStyle` or equivalent display-value access methods;
+- many state fields;
+- many pending actions or pending mutations;
+- many bridge hooks or target-framework bridge points;
+- many unrelated public action methods;
+- many modal, form, list, card, or row responsibilities;
+- many sections with independent behavior;
+- too many unrelated display value getters;
+- a role that cannot be explained in one short sentence.
+
+A giant node must not be accepted merely because it came from one screen, route,
+file, tab, or framework component.
+
+If the agent keeps the candidate as one node, the output must provide an
+explicit decomposition justification explaining why internal candidates are not
+nodes, state nodes, data nodes, connectors, black-box components, or library
+nodes. Without that proof, validation reports `WF-017`.
+
+## Mg-0d. PanelDisplayStyle is not decomposition
+
+`PanelDisplayStyle` or equivalent display-token access is not a substitute for
+node decomposition.
+
+It is allowed only for stable structural sections whose existence is constant
+and whose visibility/display is an already-resolved presentation value.
+
+It must not hide:
+- state alternatives;
+- lifecycle-bearing branches;
+- different capabilities;
+- independent workflows;
+- async process states;
+- forms with independent validation or save lifecycle;
+- modal states;
+- permission-gated capability branches;
+- data ownership boundaries.
+
+If a section has its own responsibility, lifecycle, actions, async flow, or
+state transition semantics, it must be modeled as a node or state branch
+candidate, not merely hidden with `PanelDisplayStyle`.
+
+Validation must flag excessive `PanelDisplayStyle` use as a possible hidden
+state tree and require decomposition evidence.
+
+## Mg-0e. Reusable structure and library extraction
+
+Migration modeling has two axes:
+
+1. Vertical decomposition: scope -> child responsibilities -> states ->
+   substates.
+2. Horizontal extraction: repeated structures -> reusable library nodes or
+   black-box components.
+
+Repeated legacy structures are candidates for reusable TOP library nodes.
+
+A modal, card, row, tile, list item, selector, banner, form, status panel,
+action panel, or workflow fragment is not automatically a helper component. It
+is a candidate node, state node, runtime/lib node, reusable library node,
+black-box component, or local implementation detail until classified.
+
+A candidate should become a library node when:
+- the same structural pattern appears more than once;
+- it has a stable semantic role;
+- it can be parameterized through a narrow contract;
+- it has its own content, lifecycle, or events;
+- duplicating it would create repeated prompt/code logic.
+
+Do not extract a library node when:
+- similarity is only visual but behavior is different;
+- the abstraction would require a wide props/config object;
+- extraction would create a generic god-component;
+- the repeated part has no stable responsibility.
+
+If helper components remain, the migration output must explain why each retained
+helper is not a TOP node, black-box component, or library node.
+
+## Mg-0f. Hook bridge residuals are not content orchestration
+
+React hooks or other target-framework hooks inside locally implemented content
+may be accepted only as forced bridge residuals.
+
+A hook bridge inside locally implemented content must not turn content into an
+orchestration layer.
+
+If hooks are required by the target framework, classify them as one of:
+- bridge component;
+- connector;
+- black-box boundary;
+- data bridge node;
+- adapter residual.
+
+The content must not own workflow logic, mutation construction, routing
+decisions, alert/business decisions, store writes, pending action execution, or
+business orchestration.
+
+If a content file contains multiple hooks plus effect workflows, pending action
+execution, mutation body construction, router calls, alert calls, or store
+writes, validation must flag a possible orchestration-in-content violation and
+require isolation as a bridge/connector/black-box/data node.
+
+## Mg-0g. Global store access is residual, not canonical access
+
+Direct access to global stores from a controller must not be called
+architecturally correct by default.
+
+It may be accepted only as a migration residual when it is:
+- documented;
+- isolated;
+- justified by legacy constraints;
+- assigned a target repair direction;
+- given an expiry condition.
+
+Preferred repairs are explicit store connectors, data nodes, data controllers,
+adapter context, or narrow access contracts.
+
+Validation must distinguish temporary residual access from canonical TOP access.
+
+## Mg-0h. Accepted deviation discipline
+
+Accepted deviations are not a place to hide core violations.
+
+Every accepted deviation must include:
+- deviation name;
+- exact files/locations affected;
+- why it is accepted temporarily;
+- why it is not blocking this phase;
+- target repair direction;
+- expiry condition;
+- phase where it must be removed or re-evaluated;
+- whether it is allowed in canonical target architecture or only in migration
+  mode.
+
+If any accepted deviation lacks target repair and expiry condition, validation
+must not produce a clean final pass.
+
+## Mg-0i. Runtime Branch Binding Pattern
+
+Runtime-created branches may receive binding input only to attach them to an
+entity context, not to fill them with scattered data.
+
+Preferred binding:
+1. Entity Context Binding — the runtime branch root receives a narrow entity
+   context reference: data-node controller, entity access interface, or model
+   controller.
+
+Allowed binding:
+2. Identity Key Binding — the runtime branch root receives a stable identity key
+   only when the branch is responsible for resolving or loading its entity
+   context.
+
+Allowed but weaker:
+3. Typed DTO Binding — the runtime branch root receives a typed immutable DTO
+   only when no entity context exists yet. The DTO must be converted into owned
+   data content/model as early as possible.
+
+Forbidden:
+- scattered constructor data;
+- props/config/callback bags;
+- mutable raw model objects;
+- presentation values;
+- services/stores passed directly as arbitrary arguments.
+
+A runtime branch must not be filled with scattered data. It must be bound to an
+entity context, or to an input that deterministically creates one.
+
 ## Intermediate migration states
 
 A migrated branch may exist in a defined intermediate state. These states describe
@@ -144,14 +406,67 @@ JSON controls routing and validation.
 
 `MIGRATION_LOG.md` is append-only. Each agent operating in migration mode must
 append a log entry before handoff and after any persistent artifact change. The
-entry records timestamp, agent, phase, files read/changed, decisions, validation
-signals, and next stage.
+entry records:
+- phase;
+- branch id;
+- migration id;
+- files read;
+- files created;
+- files modified;
+- files deleted;
+- commands run;
+- key decisions;
+- accepted deviations;
+- unable-to-verify items;
+- potential canon risks or needs-later-validation notes;
+- self-check result;
+- next agent or next action.
+
+If a real timestamp is unavailable, do not fake it. Write
+`timestamp_source: placeholder`. Identical fake timestamps must not be presented
+as forensic timestamps.
 
 The log is forensic evidence. Agents must not rewrite old entries to hide a bad
 decision. Corrections are appended as new entries.
 
 If these files are missing, stale, contradictory, or not updated for a migration
 handoff, the migration is incomplete even if generated code exists.
+
+## Mg-1c. Active migration workspace ownership
+
+The active migration workspace is agent-owned. The legacy application remains
+user-owned.
+
+During migration, agents may create, modify, replace, and delete files required
+by the active migration workflow inside:
+
+```text
+top/specs/<branch-id>.json
+top/prompts/<branch-id>/**
+top/migration/**
+top/assets/**
+top/semantic/**
+top_src/<branch-id>/**
+```
+
+They do not need user confirmation for each file write inside the active
+migration workspace when the write follows the current migration plan/workflow
+and is recorded in the migration log.
+
+This authority does not include:
+- unrelated legacy source files;
+- unrelated `top_src/` branches;
+- unrelated migration branches;
+- package manifests or lock files;
+- native iOS/Android files;
+- environment or secrets files;
+- git push or remote operations.
+
+Legacy app files may be modified only for explicitly required thin adapters or
+integration wiring, and those changes must be logged.
+
+Validation must verify that writes outside the active migration workspace are
+either explicitly allowed adapter/integration changes or scope violations.
 
 ---
 

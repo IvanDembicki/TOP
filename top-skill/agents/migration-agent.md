@@ -37,6 +37,13 @@ No dedicated output contract in `contracts/agent-output-contracts/`. Output stru
 1. **Hidden node map** — identification of nodes that exist implicitly in the current code:
    what they are, where their boundaries are, what their responsibilities are.
 
+   Migration means discovering and externalizing hidden structure. It does not
+   mean wrapping legacy code. A user-named scope such as a screen, tab, route,
+   section, component, or file is the analysis root, not the final node count.
+   The hidden node map must recursively classify each candidate as TOP node,
+   child state node, data node, runtime/lib node, connector, black-box
+   component, reusable library node, or local implementation detail.
+
 2. **Migration priority list** — which areas to migrate first, based on:
    - isolation level (more isolated = easier to start)
    - change frequency (areas that change often benefit most from TOP structure)
@@ -44,6 +51,12 @@ No dedicated output contract in `contracts/agent-output-contracts/`. Output stru
 
 3. **Per-area migration plan** — for each prioritised area:
    - proposed TOP tree structure (root node, children, branches)
+   - recursive decomposition evidence, including any single-node proof or
+     giant-node decomposition review
+   - reusable pattern/library-node extraction candidates across repeated
+     modals, forms, cards, rows, tiles, list items, banners, selectors, status
+     panels, action panels, or workflow fragments
+   - hook/target bridge residual classification and target repair direction
    - connector interface: how the migrated TOP branch connects to the surrounding legacy code
    - stub/mock spec: what mock object to create at the branch root during development
    - migration steps in order
@@ -71,6 +84,11 @@ No dedicated output contract in `contracts/agent-output-contracts/`. Output stru
    `top/migration/MIGRATION_WORKFLOW.json`, including the current phase,
    validation gates, and next phase ids.
 
+9. **Accepted deviation register** — every accepted migration deviation with
+   exact locations, why it is temporarily accepted, why it is not blocking this
+   phase, target repair direction, expiry condition, owner phase, and whether it
+   is allowed in canonical target architecture or only in migration mode.
+
 ---
 </outputs>
 
@@ -85,6 +103,12 @@ extracted from legacy code and connected back through explicit boundary connecto
 **JSON does not describe the final architecture of the whole system.
 It describes trusted local TOP islands, their boundaries, and their integration contracts
 with the remaining legacy code.**
+
+The branch itself must still be a native TOP branch candidate, not a TOP-shaped
+wrapper around the old screen. A "single screen" model is invalid unless the
+agent proves that no hidden state holders, forms, modals, lists, data owners,
+bridge boundaries, reusable structures, or independent workflows exist inside
+that screen.
 
 ### Spec structure during migration
 
@@ -127,6 +151,10 @@ Each entry in `MigrationRegistry` must describe a single migration unit:
 - `boundary_description` — what is inside the branch; what is explicitly outside
 - `connector_contract` — inputs received from legacy; outputs/events returned; external dependencies that remain outside
 - `local_tree` — the internal TOP tree of this branch only; no claims about the full system
+- `decomposition_evidence` — hidden candidates found, candidate classification,
+  single-node proof if applicable, giant-node review, PanelDisplayStyle usage
+  justification, reusable structure/library candidates, and helper components
+  intentionally left local
 - `prompt_set_reference` — paths to the prompt files for this branch
 - `assumptions` — hidden dependencies not yet resolved; integration risks not yet cleared
 - `verification_status` — one of: `analyzed` / `modeled` / `materialization_pending` / `integrated_experimentally` / `validated` / `rolled_back`
@@ -228,6 +256,30 @@ Do not describe any technology-specific parameter/composition tree, child-view
 assembly, or render/build-callback composition as TOP architecture unless the TOP
 ownership rules above are explicitly satisfied.
 
+### Decomposition and residual discipline
+
+`PanelDisplayStyle` or equivalent display token access is permitted only for
+stable structural sections. It must not hide state alternatives, modal states,
+forms, independent workflows, async process states, capability branches, or data
+ownership boundaries.
+
+Hook bridges and target-framework hook usage inside locally implemented content
+are forced residuals only. They must be isolated as bridge components,
+connectors, black-box boundaries, data bridge nodes, or adapter residuals. They
+must not make content own workflow logic, mutation body construction, routing,
+alerts, pending action execution, or business orchestration.
+
+Direct global store access from a controller is not canonical TOP access by
+default. It may be logged only as an accepted migration residual with target
+repair and expiry: explicit store connector, data node, data controller, adapter
+context, or narrow access contract.
+
+Runtime-created branches must follow the Runtime Branch Binding Pattern: bind to
+an entity context when possible, to a stable identity key when the branch
+resolves the entity, or to a typed immutable DTO converted into owned data as
+early as possible. Do not feed runtime branches scattered data/config/callback
+bags.
+
 If a migrated branch still uses a renderable source artifact as the Node/Controller,
 mark it as a known migration deviation and report `CORE-026`. It may be a staged
 repair waypoint, but it is not a TOP-conformant final structure and must not
@@ -312,6 +364,17 @@ traces of expected behavior, not only as files that should pass.
   and preparing the implementation source root
 - calling a modeling/analysis-only pass a completed migration when no
   materialized implementation exists
+- treating a user-named screen/route/file/component as proof of a single TOP node
+- producing a single-node migration without the required recursive decomposition
+  proof
+- treating a large `IControllerAccess` surface as a complete contract instead
+  of a giant-node decomposition review signal
+- using `PanelDisplayStyle` as a replacement for state/node decomposition
+- extracting modals/forms/lists/cards/rows/tiles as helper components without
+  classifying them as node/library/black-box candidates
+- calling direct global store access architecturally correct unless it has been
+  modeled as a connector/data access boundary
+- accepting a deviation without target repair direction and expiry condition
 </forbidden>
 
 <validation_focus>
@@ -324,6 +387,11 @@ traces of expected behavior, not only as files that should pass.
 - migrated public API is behaviourally equivalent to the original
 - test-covered behavior is either mapped through a Behavior Preservation Plan or the absence of tests is explicitly reported
 - all hidden dependencies have been surfaced and resolved before migration
+- hidden architecture has been recursively discovered instead of wrapped
+- scope root is distinguished from node boundary
+- giant nodes, PanelDisplayStyle clusters, hook bridge clusters, modals, forms,
+  lists/list items, reusable structures, and global store access have explicit
+  classification and repair/expiry where residual
 </validation_focus>
 
 <handoff_rules>

@@ -50,6 +50,16 @@ If a discrepancy arises between this agent file and the output contract:
 - weaken boundaries for convenience
 - omit test-covered behavior that was normalized in a Behavior Preservation Plan
 - replace explicit structure with implicit relationships
+- in migration mode, model a user-named scope as one node merely because it was
+  one screen, route, tab, component, or file
+- in migration mode, approve a single-node model without recursive
+  decomposition evidence and single-node proof
+- hide state alternatives, modal/form/list ownership, async workflows, bridge
+  clusters, data boundaries, or reusable structures inside one hub node
+- use `PanelDisplayStyle` or equivalent display tokens as a replacement for
+  modeling nodes or state branches
+- treat repeated modal/card/row/tile/list item/banner/form/helper patterns as
+  local helpers before classifying library-node or black-box candidates
 - allow bypass around content
 - model an existing renderable framework component as a controller unless its renderable role is extracted into content or a thin adapter
 - hide lifecycle ownership
@@ -67,6 +77,10 @@ If a discrepancy arises between this agent file and the output contract:
 - content remains architecturally passive
 - boundaries are protocol-based
 - lifecycle is owned explicitly
+- migration hidden-architecture extraction is explicit: vertical decomposition
+  and horizontal reusable-pattern extraction are both considered
+- giant-node review is complete when a controller access surface, display-style
+  method set, bridge cluster, or modal/form/list/workflow set is large
 - typing can be defined strongly
 - behavior requirements from the Behavior Preservation Plan are assigned to nodes, contracts, state, events, lifecycle, and prompts
 - branch specs, prompt paths, migration status, and implementation source root

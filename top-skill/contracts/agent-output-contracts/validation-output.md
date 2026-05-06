@@ -45,6 +45,12 @@ details:
 - migration_workflow_check
 - migration_plan_check
 - migration_log_check
+- migration_decomposition_check
+- giant_node_review_check
+- panel_display_style_check
+- post_generation_source_validation_check
+- accepted_deviation_discipline_check
+- migration_workspace_write_check
 - semantic_preservation_check
 - behavior_preservation_check
 - source_platform_leakage_check
@@ -101,6 +107,22 @@ next_step:
 - Validation must report `WF-016` when a migration-mode task creates or changes
   TOP artifacts without current `top/migration/MIGRATION_WORKFLOW.json`, or when
   the workflow JSON disagrees with plan/status/log
+- Validation must report `WF-017` when migration modeling treats a user-named
+  scope as a final node boundary, keeps a single-node/giant-node wrapper without
+  recursive decomposition proof, omits reusable-pattern/modal/form/list
+  classification, or uses display-token clusters as a substitute for
+  decomposition.
+- Validation must report `WF-018` when an accepted deviation lacks exact
+  locations, temporary acceptance rationale, target repair direction, expiry
+  condition, and owner phase.
+- Validation must report `WF-019` when migration agents modify files outside the
+  active migration workspace without an explicitly allowed thin
+  adapter/integration reason recorded in the migration log.
+- `migration_decomposition_check`, `giant_node_review_check`,
+  `panel_display_style_check`, `post_generation_source_validation_check`,
+  `accepted_deviation_discipline_check`, and
+  `migration_workspace_write_check` must explicitly report `pass`, `fail`, or
+  `not_applicable`.
 - `spec_sync_check` must explicitly report `pass`, `fail`, or `not_applicable`
 - `drift_check` must explicitly report `pass`, `fail`, or `not_applicable`; when applicable it must cover JSON topology, prompts, Expected Materialization, project-local TOP artifacts, and materialized implementation artifacts
 - `top_layout_check` must explicitly report `pass`, `fail`, or `not_applicable`
@@ -123,6 +145,10 @@ next_step:
 - If `source_platform_leakage_present` is true in Layer B or in a non-source target, `overall_status` must be `fail`
 - In `generation-pipeline`, validation must check semantic preservation, absence of source-platform leakage, target adaptation coherence, and TOP invariants
 - In migration scopes with legacy tests, validation must check Behavior Preservation Plan existence, prompt representation, and TOP-compatible test coverage
+- After generation, validation must inspect actual generated/materialized source
+  files, including controller files, locally implemented content files,
+  contracts, bridge components, helper components, modal files, adapters, and
+  generated constants/helpers. Type-check success is not TOP validation.
 - If `test_covered_behavior_preserved` is false, `overall_status` must be `fail`
 - Commentary cannot substitute for validation
 - Free text outside the required structure is prohibited

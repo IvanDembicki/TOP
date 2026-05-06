@@ -54,6 +54,21 @@ Check:
 - compliance with `props.dir` and expected directory placement of generated files;
 - compliance with `props.sourceRoot`, canonical `top_src/` source-root layout,
   and `top/specs/` branch spec placement;
+- for migration scopes, confirmation that generated source preserves the
+  approved decomposition and does not collapse into a single hub node or
+  TOP-shaped wrapper around a legacy screen/component/file;
+- for migration scopes, confirmation that `PanelDisplayStyle` or equivalent
+  display-token getters do not hide state alternatives, modal/form/list
+  ownership, async process branches, permission-gated capabilities, workflows,
+  or data boundaries;
+- for migration scopes, confirmation that bridge residuals are isolated as
+  bridge components, connectors, black-box boundaries, data bridge nodes, or
+  adapter residuals, and do not make locally implemented content own
+  orchestration;
+- for migration scopes, confirmation that helper components, modals, forms,
+  cards, rows, tiles, list items, banners, selectors, status panels, and action
+  panels have been classified as local details, nodes, black boxes, or reusable
+  library nodes;
 - presence and correctness of an explicit restricted access artifact for content, if content exists;
 - materialization of the artifact as a named contract type, not an anonymous object shape;
 - explicit typing of the constructor/factory/method parameter receiving the artifact, if the language allows;
@@ -129,6 +144,8 @@ Categorize them as:
 - decomposed owner access input into Content (`CORE-030`);
 - decomposed content access input into Controller (`CORE-031`);
 - context data injection into TOP objects (`CORE-032`);
+- missing migration decomposition review / giant-node wrapper (`WF-017`);
+- undisciplined accepted deviation (`WF-018`);
 - locally implemented content conditional selection logic (`CORE-015`);
 - locally implemented content output derivation (`CORE-015`);
 - controller-to-content presentation command or mutation push into locally

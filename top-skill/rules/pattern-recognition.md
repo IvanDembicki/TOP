@@ -103,6 +103,32 @@ Canonical repair:
 - route service/store/global dependency access through the owning context,
   parent, or controller contract.
 
+### Group A3 — Migration wrapper and giant-node signals
+
+During migration, a user-named screen, route, tab, component, section, or file
+is a scope root, not a final node boundary.
+
+Candidate `WF-017` signals:
+- phrases such as "single-node architecture", "single hub node", "no separate
+  data child nodes", or "all hooks inline";
+- a very large `IControllerAccess`/target-equivalent method set;
+- many `PanelDisplayStyle` or equivalent display-token methods;
+- many pending actions, pending mutations, or bridge callbacks in one node;
+- many modal/form/list/card/row/tile/helper components left local without
+  classification;
+- target hook clusters in locally implemented content combined with effect
+  workflows, mutation construction, routing, alerts, store writes, or pending
+  action execution;
+- direct global store access labeled architecturally correct instead of
+  residual/connector/data-boundary access.
+
+The canonical question is: what hidden tree is inside this legacy scope?
+
+Validation confirms `WF-017` when the migration output lacks recursive
+decomposition evidence, single-node proof, reusable-pattern analysis,
+PanelDisplayStyle justification, hook bridge residual classification, or helper
+component classification.
+
 ### Group B — Visibility and style manipulation
 
 - `el.style.display = 'none' / 'block'` — conditional hiding based on mode (not model data)

@@ -559,12 +559,29 @@ The verification loop must check not only behavior but also the architectural co
   locally implemented content.
 - whether TOP object construction is context attachment only, with no constructor
   data injection or setter-style post-construction data/config/state pushing.
+- for migration, whether generated code preserves the approved decomposition
+  instead of collapsing hidden states, data owners, bridge boundaries, forms,
+  modals, lists, or reusable structures back into one hub node or helper
+  component wrapper.
 
 ---
 
 ## 14. Mandatory post-generation validation
 
 After generation/refactor, the AI must run `references/node-validation-rules.md`.
+
+For migration generation, the validator must inspect actual generated source
+files, not only specs and prompts. Type-check clean is not TOP-clean.
+
+The post-generation pass must read controller files, locally implemented content
+files, contracts, bridge components, helper components, modal files, adapters,
+and generated constants/helpers. It must check for content-side conditional
+logic, output derivation, lookup/mapping tables, formatting/concatenation,
+booleans used in content to compute visibility/disabled/opacity values, effect
+workflows or pending action execution in content, mutation body construction in
+content, router/navigation calls in content, alert/business decisions in
+content, controller-to-content command channels, constructor/setter injection,
+and helper components that bypass TOP classification.
 
 Code is not considered correct until the validation rules confirm that:
 - the class of violation has been identified;

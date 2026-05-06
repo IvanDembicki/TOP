@@ -31,6 +31,8 @@ details:
 - behavior_preservation_fixes
 - preserved_structure
 - remaining_issues
+- re_modeling_required
+- accepted_deviation_updates
 
 validation_signals:
 - new_violations_introduced
@@ -67,6 +69,10 @@ next_step:
   constructor data injection or setter-style post-construction data/config/
   state/presentation pushing into TOP objects instead of context attachment and
   pull-through contracts
+- Repair output must report `WF-017` when a reported wrapped-legacy or
+  giant-node failure cannot be fixed without returning to recursive modeling.
+- Repair output must report `WF-018` when accepted deviations remain without
+  target repair direction and expiry condition.
 - If a shared derived fact cannot be repaired without a new typed access/update boundary, named controller method, or modeled connector contract, repair output must mark the repair blocked instead of proposing a local workaround
 - Repair output must not treat documentation of a core violation as repair. A
   core violation may be listed in `accepted_deviations` only when TOP canon

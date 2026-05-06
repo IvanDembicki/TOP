@@ -303,3 +303,48 @@ When designing:
 2. record invariants in the spec;
 3. record runtime semantics in prompts/references;
 4. separately describe the source of truth and ownership if the pattern is mutable.
+
+---
+
+## 11. Runtime Branch Binding Pattern
+
+### Definition
+
+A runtime-created branch is attached to an entity context. It is not filled with
+scattered data packets.
+
+### Preferred binding
+
+Entity Context Binding: the runtime branch root receives a narrow entity context
+reference such as a data-node controller, entity access interface, or model
+controller.
+
+### Allowed bindings
+
+Identity Key Binding: the branch root receives a stable identity key only when
+the branch itself resolves or loads its entity context.
+
+Typed DTO Binding: the branch root receives a typed immutable DTO only when no
+entity context exists yet. The DTO must be converted into owned data
+content/model as early as possible.
+
+### Forbidden
+
+- scattered constructor data;
+- props/config/callback bags;
+- mutable raw model objects;
+- presentation values;
+- direct services/stores as arbitrary arguments.
+
+### Invariants
+
+- the branch has one binding source;
+- the binding deterministically identifies or creates entity context;
+- semantic data is pulled through contracts after attachment;
+- binding does not become a general constructor injection channel.
+
+### Common confusion
+
+- passing many fields because the runtime item is dynamic;
+- treating a list item DTO as the permanent owner of state;
+- using framework props/config as the TOP branch API.

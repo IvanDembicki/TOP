@@ -97,6 +97,9 @@ Violations of the execution process. Affect pipeline validity, not TOP Core itse
 | WF-014 | Missing migration plan | A migration-mode task creates or changes TOP artifacts without a current `top/migration/MIGRATION_PLAN.md` that records scope, phases, responsible agents, artifacts, gates, and rollback/stop points. |
 | WF-015 | Missing or stale migration log | A migration-mode agent changes artifacts or hands off to another stage without appending an entry to `top/migration/MIGRATION_LOG.md`, or the log is rewritten instead of append-only. |
 | WF-016 | Missing or stale migration workflow tree | A migration-mode task creates or changes TOP artifacts without a current `top/migration/MIGRATION_WORKFLOW.json`, or the workflow JSON disagrees with the migration plan/status/log about scope, phase order, current phase, gates, or responsible agents. |
+| WF-017 | Missing migration decomposition review | Migration modeling treats a user-named scope as a final node boundary, keeps a single-node/giant-node wrapper without recursive decomposition proof, omits candidate classification for hidden state/data/workflow/modal/form/list/helper structures, or uses `PanelDisplayStyle`/display-token clusters as a substitute for node/state decomposition. |
+| WF-018 | Undisciplined accepted deviation | An accepted migration deviation lacks exact affected locations, temporary acceptance rationale, non-blocking rationale for the phase, target repair direction, expiry condition, owner phase, or canonical-target permissibility. |
+| WF-019 | Migration workspace scope violation | A migration-mode agent modifies files outside the active migration workspace without an explicitly allowed thin adapter/integration reason recorded in the migration log. The active migration workspace is `top/specs/<branch-id>.json`, `top/prompts/<branch-id>/**`, `top/migration/**`, `top/assets/**`, `top/semantic/**`, and `top_src/<branch-id>/**`. |
 
 ---
 

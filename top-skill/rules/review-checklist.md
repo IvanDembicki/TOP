@@ -141,7 +141,22 @@ A result is not valid until all checklist items pass.
   `top_src/<branch-id>/` or the approved equivalent, with `.gitkeep` if empty
 - analysis/modeling outputs use honest phase status and do not call themselves
   complete/validated before implementation and validation exist
-- report `CONV-007`, `CONV-008`, `WF-013`, `WF-014`, `WF-015`, or `WF-016` when these
+- migration scope root is not treated as final node boundary; recursive
+  decomposition evidence exists for hidden states, data owners, async
+  workflows, forms, modals, lists/list items, bridge boundaries, black boxes,
+  and reusable structures
+- giant-node review exists for large controller access surfaces, many
+  display-style methods, many bridge hooks, many pending actions/mutations, or
+  many unrelated modal/form/list/workflow responsibilities
+- `PanelDisplayStyle` or equivalent display-token methods do not hide state
+  alternatives, workflows, modal/form/list ownership, async process states,
+  permission-gated capabilities, or data boundaries
+- accepted migration deviations include exact locations, temporary rationale,
+  target repair direction, expiry condition, and owner phase
+- generated migration source files have been architecturally validated after
+  generation; type-check clean is not treated as TOP-clean
+- report `CONV-007`, `CONV-008`, `WF-013`, `WF-014`, `WF-015`, `WF-016`,
+  `WF-017`, `WF-018`, or `WF-019` when these
   checks fail
 
 ---
@@ -190,7 +205,9 @@ A result is not valid until all checklist items pass.
 
 - not just working, but canonical
 - no remaining critical risks
-- ready for use justified
+- readiness status is precise and justified: `ready_for_generation`,
+  `ready_for_integration`, `ready_for_manual_QA`, or
+  `ready_for_production_candidate`; do not use unqualified ready-for-use wording
 
 ---
 

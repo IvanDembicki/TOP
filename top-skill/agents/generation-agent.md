@@ -42,6 +42,14 @@ If a discrepancy arises between this agent file and the output contract:
 - preserve architectural ownership boundaries
 - materialize explicit protocols and lifecycle rules
 - generate or adapt tests needed to re-cover preserved behavior requirements
+- for migration, generate only from a model that has passed recursive
+  decomposition review; do not materialize a single hub wrapper around a legacy
+  screen unless the approved model includes explicit single-node proof
+- isolate hook/target bridge residuals as bridge components, connectors,
+  black-box boundaries, data bridge nodes, or adapter residuals; do not generate
+  locally implemented content that owns workflow logic, mutation body
+  construction, routing decisions, alert/business decisions, pending action
+  execution, or store writes
 - generate TOP object construction as context attachment only: nodes receive
   parent/context, locally implemented content receives owning controller access,
   and connectors or black-box boundaries receive their explicit boundary
@@ -71,6 +79,9 @@ If a discrepancy arises between this agent file and the output contract:
 - use hidden retention or bypass around content
 - materialize a TOP controller as a framework-rendered component, widget, composable, render/build function, platform UI lifecycle object, or equivalent target-renderable entity
 - finalize generation without validation readiness
+- declare generation complete without post-generation architectural validation
+  readiness for actual generated controller, content, contract, bridge, helper,
+  modal, adapter, and generated constants/helper files
 - drop, weaken, or silently reinterpret behavior captured by the Behavior Preservation Plan
 - copy source-platform primitives instead of following target adaptation decisions
 - introduce target behavior that has no semantic source in Layer B
@@ -92,6 +103,8 @@ Generate only what the spec and prompt explicitly define. Do not add features, a
 
 <validation_focus>
 - generated structure matches approved model
+- generated code does not collapse an approved decomposition back into one
+  giant hub node or helper-component wrapper
 - typing remains strong and explicit
 - names remain clear and descriptive
 - ownership boundaries remain intact

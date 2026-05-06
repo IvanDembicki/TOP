@@ -307,3 +307,60 @@ Classification: `skill_convention_violation`
   must be modeled as explicit child state nodes.
 - External, native, third-party, or self-contained logic may be wrapped only as
   black-box component content with a narrow explicit interface.
+
+## Migration decomposition check
+
+Validation must verify that migration modeling discovers hidden architecture
+instead of wrapping legacy code.
+
+Required checks:
+- the user-named scope is treated as a migration scope root, not as proof of a
+  single TOP node;
+- hidden objects, state holders, state alternatives, data ownership boundaries,
+  async workflows, forms, modals, lists/list items, runtime entities,
+  connectors, bridge boundaries, black-box components, and repeated structures
+  were inventoried and classified;
+- a single-node migration has explicit proof that no internal candidate deserves
+  a node, state node, data node, connector, black-box component, or library node;
+- a giant node has decomposition review when its controller access surface,
+  display-style method count, bridge hook count, pending action/mutation count,
+  or modal/form/list/workflow responsibility count is large;
+- `PanelDisplayStyle` or equivalent display-token methods are used only for
+  stable structural sections and not as a replacement for state/node
+  decomposition;
+- repeated modals, forms, cards, rows, tiles, list items, banners, selectors,
+  status panels, action panels, or workflow fragments were evaluated as
+  reusable library node or black-box candidates;
+- hook/target bridge residuals inside locally implemented content are isolated
+  and do not make content own orchestration;
+- direct global store access is either modeled as a connector/data boundary or
+  recorded as a migration residual with target repair and expiry.
+
+Classification:
+- missing or insufficient decomposition review is `WF-017`;
+- accepted deviations without target repair and expiry are `WF-018`;
+- workspace writes outside the active branch without explicit adapter/integration
+  allowance are `WF-019`.
+
+## Post-generation source validation check
+
+After generation, validation must inspect actual generated source files. Type
+checking is not TOP validation.
+
+The validator must read and check:
+- controller files;
+- locally implemented content files;
+- contracts;
+- bridge components;
+- helper components;
+- modal files;
+- adapters;
+- generated constants/helpers.
+
+Validation must detect content-side conditional logic, output derivation,
+lookup/mapping tables, formatting/concatenation, booleans used in content to
+compute disabled/opacity/visibility, `useEffect` or equivalent workflows in
+content, mutation body construction in content, navigation/routing in content,
+alert/business decisions in content, controller-to-content command channels,
+constructor or setter injection, and helper components that are unclassified
+black boxes or local legacy wrappers.

@@ -7,6 +7,29 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.20] — 2026-05-06
+
+- Added migration canon that migration means discovering and externalizing
+  hidden structure, not wrapping legacy screens/files/components in TOP-shaped
+  controller/content facades.
+- Added scope-vs-node-boundary, recursive decomposition, giant-node review,
+  `PanelDisplayStyle` discipline, reusable structure/library extraction,
+  modal/form/list candidate analysis, hook bridge residual isolation, and
+  global-store residual rules.
+- Added Runtime Branch Binding Pattern and active migration workspace ownership
+  rules, including stricter forensic `MIGRATION_LOG.md` entry requirements.
+- Added `WF-017`, `WF-018`, and `WF-019` for missing decomposition review,
+  undisciplined accepted deviations, and migration workspace scope violations.
+- Replaced ambiguous final-audit readiness with explicit statuses:
+  `ready_for_generation`, `ready_for_integration`, `ready_for_manual_QA`, and
+  `ready_for_production_candidate`.
+- Strengthened post-generation validation requirements so type-check clean does
+  not replace architectural review of generated source files, bridge files,
+  helpers, modals, contracts, and adapters.
+- Tightened migration and modeling-refactor hydration so generation, spec-sync,
+  repair, branch-scoped migration control artifacts, and generation prompts are
+  loaded with the agents that depend on them.
+
 ## [1.1.19] — 2026-05-05
 
 - Tightened locally implemented content static materialization so content must

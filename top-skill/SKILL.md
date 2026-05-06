@@ -5,7 +5,7 @@ description: Skill for designing, generating, and validating systems built with 
 
 # TOP Skill
 
-**Version:** 1.1.19
+**Version:** 1.1.20
 **Last updated:** 2026-05-05 04:44 -07:00
 **Invocation:** `/top`
 
@@ -305,6 +305,11 @@ Strong signals for activating the skill:
 32. Validation and review must be fresh. The validator/reviewer must load the current skill files required by the active task and must re-read the target artifacts being judged in the current validation pass. Prior session reads, previous generation context, memory of older skill versions, or earlier inspections of target files are not valid evidence. If a report lists a file as checked, it must have been read for that pass. Anything else is a workflow gap and the validation is incomplete.
 33. Legacy tests are requirements evidence during migration. Tests covering the migrated scope must be treated as executable traces of expected behavior, not merely as verification files. Implementation-specific assertions may be discarded only after their behavioral meaning is extracted, normalized, mapped to TOP nodes/contracts, reflected in spec/prompts, and re-covered by preserved, adapted, or newly generated TOP-compatible tests. Migration is incomplete until behavior preserved by legacy tests is represented in TOP prompts and covered by TOP-compatible tests.
 34. Accepted deviations are still deviations. A documented migration waypoint may explain why a core violation remains temporarily, but it does not remove the violation, does not change `core_violations`, and must not produce Validation `PASS`, Final Audit `PASS`, or `ready_for_use`. Reporting pass/readiness while confirmed core violations or accepted core deviations remain is `WF-011`.
+35. Migration means discovering and externalizing hidden structure. It does not mean wrapping legacy code. A user-named scope such as a screen, route, tab, section, component, or file is an analysis root, not a final TOP node boundary. Migration modeling must recursively decompose hidden responsibilities, states, data ownership, async workflows, forms, modals, lists/list items, bridge boundaries, and repeated structures until each node has a small role-focused controller access surface and can be regenerated in isolation.
+36. Giant nodes are migration smells. A large `IControllerAccess`, many display-style methods, many bridge hooks, many pending actions/mutations, many modal/form/list responsibilities, or a role that cannot be explained in one short sentence triggers decomposition review. A single-node migration may pass only with explicit proof that no internal candidate should be a node, state node, data node, connector, black-box component, or library node.
+37. `PanelDisplayStyle` and equivalent display tokens are not substitutes for node decomposition. They are allowed only for stable structural sections whose existence is constant and whose visibility/display is an already-resolved presentation value. They must not hide state alternatives, lifecycle-bearing branches, async process states, forms, modal states, permission-gated capabilities, workflows, or data ownership boundaries.
+38. Runtime Branch Binding Pattern: runtime-created branches may be bound to a narrow entity context, a stable identity key that resolves an entity context, or a typed immutable DTO that is converted into owned data as early as possible. They must not receive scattered constructor data, props/config/callback bags, mutable model objects, presentation values, or direct services/stores.
+39. Migration readiness terms must be precise: `ready_for_generation`, `ready_for_integration`, `ready_for_manual_QA`, and `ready_for_production_candidate` are separate statuses. Do not use unqualified `ready_for_use` for a model that is only ready for generation or for generated code that has not passed architectural validation.
 
 Normative chain for the generative layer:
 

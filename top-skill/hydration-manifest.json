@@ -1,5 +1,5 @@
 {
-  "version": "1.1.19",
+  "version": "1.1.20",
   "description": "Hydration manifest for TOP Skill. On every invocation the agent reads this manifest first, then reads the listed files directly from the skill filesystem directory using the base directory provided by the host environment.",
   "always": [
     "skill.json",
@@ -63,18 +63,26 @@
       "canon/architectural-invariants.md",
       "canon/controller-content-rules.md",
       "canon/forbidden-confusions.md",
+      "canon/migration.md",
       "contracts/top-folder-contract.md",
       "rules/spec-sync-rules.md",
       "top/schemas/migration-workflow.schema.json",
+      "references/migration-heuristics.md",
+      "references/code-generation.md",
       "references/event-model.md",
       "references/node-validation-rules.md",
+      "agents/canon-precheck-agent.md",
       "agents/top-modeling-agent.md",
       "agents/validation-agent.md",
       "agents/repair-agent.md",
       "contracts/agent-output-contracts/intake-output.md",
+      "contracts/agent-output-contracts/migration-infrastructure-output.md",
+      "contracts/agent-output-contracts/migration-plan-output.md",
       "contracts/agent-output-contracts/behavior-preservation-output.md",
+      "contracts/agent-output-contracts/top-modeling-output.md",
       "contracts/agent-output-contracts/canon-precheck-output.md",
-      "contracts/agent-output-contracts/validation-output.md"
+      "contracts/agent-output-contracts/validation-output.md",
+      "contracts/agent-output-contracts/repair-output.md"
     ],
     "generation-pipeline": [
       "rules/task-modes.md",
@@ -119,7 +127,10 @@
       "contracts/agent-output-contracts/migration-plan-output.md",
       "contracts/agent-output-contracts/behavior-preservation-output.md",
       "contracts/agent-output-contracts/top-modeling-output.md",
+      "contracts/agent-output-contracts/generation-output.md",
+      "contracts/agent-output-contracts/spec-sync-output.md",
       "contracts/agent-output-contracts/validation-output.md",
+      "contracts/agent-output-contracts/repair-output.md",
       "contracts/agent-output-contracts/final-audit-output.md",
       "rules/task-modes.md",
       "canon/migration.md",
@@ -139,6 +150,7 @@
       "canon/architectural-invariants.md",
       "canon/validation-rules.md",
       "rules/violation-classification.md",
+      "prompts/generate-top-node.md",
       "prompts/refactor-to-top.md",
       "prompts/verify-node-implementation-prompt.md"
     ],

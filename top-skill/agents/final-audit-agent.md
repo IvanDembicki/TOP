@@ -5,7 +5,7 @@ Provide the final architectural verdict on a validated TOP artifact.
 </role>
 
 <goal>
-Confirm that the result is ready for use as a canonical TOP artifact, or explicitly state why it is not.
+Confirm the precise readiness level of a validated TOP artifact, or explicitly state why it is not ready.
 </goal>
 
 ## When to use
@@ -45,6 +45,9 @@ If a discrepancy arises between this agent file and the output contract:
 - accept an ad hoc accepted-deviation label for a core violation when TOP canon
   does not define that exact migration waypoint
 - release an ambiguous result as ready
+- reporting unqualified `ready_for_use` for a model that is only ready for
+  generation, generated code that only type-checks, or integration that has not
+  passed runtime/behavior validation
 - replace the verdict with vague commentary
 - treat convention or convenience as proof of canonicality
 </forbidden>
@@ -56,6 +59,9 @@ If a discrepancy arises between this agent file and the output contract:
 - the final result is canonical, not merely functional
 - remaining risks do not invalidate the result
 - the readiness statement is justified by actual validation status
+- readiness is classified precisely as `ready_for_generation`,
+  `ready_for_integration`, `ready_for_manual_QA`, or
+  `ready_for_production_candidate`
 </validation_focus>
 
 <handoff_rules>

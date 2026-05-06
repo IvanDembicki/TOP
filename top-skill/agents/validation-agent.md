@@ -55,6 +55,20 @@ If a discrepancy arises between this agent file and the output contract:
 - accept a migrated scope when test-covered behavior was not mapped to TOP prompts and TOP-compatible tests
 - mark a documented migration waypoint or accepted core deviation as validation `pass`
 - route to Final Audit while confirmed core violations or accepted core deviations remain
+- accept migration modeling that wraps a legacy screen/component/file as one
+  hub node without recursive decomposition evidence
+- accept a giant node when large controller access, many display-style methods,
+  many bridge hooks, many pending actions/mutations, or many unrelated
+  modal/form/list/workflow responsibilities lack decomposition review
+- accept `PanelDisplayStyle` or equivalent display-token clusters as resolution
+  when they hide state alternatives, workflows, modal/form/list ownership,
+  permission-gated capabilities, async process states, or data boundaries
+- call direct global store access canonical TOP access unless it is modeled as a
+  connector/data boundary; otherwise it is only a documented migration residual
+- accept an accepted deviation that lacks exact locations, target repair,
+  expiry condition, and owner phase
+- accept generated code without post-generation architectural validation of the
+  actual generated source files
 - accept a repair that replaces derivation duplication with Node/Controller runtime input tunneling
 - accept a repair that replaces `CORE-029` with independent duplicate derivation of the same shared fact
 - accept locally implemented content that contains conditional selection logic
@@ -79,6 +93,13 @@ If a discrepancy arises between this agent file and the output contract:
 - locally implemented content conditional selection validation (`CORE-015`)
 - locally implemented content output-derivation validation (`CORE-015`)
 - controller-to-content presentation push validation (`CORE-015`)
+- post-generation source validation of controllers, content, contracts, bridge
+  components, helpers, modal files, adapters, and generated constants/helpers
+- migration decomposition validation: scope-vs-node-boundary, recursive
+  candidate classification, single-node proof, giant-node review,
+  PanelDisplayStyle discipline, reusable-pattern extraction, modal/form/list
+  candidate analysis, hook bridge isolation, and global-store residual
+  discipline
 - controller validation
 - lifecycle validation
 - method-semantics validation
