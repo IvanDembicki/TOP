@@ -93,7 +93,8 @@ The `behavior_preservation_plan` must contain:
   `CORE-028`.
 - For migration tasks, `migration_log_entry` must identify the appended
   `top/migration/MIGRATION_LOG.md` entry for this pass and the
-  `top/migration/MIGRATION_WORKFLOW.json` behavior-preservation phase status.
+  `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` behavior-preservation
+  phase status.
 - Free text outside the required structure is prohibited.
 
 ## Semantic validity rule

@@ -19,8 +19,8 @@ it does not require the standard pipeline to have run first.
 
 <inputs>
 - existing code or description of the existing system (or a fragment)
-- `top/migration/MIGRATION_WORKFLOW.json`
-- `top/migration/MIGRATION_PLAN.md`
+- `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`
+- `top/migration/<branch-id>/MIGRATION_PLAN.md`
 - `top/migration/MIGRATION_LOG.md`
 - legacy tests, snapshots, fixtures, QA scripts, executable examples, or documented test cases covering the scope
 - technology context
@@ -81,7 +81,7 @@ No dedicated output contract in `contracts/agent-output-contracts/`. Output stru
    artifacts changed, validation signals, and next stage.
 
 8. **Migration workflow update** — the phase/status update written to
-   `top/migration/MIGRATION_WORKFLOW.json`, including the current phase,
+   `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`, including the current phase,
    validation gates, and next phase ids.
 
 9. **Accepted deviation register** — every accepted migration deviation with
@@ -204,18 +204,20 @@ materialization plan was created.
 
 ### Migration workflow, plan, and log use
 
-Before this agent starts scope analysis, `top/migration/MIGRATION_WORKFLOW.json`
-and `top/migration/MIGRATION_PLAN.md` must exist. Both must name the current
-scope or explain how the current scope is being selected. If the user specified
-the scope, the plan and workflow record that instruction. If the user did not
-specify a scope, Migration Planning Agent records the selection rationale before
-this agent proceeds.
+Before this agent starts scope analysis,
+`top/migration/<branch-id>/MIGRATION_WORKFLOW.json` and
+`top/migration/<branch-id>/MIGRATION_PLAN.md` must exist. Both must name the
+current scope or explain how the current scope is being selected. If the user
+specified the scope, the branch plan and workflow record that instruction. If
+the user did not specify a scope, Migration Planning Agent records the selection
+rationale before this agent proceeds.
 
-This agent must update `top/migration/MIGRATION_WORKFLOW.json` when phase status
-or next-stage routing changes and append to `top/migration/MIGRATION_LOG.md`
-before handoff. If it creates or modifies persistent artifacts, it appends a log
-entry after those changes as well. The log entry is not a summary for the user;
-it is a forensic record for later diagnosis.
+This agent must update `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` when
+phase status or next-stage routing changes and append to shared
+`top/migration/MIGRATION_LOG.md` before handoff. If it creates or modifies
+persistent artifacts, it appends a log entry after those changes as well. The log
+entry is not a summary for the user; it is a forensic record for later
+diagnosis.
 
 ---
 
@@ -242,7 +244,9 @@ output.
 
 For each migrated branch, the agent must plan the final ownership direction:
 - the parent Node/Controller constructs direct child nodes at their tree positions;
-- a Node constructor receives only its parent reference;
+- a static Node constructor receives only parent/context;
+- a runtime-created branch root may receive parent/context plus one canonical
+  Runtime Branch Binding input;
 - Content receives exactly one semantic value: the owning controller instance
   typed only through `IControllerAccess`/target-equivalent;
 - any public runtime input object/value used to materialize Content is exactly the narrow content-to-controller owner access contract and nothing else;
@@ -352,8 +356,8 @@ traces of expected behavior, not only as files that should pass.
 - violating canonical TOP rules in the proposed structure
 - producing a plan that cannot be executed one step at a time
 - proceeding without confirmed version control baseline
-- proceeding without `top/migration/MIGRATION_WORKFLOW.json`
-- proceeding without `top/migration/MIGRATION_PLAN.md`
+- proceeding without `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`
+- proceeding without `top/migration/<branch-id>/MIGRATION_PLAN.md`
 - handing off without appending to `top/migration/MIGRATION_LOG.md`
 - declaring a fragment isolated without completing the dependency audit
 - continuing past a migration scope with tests without a Behavior Preservation Plan

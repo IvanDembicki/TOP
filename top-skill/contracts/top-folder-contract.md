@@ -44,8 +44,10 @@ top/
   prompts/
     <branch-or-tree>/**/*.md
   migration/
-    MIGRATION_WORKFLOW.json
-    MIGRATION_PLAN.md
+    <branch-id>/
+      MIGRATION_WORKFLOW.json
+      MIGRATION_PLAN.md
+      reports/
     MIGRATION_STATUS.md
     MIGRATION_LOG.md
   assets/
@@ -94,14 +96,15 @@ Every migration-mode task that creates or changes project-local TOP artifacts
 must maintain these files:
 
 ```text
-top/migration/MIGRATION_PLAN.md
+top/migration/<branch-id>/MIGRATION_PLAN.md
+top/migration/<branch-id>/MIGRATION_WORKFLOW.json
+top/migration/<branch-id>/reports/**
 top/migration/MIGRATION_STATUS.md
 top/migration/MIGRATION_LOG.md
-top/migration/MIGRATION_WORKFLOW.json
 ```
 
-`MIGRATION_WORKFLOW.json` is the machine-readable migration process tree. It
-must conform to the current `top-skill` schema
+`top/migration/<branch-id>/MIGRATION_WORKFLOW.json` is the machine-readable
+migration process tree for one branch. It must conform to the current `top-skill` schema
 `top/schemas/migration-workflow.schema.json` and record:
 
 - migration id, selected scope, branch id, and current phase;
@@ -110,8 +113,8 @@ must conform to the current `top-skill` schema
 - handoff rules;
 - active, invalidated, or superseded migration decisions when they affect later work.
 
-`MIGRATION_PLAN.md` is the explicit plan for the migration effort. It must
-record:
+`top/migration/<branch-id>/MIGRATION_PLAN.md` is the explicit plan for one
+branch migration effort. It must record:
 
 - user-requested scope, if provided;
 - selected migration scope and branch id;
@@ -122,16 +125,17 @@ record:
 - rollback and stop points;
 - current phase status.
 
-`MIGRATION_WORKFLOW.json` and `MIGRATION_PLAN.md` must describe the same phase
-order and current phase. If they disagree, validation treats the migration
-control plane as stale.
+The branch workflow and branch plan must describe the same phase order and
+current phase. If they disagree, validation treats the migration control plane
+as stale.
 
-`MIGRATION_STATUS.md` records the current state of each branch and validation
-result. It is status, not a plan and not a log.
+`top/migration/MIGRATION_STATUS.md` records the current state of each branch and
+validation result. It is shared status, not a plan and not a log. Updates must
+preserve previous branch history.
 
-`MIGRATION_LOG.md` is append-only. Each agent operating in migration mode must
-append an entry before handoff, and after any persistent artifact change. Each
-entry must include:
+`top/migration/MIGRATION_LOG.md` is shared, multi-branch, and append-only. Each
+agent operating in migration mode must append an entry before handoff, and after
+any persistent artifact change. Each entry must include:
 
 - timestamp and `timestamp_source` (`real` or `placeholder`);
 - agent name;
@@ -160,22 +164,34 @@ The active migration workspace is agent-owned. The legacy application remains
 user-owned.
 
 Agents may create, modify, replace, and delete files required by the active
-migration workflow inside:
+migration workflow inside branch-owned artifacts:
 
 ```text
 top/specs/<branch-id>.json
 top/prompts/<branch-id>/**
-top/migration/**
+top/migration/<branch-id>/MIGRATION_PLAN.md
+top/migration/<branch-id>/MIGRATION_WORKFLOW.json
+top/migration/<branch-id>/reports/**
+top/migration/<branch-id>/**
 top/assets/**
 top/semantic/**
 top_src/<branch-id>/**
 ```
 
+Shared artifacts are `top/migration/MIGRATION_LOG.md` and
+`top/migration/MIGRATION_STATUS.md`. The log is append-only and multi-branch.
+Shared status updates must preserve previous branch history. A new branch must
+not overwrite another branch's plan, workflow, reports, prompts, spec, or
+generated source. If a legacy project still uses flat
+`top/migration/MIGRATION_PLAN.md` or `top/migration/MIGRATION_WORKFLOW.json`,
+the agent must preserve prior branch information and explicitly log the
+compatibility update.
+
 This authority is scoped to the active branch and current
-`MIGRATION_WORKFLOW.json`/`MIGRATION_PLAN.md`. It does not include unrelated
-legacy source files, unrelated `top_src/` branches, package manifests or lock
-files, native iOS/Android files, environment/secrets files, git push, or remote
-operations.
+branch workflow/plan. It does not include unrelated legacy source files,
+unrelated `top_src/` branches, another branch's `top/migration/<other-branch>/`
+artifacts, package manifests or lock files, native iOS/Android files,
+environment/secrets files, git push, or remote operations.
 
 Legacy app files may be modified only for explicitly required thin adapter or
 integration wiring. Such writes must be logged and validated as in-scope.
@@ -319,8 +335,9 @@ their roles explicitly.
 - Every prompt file referenced in JSON must exist on disk
 - Every new migration branch spec must live under `top/specs/` unless an established root index records a different project convention
 - Every migration-mode task that creates or changes TOP artifacts must maintain
-  `top/migration/MIGRATION_WORKFLOW.json`, `MIGRATION_PLAN.md`,
-  `MIGRATION_STATUS.md`, and `MIGRATION_LOG.md`
+  `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`,
+  `top/migration/<branch-id>/MIGRATION_PLAN.md`,
+  `top/migration/MIGRATION_STATUS.md`, and `top/migration/MIGRATION_LOG.md`
 - Every `props.source` file referenced in JSON must exist on disk and describe the same node type
 - Every `props.assetPath` file referenced in JSON must exist on disk
 - Every file under `top/assets/` must have a corresponding asset node under the `Assets` branch

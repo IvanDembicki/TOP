@@ -61,7 +61,8 @@
         "Behavior Preservation Agent",
         "Generation Agent",
         "Spec Sync Agent",
-        "Repair Agent"
+        "Repair Agent",
+        "Final Audit Agent"
       ],
       "allowed_next_modes": [
         "validation",

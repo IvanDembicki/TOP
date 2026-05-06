@@ -258,11 +258,15 @@ def check_top_governance_consistency(root):
     required_migration_reads = [
         "agents/migration-infrastructure-agent.md",
         "agents/migration-planning-agent.md",
+        "agents/canon-precheck-agent.md",
+        "agents/final-audit-agent.md",
         "contracts/agent-output-contracts/migration-infrastructure-output.md",
         "contracts/agent-output-contracts/migration-plan-output.md",
+        "contracts/agent-output-contracts/canon-precheck-output.md",
         "contracts/agent-output-contracts/generation-output.md",
         "contracts/agent-output-contracts/spec-sync-output.md",
         "contracts/agent-output-contracts/repair-output.md",
+        "contracts/agent-output-contracts/final-audit-output.md",
         "prompts/generate-top-node.md",
         "top/schemas/migration-workflow.schema.json",
     ]
@@ -285,12 +289,52 @@ def check_top_governance_consistency(root):
             errors.append(f"QUICKSTART_MIN_READS.md modeling-refactor minimum missing: {item}")
 
     task_hydration = hydration.get("task", {})
+    agent_file_by_name = {
+        "TOP Modeling Agent": "agents/top-modeling-agent.md",
+        "Canon Precheck Agent": "agents/canon-precheck-agent.md",
+        "Semantic Interpreter Agent": "agents/semantic-interpreter-agent.md",
+        "Target Adaptation Agent": "agents/target-adaptation-agent.md",
+        "Generation Agent": "agents/generation-agent.md",
+        "Spec Sync Agent": "agents/spec-sync-agent.md",
+        "Validation Agent": "agents/validation-agent.md",
+        "Migration Infrastructure Agent": "agents/migration-infrastructure-agent.md",
+        "Migration Planning Agent": "agents/migration-planning-agent.md",
+        "Migration Agent": "agents/migration-agent.md",
+        "Behavior Preservation Agent": "agents/behavior-preservation-agent.md",
+        "Repair Agent": "agents/repair-agent.md",
+        "Final Audit Agent": "agents/final-audit-agent.md",
+        "Spec Change Verification Agent": "agents/spec-change-verification-agent.md",
+    }
+    for mode_item in mode_manifest.get("modes", []):
+        mode_name = mode_item.get("mode")
+        if mode_name not in task_hydration:
+            continue
+        hydrated_items = set(task_hydration.get(mode_name, []))
+        for agent_name in mode_item.get("required_agents", []) + mode_item.get("conditional_agents", []):
+            agent_file = agent_file_by_name.get(agent_name)
+            if agent_file and agent_file not in hydrated_items:
+                errors.append(f"hydration-manifest.json task.{mode_name} missing mode agent: {agent_file}")
+
     hydration_required = {
         "migration": [
+            "agents/canon-precheck-agent.md",
+            "contracts/agent-output-contracts/canon-precheck-output.md",
+            "agents/final-audit-agent.md",
+            "contracts/agent-output-contracts/final-audit-output.md",
             "contracts/agent-output-contracts/generation-output.md",
             "contracts/agent-output-contracts/spec-sync-output.md",
             "contracts/agent-output-contracts/repair-output.md",
             "prompts/generate-top-node.md",
+        ],
+        "generation-pipeline": [
+            "agents/top-modeling-agent.md",
+            "contracts/agent-output-contracts/top-modeling-output.md",
+            "agents/canon-precheck-agent.md",
+            "contracts/agent-output-contracts/canon-precheck-output.md",
+            "contracts/agent-output-contracts/generation-output.md",
+            "contracts/agent-output-contracts/repair-output.md",
+            "prompts/generate-top-node.md",
+            "prompts/verify-node-implementation-prompt.md",
         ],
         "modeling-refactor": [
             "canon/migration.md",
@@ -307,6 +351,17 @@ def check_top_governance_consistency(root):
         for item in required_items:
             if item not in hydrated_items:
                 errors.append(f"hydration-manifest.json task.{task_name} missing: {item}")
+
+    migration_hydration = set(task_hydration.get("migration", []))
+    for item in [
+        "agents/canon-precheck-agent.md",
+        "contracts/agent-output-contracts/canon-precheck-output.md",
+        "agents/final-audit-agent.md",
+        "contracts/agent-output-contracts/final-audit-output.md",
+        "contracts/agent-output-contracts/generation-output.md",
+    ]:
+        if item not in migration_hydration:
+            errors.append(f"migration hydration missing required pipeline file: {item}")
 
     behavior_contract = read_text(root / "contracts/agent-output-contracts/behavior-preservation-output.md")
     for status in [
@@ -388,6 +443,8 @@ def check_required_phrases(root):
         ("contracts/top-folder-contract.md", "MIGRATION_PLAN.md"),
         ("contracts/top-folder-contract.md", "MIGRATION_LOG.md"),
         ("contracts/top-folder-contract.md", "The active migration workspace is agent-owned"),
+        ("contracts/top-folder-contract.md", "top/migration/<branch-id>/MIGRATION_WORKFLOW.json"),
+        ("contracts/top-folder-contract.md", "Shared artifacts are `top/migration/MIGRATION_LOG.md`"),
         ("canon/migration.md", "Migration artifact layout must be canonical"),
         ("canon/migration.md", "Migration workflow tree, plan, and action log are mandatory"),
         ("canon/migration.md", "Migration means discovering and externalizing hidden structure"),
@@ -396,11 +453,14 @@ def check_required_phrases(root):
         ("canon/migration.md", "PanelDisplayStyle is not decomposition"),
         ("canon/migration.md", "Runtime Branch Binding Pattern"),
         ("canon/migration.md", "Active migration workspace ownership"),
+        ("canon/migration.md", "Shared migration artifacts are not branch-owned"),
         ("agents/migration-infrastructure-agent.md", "MIGRATION_PLAN.md"),
         ("agents/migration-infrastructure-agent.md", "MIGRATION_WORKFLOW.json"),
         ("agents/migration-planning-agent.md", "MIGRATION_PLAN.md"),
         ("agents/migration-planning-agent.md", "MIGRATION_WORKFLOW.json"),
         ("agents/migration-agent.md", "Migration means discovering and externalizing hidden structure"),
+        ("agents/canon-precheck-agent.md", "Canon Precheck Agent"),
+        ("agents/final-audit-agent.md", "Final Audit Agent"),
         ("agents/validation-agent.md", "post-generation source validation"),
         ("rules/spec-sync-rules.md", "missing_source_root"),
         ("rules/spec-sync-rules.md", "missing_migration_control_plane"),
@@ -447,6 +507,9 @@ def check_required_phrases(root):
         ("rules/pattern-recognition.md", "Migration wrapper and giant-node signals"),
         ("references/migration-heuristics.md", "Giant controller access surface"),
         ("references/pattern-cards.md", "Runtime Branch Binding Pattern"),
+        ("SKILL.md", "Runtime-created branch roots may additionally receive one canonical binding input"),
+        ("canon/validation-rules.md", "Runtime-created branch roots may receive parent/context plus one canonical"),
+        ("hydration-manifest.json", "contracts/agent-output-contracts/canon-precheck-output.md"),
         ("contracts/agent-output-contracts/final-audit-output.md", "readiness_status"),
     ]
     errors = []
@@ -472,6 +535,80 @@ def check_known_risky_patterns(root):
             for match in re.finditer(pattern, text):
                 line = text.count("\n", 0, match.start()) + 1
                 errors.append(f"{rel(path, root)}:{line}: risky pattern ({label})")
+    return errors
+
+
+ABSOLUTE_PARENT_ONLY_RE = re.compile(
+    r"(all|every|each)?\s*(top\s+)?node\s+constructors?\s+"
+    r"(must\s+)?(receives?|receive|has|have)\s+"
+    r"(exactly\s+one\s+semantic\s+argument:\s+)?(only\s+)?(its\s+)?parent",
+    re.IGNORECASE,
+)
+
+
+def check_runtime_branch_binding_consistency(root):
+    errors = []
+    if "Runtime Branch Binding Pattern" not in read_text(root / "canon/migration.md"):
+        return errors
+
+    hard_paths = [
+        "SKILL.md",
+        "canon/core-axioms.md",
+        "canon/architectural-invariants.md",
+        "canon/controller-content-rules.md",
+        "canon/validation-rules.md",
+        "canon/migration.md",
+        "references/node-model.md",
+        "references/interaction-contracts.md",
+        "references/code-generation.md",
+        "references/node-validation-rules.md",
+        "rules/violation-catalog.md",
+        "rules/pattern-recognition.md",
+        "prompts/generate-top-node.md",
+        "prompts/generate-node-implementation-prompt.md",
+        "prompts/verify-node-implementation-prompt.md",
+        "agents/migration-agent.md",
+        "agents/generation-agent.md",
+        "agents/validation-agent.md",
+        "agents/repair-agent.md",
+    ]
+    exception_terms = re.compile(
+        r"static node|runtime-created|Runtime Branch Binding|entity context|identity key|typed immutable DTO",
+        re.IGNORECASE,
+    )
+    for file_name in hard_paths:
+        path = root / file_name
+        if not path.exists():
+            continue
+        lines = read_text(path).splitlines()
+        for index, line in enumerate(lines):
+            if not ABSOLUTE_PARENT_ONLY_RE.search(line):
+                continue
+            window = "\n".join(lines[max(0, index - 2): index + 4])
+            if not exception_terms.search(window):
+                errors.append(
+                    f"{file_name}:{index + 1}: constructor-only-parent wording "
+                    "does not mention static-node scope or Runtime Branch Binding exception"
+                )
+    return errors
+
+
+def check_branch_scoped_migration_control_consistency(root):
+    errors = []
+    required_phrases = [
+        ("canon/migration.md", "top/migration/<branch-id>/MIGRATION_WORKFLOW.json"),
+        ("canon/migration.md", "Shared migration artifacts are not branch-owned"),
+        ("contracts/top-folder-contract.md", "top/migration/<branch-id>/MIGRATION_WORKFLOW.json"),
+        ("contracts/top-folder-contract.md", "Shared artifacts are `top/migration/MIGRATION_LOG.md`"),
+        ("rules/violation-catalog.md", "top/migration/<branch-id>/**"),
+    ]
+    for file_name, phrase in required_phrases:
+        if phrase not in read_text(root / file_name):
+            errors.append(f"{file_name}: branch-scoped migration control phrase missing: {phrase}")
+
+    for file_name in ["canon/migration.md", "contracts/top-folder-contract.md", "rules/violation-catalog.md"]:
+        if "top/migration/**" in read_text(root / file_name):
+            errors.append(f"{file_name}: broad top/migration/** ownership remains")
     return errors
 
 
@@ -708,6 +845,8 @@ def run(root):
         ("markdown links", check_markdown_links),
         ("required phrases", check_required_phrases),
         ("risky patterns", check_known_risky_patterns),
+        ("runtime branch binding consistency", check_runtime_branch_binding_consistency),
+        ("branch-scoped migration control", check_branch_scoped_migration_control_consistency),
     ]
     all_errors = []
     for name, check in hard_checks:

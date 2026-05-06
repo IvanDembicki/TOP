@@ -141,7 +141,11 @@ result — is the owner.
 
 ## Rule 8a — Node/Controller runtime input is not an access contract
 
-A TOP Node/Controller receives only its parent/owner boundary as semantic input.
+A static TOP Node/Controller receives only its parent/owner boundary as semantic
+input. A runtime-created branch root may receive parent/context plus one
+canonical Runtime Branch Binding input: entity context reference, stable
+identity key, or typed immutable DTO fallback. That binding is not arbitrary
+data/config/callback injection.
 
 Target runtime entrypoints such as functions, callables, components, route
 handlers, factories, or equivalent mechanisms must not receive semantic data,
@@ -159,7 +163,9 @@ it will use.
 Objects are connected to context, not filled with data. A constructor must
 receive only the narrow contextual reference required to place the object inside
 its ownership boundary:
-- a child node receives its parent/context reference;
+- a static child node receives its parent/context reference;
+- a runtime-created branch root may receive parent/context plus one canonical
+  Runtime Branch Binding input;
 - locally implemented content receives its owning controller access contract;
 - a connector or black-box boundary receives its explicit boundary interface.
 

@@ -124,12 +124,15 @@ architecturally belongs in the tree.
 Generated construction attaches objects to context; it does not inject the state
 they will use. Objects are connected to context, not filled with data.
 
-Generated node, locally implemented content, connector, and black-box boundary
-constructors must receive only the narrow contextual reference required to place
-the object inside its ownership boundary. They must not receive data packets,
-flags, callbacks, config/options/props-like objects, stores, services, child
-views, presentation values, visibility values, style values, text values,
-runtime state, handlers, or arbitrary additional arguments.
+Generated static node, locally implemented content, connector, and black-box
+boundary constructors must receive only the narrow contextual reference required
+to place the object inside its ownership boundary. Runtime-created branch roots
+may receive parent/context plus one canonical Runtime Branch Binding input:
+entity context reference, stable identity key, or typed immutable DTO fallback.
+They must not receive data packets, flags, callbacks, config/options/props-like
+objects, stores, services, child views, presentation values, visibility values,
+style values, text values, runtime state, handlers, or arbitrary additional
+arguments.
 
 Generated code must not configure child nodes, locally implemented content,
 connectors, or black-box boundaries after construction through setter-style
@@ -137,7 +140,12 @@ data/config/state/presentation injection. If an object needs a value, generation
 must expose that request through the appropriate access contract and let the
 object pull the value after attachment.
 
-Node constructors receive exactly one semantic argument: the parent reference.
+Static node constructors receive exactly one semantic argument: the
+parent/context reference. Runtime-created branch roots may receive one canonical
+binding input in addition to parent/context; generated code must prefer entity
+context binding, allow identity key binding only when the branch resolves/loads
+the entity context, and use typed immutable DTO binding only as a fallback that
+is converted into owned data early.
 For root materialization, `null` or `RootContext` is permitted only as a root
 ownership/bootstrap marker. `RootContext` must not become a dependency injection
 container.

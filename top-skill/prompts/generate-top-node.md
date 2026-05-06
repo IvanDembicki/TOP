@@ -43,7 +43,10 @@ rules:
 - enforce Controller Role Purity
 - generate context attachment, not data injection: TOP object construction
   attaches the object to its ownership context and does not fill it with values
-- node constructor receives only the parent reference as semantic input
+- static node constructors receive only parent/context as semantic input
+- runtime-created branch roots may receive parent/context plus one canonical
+  Runtime Branch Binding input: entity context reference, stable identity key,
+  or typed immutable DTO fallback
 - locally implemented content receives only the owning controller access
   contract as semantic input
 - connectors and black-box boundaries receive only their explicit boundary

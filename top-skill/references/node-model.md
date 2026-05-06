@@ -83,7 +83,11 @@ stores, services, child views, presentation values, visibility values, style
 values, text values, runtime state, or handlers.
 
 Node construction:
-- a Node constructor receives exactly one semantic argument: its parent reference;
+- a static Node constructor receives exactly one semantic argument: its
+  parent/context reference;
+- a runtime-created branch root may receive parent/context plus one canonical
+  Runtime Branch Binding input: entity context reference, stable identity key,
+  or typed immutable DTO fallback;
 - for a root node, the parent may be `null` or `RootContext`;
 - `RootContext` is only a root ownership/bootstrap marker, not a dependency
   injection container;
@@ -92,6 +96,9 @@ Node construction:
   parent-derived facts, callbacks, services, stores, child fragments,
   config/options/props-like objects, parameter bags, runtime argument sets, or
   arbitrary props.
+- Runtime branch binding must not be scattered data, props/config/callback bags,
+  mutable raw model objects, services/stores, presentation values, or arbitrary
+  runtime state.
 - Shared derived facts are not repaired by choosing between duplicate derivation
   and runtime input tunneling. They require an explicit typed access/update
   boundary, named controller method, or modeled connector contract after the

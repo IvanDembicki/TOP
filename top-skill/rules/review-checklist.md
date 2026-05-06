@@ -130,9 +130,9 @@ A result is not valid until all checklist items pass.
 - new branch specs live under `top/specs/`, not ad hoc root-level JSON files
 - implementation prompts live under `top/prompts/`
 - migration status/tracking lives under `top/migration/`
-- `top/migration/MIGRATION_PLAN.md` exists and names the current scope, phases,
+- `top/migration/<branch-id>/MIGRATION_PLAN.md` exists and names the current scope, phases,
   responsible agents, planned artifacts, gates, and rollback/stop points
-- `top/migration/MIGRATION_WORKFLOW.json` exists, parses as JSON, and names the
+- `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` exists, parses as JSON, and names the
   same scope, branch id, phase order, current phase, responsible agents, gates,
   and handoffs as the plan/status
 - `top/migration/MIGRATION_LOG.md` exists and has append-only entries for

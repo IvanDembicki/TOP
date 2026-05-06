@@ -245,6 +245,10 @@ must not produce a clean final pass.
 Runtime-created branches may receive binding input only to attach them to an
 entity context, not to fill them with scattered data.
 
+This pattern is the only exception to the static-node constructor rule. Static
+TOP nodes receive only their parent/context reference. Runtime-created branch
+roots may receive parent/context plus one canonical binding input:
+
 Preferred binding:
 1. Entity Context Binding — the runtime branch root receives a narrow entity
    context reference: data-node controller, entity access interface, or model
@@ -269,6 +273,24 @@ Forbidden:
 
 A runtime branch must not be filled with scattered data. It must be bound to an
 entity context, or to an input that deterministically creates one.
+
+Allowed examples:
+- `new StaticChildNode(parent)`
+- `new RuntimeItemNode(parent, entityAccess)`
+- `new RuntimeItemNode(parent, stableEntityId)`
+- `new RuntimeItemNode(parent, typedImmutableDto)`
+
+Forbidden examples:
+- `new RuntimeItemNode(parent, id, name, status, callbacks, config)`
+- `new ChildNode(parent, props)`
+- `child.setData(...)`
+- `child.applyConfig(...)`
+
+Repair replaces scattered data arguments with an entity context reference when
+available, uses a scalar identity only when the runtime branch owns
+resolution/loading, uses a typed immutable DTO only as a fallback, converts DTOs
+into owned data content/model early, and exposes required values through narrow
+contracts.
 
 ## Intermediate migration states
 
@@ -378,19 +400,20 @@ Every migration-mode task that creates or changes project-local TOP artifacts
 must maintain:
 
 ```text
-top/migration/MIGRATION_WORKFLOW.json
-top/migration/MIGRATION_PLAN.md
+top/migration/<branch-id>/MIGRATION_WORKFLOW.json
+top/migration/<branch-id>/MIGRATION_PLAN.md
+top/migration/<branch-id>/reports/**
 top/migration/MIGRATION_STATUS.md
 top/migration/MIGRATION_LOG.md
 ```
 
-`MIGRATION_WORKFLOW.json` is the machine-readable process tree for the current
-migration. It records phases, responsible agents, current phase, gates, handoff
-rules, and decision trace entries. It must be updated before a new phase starts
-and after any phase changes status.
+`top/migration/<branch-id>/MIGRATION_WORKFLOW.json` is the machine-readable
+process tree for the current branch migration. It records phases, responsible
+agents, current phase, gates, handoff rules, and decision trace entries. It
+must be updated before a new phase starts and after any phase changes status.
 
-`MIGRATION_PLAN.md` is required before scope analysis, modeling, generation, or
-repair proceeds. It records:
+`top/migration/<branch-id>/MIGRATION_PLAN.md` is required before scope analysis,
+modeling, generation, or repair proceeds. It records:
 
 - the user-requested starting scope, if present;
 - the selected migration scope and branch id;
@@ -400,13 +423,13 @@ repair proceeds. It records:
 - behavior preservation routing;
 - rollback and stop points.
 
-`MIGRATION_WORKFLOW.json` and `MIGRATION_PLAN.md` must agree on selected scope,
-branch id, phase order, responsible agents, and current phase. Markdown explains;
-JSON controls routing and validation.
+The branch workflow and branch plan must agree on selected scope, branch id,
+phase order, responsible agents, and current phase. Markdown explains; JSON
+controls routing and validation.
 
-`MIGRATION_LOG.md` is append-only. Each agent operating in migration mode must
-append a log entry before handoff and after any persistent artifact change. The
-entry records:
+`top/migration/MIGRATION_LOG.md` is shared, multi-branch, and append-only. Each
+agent operating in migration mode must append a log entry before handoff and
+after any persistent artifact change. The entry records:
 - phase;
 - branch id;
 - migration id;
@@ -429,6 +452,10 @@ as forensic timestamps.
 The log is forensic evidence. Agents must not rewrite old entries to hide a bad
 decision. Corrections are appended as new entries.
 
+`top/migration/MIGRATION_STATUS.md` is shared branch status. It may be updated
+only by preserving previous branch history and adding or updating the current
+branch entry; it must not be rewritten as if only one active branch exists.
+
 If these files are missing, stale, contradictory, or not updated for a migration
 handoff, the migration is incomplete even if generated code exists.
 
@@ -438,16 +465,33 @@ The active migration workspace is agent-owned. The legacy application remains
 user-owned.
 
 During migration, agents may create, modify, replace, and delete files required
-by the active migration workflow inside:
+by the active branch migration workflow inside branch-owned artifacts:
 
 ```text
 top/specs/<branch-id>.json
 top/prompts/<branch-id>/**
-top/migration/**
+top/migration/<branch-id>/MIGRATION_PLAN.md
+top/migration/<branch-id>/MIGRATION_WORKFLOW.json
+top/migration/<branch-id>/reports/**
+top/migration/<branch-id>/**
 top/assets/**
 top/semantic/**
 top_src/<branch-id>/**
 ```
+
+Shared migration artifacts are not branch-owned:
+
+```text
+top/migration/MIGRATION_LOG.md
+top/migration/MIGRATION_STATUS.md
+```
+
+`MIGRATION_LOG.md` is append-only and multi-branch. Shared status files may be
+updated only without erasing previous branch history. A new branch must not
+overwrite another branch's plan, workflow, reports, prompts, spec, or generated
+source. If a legacy project still uses flat `top/migration/MIGRATION_PLAN.md` or
+`top/migration/MIGRATION_WORKFLOW.json`, the agent must preserve prior branch
+information and explicitly log the compatibility update.
 
 They do not need user confirmation for each file write inside the active
 migration workspace when the write follows the current migration plan/workflow
@@ -457,6 +501,7 @@ This authority does not include:
 - unrelated legacy source files;
 - unrelated `top_src/` branches;
 - unrelated migration branches;
+- another branch's `top/migration/<other-branch>/` artifacts;
 - package manifests or lock files;
 - native iOS/Android files;
 - environment or secrets files;
@@ -465,8 +510,12 @@ This authority does not include:
 Legacy app files may be modified only for explicitly required thin adapters or
 integration wiring, and those changes must be logged.
 
-Validation must verify that writes outside the active migration workspace are
-either explicitly allowed adapter/integration changes or scope violations.
+Validation must verify that active branch writes stayed inside the branch-owned
+workspace, shared artifacts preserved previous branch history, `MIGRATION_LOG.md`
+was appended rather than rewritten, unrelated `top_src/<other-branch>` and
+`top/migration/<other-branch>` files were not changed, and writes outside the
+active migration workspace are either explicitly allowed adapter/integration
+changes or scope violations.
 
 ---
 
@@ -513,7 +562,9 @@ may be retained only as explicitly declared wrapped legacy or adapter mechanics.
 They are not TOP-conformant final structure.
 
 The target migration direction is pull-based construction:
-- a Node constructor receives only its parent reference;
+- a static Node constructor receives only its parent/context reference;
+- a runtime-created branch root may receive parent/context plus one canonical
+  Runtime Branch Binding input;
 - a Content constructor receives exactly one semantic value: the owning controller
   instance typed only through `IControllerAccess`/target-equivalent;
 - Content is not typed against the concrete controller;

@@ -7,8 +7,9 @@ Create and maintain the explicit migration plan for a TOP migration effort.
 <goal>
 Turn a user request such as "migrate this project to TOP, start with Settings"
 into a concrete, staged, auditable migration plan stored in the project under
-`top/migration/MIGRATION_PLAN.md`, with the matching machine-readable phase tree
-stored under `top/migration/MIGRATION_WORKFLOW.json`.
+`top/migration/<branch-id>/MIGRATION_PLAN.md`, with the matching
+machine-readable phase tree stored under
+`top/migration/<branch-id>/MIGRATION_WORKFLOW.json`.
 </goal>
 
 ## When to use
@@ -36,8 +37,10 @@ If a discrepancy arises between this agent file and the output contract:
 - inspect project structure enough to identify migration candidates
 - honor an explicit user-selected starting scope
 - when no starting scope is provided, choose the best starting scope by isolation, risk, behavior coverage, and dependency visibility
-- create or update `top/migration/MIGRATION_PLAN.md`
-- create or update `top/migration/MIGRATION_WORKFLOW.json`
+- create or update `top/migration/<branch-id>/MIGRATION_PLAN.md`
+- create or update `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`
+- preserve shared `top/migration/MIGRATION_STATUS.md` branch history when status
+  needs to change
 - record work packages for the specialist agents
 - append a migration log entry describing the planning decision
 </allowed>
@@ -65,7 +68,7 @@ If a discrepancy arises between this agent file and the output contract:
   and single-node proof when applicable
 - plan includes Behavior Preservation Agent routing when tests or executable behavior evidence exist
 - plan includes validation and repair loop gates
-- plan references `MIGRATION_LOG.md`
+- plan references shared append-only `top/migration/MIGRATION_LOG.md`
 </validation_focus>
 
 <handoff_rules>

@@ -124,9 +124,17 @@ If a discrepancy arises between this agent file and the output contract:
 - canonical TOP artifact layout validation: new branch specs under `top/specs/`,
   prompts under `top/prompts/`, status under `top/migration/`, and declared
   implementation source root under `top_src/` or the project-approved equivalent
-- migration workflow/plan/log validation: `MIGRATION_WORKFLOW.json` is valid and
-  current, `MIGRATION_PLAN.md` agrees with it, and `MIGRATION_LOG.md` has
-  append-only entries for migration-mode handoffs and persistent artifact changes
+- migration workflow/plan/log validation:
+  `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` is valid and current,
+  `top/migration/<branch-id>/MIGRATION_PLAN.md` agrees with it, and shared
+  `top/migration/MIGRATION_LOG.md` has append-only entries for migration-mode
+  handoffs and persistent artifact changes
+- migration workspace scope validation: active branch writes stay inside
+  branch-owned `top/specs/<branch-id>.json`, `top/prompts/<branch-id>/**`,
+  `top/migration/<branch-id>/**`, `top_src/<branch-id>/**`, or permitted
+  asset/semantic paths; shared `MIGRATION_STATUS.md` preserves previous branch
+  history; unrelated branch workspaces and unrelated legacy files are untouched
+  unless an adapter/integration change is explicitly justified and logged
 </validation_focus>
 
 <handoff_rules>

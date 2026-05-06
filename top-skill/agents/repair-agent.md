@@ -18,7 +18,8 @@ Use this agent after precheck failure, validation failure, or when a known artif
 - canon
 - validation rules
 - relevant contracts
-- `top/migration/MIGRATION_WORKFLOW.json`, `MIGRATION_PLAN.md`, and
+- `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`,
+  `top/migration/<branch-id>/MIGRATION_PLAN.md`, and
   `MIGRATION_LOG.md` when task mode is migration
 </inputs>
 
@@ -59,6 +60,11 @@ If a discrepancy arises between this agent file and the output contract:
   object pull through that contract, modeling pushed state/structural
   alternatives as explicit child state nodes, or wrapping external component
   configuration behind a black-box boundary with a narrow explicit interface
+- repair runtime branch constructor injection by replacing scattered data args
+  with an entity context reference, using a scalar identity key only when the
+  branch owns resolution/loading, using a typed immutable DTO only as fallback,
+  converting DTOs into owned data content/model early, and exposing required
+  values through narrow contracts
 - repair wrapped-legacy migration failures by returning to modeling when the
   fix requires recursive decomposition, child state extraction, data-node
   extraction, connector modeling, black-box boundaries, or reusable library nodes
@@ -97,6 +103,8 @@ If a discrepancy arises between this agent file and the output contract:
 - repair constructor data injection by moving the same data/config/callback/
   state packet into another public runtime entrypoint, props-like object, setter,
   method bag, facade, or service injection channel
+- treat Runtime Branch Binding as a props/config/callback escape hatch; it is
+  one canonical entity context, identity key, or typed immutable DTO input only
 - repair a confirmed core violation by merely documenting it as accepted,
   temporary, deferred, or waypoint unless TOP canon defines that exact migration
   waypoint

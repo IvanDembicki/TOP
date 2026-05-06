@@ -22,8 +22,8 @@ proved by tests.
 
 <inputs>
 - migration scope from Migration Agent
-- `top/migration/MIGRATION_WORKFLOW.json`
-- `top/migration/MIGRATION_PLAN.md`
+- `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`
+- `top/migration/<branch-id>/MIGRATION_PLAN.md`
 - `top/migration/MIGRATION_LOG.md`
 - legacy code under migration
 - legacy tests covering the migration scope

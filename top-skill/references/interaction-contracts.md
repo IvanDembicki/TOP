@@ -51,7 +51,11 @@ dependencies into constructors, public runtime parameters, composition entrypoin
 parameter bags, config/options/props-like objects, callbacks/handlers bundles,
 stores, services, or prebuilt fragments.
 
-A Node constructor receives only its parent reference as semantic input.
+Static Node constructors receive only parent/context as semantic input.
+Runtime-created branch roots may receive parent/context plus one canonical
+Runtime Branch Binding input: entity context reference, stable identity key, or
+typed immutable DTO fallback. That binding must not become scattered
+data/config/callback injection.
 Node/Controller public runtime entrypoints must not receive semantic data,
 derived facts, callbacks, handlers, services, stores, child fragments,
 config/options/props-like objects, parameter bags, runtime argument sets, or

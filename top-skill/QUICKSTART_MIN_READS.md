@@ -45,7 +45,13 @@ Minimum:
 - `canon/core-axioms.md`
 - `canon/validation-rules.md`
 - `agents/index.md`
+- `agents/top-modeling-agent.md`
+- `agents/canon-precheck-agent.md`
+- `agents/generation-agent.md`
+- `agents/validation-agent.md`
+- `agents/repair-agent.md`
 - `contracts/agent-output-contracts/intake-output.md`
+- `contracts/agent-output-contracts/top-modeling-output.md`
 - `contracts/agent-output-contracts/canon-precheck-output.md`
 - `references/semantic-ui-layer.md`
 - `references/target-adaptation-layer.md`
@@ -56,6 +62,9 @@ Minimum:
 - `contracts/agent-output-contracts/target-adaptation-output.md`
 - `contracts/agent-output-contracts/generation-output.md`
 - `contracts/agent-output-contracts/validation-output.md`
+- `contracts/agent-output-contracts/repair-output.md`
+- `prompts/generate-top-node.md`
+- `prompts/verify-node-implementation-prompt.md`
 
 ## 4. migration
 
@@ -71,10 +80,17 @@ Minimum:
 - `agents/migration-agent.md`
 - `agents/behavior-preservation-agent.md`
 - `agents/top-modeling-agent.md`
+- `agents/canon-precheck-agent.md`
+- `agents/generation-agent.md`
+- `agents/spec-sync-agent.md`
+- `agents/validation-agent.md`
+- `agents/repair-agent.md`
+- `agents/final-audit-agent.md`
 - `contracts/agent-output-contracts/migration-infrastructure-output.md`
 - `contracts/agent-output-contracts/migration-plan-output.md`
 - `contracts/agent-output-contracts/behavior-preservation-output.md`
 - `contracts/agent-output-contracts/top-modeling-output.md`
+- `contracts/agent-output-contracts/canon-precheck-output.md`
 - `contracts/agent-output-contracts/generation-output.md`
 - `contracts/agent-output-contracts/spec-sync-output.md`
 - `contracts/agent-output-contracts/validation-output.md`

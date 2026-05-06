@@ -73,7 +73,12 @@ factory calls, or runtime entrypoints for known TOP object roles that receive
 more than the allowed context argument.
 
 Candidate signals:
-- constructors for nodes with arguments beyond parent/context;
+- constructors for static nodes with arguments beyond parent/context;
+- constructors for runtime-created branch roots with more than parent/context
+  plus one canonical Runtime Branch Binding input;
+- runtime branch constructors whose extra input is a props/config/callback bag,
+  scattered entity fields, mutable raw model object, service/store object,
+  presentation value, or arbitrary runtime state;
 - constructors for locally implemented content with arguments beyond the owning
   controller access contract;
 - constructors or factories for connectors or black-box boundaries with data,
@@ -95,6 +100,8 @@ injection, or setter-style packet pushing into child/content objects.
 
 Canonical repair:
 - remove additional constructor arguments;
+- for runtime-created branches, replace scattered data arguments with an entity
+  context reference, stable identity key, or typed immutable DTO fallback;
 - expose the missing value/request through the appropriate access contract;
 - let the object pull the value through that contract after attachment;
 - model pushed state or structural alternatives as explicit child state nodes;

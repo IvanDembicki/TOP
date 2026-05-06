@@ -55,8 +55,11 @@ next_step:
 
 ## Rules
 
-- `migration_plan_path` must be `top/migration/MIGRATION_PLAN.md`
-- `migration_workflow_path` must be `top/migration/MIGRATION_WORKFLOW.json`
+- `migration_plan_path` must be `top/migration/<branch-id>/MIGRATION_PLAN.md`
+- `migration_workflow_path` must be `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`
+- Shared `top/migration/MIGRATION_LOG.md` is append-only, and shared
+  `top/migration/MIGRATION_STATUS.md` updates must preserve previous branch
+  history.
 - `agent_work_packages` must list the migration stages and responsible agents.
 - `workflow_phase_updates` must list the phase ids, statuses, gates, outputs,
   and next phases written to the workflow JSON.

@@ -28,10 +28,17 @@ Local functionality does not override TOP rules.
   callbacks, config/options/props-like objects, stores, services, child views,
   presentation values, visibility values, style values, text values, runtime
   state, and arbitrary additional arguments are `CORE-032`.
+- Runtime-created branch roots may receive parent/context plus one canonical
+  Runtime Branch Binding input: entity context reference, stable identity key,
+  or typed immutable DTO fallback. Scattered entity fields, props/config/callback
+  bags, mutable model objects, services/stores, presentation values, or
+  arbitrary runtime state remain `CORE-032`.
 - Post-construction data/config/state/presentation pushing into child nodes,
   locally implemented content, connectors, or black-box boundaries through
   setter-style calls is `CORE-032`.
-- Node constructors receive only the parent reference as their semantic argument; root `null`/`RootContext` is allowed only as a root ownership/bootstrap marker, not as dependency injection.
+- Static node constructors receive only parent/context as their semantic argument;
+  root `null`/`RootContext` is allowed only as a root ownership/bootstrap marker,
+  not as dependency injection.
 - Node/Controller public runtime entrypoints must not receive semantic data,
   derived facts, callbacks, handlers, services, stores, child fragments,
   config/options/props-like objects, parameter bags, runtime argument sets, or
@@ -207,19 +214,19 @@ Behavioral analysis and typing analysis are independent passes. The absence of b
 - A migration/materialization handoff without canonical paths, source root, and
   honest phase status is `WF-013`.
 - A migration-mode task that creates or changes TOP artifacts without
-  `top/migration/MIGRATION_PLAN.md` is `WF-014`.
+  `top/migration/<branch-id>/MIGRATION_PLAN.md` is `WF-014`.
 - A migration-mode handoff or artifact change without an appended
   `top/migration/MIGRATION_LOG.md` entry is `WF-015`.
 - A migration-mode task that creates or changes TOP artifacts without current
-  `top/migration/MIGRATION_WORKFLOW.json`, or with workflow JSON that disagrees
+  `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`, or with workflow JSON that disagrees
   with plan/status/log, is `WF-016`.
 
 ## Migration workflow/plan/log validation
-- `MIGRATION_WORKFLOW.json` must exist before migration scope analysis,
+- Branch-scoped `MIGRATION_WORKFLOW.json` must exist before migration scope analysis,
   modeling, generation, repair, validation, or final audit proceeds.
 - The workflow JSON must parse and record current scope, branch id, current
   phase, phases, responsible agents, gates, handoffs, and next phases.
-- `MIGRATION_PLAN.md` must exist before migration scope analysis, modeling,
+- Branch-scoped `MIGRATION_PLAN.md` must exist before migration scope analysis, modeling,
   generation, repair, validation, or final audit proceeds.
 - The plan must record current scope, branch id, phases, responsible agents,
   planned artifacts, validation gates, behavior preservation routing, and

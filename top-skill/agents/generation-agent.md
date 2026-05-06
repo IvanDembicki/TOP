@@ -15,8 +15,8 @@ Use this agent only after the model has passed canon precheck, semantic interpre
 <inputs>
 - approved TOP model
 - Behavior Preservation Plan when generating a migrated scope with legacy tests
-- `top/migration/MIGRATION_WORKFLOW.json` when task mode is migration
-- `top/migration/MIGRATION_PLAN.md` when task mode is migration
+- `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` when task mode is migration
+- `top/migration/<branch-id>/MIGRATION_PLAN.md` when task mode is migration
 - `top/migration/MIGRATION_LOG.md` when task mode is migration
 - platform-neutral semantic UI layer
 - target adaptation plan
@@ -91,6 +91,10 @@ If a discrepancy arises between this agent file and the output contract:
 - generate presentation content that directly reads or mutates data content
 - generate constructor data injection or post-construction setter-style
   data/config/state/presentation pushes into TOP objects
+- generate runtime branch roots with scattered entity fields, props/config/
+  callback bags, mutable raw model objects, services/stores, presentation values,
+  or arbitrary runtime state instead of one canonical Runtime Branch Binding
+  input
 - scatter generated TOP implementation files into legacy source directories when
   no approved integration contract or source-root declaration permits it
 - in migration mode, generate without following the current migration workflow
@@ -113,6 +117,8 @@ Generate only what the spec and prompt explicitly define. Do not add features, a
   implemented content
 - TOP objects are attached to context rather than filled with constructor data,
   config, callbacks, state, services, stores, child views, or presentation values
+- runtime-created branch roots use parent/context plus at most one canonical
+  Runtime Branch Binding input; static nodes remain parent/context-only
 - no local convenience weakens canon
 - generated target artifacts preserve semantic intent without source-platform leakage
 - generated or adapted tests cover each mapped preserved behavior requirement

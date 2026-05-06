@@ -19,7 +19,7 @@ This file defines the TOP agent pipeline and relationships between agents.
 
 Spec Change Verification Agent — mandatory first step in `spec-change` mode after Intake. See `agents/spec-change-verification-agent.md` and protocol in `references/spec-change-verification.md`.
 
-Migration Infrastructure Agent — mandatory first migration-mode stage. It verifies the repository baseline and creates/validates `top/migration/MIGRATION_WORKFLOW.json`, `MIGRATION_PLAN.md`, `MIGRATION_STATUS.md`, `MIGRATION_LOG.md`, canonical `top/` directories, and planned `top_src/` roots. See `agents/migration-infrastructure-agent.md`.
+Migration Infrastructure Agent — mandatory first migration-mode stage. It verifies the repository baseline and creates/validates branch-scoped `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`, `MIGRATION_PLAN.md`, shared `MIGRATION_STATUS.md`, shared append-only `MIGRATION_LOG.md`, canonical `top/` directories, and planned `top_src/` roots. See `agents/migration-infrastructure-agent.md`.
 
 Migration Planning Agent — mandatory migration-mode stage after infrastructure. It creates or updates the explicit migration plan plus the machine-readable migration workflow tree, and chooses a starting scope when the user did not specify one. See `agents/migration-planning-agent.md`.
 
@@ -162,7 +162,7 @@ Generation Agent is used only when the migration task includes materialization. 
 - Contracts must be followed by each agent.
 - No agent may expand its role beyond definition.
 - In migration mode, every agent that changes artifacts or hands off to another
-  migration stage must update `top/migration/MIGRATION_WORKFLOW.json` when phase
+  migration stage must update `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` when phase
   status changes and append to `top/migration/MIGRATION_LOG.md`.
 
 ## Invalidation rule

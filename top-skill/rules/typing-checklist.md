@@ -24,7 +24,10 @@ They exist in any TOP paradigm implementation regardless of platform.
 ### 1. Parent parameter in the Node constructor
 
 **What to check:**
-Each Node constructor receives exactly one semantic argument: its parent reference.
+Each static Node constructor receives exactly one semantic argument: its
+parent/context reference. A runtime-created branch root may receive
+parent/context plus one canonical Runtime Branch Binding input: entity context
+reference, stable identity key, or typed immutable DTO fallback.
 The type of parent must be declared as a concrete type — the one that actually creates this node.
 
 For the root node only, the parent may be `null` or a special `RootContext`.
@@ -69,11 +72,14 @@ Violation code: `CORE-029`.
 ### 1a-1. Context attachment, not data injection
 
 **What to check:**
-Every TOP object constructor receives only the narrow contextual reference
-required to attach the object to its ownership boundary.
+Every TOP object constructor receives only the narrow contextual reference or
+canonical runtime branch binding input required to attach the object to its
+ownership boundary.
 
 Valid constructor inputs:
-- node: parent/context reference;
+- static node: parent/context reference;
+- runtime-created branch root: parent/context plus one canonical Runtime Branch
+  Binding input;
 - locally implemented content: owning controller access contract;
 - connector or black-box boundary: explicit boundary interface.
 

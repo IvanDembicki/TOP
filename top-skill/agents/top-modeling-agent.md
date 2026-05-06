@@ -15,8 +15,8 @@ Use this agent after domain structure is stable enough to support architecture d
 <inputs>
 - structured domain
 - Behavior Preservation Plan when modeling a migration scope with legacy tests
-- `top/migration/MIGRATION_WORKFLOW.json` when task mode is migration
-- `top/migration/MIGRATION_PLAN.md` when task mode is migration
+- `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` when task mode is migration
+- `top/migration/<branch-id>/MIGRATION_PLAN.md` when task mode is migration
 - `top/migration/MIGRATION_LOG.md` when task mode is migration
 - technology context
 - canon

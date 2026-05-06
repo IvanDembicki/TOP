@@ -64,7 +64,11 @@ This invariant is foundational. It is not tied to any particular language, platf
 
 ### Construction rule
 
-- A Node constructor receives exactly one semantic argument: its Parent reference.
+- A static Node constructor receives exactly one semantic argument: its
+  Parent/context reference.
+- A runtime-created branch root may receive parent/context plus one canonical
+  Runtime Branch Binding input: entity context reference, stable identity key,
+  or typed immutable DTO fallback. That binding is not arbitrary data injection.
 - A Node/Controller public runtime entrypoint must not receive semantic data,
   derived facts, callbacks, handlers, services, stores, child fragments,
   config/options/props-like objects, parameter bags, runtime argument sets, or
@@ -101,10 +105,12 @@ This invariant is foundational. It is not tied to any particular language, platf
 TOP construction attaches an object to its context; it does not inject the state
 it will use.
 
-Objects are connected to context, not filled with data. A TOP object constructor
-must receive only the narrow contextual reference required to place that object
+Objects are connected to context, not filled with data. TOP object constructors
+must receive only the narrow contextual reference required to place the object
 inside its ownership boundary:
-- a node receives its parent/context reference;
+- a static node receives its parent/context reference;
+- a runtime-created branch root receives parent/context plus one canonical
+  Runtime Branch Binding input when it needs entity attachment;
 - locally implemented content receives its owning controller access contract;
 - a connector or black-box boundary receives its explicit boundary interface.
 
@@ -115,7 +121,9 @@ the object during construction or later through imperative setters.
 
 A constructor must not receive data packets, flags, callbacks, config objects,
 stores, services, child views, presentation values, visibility values, style
-values, text values, or runtime state as additional arguments.
+values, text values, or runtime state as additional arguments. Runtime branch
+binding must be one canonical entity context, identity key, or typed immutable
+DTO input, not scattered data.
 
 Conceptual violations:
 

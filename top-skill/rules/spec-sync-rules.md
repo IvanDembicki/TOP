@@ -90,8 +90,8 @@ A migration-mode task lacks required plan/status/log artifacts or the log was
 not updated for a handoff/change.
 
 Indicators:
-- `top/migration/MIGRATION_PLAN.md` is missing or does not mention the current scope
-- `top/migration/MIGRATION_WORKFLOW.json` is missing, invalid JSON, or does not
+- `top/migration/<branch-id>/MIGRATION_PLAN.md` is missing or does not mention the current scope
+- `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` is missing, invalid JSON, or does not
   mention the current scope and phase
 - `top/migration/MIGRATION_LOG.md` is missing
 - artifact changes occurred without a new log entry
@@ -178,8 +178,9 @@ The agent must compare:
      are thin framework adapters explicitly declared by an integration contract.
 
 6. The migration control plane:
-   - `top/migration/MIGRATION_WORKFLOW.json`, `MIGRATION_PLAN.md`,
-     `MIGRATION_STATUS.md`, and `MIGRATION_LOG.md` must exist for
+   - `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`,
+     `top/migration/<branch-id>/MIGRATION_PLAN.md`,
+     `top/migration/MIGRATION_STATUS.md`, and `top/migration/MIGRATION_LOG.md` must exist for
      migration-mode artifact changes;
    - the workflow JSON must name the current migration scope, branch id,
      current phase, responsible agents, gates, and next phases;

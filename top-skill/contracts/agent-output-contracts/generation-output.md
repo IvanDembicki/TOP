@@ -92,8 +92,8 @@ spec_sync_handoff:
   post-generation architectural self-check, or explain why generation produced
   no source files.
 - For migration tasks, `migration_plan_alignment` must state how generated
-  artifacts follow `top/migration/MIGRATION_WORKFLOW.json` and
-  `top/migration/MIGRATION_PLAN.md`, and `migration_log_entry`
+  artifacts follow `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` and
+  `top/migration/<branch-id>/MIGRATION_PLAN.md`, and `migration_log_entry`
   must identify the appended log entry. For non-migration tasks both fields must
   be explicitly `not_applicable`.
 - Generation is not permitted to override the approved architecture

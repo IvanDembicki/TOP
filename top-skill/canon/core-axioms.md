@@ -81,9 +81,16 @@ runtime state, services, stores, child views, or handlers it will use.
 
 A TOP object constructor may receive only the narrow contextual reference needed
 to place it inside the tree or boundary:
-- a node receives its parent/context reference;
+- a static node receives its parent/context reference;
+- a runtime-created branch root may receive parent/context plus one canonical
+  Runtime Branch Binding input: entity context reference, stable identity key,
+  or typed immutable DTO fallback;
 - locally implemented content receives its owning controller access contract;
 - a connector or black-box boundary receives its explicit boundary interface.
+
+Runtime Branch Binding is not a general constructor argument escape hatch. It
+must not carry scattered data, props/config/callback bags, mutable raw model
+objects, presentation values, services/stores, or arbitrary runtime state.
 
 After attachment, the object requests required information through that
 contract. The owner remains responsible for exposing the contract, but it does

@@ -101,11 +101,11 @@ next_step:
   claims future materialization without a canonical materialization plan, source
   root, and honest phase status
 - Validation must report `WF-014` when a migration-mode task creates or changes
-  TOP artifacts without a current `top/migration/MIGRATION_PLAN.md`
+  TOP artifacts without a current `top/migration/<branch-id>/MIGRATION_PLAN.md`
 - Validation must report `WF-015` when a migration-mode handoff or artifact
   change lacks an appended `top/migration/MIGRATION_LOG.md` entry
 - Validation must report `WF-016` when a migration-mode task creates or changes
-  TOP artifacts without current `top/migration/MIGRATION_WORKFLOW.json`, or when
+  TOP artifacts without current `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`, or when
   the workflow JSON disagrees with plan/status/log
 - Validation must report `WF-017` when migration modeling treats a user-named
   scope as a final node boundary, keeps a single-node/giant-node wrapper without
@@ -116,8 +116,10 @@ next_step:
   locations, temporary acceptance rationale, target repair direction, expiry
   condition, and owner phase.
 - Validation must report `WF-019` when migration agents modify files outside the
-  active migration workspace without an explicitly allowed thin
-  adapter/integration reason recorded in the migration log.
+  active branch workspace without an explicitly allowed thin adapter/integration
+  reason recorded in the migration log, overwrite another branch workspace,
+  rewrite shared `MIGRATION_LOG.md`, or update shared `MIGRATION_STATUS.md`
+  without preserving previous branch history.
 - `migration_decomposition_check`, `giant_node_review_check`,
   `panel_display_style_check`, `post_generation_source_validation_check`,
   `accepted_deviation_discipline_check`, and

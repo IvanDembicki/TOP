@@ -32,11 +32,10 @@ schema over prose-only state. Prose may explain; JSON controls.
 For migration projects, the structured process artifact is:
 
 ```text
-top/migration/MIGRATION_WORKFLOW.json
+top/migration/<branch-id>/MIGRATION_WORKFLOW.json
 ```
 
 ## Readiness rule
 
 A result is not ready while required artifacts are missing, stale, empty,
 contradictory, or unvalidated.
-

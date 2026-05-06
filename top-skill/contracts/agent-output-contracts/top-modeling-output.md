@@ -78,8 +78,8 @@ next_step:
   `bridge_residual_register`, and `accepted_deviation_register` must be
   explicit for migration tasks, even when empty.
 - For migration tasks, `migration_plan_alignment` must state how the model
-  follows `top/migration/MIGRATION_WORKFLOW.json` and
-  `top/migration/MIGRATION_PLAN.md`, and `migration_log_entry` must
+  follows `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` and
+  `top/migration/<branch-id>/MIGRATION_PLAN.md`, and `migration_log_entry` must
   identify the appended log entry. For non-migration tasks both fields must be
   explicitly `not_applicable`.
 - Free text outside the required structure is prohibited

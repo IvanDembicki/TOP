@@ -313,6 +313,9 @@ When designing:
 A runtime-created branch is attached to an entity context. It is not filled with
 scattered data packets.
 
+Static nodes are parent/context-only. Runtime-created branch roots may receive
+parent/context plus one canonical binding input under this pattern.
+
 ### Preferred binding
 
 Entity Context Binding: the runtime branch root receives a narrow entity context
@@ -335,6 +338,19 @@ content/model as early as possible.
 - mutable raw model objects;
 - presentation values;
 - direct services/stores as arbitrary arguments.
+
+### Examples
+
+Allowed:
+- `new RuntimeItemNode(parent, entityAccess)`
+- `new RuntimeItemNode(parent, stableEntityId)`
+- `new RuntimeItemNode(parent, typedImmutableDto)`
+
+Forbidden:
+- `new RuntimeItemNode(parent, id, name, status, callbacks, config)`
+- `new ChildNode(parent, props)`
+- `child.setData(...)`
+- `child.applyConfig(...)`
 
 ### Invariants
 

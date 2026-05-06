@@ -80,8 +80,8 @@ In migration mode, the Orchestrator must not route directly from a user request
 to Migration Agent, TOP Modeling Agent, Generation Agent, Validation Agent, or
 Repair Agent unless:
 
-- `top/migration/MIGRATION_PLAN.md` exists and names the current migration step;
-- `top/migration/MIGRATION_WORKFLOW.json` exists, parses, and names the current
+- `top/migration/<branch-id>/MIGRATION_PLAN.md` exists and names the current migration step;
+- `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` exists, parses, and names the current
   migration phase and next permitted stages;
 - `top/migration/MIGRATION_LOG.md` exists;
 - the prior migration-stage handoff appended a log entry;

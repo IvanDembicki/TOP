@@ -39,13 +39,12 @@
       "contract_id": "migration_project_control_plane_contract",
       "applies_to": "A target project undergoing TOP migration.",
       "required_artifacts": [
-        "top/migration/MIGRATION_WORKFLOW.json",
-        "top/migration/MIGRATION_PLAN.md",
+        "top/migration/<branch-id>/MIGRATION_WORKFLOW.json",
+        "top/migration/<branch-id>/MIGRATION_PLAN.md",
         "top/migration/MIGRATION_STATUS.md",
         "top/migration/MIGRATION_LOG.md"
       ],
-      "readiness_rule": "Use for migration-mode tasks that create or change TOP artifacts in a target project. The workflow JSON is the machine-readable process graph; the plan is human-readable intent; the log is append-only evidence."
+      "readiness_rule": "Use for migration-mode tasks that create or change TOP artifacts in a target project. Branch workflow JSON is the machine-readable process graph; the branch plan is human-readable intent; the shared log is append-only evidence; shared status must preserve previous branch history."
     }
   ]
 }
-

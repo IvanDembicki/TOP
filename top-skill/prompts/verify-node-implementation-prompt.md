@@ -80,6 +80,10 @@ Check:
   inject data packets, flags, callbacks, config/options/props-like objects,
   stores, services, child views, presentation values, visibility values, style
   values, text values, runtime state, handlers, or arbitrary additional values;
+- confirmation that static node constructors are parent/context-only, and that
+  runtime-created branch roots, if present, use parent/context plus at most one
+  canonical Runtime Branch Binding input: entity context reference, stable
+  identity key, or typed immutable DTO fallback;
 - confirmation that child nodes, locally implemented content, connectors, and
   black-box boundaries are not configured after construction through
   setter-style data/config/state/presentation injection (`CORE-032`);

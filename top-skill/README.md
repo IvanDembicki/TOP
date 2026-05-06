@@ -1,6 +1,6 @@
 # TOP Skill — Tree-Oriented Programming
 
-**Version:** 1.1.20 | **License:** MIT | **Invocation:** `/top`
+**Version:** 1.1.21 | **License:** MIT | **Invocation:** `/top`
 
 **TOP turns architecture from a weak social norm into a strong machine-verifiable protocol.**
 
@@ -62,8 +62,10 @@ The sufficient operational unit in TOP is the pair **`spec + prompt`**. Code is 
 - `top/schemas/migration-workflow.schema.json` — schema for project migration workflow trees
 - `top/validation/output-rules.md` — readiness checks for skill outputs
 
-Migration projects must keep `top/migration/MIGRATION_WORKFLOW.json` alongside
-`MIGRATION_PLAN.md`, `MIGRATION_STATUS.md`, and `MIGRATION_LOG.md`.
+Migration projects must keep branch-owned control artifacts under
+`top/migration/<branch-id>/` and shared multi-branch status/log artifacts under
+`top/migration/`. `MIGRATION_LOG.md` is append-only; shared status updates must
+preserve prior branch history.
 
 ---
 

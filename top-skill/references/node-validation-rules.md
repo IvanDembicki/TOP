@@ -75,7 +75,10 @@ Canonical correction direction:
 ## 2a. Pull-Based Construction / Locality Validation
 
 Required checks:
-- every Node constructor has exactly one semantic argument: its parent reference;
+- every static Node constructor has exactly one semantic argument: its
+  parent/context reference;
+- every runtime-created branch root has at most parent/context plus one
+  canonical Runtime Branch Binding input;
 - every TOP object constructor attaches the object to context and does not inject
   data packets, flags, callbacks, config/options/props-like objects, stores,
   services, child views, presentation values, visibility values, style values,

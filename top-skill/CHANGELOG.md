@@ -7,6 +7,22 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.21] — 2026-05-06
+
+- Fixed hydration consistency for migration and generation-pipeline modes:
+  Canon Precheck, Final Audit, TOP Modeling, generation, spec-sync, validation,
+  repair agents, prompts, and output contracts now hydrate with the modes that
+  require them.
+- Clarified constructor rules around Runtime Branch Binding: static nodes remain
+  parent/context-only, while runtime-created branch roots may receive one
+  canonical entity context, stable identity key, or typed immutable DTO binding.
+- Refined migration workspace ownership to branch-scoped control artifacts under
+  `top/migration/<branch-id>/`, with shared append-only logs and history-preserving
+  status files.
+- Added quick validation consistency checks for hydration-vs-mode-manifest drift,
+  constructor-only-parent wording that omits runtime branch binding, and
+  branch-scoped migration control wording.
+
 ## [1.1.20] — 2026-05-06
 
 - Added migration canon that migration means discovering and externalizing

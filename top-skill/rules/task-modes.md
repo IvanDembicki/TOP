@@ -141,8 +141,9 @@ Generation Agent, Semantic Interpreter Agent, Target Adaptation Agent, and Spec 
 Execution steps:
 1. Confirm a recoverable version-control baseline.
 2. Prepare migration infrastructure: `top/specs/`, `top/prompts/`,
-   `top/migration/`, `MIGRATION_WORKFLOW.json`, `MIGRATION_PLAN.md`,
-   `MIGRATION_STATUS.md`, `MIGRATION_LOG.md`, and planned
+   branch-scoped `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`,
+   `MIGRATION_PLAN.md`, shared `MIGRATION_STATUS.md`, shared append-only
+   `MIGRATION_LOG.md`, and planned
    `top_src/<branch-id>/` roots.
 3. Create or update the explicit migration plan. If the user named a starting
    scope, use it. If not, choose the starting scope by isolation, risk,
@@ -173,8 +174,9 @@ Losing, weakening, or failing to represent test-covered behavior is `CORE-028`.
 Creating migration specs/prompts outside the canonical layout is a convention
 violation. Omitting the materialization source root for a migration that declares
 future implementation artifacts is `WF-013`.
-Missing `MIGRATION_PLAN.md` is `WF-014`. Missing or stale `MIGRATION_LOG.md` is
-`WF-015`. Missing or stale `MIGRATION_WORKFLOW.json` is `WF-016`.
+Missing branch-scoped `MIGRATION_PLAN.md` is `WF-014`. Missing or stale
+`MIGRATION_LOG.md` is `WF-015`. Missing or stale branch-scoped
+`MIGRATION_WORKFLOW.json` is `WF-016`.
 Missing recursive decomposition or giant-node review is `WF-017`.
 Undisciplined accepted deviations are `WF-018`. Writes outside the active
 migration workspace without explicit adapter/integration allowance are `WF-019`.

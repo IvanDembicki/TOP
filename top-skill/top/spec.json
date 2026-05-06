@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
   "skill_name": "Tree-Oriented Programming Skill",
-  "skill_version": "1.1.20",
+  "skill_version": "1.1.21",
   "status": "stable",
   "purpose": "Design, model, generate, migrate, and validate systems built with Tree-Oriented Programming.",
   "core_thesis": "A TOP skill is not a loose prompt. It is a controlled tree of canon, modes, agents, contracts, schemas, validation rules, and outputs.",

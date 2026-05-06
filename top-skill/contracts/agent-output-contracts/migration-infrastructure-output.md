@@ -52,15 +52,23 @@ next_step:
 
 ## Rules
 
-- `migration_plan_path` must be `top/migration/MIGRATION_PLAN.md`
-- `migration_workflow_path` must be `top/migration/MIGRATION_WORKFLOW.json`
+- `migration_plan_path` must be `top/migration/<branch-id>/MIGRATION_PLAN.md`
+- `migration_workflow_path` must be `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`
 - `migration_status_path` must be `top/migration/MIGRATION_STATUS.md`
 - `migration_log_path` must be `top/migration/MIGRATION_LOG.md`
 - `migration_workflow_check` must confirm valid JSON and the initial phase tree.
 - If implementation materialization is planned, `source_root_status` must name
   the declared source root and whether it exists.
 - `active_migration_workspace` must name the branch-owned paths where agents may
-  write without per-file confirmation, and must state that legacy app files
-  remain user-owned except explicitly logged thin adapter/integration changes.
+  write without per-file confirmation, including
+  `top/migration/<branch-id>/MIGRATION_PLAN.md`,
+  `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`,
+  `top/migration/<branch-id>/reports/**`, `top/specs/<branch-id>.json`,
+  `top/prompts/<branch-id>/**`, and `top_src/<branch-id>/**`.
+- Shared `top/migration/MIGRATION_LOG.md` is append-only, and shared
+  `top/migration/MIGRATION_STATUS.md` updates must preserve previous branch
+  history.
+- The contract must state that legacy app files remain user-owned except
+  explicitly logged thin adapter/integration changes.
 - `log_entry_written` must be `true` for a valid handoff.
 - Free text outside the required structure is prohibited.
