@@ -25,6 +25,17 @@ the current validation pass.
 Required checks:
 - if the node has a separate content, the controller does not bypass the content boundary through direct access to the concrete implementation;
 - controller fields/references to content are typed as `IContentAccess` or the target-equivalent narrow contract, not as the concrete Content class where the technology permits that boundary;
+- concrete locally implemented content is private to its owning controller:
+  parents, siblings, children, adapters, helpers, generated callers, and other
+  nodes do not import, instantiate, type against, downcast to, inspect, store,
+  or call the concrete content class (`CORE-033`);
+- controller public APIs do not return platform view fragments, render/build
+  trees, content fragments, style/layout fragments, JSX/widget/composable
+  fragments, animation objects, content-owned setter handles, or mutation
+  handles (`CORE-034`);
+- content-owned setters/mutation handles are not captured by controllers,
+  returned through controller APIs, passed through access contracts, or handed
+  to parents/adapters/helpers (`CORE-035`);
 - controller-to-content access through `IContentAccess` is limited to
   lifecycle/materialization access such as obtaining the root content primitive
   or participating in controlled lifecycle;
@@ -176,6 +187,11 @@ Canonical correction direction:
 Required checks:
 - content has no architectural will;
 - content does not decide to attach/integrate/mount/remove/show/hide/destroy as an architectural or lifecycle action;
+- one node has zero or one locally implemented content object. Extra
+  modal/form/card/list/bridge/helper presentation objects are either private
+  target-local implementation detail inside that content object or explicitly
+  modeled/classified as child nodes, state nodes, black-box components, bridge
+  boundaries, or reusable library nodes;
 - locally implemented content contains no conditional selection logic of any
   kind;
 - locally implemented content does not decide, derive, branch, select, toggle,
@@ -370,6 +386,13 @@ Required checks for migration branches:
   selectors, status panels, action panels, and repeated structures are
   classified as local details, nodes, state nodes, black boxes, or reusable
   library nodes.
+- generated folder layout mirrors the approved TOP tree through the declared
+  source root, effective `props.dir`, and prompt layout; semantic subtrees are
+  not flattened into a wrapper folder without explicit materialization
+  rationale (`CONV-010`);
+- branch specs use canonical node shape (`type` or approved equivalent), not
+  ad hoc `id`/`name` pseudo-spec trees that cannot regenerate canonical TOP
+  nodes (`CONV-009`).
 
 Violation codes:
 - `WF-017` for missing or insufficient decomposition review;
@@ -389,6 +412,26 @@ Canonical correction direction:
   data bridge nodes, or adapter residuals;
 - replace global store access with store connector, data node, data controller,
   adapter context, or a narrow access contract.
+
+---
+
+## 10b. Independent checkpoint validation
+
+Required checks for migration and generation pipelines:
+- infrastructure, scope/decomposition, model/spec, canon precheck, generation,
+  post-generation validation, repair when needed, and final audit checkpoints
+  are persisted as branch-scoped artifacts or append-only shared log entries
+  before handoff;
+- executor self-check output is treated as input evidence only;
+- Validation Agent and Final Audit Agent re-read the current skill files and
+  target artifacts in the current pass;
+- validation is adversarial: it attempts to disprove conformance using canon,
+  generated source, specs, prompts, contracts, logs, and branch layout.
+
+Violation codes:
+- `WF-020` for missing or stale checkpoints;
+- `WF-021` for validation based on previous context or generator/repair claims
+  instead of independent current-pass evidence.
 
 ---
 

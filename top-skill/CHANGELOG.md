@@ -7,6 +7,38 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.23] — 2026-05-06
+
+- Added mandatory dedicated migration git branch safety: every migration must
+  create or switch to `top-migration/<branch-id>` or a documented deterministic
+  equivalent before any migration write.
+- Added the git safety gate to migration infrastructure, logs, contracts, and
+  validation: initial branch, migration branch, checkout result, working tree
+  status, remote status, unrelated changes, write permission, commit policy, and
+  no-push policy must be recorded.
+- Added `WF-022` for migration writes outside a dedicated branch, missing branch
+  safety logging, branch/id mismatch, unrelated work mixing, unauthorized push,
+  or unauthorized local commit.
+- Updated migration, generation, repair, validation, final audit, orchestration,
+  contracts, pattern recognition, README/SKILL, and quick validation checks for
+  the dedicated-branch rule.
+
+## [1.1.22] — 2026-05-06
+
+- Strengthened strict migration modeling: migration must discover hidden
+  architecture rather than wrap a legacy screen behind one hub node, with
+  persistent short checkpoints and independent adversarial validation.
+- Added hard validation coverage for concrete content privacy, controller
+  platform/content fragment outputs, and content-owned setter bridges
+  (`CORE-033` through `CORE-035`).
+- Added convention checks for canonical TOP spec shape and generated
+  layout/topology correspondence (`CONV-009`, `CONV-010`).
+- Added workflow gaps for missing migration checkpoints and non-independent
+  validation (`WF-020`, `WF-021`).
+- Extended generation, repair, validation, code-generation references, pattern
+  recognition, and quick validation prefilters for the stricter content,
+  layout, and validation-flow rules.
+
 ## [1.1.21] — 2026-05-06
 
 - Fixed hydration consistency for migration and generation-pipeline modes:

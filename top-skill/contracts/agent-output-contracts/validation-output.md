@@ -51,6 +51,13 @@ details:
 - post_generation_source_validation_check
 - accepted_deviation_discipline_check
 - migration_workspace_write_check
+- concrete_content_privacy_check
+- controller_fragment_output_check
+- content_owned_setter_bridge_check
+- top_spec_shape_check
+- generated_layout_topology_check
+- independent_checkpoint_check
+- dedicated_migration_branch_check
 - semantic_preservation_check
 - behavior_preservation_check
 - source_platform_leakage_check
@@ -92,11 +99,27 @@ next_step:
   decomposed content lifecycle/materialization members, method bags,
   facade/adapters, concrete Content types, platform primitives, or inline
   objects instead of its own Content instance typed through `IContentAccess`
+- Validation must report `CORE-033` when concrete locally implemented content
+  is imported, instantiated, typed against, downcast to, inspected, stored, or
+  called outside its owning controller, or when the owning controller stores it
+  as concrete content instead of `IContentAccess`
+- Validation must report `CORE-034` when controller APIs return platform/content
+  fragments, render/build trees, style/layout fragments, JSX/widget/composable
+  fragments, animation objects, content-owned setters, or mutation handles
+- Validation must report `CORE-035` when content-owned setter/mutation handles
+  cross the content boundary through controller fields, APIs, access contracts,
+  adapters, helpers, or callbacks
 - Validation must report `CONV-007` when a new migration branch spec is stored
   as an ad hoc root-level file in `top/` instead of under `top/specs/` without an
   established project convention
 - Validation must report `CONV-008` when implementation prompts or Expected
   Materialization exist but no implementation source root is declared/prepared
+- Validation must report `CONV-009` when project TOP specs use ad hoc
+  `id`/`name` pseudo-spec node shape instead of canonical `type` or an approved
+  equivalent
+- Validation must report `CONV-010` when generated implementation layout does
+  not mirror the approved TOP tree through source root, effective `props.dir`,
+  and prompt layout
 - Validation must report `WF-013` when a migration/modeling handoff plans or
   claims future materialization without a canonical materialization plan, source
   root, and honest phase status
@@ -120,10 +143,27 @@ next_step:
   reason recorded in the migration log, overwrite another branch workspace,
   rewrite shared `MIGRATION_LOG.md`, or update shared `MIGRATION_STATUS.md`
   without preserving previous branch history.
+- Validation must report `WF-020` when required branch checkpoints are missing
+  or stale before handoff.
+- Validation must report `WF-021` when validation relies on generator/repair
+  memory, prior chat context, or previous reads instead of independent
+  current-pass evidence.
+- Validation must report `WF-022` when migration writes were performed before
+  creating or switching to a dedicated migration branch, when branch safety was
+  not logged, when the branch does not match the migration branch id, when
+  unrelated work was mixed into migration output, when push occurred without
+  explicit user request, or when local commits were not requested or
+  phase-documented.
 - `migration_decomposition_check`, `giant_node_review_check`,
   `panel_display_style_check`, `post_generation_source_validation_check`,
   `accepted_deviation_discipline_check`, and
   `migration_workspace_write_check` must explicitly report `pass`, `fail`, or
+  `not_applicable`.
+- `concrete_content_privacy_check`, `controller_fragment_output_check`,
+  `content_owned_setter_bridge_check`, `top_spec_shape_check`,
+  `generated_layout_topology_check`, and `independent_checkpoint_check` must
+  explicitly report `pass`, `fail`, or `not_applicable`.
+- `dedicated_migration_branch_check` must explicitly report `pass`, `fail`, or
   `not_applicable`.
 - `spec_sync_check` must explicitly report `pass`, `fail`, or `not_applicable`
 - `drift_check` must explicitly report `pass`, `fail`, or `not_applicable`; when applicable it must cover JSON topology, prompts, Expected Materialization, project-local TOP artifacts, and materialized implementation artifacts

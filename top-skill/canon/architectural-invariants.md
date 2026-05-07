@@ -228,6 +228,56 @@ This symmetry is mandatory even when one direction currently has no methods. An 
 
 This is especially important when content wraps a large platform component, widget, native view, or third-party object. The concrete content object may expose many public methods, but the controller may be allowed to use only one or two of them. `IContentAccess` cuts off the rest of the concrete surface and keeps the content implementation replaceable, portable, and verifiable.
 
+### Absolute content privacy
+
+Concrete locally implemented content is private to its owning controller. It is
+not a public class dependency, a parent dependency, a sibling dependency, or an
+adapter dependency.
+
+Only the owning controller may create its concrete content, and it must store
+and use that content only as `IContentAccess`/target-equivalent. No other
+artifact may import, instantiate, type against, downcast to, inspect, store, or
+call the concrete content class. A public controller API may expose only
+controller-level values or opaque placement handles where canon permits; it must
+not leak concrete content or content-owned platform primitives.
+
+This is a hard boundary. Moving concrete content access into a helper, adapter,
+factory, hook, closure, or generated method bag is still concrete content
+exposure.
+
+### One controller, zero-or-one content
+
+A TOP node has exactly one controller. It may have no content, or it may have
+one locally implemented content object owned by that controller.
+
+If a legacy artifact contains several presentation fragments, modal helpers,
+form helpers, cards, rows, bridge components, or platform widgets, those pieces
+must be classified before generation as child nodes, state nodes, black-box
+components, bridge boundaries, reusable library nodes, or target-local
+implementation detail inside the one private content object. They must not
+become an unmodeled helper-component forest inside one giant node.
+
+### Controller output is not content implementation
+
+A controller must not return platform view fragments, render/build trees,
+content fragments, style/layout fragments, JSX/widget/composable fragments,
+animation objects, content-owned setter handles, or platform mutation handles as
+part of its controller API.
+
+When parent-owned placement is required, the public child output must be opaque
+and placement-only. The caller must not receive concrete content, platform
+internals, callback registration handles, setter handles, or a mutation surface.
+
+### Content-owned setters do not cross the boundary
+
+Content-owned setter/mutation functions are private content mechanics. They must
+not be captured by controllers, stored in controller fields, returned through
+controller APIs, passed through `IControllerAccess`/`IContentAccess`, or handed
+to parents/adapters/helpers.
+
+The canonical replacement is controller-owned state plus dirty/render/lifecycle
+refresh and content pull of already-resolved values during materialization.
+
 ### Locally implemented content static materialization clarification
 
 Locally implemented content must contain no conditional selection logic of any

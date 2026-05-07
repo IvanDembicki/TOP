@@ -48,6 +48,9 @@ If a discrepancy arises between this agent file and the output contract:
 - reporting unqualified `ready_for_use` for a model that is only ready for
   generation, generated code that only type-checks, or integration that has not
   passed runtime/behavior validation
+- finalize a migrated scope when validation did not confirm the dedicated
+  migration branch, git safety gate, no-push policy, and allowed local commit
+  policy
 - replace the verdict with vague commentary
 - treat convention or convenience as proof of canonicality
 </forbidden>
@@ -62,6 +65,12 @@ If a discrepancy arises between this agent file and the output contract:
 - readiness is classified precisely as `ready_for_generation`,
   `ready_for_integration`, `ready_for_manual_QA`, or
   `ready_for_production_candidate`
+- for migration, dedicated branch safety passed: branch name matches the
+  migration branch id, the git safety gate is logged before writes, no unrelated
+  files were modified, no push occurred without explicit user request, and any
+  local commit was requested or phase-documented
+- for migration, the dedicated migration branch is the only branch on which
+  migration writes occurred
 </validation_focus>
 
 <handoff_rules>

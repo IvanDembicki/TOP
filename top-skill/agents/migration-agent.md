@@ -22,6 +22,7 @@ it does not require the standard pipeline to have run first.
 - `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`
 - `top/migration/<branch-id>/MIGRATION_PLAN.md`
 - `top/migration/MIGRATION_LOG.md`
+- confirmed dedicated migration git branch and git safety gate entry
 - legacy tests, snapshots, fixtures, QA scripts, executable examples, or documented test cases covering the scope
 - technology context
 - scope: full project or specific module/area
@@ -219,6 +220,12 @@ persistent artifacts, it appends a log entry after those changes as well. The lo
 entry is not a summary for the user; it is a forensic record for later
 diagnosis.
 
+Before this agent starts scope analysis or writes any artifact, it must verify
+that Migration Infrastructure Agent confirmed the dedicated migration git
+branch. The branch should be `top-migration/<branch-id>` unless the workflow
+records a deterministic project equivalent. If the git safety gate is absent,
+ambiguous, or says `migration_writes_allowed: false`, this agent must stop.
+
 ---
 
 ## Pull-based migration target
@@ -356,6 +363,12 @@ traces of expected behavior, not only as files that should pass.
 - violating canonical TOP rules in the proposed structure
 - producing a plan that cannot be executed one step at a time
 - proceeding without confirmed version control baseline
+- proceeding without a confirmed dedicated migration branch and first log entry
+  containing the git safety gate
+- performing migration writes on the user's current working branch
+- pushing to remote unless the user explicitly requested push
+- creating a local commit unless requested or the current workflow phase
+  explicitly documents a local-commit step
 - proceeding without `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`
 - proceeding without `top/migration/<branch-id>/MIGRATION_PLAN.md`
 - handing off without appending to `top/migration/MIGRATION_LOG.md`
@@ -388,6 +401,8 @@ traces of expected behavior, not only as files that should pass.
 - migrated branches are self-contained: they can be developed and tested with a mock parent
 - migration steps are ordered so each step produces a working system
 - specs/prompts/status/source-root paths follow the canonical TOP project layout
+- dedicated migration branch matches branch id and migration log proves the git
+  safety gate passed before writes
 - migrated public API is behaviourally equivalent to the original
 - test-covered behavior is either mapped through a Behavior Preservation Plan or the absence of tests is explicitly reported
 - all hidden dependencies have been surfaced and resolved before migration

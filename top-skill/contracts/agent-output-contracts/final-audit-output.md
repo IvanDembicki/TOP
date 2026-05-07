@@ -53,6 +53,10 @@ next_step:
   core violation or migration waypoint
 - Final audit cannot mark the result ready if unresolved drift remains between spec, prompts, project-local TOP artifacts, and materialized implementation artifacts
 - Final audit cannot mark a migrated scope ready if test-covered legacy behavior lacks a Behavior Preservation Plan, prompt representation, or TOP-compatible test coverage
+- Final audit cannot mark a migrated scope ready unless validation confirmed the
+  dedicated migration branch, the first git safety gate log entry, no migration
+  writes before branch confirmation, no unrelated file modifications, no
+  unauthorized push, and no unauthorized local commit.
 - For non-migration tasks, `behavior_preservation_plan`, `behavior_preservation_gate`, and `test_covered_behavior_preserved` must be explicitly `not_applicable`
 - Violation types must be separated into three categories
 - Reporting `pass`, `ready`, or `ready_for_use` with remaining core violations

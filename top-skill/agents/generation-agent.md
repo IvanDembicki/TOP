@@ -18,6 +18,7 @@ Use this agent only after the model has passed canon precheck, semantic interpre
 - `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` when task mode is migration
 - `top/migration/<branch-id>/MIGRATION_PLAN.md` when task mode is migration
 - `top/migration/MIGRATION_LOG.md` when task mode is migration
+- confirmed dedicated migration git branch and git safety gate when task mode is migration
 - platform-neutral semantic UI layer
 - target adaptation plan
 - target technology
@@ -57,6 +58,18 @@ If a discrepancy arises between this agent file and the output contract:
 - generate locally implemented content as structurally static materialization
   that applies only already-resolved primitive/output values received through
   owning controller access
+- keep concrete locally implemented content private to its owning controller;
+  generate no imports, constructor calls, type annotations, downcasts, helper
+  calls, or adapter references to concrete content from outside the owning
+  controller
+- generate one controller and zero-or-one locally implemented content object per
+  node; classify extra modal/form/card/list/helper/bridge pieces as child
+  nodes, state nodes, black-box components, bridge boundaries, reusable library
+  nodes, or private target-local implementation detail
+- generate controller APIs as controller APIs, not as renderer APIs; do not
+  return platform fragments, content fragments, render/build trees,
+  JSX/widget/composable fragments, style/layout fragments, animation objects,
+  content-owned setter handles, or mutation handles
 - keep text formatting, string concatenation, hardcoded display values,
   style/class/token selection, icon selection, visibility selection, handler
   selection, and output computation out of locally implemented content
@@ -70,6 +83,8 @@ If a discrepancy arises between this agent file and the output contract:
 - write generated TOP implementation artifacts only under the declared
   implementation source root (`top_src/` by default), except thin framework
   adapters explicitly declared by the integration contract
+- in migration mode, generate only after the dedicated migration branch is
+  active and the first migration log entry permits writes
 </allowed>
 
 <forbidden>
@@ -88,6 +103,11 @@ If a discrepancy arises between this agent file and the output contract:
 - generate conditional selection logic inside locally implemented content
 - generate controller-to-content imperative presentation updates into locally
   implemented content
+- generate content-owned setter/mutation handles that cross the content
+  boundary through controller fields, public APIs, access contracts, adapters,
+  or helpers
+- generate unclassified helper-component forests as a substitute for TOP
+  decomposition
 - generate presentation content that directly reads or mutates data content
 - generate constructor data injection or post-construction setter-style
   data/config/state/presentation pushes into TOP objects
@@ -99,6 +119,8 @@ If a discrepancy arises between this agent file and the output contract:
   no approved integration contract or source-root declaration permits it
 - in migration mode, generate without following the current migration workflow
   and plan or without appending a migration log entry for generated artifacts
+- generate migration artifacts on the user's current working branch or push to
+  remote without explicit user request
 
 <avoid_over_engineering>
 Generate only what the spec and prompt explicitly define. Do not add features, abstractions, utilities, or error handling beyond what is specified. Do not design for hypothetical future requirements. Do not add comments or documentation to code not explicitly required by the prompt. The right amount of complexity is the minimum needed to satisfy the node contract — nothing more.
@@ -109,6 +131,11 @@ Generate only what the spec and prompt explicitly define. Do not add features, a
 - generated structure matches approved model
 - generated code does not collapse an approved decomposition back into one
   giant hub node or helper-component wrapper
+- generated file layout mirrors the approved TOP tree through the declared
+  source root, effective `props.dir`, and prompt layout
+- generated concrete content remains private to the owning controller
+- controller APIs do not return platform/content fragments or content-owned
+  mutation handles
 - typing remains strong and explicit
 - names remain clear and descriptive
 - ownership boundaries remain intact

@@ -421,12 +421,17 @@ def check_required_phrases(root):
         ("rules/violation-catalog.md", "CORE-030"),
         ("rules/violation-catalog.md", "CORE-031"),
         ("rules/violation-catalog.md", "CORE-032"),
+        ("rules/violation-catalog.md", "CORE-033"),
+        ("rules/violation-catalog.md", "CORE-034"),
+        ("rules/violation-catalog.md", "CORE-035"),
         ("rules/violation-catalog.md", "Locally implemented content"),
         ("rules/pattern-recognition.md", "Locally implemented content conditional selection"),
         ("rules/pattern-recognition.md", "Context data injection"),
         ("rules/pattern-recognition.md", "reports candidates for Validation Agent review"),
         ("rules/violation-catalog.md", "CONV-007"),
         ("rules/violation-catalog.md", "CONV-008"),
+        ("rules/violation-catalog.md", "CONV-009"),
+        ("rules/violation-catalog.md", "CONV-010"),
         ("rules/violation-catalog.md", "WF-010"),
         ("rules/violation-catalog.md", "WF-011"),
         ("rules/violation-catalog.md", "WF-012"),
@@ -437,12 +442,17 @@ def check_required_phrases(root):
         ("rules/violation-catalog.md", "WF-017"),
         ("rules/violation-catalog.md", "WF-018"),
         ("rules/violation-catalog.md", "WF-019"),
+        ("rules/violation-catalog.md", "WF-020"),
+        ("rules/violation-catalog.md", "WF-021"),
+        ("rules/violation-catalog.md", "WF-022"),
         ("contracts/top-folder-contract.md", "top_src/<branch-id>/"),
         ("contracts/top-folder-contract.md", "top/specs/settings-branch.json"),
         ("contracts/top-folder-contract.md", "MIGRATION_WORKFLOW.json"),
         ("contracts/top-folder-contract.md", "MIGRATION_PLAN.md"),
         ("contracts/top-folder-contract.md", "MIGRATION_LOG.md"),
         ("contracts/top-folder-contract.md", "The active migration workspace is agent-owned"),
+        ("contracts/top-folder-contract.md", "top-migration/<branch-id>"),
+        ("contracts/top-folder-contract.md", "Git safety gate"),
         ("contracts/top-folder-contract.md", "top/migration/<branch-id>/MIGRATION_WORKFLOW.json"),
         ("contracts/top-folder-contract.md", "Shared artifacts are `top/migration/MIGRATION_LOG.md`"),
         ("canon/migration.md", "Migration artifact layout must be canonical"),
@@ -454,8 +464,13 @@ def check_required_phrases(root):
         ("canon/migration.md", "Runtime Branch Binding Pattern"),
         ("canon/migration.md", "Active migration workspace ownership"),
         ("canon/migration.md", "Shared migration artifacts are not branch-owned"),
+        ("canon/migration.md", "Mandatory dedicated git branch"),
+        ("canon/migration.md", "top-migration/<branch-id>"),
+        ("canon/migration.md", "remote push: forbidden unless the user explicitly requests push"),
         ("agents/migration-infrastructure-agent.md", "MIGRATION_PLAN.md"),
         ("agents/migration-infrastructure-agent.md", "MIGRATION_WORKFLOW.json"),
+        ("agents/migration-infrastructure-agent.md", "dedicated migration branch"),
+        ("agents/migration-infrastructure-agent.md", "git safety gate"),
         ("agents/migration-planning-agent.md", "MIGRATION_PLAN.md"),
         ("agents/migration-planning-agent.md", "MIGRATION_WORKFLOW.json"),
         ("agents/migration-agent.md", "Migration means discovering and externalizing hidden structure"),
@@ -502,15 +517,27 @@ def check_required_phrases(root):
         ("canon/core-axioms.md", "Presentation content reports intent"),
         ("canon/core-axioms.md", "controllers mutate data"),
         ("canon/core-axioms.md", "must not derive output values"),
+        ("canon/core-axioms.md", "Absolute content privacy"),
+        ("canon/core-axioms.md", "One controller, zero-or-one content"),
+        ("canon/core-axioms.md", "Controller is not a renderer"),
+        ("canon/core-axioms.md", "Content-owned setters do not cross the boundary"),
         ("examples/tree-editor/README.md", "canonical for top-skill 1.1.18"),
         ("rules/pattern-recognition.md", "Output derivation inside locally implemented content"),
         ("rules/pattern-recognition.md", "Migration wrapper and giant-node signals"),
+        ("rules/pattern-recognition.md", "Concrete content privacy and fragment-output signals"),
+        ("rules/pattern-recognition.md", "Spec shape and generated layout signals"),
+        ("rules/pattern-recognition.md", "Missing checkpoint / non-independent validation signals"),
+        ("rules/pattern-recognition.md", "Migration git branch safety signals"),
         ("references/migration-heuristics.md", "Giant controller access surface"),
         ("references/pattern-cards.md", "Runtime Branch Binding Pattern"),
         ("SKILL.md", "Runtime-created branch roots may additionally receive one canonical binding input"),
         ("canon/validation-rules.md", "Runtime-created branch roots may receive parent/context plus one canonical"),
         ("hydration-manifest.json", "contracts/agent-output-contracts/canon-precheck-output.md"),
         ("contracts/agent-output-contracts/final-audit-output.md", "readiness_status"),
+        ("contracts/agent-output-contracts/validation-output.md", "concrete_content_privacy_check"),
+        ("contracts/agent-output-contracts/validation-output.md", "independent_checkpoint_check"),
+        ("contracts/agent-output-contracts/validation-output.md", "dedicated_migration_branch_check"),
+        ("contracts/agent-output-contracts/migration-infrastructure-output.md", "git_safety_gate"),
     ]
     errors = []
     for file_name, phrase in checks:
@@ -612,6 +639,40 @@ def check_branch_scoped_migration_control_consistency(root):
     return errors
 
 
+def check_migration_git_branch_safety_consistency(root):
+    errors = []
+    required_phrases = [
+        ("canon/migration.md", "Mandatory dedicated git branch"),
+        ("canon/migration.md", "top-migration/<branch-id>"),
+        ("canon/migration.md", "remote push: forbidden unless the user explicitly requests push"),
+        ("canon/migration.md", "Git safety gate:"),
+        ("contracts/top-folder-contract.md", "top-migration/<branch-id>"),
+        ("contracts/top-folder-contract.md", "Git safety gate:"),
+        ("agents/migration-infrastructure-agent.md", "dedicated migration branch"),
+        ("agents/migration-infrastructure-agent.md", "git safety gate"),
+        ("agents/validation-agent.md", "dedicated migration branch validation"),
+        ("agents/final-audit-agent.md", "dedicated migration branch"),
+        ("contracts/agent-output-contracts/migration-infrastructure-output.md", "git_safety_gate"),
+        ("contracts/agent-output-contracts/validation-output.md", "dedicated_migration_branch_check"),
+        ("rules/violation-catalog.md", "WF-022"),
+        ("rules/pattern-recognition.md", "Migration git branch safety signals"),
+    ]
+    for file_name, phrase in required_phrases:
+        if phrase not in read_text(root / file_name):
+            errors.append(f"{file_name}: migration git branch safety phrase missing: {phrase}")
+
+    no_push_terms = [
+        ("canon/migration.md", "push"),
+        ("contracts/top-folder-contract.md", "push"),
+        ("agents/migration-infrastructure-agent.md", "push"),
+        ("contracts/agent-output-contracts/final-audit-output.md", "push"),
+    ]
+    for file_name, phrase in no_push_terms:
+        if phrase not in read_text(root / file_name).lower():
+            errors.append(f"{file_name}: no-push policy wording missing")
+    return errors
+
+
 CONTENT_SOURCE_SUFFIXES = {
     ".ts",
     ".tsx",
@@ -670,6 +731,22 @@ SUSPICIOUS_ARG_NAME_RE = re.compile(
 
 POST_CONSTRUCTION_PUSH_RE = re.compile(
     r"\.\s*(applyConfig|applyState|setData|setCallbacks|setVisible|setText|setStyle|setClass|setPaddingLeft|updateText|updateFromState|updateToggle|renderWith)\s*\("
+)
+
+CONTENT_PRIVACY_RE = re.compile(
+    r"\bimport\s+\{[^}]*[A-Za-z_][A-Za-z0-9_]*Content\b"
+)
+
+CONTROLLER_FRAGMENT_OUTPUT_RE = re.compile(
+    r"\b(get|render|build)[A-Za-z0-9_]*(View|Content|Fragment|Widget|Element)\s*\([^)]*\)\s*"
+    r"(:\s*(React\.ReactNode|React\.ReactElement|ReactElement|JSX\.Element|HTMLElement|Element|View|Widget|Fragment)|=>\s*<)",
+    re.IGNORECASE,
+)
+
+CONTENT_SETTER_HANDLE_RE = re.compile(
+    r"\b(set[A-Z][A-Za-z0-9_]*|update[A-Z][A-Za-z0-9_]*)\b.*\b(IControllerAccess|IContentAccess|controller|parent|adapter|helper)\b"
+    r"|\b(this\.)?_[A-Za-z0-9_]*(setter|set[A-Z]|update[A-Z])[A-Za-z0-9_]*\s*=",
+    re.IGNORECASE,
 )
 
 EXAMPLE_TEXT_SUFFIXES = {".md", ".json", ".ts", ".tsx", ".js", ".jsx"}
@@ -834,6 +911,65 @@ def check_example_consistency_prefilter(root):
     return candidates
 
 
+def check_content_privacy_prefilter(root):
+    """Platform-neutral-ish source scan; Validation Agent makes verdicts."""
+    candidates = []
+    for path in sorted(root.glob("**/*")):
+        if path.is_dir() or is_within_skipped_dir(path, root):
+            continue
+        if path.suffix.lower() not in CONTENT_SOURCE_SUFFIXES:
+            continue
+        text = read_text(path)
+        owning_controller_hint = path.stem.lower().endswith("node") or "controller" in path.stem.lower()
+        for line_number, line in enumerate(text.splitlines(), start=1):
+            if CONTENT_PRIVACY_RE.search(line) and not owning_controller_hint:
+                if "DomContent" in line and not re.search(r"\b[A-Za-z_][A-Za-z0-9_]+Content\b", line.replace("DomContent", "")):
+                    continue
+                candidates.append(
+                    f"{rel(path, root)}:{line_number}: candidate concrete content privacy "
+                    "breach; Validation Agent must review"
+                )
+            if CONTROLLER_FRAGMENT_OUTPUT_RE.search(line):
+                if re.search(r"\bgetView\s*\(\)\s*:\s*HTMLElement\b", line):
+                    continue
+                candidates.append(
+                    f"{rel(path, root)}:{line_number}: candidate controller platform/content "
+                    "fragment output; Validation Agent must review"
+                )
+            if CONTENT_SETTER_HANDLE_RE.search(line):
+                candidates.append(
+                    f"{rel(path, root)}:{line_number}: candidate content-owned setter bridge; "
+                    "Validation Agent must review"
+                )
+    return candidates
+
+
+def check_project_spec_shape(root):
+    errors = []
+    specs_root = root / "top" / "specs"
+    if not specs_root.exists():
+        return errors
+
+    def visit(value, path, trail):
+        if isinstance(value, dict):
+            looks_like_node = any(key in value for key in ("children", "prompt", "props", "doc"))
+            if looks_like_node and "type" not in value and ("id" in value or "name" in value):
+                errors.append(f"{rel(path, root)}:{trail}: node-like object lacks canonical type field")
+            for key, child in value.items():
+                visit(child, path, f"{trail}.{key}")
+        elif isinstance(value, list):
+            for index, child in enumerate(value):
+                visit(child, path, f"{trail}[{index}]")
+
+    for path in sorted(specs_root.glob("**/*.json")):
+        try:
+            data = load_json(path)
+        except Exception:
+            continue
+        visit(data, path, "$")
+    return errors
+
+
 def run(root):
     hard_checks = [
         ("required paths", check_required_paths),
@@ -847,6 +983,8 @@ def run(root):
         ("risky patterns", check_known_risky_patterns),
         ("runtime branch binding consistency", check_runtime_branch_binding_consistency),
         ("branch-scoped migration control", check_branch_scoped_migration_control_consistency),
+        ("migration git branch safety", check_migration_git_branch_safety_consistency),
+        ("project spec shape", check_project_spec_shape),
     ]
     all_errors = []
     for name, check in hard_checks:
@@ -858,6 +996,7 @@ def run(root):
     agent_review_candidates.extend(check_locally_implemented_content_conditional_prefilter(root))
     agent_review_candidates.extend(check_context_attachment_prefilter(root))
     agent_review_candidates.extend(check_example_consistency_prefilter(root))
+    agent_review_candidates.extend(check_content_privacy_prefilter(root))
 
     if all_errors:
         print("quick_validate: FAILED")

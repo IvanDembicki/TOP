@@ -80,6 +80,9 @@ In migration mode, the Orchestrator must not route directly from a user request
 to Migration Agent, TOP Modeling Agent, Generation Agent, Validation Agent, or
 Repair Agent unless:
 
+- Migration Infrastructure Agent confirmed a dedicated migration git branch,
+  normally `top-migration/<branch-id>`, and the first migration log entry
+  contains the git safety gate;
 - `top/migration/<branch-id>/MIGRATION_PLAN.md` exists and names the current migration step;
 - `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` exists, parses, and names the current
   migration phase and next permitted stages;

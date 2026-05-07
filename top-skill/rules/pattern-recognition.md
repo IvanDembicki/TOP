@@ -136,6 +136,92 @@ decomposition evidence, single-node proof, reusable-pattern analysis,
 PanelDisplayStyle justification, hook bridge residual classification, or helper
 component classification.
 
+### Group A4 — Concrete content privacy and fragment-output signals
+
+Concrete locally implemented content is private to the owning controller.
+
+Candidate `CORE-033` signals:
+- files outside the owning controller import a `*Content` class;
+- files outside the owning controller instantiate `new *Content(...)`;
+- controller fields or public APIs are typed as concrete content instead of
+  `IContentAccess`/target-equivalent;
+- adapters, helpers, parents, siblings, or children downcast to, store, inspect,
+  or call concrete content.
+
+Candidate `CORE-034` signals:
+- controller public methods return platform view fragments, render/build trees,
+  JSX/widget/composable fragments, content fragments, style/layout fragments,
+  animation objects, content-owned setters, or platform mutation handles;
+- methods named like `get*View`, `render*`, `build*Content`, or `get*Fragment`
+  return inspectable platform/content implementation rather than an opaque
+  placement-only handle allowed by canon.
+
+Candidate `CORE-035` signals:
+- content-owned setters/mutation handles are stored in controller fields;
+- content passes setter handles through `IControllerAccess`/`IContentAccess`;
+- helpers/adapters capture content setters for later controller-driven updates;
+- callback registration is used as a hidden controller-to-content presentation
+  command channel.
+
+Canonical repair:
+- keep concrete content imports/instantiation inside the owning controller only;
+- store the content as `IContentAccess`;
+- expose controller-level values or opaque placement handles only where canon
+  permits;
+- remove crossed setter handles and use controller state, dirty/render/lifecycle
+  refresh, and content pull of already-resolved values.
+
+### Group A5 — Spec shape and generated layout signals
+
+Candidate `CONV-009` signals:
+- project TOP specs model nodes through ad hoc `id`/`name` fields without a
+  canonical `type` or project-approved equivalent;
+- generated prompt/code cannot identify node kind, parent/child topology, or
+  content classification from the spec shape.
+
+Candidate `CONV-010` signals:
+- generated implementation files flatten a semantic subtree into one folder
+  without explicit materialization rationale;
+- prompt paths and code paths do not mirror the same semantic branch structure;
+- `props.dir`, `props.sourceRoot`, and Expected Materialization disagree.
+
+Quick validation may report these as hard errors for unambiguous spec files or
+as agent review candidates when project conventions are unclear.
+
+### Group A6 — Missing checkpoint / non-independent validation signals
+
+Candidate `WF-020` signals:
+- migration outputs hand off without branch-scoped infrastructure,
+  decomposition, model/spec, precheck, generation, post-generation validation,
+  repair, or final-audit checkpoint artifacts;
+- shared `MIGRATION_LOG.md` lacks an append-only entry for a persistent artifact
+  change or handoff.
+
+Candidate `WF-021` signals:
+- validation cites generator memory, previous chat context, or self-check text
+  as proof without current-pass file reads;
+- final audit trusts type-check or generator output without adversarially
+  re-reading generated source, specs, prompts, contracts, and logs.
+
+### Group A7 — Migration git branch safety signals
+
+Candidate `WF-022` signals:
+- migration artifacts or generated source were created while the repository was
+  still on the user's current branch;
+- branch name is missing, ambiguous, or does not match
+  `top-migration/<branch-id>` or a documented deterministic equivalent;
+- the first `MIGRATION_LOG.md` entry lacks the git safety gate;
+- the log does not record initial branch, migration branch, branch creation or
+  checkout result, working tree status, remote status, unrelated uncommitted
+  changes, write permission, local commit policy, and push policy;
+- unrelated uncommitted changes were mixed with migration output;
+- remote push occurred without explicit user request;
+- a local commit occurred without explicit request or a documented commit phase.
+
+Canonical repair is not to continue writing. Stop, preserve user work, ask for
+commit/stash/branch clarification when needed, switch/create the dedicated
+migration branch, append the git safety gate, then resume migration writes.
+
 ### Group B — Visibility and style manipulation
 
 - `el.style.display = 'none' / 'block'` — conditional hiding based on mode (not model data)

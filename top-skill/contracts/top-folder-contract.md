@@ -103,6 +103,21 @@ top/migration/MIGRATION_STATUS.md
 top/migration/MIGRATION_LOG.md
 ```
 
+Before any migration artifact, generated source, adapter, route, integration, or
+legacy source write is allowed, the migration must be running on a dedicated git
+branch. The canonical branch name is:
+
+```text
+top-migration/<branch-id>
+```
+
+Migration Infrastructure Agent must inspect the current branch and git status,
+create or switch to the dedicated branch, confirm the checked-out branch, and
+write the first migration log entry with the git safety gate. The user's current
+working branch must not receive migration writes. Remote push is forbidden
+unless the user explicitly requests push. Local commits are allowed only when
+requested or when a documented migration commit phase is active.
+
 `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` is the machine-readable
 migration process tree for one branch. It must conform to the current `top-skill` schema
 `top/schemas/migration-workflow.schema.json` and record:
@@ -152,6 +167,22 @@ any persistent artifact change. Each entry must include:
 - validation or self-check result;
 - next agent, next action, or blocking condition.
 
+The first log entry for a migration must also include:
+
+```text
+**Git safety gate:**
+- initial_branch:
+- migration_branch:
+- branch_created:
+- branch_checked_out:
+- working_tree_status:
+- remote_status:
+- unrelated_uncommitted_changes:
+- migration_writes_allowed:
+- local_commit_policy:
+- push_policy:
+```
+
 If a real timestamp is unavailable, write `timestamp_source: placeholder` and do
 not invent identical fake forensic timestamps.
 
@@ -162,6 +193,9 @@ look cleaner after the fact. Corrections are new entries.
 
 The active migration workspace is agent-owned. The legacy application remains
 user-owned.
+
+This ownership applies only within the confirmed dedicated migration git branch.
+Before that branch is active, no migration writes are authorized.
 
 Agents may create, modify, replace, and delete files required by the active
 migration workflow inside branch-owned artifacts:

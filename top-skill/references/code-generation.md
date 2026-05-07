@@ -215,6 +215,10 @@ If a node has content, generation must preserve the architectural split:
 - a separate concrete content class;
 - concrete content is hidden behind the controller;
 - the controller remains the sole external interface of the node.
+- one controller owns zero or one locally implemented content object. Extra
+  modal/form/card/list/bridge/helper presentation pieces must be modeled or
+  classified before generation, not left as an unclassified helper-component
+  forest inside one giant node.
 
 ### Canonical rule
 Generated architecture must not mix the controller and concrete content into a single class where content exists.
@@ -248,6 +252,18 @@ Generated code must not replace the Content instance typed as
 `IContentAccess` with decomposed content lifecycle/materialization members, method bags,
 facade/adapters, closure objects, platform primitives, or objects assembled
 outside the controller/content construction boundary. This is `CORE-031`.
+
+Concrete locally implemented content is private to the owning controller.
+Generated parents, siblings, children, adapters, helpers, and external callers
+must not import, instantiate, type against, downcast to, inspect, store, or call
+that concrete content. Only the owning controller creates it, and the owning
+controller stores and uses it as `IContentAccess`/target-equivalent.
+
+Generated controller APIs must not return platform view fragments,
+render/build trees, content fragments, JSX/widget/composable fragments,
+style/layout fragments, animation objects, content-owned setter handles, or
+platform mutation handles. When child output is needed, expose only an opaque
+placement handle through the child controller's public API where canon permits.
 
 Content must not access the public node surface. Anything else is strictly prohibited.
 
@@ -330,6 +346,12 @@ such as show/hide/update/apply-state/class/style/render-with commands on
 Generated controller code must not use the node's own render/view/native primitive, its platform API, or any equivalent exposed primitive handle for its own content. Detection examples for DOM-like targets: `this.el`, `this.getView().classList`, `this.getView().style`, `this.getView().addEventListener`, `this.getView().setAttribute`, `querySelector`, `content.getView()` — use the equivalent native/render primitive handle on other platforms.
 The controller manages the content lifecycle and does not use the internal content implementation as a communication channel.
 If a node has a separate content object, generation must not leave direct controller access to the concrete implementation bypassing the content boundary. Anything else is strictly prohibited.
+
+Generated content-owned setter/mutation functions must stay private to content.
+They must not be captured by the controller, returned through a controller API,
+stored in access contracts, or passed to adapters/helpers. Presentation updates
+use controller-owned state plus dirty/render/lifecycle refresh and content pull
+of already-resolved values.
 
 ### Requirements for internal access boundaries
 Generation must create for nodes with a separate content only explicitly defined, narrow, and maximally strictly typed internal access boundaries: `IControllerAccess` and `IContentAccess`.
@@ -547,6 +569,16 @@ Typical errors include:
 - generation creates controller-to-content presentation commands or mutation
   commands instead of controller state update, dirty/render request, and content
   pull of already-resolved values;
+- generation exposes concrete content outside the owning controller, or stores
+  concrete content in controller fields instead of `IContentAccess`;
+- generation returns platform/content fragments, style/layout fragments,
+  render/build trees, or content-owned setters from controller methods;
+- generation leaves multiple modal/form/card/list/helper presentation fragments
+  as unclassified local components instead of TOP nodes, state nodes,
+  black-boxes, bridge boundaries, reusable library nodes, or private
+  target-local detail;
+- generation flattens an approved semantic subtree into one output directory
+  without an explicit materialization rationale;
 - generation loses the distinction between `view` and `component`.
 
 ---
@@ -567,6 +599,11 @@ The verification loop must check not only behavior but also the architectural co
   locally implemented content.
 - whether TOP object construction is context attachment only, with no constructor
   data injection or setter-style post-construction data/config/state pushing.
+- whether concrete content privacy is preserved, controller APIs do not return
+  content/platform fragments, and content-owned setter handles do not cross the
+  boundary.
+- whether generated source layout mirrors the approved TOP tree through the
+  declared source root, effective `props.dir`, and prompt layout.
 - for migration, whether generated code preserves the approved decomposition
   instead of collapsing hidden states, data owners, bridge boundaries, forms,
   modals, lists, or reusable structures back into one hub node or helper

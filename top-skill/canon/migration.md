@@ -396,6 +396,39 @@ The phase status must be honest:
 
 Migration is a controlled workflow, not a single agent improvisation.
 
+### Mandatory dedicated git branch
+
+Every TOP migration must run on a dedicated git branch. The migration branch is
+a safety boundary around the active migration workspace. Migration agents must
+not create or modify migration artifacts, generated files, adapters, route
+files, legacy integration files, or project source files on the user's current
+working branch.
+
+Before any migration write, Migration Infrastructure Agent must inspect git
+status, detect the current branch, create or switch to a deterministic dedicated
+migration branch, confirm that the checked-out branch is correct, and append the
+git safety gate entry to `top/migration/MIGRATION_LOG.md`.
+
+Recommended branch name:
+
+```text
+top-migration/<branch-id>
+```
+
+If the branch already exists, the agent must inspect it and continue only when
+it belongs to the same migration. If branch ownership is ambiguous, unrelated
+work is present, or unrelated uncommitted changes would be mixed with migration
+output, the agent must stop and report the blocking condition.
+
+Default git operation policy:
+- create/switch dedicated branch: mandatory before migration writes;
+- local commit: allowed only when explicitly requested by the user or when the
+  workflow has reached a documented local-commit phase;
+- remote push: forbidden unless the user explicitly requests push.
+
+The active migration workspace is agent-owned only after the dedicated migration
+branch is active and confirmed.
+
 Every migration-mode task that creates or changes project-local TOP artifacts
 must maintain:
 
@@ -430,6 +463,7 @@ controls routing and validation.
 `top/migration/MIGRATION_LOG.md` is shared, multi-branch, and append-only. Each
 agent operating in migration mode must append a log entry before handoff and
 after any persistent artifact change. The entry records:
+- git safety gate results for the first entry of the migration;
 - phase;
 - branch id;
 - migration id;
@@ -449,6 +483,22 @@ If a real timestamp is unavailable, do not fake it. Write
 `timestamp_source: placeholder`. Identical fake timestamps must not be presented
 as forensic timestamps.
 
+The first migration log entry must include:
+
+```text
+**Git safety gate:**
+- initial_branch:
+- migration_branch:
+- branch_created:
+- branch_checked_out:
+- working_tree_status:
+- remote_status:
+- unrelated_uncommitted_changes:
+- migration_writes_allowed:
+- local_commit_policy:
+- push_policy:
+```
+
 The log is forensic evidence. Agents must not rewrite old entries to hide a bad
 decision. Corrections are appended as new entries.
 
@@ -458,6 +508,29 @@ branch entry; it must not be rewritten as if only one active branch exists.
 
 If these files are missing, stale, contradictory, or not updated for a migration
 handoff, the migration is incomplete even if generated code exists.
+
+### Mandatory short checkpoints
+
+Migration work must move through short persistent checkpoints:
+
+1. infrastructure prepared;
+2. scope and recursive decomposition completed;
+3. model/spec and prompts written;
+4. canon precheck completed;
+5. generation completed;
+6. post-generation source validation completed;
+7. repair completed when needed;
+8. final audit completed.
+
+Each checkpoint must update branch-scoped control artifacts and append the
+shared `top/migration/MIGRATION_LOG.md` before handoff. A later agent must be
+able to resume from repository artifacts alone. Chat memory, previous agent
+claims, and generator self-check text are not migration state.
+
+Validation and final audit must be independent and adversarial. The verifier
+must re-read the current skill rules and target artifacts in its own pass. A
+generation or repair self-check is evidence to inspect, not a substitute for
+validation.
 
 ## Mg-1c. Active migration workspace ownership
 
@@ -516,6 +589,13 @@ was appended rather than rewritten, unrelated `top_src/<other-branch>` and
 `top/migration/<other-branch>` files were not changed, and writes outside the
 active migration workspace are either explicitly allowed adapter/integration
 changes or scope violations.
+
+Validation must also verify that migration writes happened only after the
+dedicated branch was created or selected, the migration branch matches
+`top-migration/<branch-id>` or a documented deterministic project equivalent,
+the first migration log entry contains the git safety gate, no remote push was
+performed without explicit user request, and any local commit was requested or
+was part of a documented commit phase.
 
 ---
 

@@ -21,6 +21,7 @@ Use this agent after precheck failure, validation failure, or when a known artif
 - `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`,
   `top/migration/<branch-id>/MIGRATION_PLAN.md`, and
   `MIGRATION_LOG.md` when task mode is migration
+- confirmed dedicated migration git branch and git safety gate when task mode is migration
 </inputs>
 
 <outputs>
@@ -77,6 +78,21 @@ If a discrepancy arises between this agent file and the output contract:
 - repair direct global store access by modeling an explicit store connector,
   data node, data controller, adapter context, or narrow access contract, or by
   recording a disciplined migration residual with target repair and expiry
+- repair concrete content privacy breaches by moving imports/instantiation/
+  typing/downcasts/calls back inside the owning controller and storing the
+  content only as `IContentAccess`
+- repair controller fragment-output APIs by replacing platform/content fragment
+  returns with controller-level values or canon-permitted opaque placement
+  handles, and by modeling hidden fragments as child/state/black-box/library
+  nodes when they have responsibility
+- repair content-owned setter bridges by removing crossed setter/mutation
+  handles and replacing them with controller state, dirty/render/lifecycle
+  refresh, and content pull through `IControllerAccess`
+- repair generated layout/topology mismatch by moving implementation artifacts
+  under the declared `top_src/<branch-id>/` / effective `props.dir` tree and
+  updating prompts/specs through Spec Sync
+- in migration mode, repair only after the dedicated migration branch is active
+  and the git safety gate permits migration writes
 </allowed>
 
 <forbidden>
@@ -110,6 +126,13 @@ If a discrepancy arises between this agent file and the output contract:
   waypoint
 - repair a giant-node/wrapped-legacy failure by adding documentation while
   keeping the single hub node unchanged
+- repair a concrete content privacy breach by wrapping the concrete content in
+  a facade, helper, adapter, method bag, or external factory while leaving it
+  externally reachable
+- repair controller fragment-output by renaming render fragments as handles when
+  the caller can still inspect, mutate, or platform-operate on them
+- repair content-owned setter bridges by moving the same setter through another
+  access contract or callback path
 - repair hidden state branches by replacing booleans with `PanelDisplayStyle`
   or equivalent display-token getters
 - keep accepted deviations that lack exact locations, target repair, expiry
@@ -118,6 +141,8 @@ If a discrepancy arises between this agent file and the output contract:
   structure remains non-canonical
 - in migration mode, repair without following the current migration workflow and
   plan or without appending a migration log entry
+- repair migration artifacts on the user's current working branch or push to
+  remote without explicit user request
 - introduce new ambiguity during repair
 - finalize the result without revalidation
 </forbidden>

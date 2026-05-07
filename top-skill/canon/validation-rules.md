@@ -8,6 +8,15 @@ Local functionality does not override TOP rules.
 - No direct access to concrete implementation.
 - No bypass around content.
 - All interaction through allowed protocols.
+- Concrete locally implemented content is private to its owning controller.
+  Other nodes, parents, siblings, adapters, helpers, and generated callers must
+  not import, instantiate, type against, downcast to, inspect, store, or call the
+  concrete content class.
+- Controller public APIs must not return platform view fragments, content
+  fragments, render/build trees, style/layout fragments, JSX/widget/composable
+  fragments, animation objects, content-owned setters, or mutation handles.
+- Content-owned setter/mutation handles must not cross the content boundary.
+  They must not be stored by controllers or passed through access contracts.
 
 ## Protocol validation
 - If a node has a separate content object, explicit internal access boundaries must exist: `IContentAccess` and `IControllerAccess`.
@@ -118,6 +127,11 @@ Canonical repair for context data injection:
   locally implemented content is a hard `CORE-015` validation error when it
   participates in selection or derivation.
 - Content may execute low-level platform operations on its own implementation material, including subscribe/unsubscribe, disposal, local event handling, target-local mechanics, and applying already-resolved primitive values during materialization/refresh. These operations must not encode presentation decisions, accept controller-pushed presentation commands, or act as an external communication channel.
+- A node has at most one locally implemented content object owned by its
+  controller. Additional modal/form/card/list/bridge/helper presentation
+  fragments must be classified as child nodes, state nodes, black-box
+  components, bridge boundaries, reusable library nodes, or private target-local
+  implementation detail inside that one content object.
 
 ## Semantic event/request validation
 - Locally implemented content reports semantic intent to its owning controller
@@ -211,6 +225,14 @@ Behavioral analysis and typing analysis are independent passes. The absence of b
   materialization-pending. It must not report validated or complete.
 - Noncanonical spec placement is `CONV-007`.
 - Missing or inconsistent implementation source root is `CONV-008`.
+- Project TOP specs must use canonical node shape. A node object must identify
+  its node kind through `type` or the project-approved equivalent. Ad hoc
+  `id`/`name`-driven pseudo-spec trees that cannot be regenerated as TOP nodes
+  are `CONV-009`.
+- Generated implementation layout must mirror the approved TOP tree through the
+  declared source root, effective `props.dir`, and prompt layout. A flat
+  generated folder that collapses a semantic subtree without explicit
+  materialization rationale is `CONV-010`.
 - A migration/materialization handoff without canonical paths, source root, and
   honest phase status is `WF-013`.
 - A migration-mode task that creates or changes TOP artifacts without
@@ -241,6 +263,21 @@ Behavioral analysis and typing analysis are independent passes. The absence of b
   migration-mode handoff and persistent artifact change.
 - Each log entry must name timestamp, agent, phase, files read/changed,
   decisions, validation/self-check result, and next stage.
+- Migration pipelines must use persistent checkpoints: infrastructure,
+  scope/decomposition, model/spec, canon precheck, generation, post-generation
+  validation, repair when needed, and final audit. Each checkpoint must write or
+  update the relevant branch-scoped artifacts before handoff.
+- Validation must be adversarial and independent from generation or repair
+  context. Generator self-checks are evidence to inspect, not a substitute for
+  validation. A validation pass must re-read target artifacts and current skill
+  rules before judging.
+- Migration writes must happen only on a confirmed dedicated git branch,
+  normally `top-migration/<branch-id>`. Validation must fail with `WF-022` if
+  migration writes happened before branch confirmation, if the first migration
+  log entry lacks the git safety gate, if branch name does not match the
+  migration branch id, if unrelated work was mixed into migration output, if
+  push occurred without explicit user request, or if a local commit was not
+  requested or phase-documented.
 
 ## Canon rule
 Only canonical patterns are allowed. Everything else is a violation.

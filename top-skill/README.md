@@ -1,10 +1,15 @@
 # TOP Skill — Tree-Oriented Programming
 
-**Version:** 1.1.21 | **License:** MIT | **Invocation:** `/top`
+**Version:** 1.1.23 | **License:** MIT | **Invocation:** `/top`
 
 **TOP turns architecture from a weak social norm into a strong machine-verifiable protocol.**
 
 A skill for AI-driven design, generation, and validation of systems built with the **Tree-Oriented Programming (TOP)** paradigm.
+
+Migration safety rule: every TOP migration must create or switch to a dedicated
+git branch, normally `top-migration/<branch-id>`, and log the git safety gate
+before any migration write. Migration agents must not push to remote unless the
+user explicitly requests push.
 
 This product is the foundational skill layer in the broader TOP product line:
 - use `top-skill` for TOP architecture, canon, modeling, and generation protocol;

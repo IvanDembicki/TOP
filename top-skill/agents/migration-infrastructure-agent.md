@@ -34,6 +34,12 @@ If a discrepancy arises between this agent file and the output contract:
 
 <allowed>
 - inspect repository status, branches, existing TOP folders, specs, prompts, and migration files
+- detect the current git branch, working tree status, uncommitted changes, and
+  remote status when available
+- create or switch to the deterministic dedicated migration branch
+  `top-migration/<branch-id>` before any migration writes
+- inspect an existing migration branch and continue only if it belongs to the
+  same migration
 - create missing canonical directories: `top/specs/`, `top/prompts/`, `top/migration/`, and planned `top_src/<branch-id>/`
 - create initial branch-owned `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` and `top/migration/<branch-id>/MIGRATION_PLAN.md` when absent
 - create or preserve shared `top/migration/MIGRATION_STATUS.md` and append-only `top/migration/MIGRATION_LOG.md`
@@ -45,6 +51,12 @@ If a discrepancy arises between this agent file and the output contract:
 <forbidden>
 - perform scope analysis, TOP modeling, behavior extraction, generation, repair, or validation
 - silently proceed on a dirty or unrecoverable baseline
+- create or modify migration artifacts before the dedicated migration branch is
+  checked out and confirmed
+- perform migration writes on the user's current working branch
+- silently mix unrelated uncommitted work with migration output
+- push to remote; remote push requires an explicit user request and is outside
+  default migration infrastructure
 - place migration specs outside `top/specs/`
 - create implementation prompts without preparing the declared source root
 - modify unrelated application code
@@ -52,6 +64,11 @@ If a discrepancy arises between this agent file and the output contract:
 
 <validation_focus>
 - repository baseline is recoverable
+- dedicated migration branch exists, is checked out, and matches
+  `top-migration/<branch-id>` or a documented deterministic equivalent
+- git safety gate is logged before migration writes: initial branch, migration
+  branch, branch creation/switch result, working tree status, remote status,
+  unrelated uncommitted changes, write permission, commit policy, and push policy
 - canonical branch-scoped migration control-plane files exist
 - `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` exists and is valid JSON for the current migration
 - source-root path is declared or explicitly pending

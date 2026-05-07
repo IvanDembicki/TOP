@@ -71,6 +71,60 @@ portability, and verifiability. If content contains selection logic, it becomes
 a hidden decision engine and breaks the TOP boundary between controller/tree
 decision ownership and content materialization.
 
+## Absolute content privacy
+
+Concrete locally implemented content is private implementation material of its
+own node. It is not a public dependency, not a sibling dependency, not a parent
+API, and not an integration surface for arbitrary code.
+
+Only the owning controller may create, store, and use its own concrete content,
+and even that controller must store and use it only through the narrow
+`IContentAccess`/target-equivalent boundary. Other nodes, parents, siblings,
+helpers, adapters, and generated callers must not import, instantiate, type
+against, downcast to, inspect, store, or call concrete content classes.
+
+A node may expose public controller-level values or opaque placement handles
+where canon permits. It must not expose concrete content or content-owned
+platform primitives as a route around controller ownership.
+
+## One controller, zero-or-one content
+
+A TOP node has exactly one controller. It may have zero or one locally
+implemented content object owned by that controller.
+
+Multiple presentation objects, fragments, modal helper components, bridge
+components, widgets, or platform primitives inside one node are not extra
+content objects by default. They are candidate child nodes, state nodes,
+black-box components, bridge boundaries, or reusable library nodes until the
+model proves that they are only target-local implementation detail hidden inside
+the one private content object.
+
+Splitting a large legacy screen into many local helper components without TOP
+classification is not decomposition. It is a wrapped-legacy risk.
+
+## Controller is not a renderer
+
+A controller must not return platform view fragments, content fragments,
+render/build trees, style/layout fragments, JSX/widget/composable fragments,
+animation objects, or content-owned mutation handles as a controller API.
+
+Parent-owned placement may use an opaque child output handle only where the
+child controller's public API explicitly exposes that handle and only for
+placement/composition. The returned value must not expose concrete content,
+platform internals, setters, callback registration, or a mutation surface.
+
+## Content-owned setters do not cross the boundary
+
+Locally implemented content may have private local mechanics, but content-owned
+setter/mutation handles must not be stored by, returned to, or passed through
+controllers, parents, adapters, helpers, or other nodes.
+
+If presentation must change, the controller changes controller-owned state and
+requests dirty/render/lifecycle refresh through the node/runtime mechanism.
+During materialization or refresh, locally implemented content pulls the
+already-resolved values through `IControllerAccess` and applies them to its
+static structure.
+
 ## Context attachment, not data injection
 
 TOP objects are context-bound, not parameter-bound.
@@ -150,6 +204,18 @@ an already-resolved display value for a stable structural section, but it must
 not conceal state alternatives, lifecycle-bearing branches, independent
 workflows, forms, modals, permission-gated capabilities, or data ownership
 boundaries.
+
+Migration must pass through short, persistent checkpoints. The recommended
+minimum checkpoints are infrastructure, scope/decomposition, model/spec,
+precheck, generation, post-generation validation, repair if needed, and final
+audit. Each checkpoint must persist branch-scoped artifacts and append the
+shared migration log before handoff. A later agent must be able to resume from
+the artifacts without trusting previous chat context.
+
+Execution and verification must remain independent. The agent that generated or
+repaired a branch may perform a self-check, but final validation must re-read
+the current skill and target artifacts and must judge adversarially against the
+canon, not against the generator's explanation.
 
 ## Behavioral coherence
 

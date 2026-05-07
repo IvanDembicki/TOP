@@ -65,6 +65,22 @@ rules:
 - Content constructor receives exactly one semantic value: the owning controller instance typed only as the narrow `IControllerAccess`/target-equivalent interface
 - zero-contract content-to-controller access is an empty owner access interface implemented by the controller; do not generate `ControllerAccessZero` dummy objects
 - controller stores and uses content through `IContentAccess`, not through the concrete Content class
+- concrete locally implemented content is private to the owning controller.
+  Do not import, instantiate, type against, downcast to, inspect, store, or call
+  concrete content from parents, siblings, children, helpers, adapters, or
+  generated callers.
+- generate one controller and zero-or-one locally implemented content object per
+  node. Additional modal/form/card/list/bridge/helper pieces must be modeled or
+  classified as child nodes, state nodes, black-box components, bridge
+  boundaries, reusable library nodes, or private target-local implementation
+  detail inside that one content object.
+- do not generate controller methods that return platform view fragments,
+  content fragments, render/build trees, JSX/widget/composable fragments,
+  style/layout fragments, animation objects, content-owned setter handles, or
+  platform mutation handles.
+- do not generate content-owned setter/mutation handles that cross the content
+  boundary through controller fields, access contracts, helpers, adapters, or
+  public APIs.
 - controller receives/stores/uses its own Content instance typed through
   `IContentAccess`; do not generate decomposed content lifecycle/materialization bags,
   facade/adapters, platform primitive handles, or inline closure objects

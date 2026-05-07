@@ -73,6 +73,14 @@ If a discrepancy arises between this agent file and the output contract:
 - accept a repair that replaces `CORE-029` with independent duplicate derivation of the same shared fact
 - accept locally implemented content that contains conditional selection logic
   of any kind
+- accept concrete locally implemented content imports, instantiation, typing,
+  downcasts, inspection, storage, or calls from any artifact other than the
+  owning controller (`CORE-033`)
+- accept controller APIs that return platform/content fragments, render/build
+  trees, JSX/widget/composable fragments, style/layout fragments, animation
+  objects, content-owned setters, or mutation handles (`CORE-034`)
+- accept content-owned setter/mutation handles crossing into controllers,
+  parents, adapters, helpers, or access contracts (`CORE-035`)
 - accept controller-to-content presentation commands, presentation state pushes,
   or imperative mutations into locally implemented content
 - accept constructor data injection or post-construction setter-style
@@ -82,6 +90,18 @@ If a discrepancy arises between this agent file and the output contract:
 - validate implementation code without checking whether the relevant
   `top/specs/**/*.json` specs or established root index still match the
   materialized child topology
+- accept final validation based only on generator/repair self-checks, prior
+  chat context, or remembered reads instead of independent current-pass file
+  reads (`WF-021`)
+- accept migration handoff that skipped a persistent checkpoint for
+  infrastructure, scope/decomposition, model/spec, precheck, generation,
+  post-generation validation, repair, or final audit (`WF-020`)
+- accept migration writes that occurred before a dedicated migration git branch
+  was created or selected and logged (`WF-022`)
+- accept migration output when the first migration log entry lacks the git
+  safety gate, when branch name does not match the branch id, when unrelated
+  files were modified, when push occurred without explicit user request, or when
+  local commits were not requested/documented
 - replace validation with vague style commentary
 </forbidden>
 
@@ -95,6 +115,10 @@ If a discrepancy arises between this agent file and the output contract:
 - controller-to-content presentation push validation (`CORE-015`)
 - post-generation source validation of controllers, content, contracts, bridge
   components, helpers, modal files, adapters, and generated constants/helpers
+- concrete content privacy validation (`CORE-033`)
+- controller fragment-output validation (`CORE-034`)
+- content-owned setter bridge validation (`CORE-035`)
+- one-controller zero-or-one-content validation and helper classification
 - migration decomposition validation: scope-vs-node-boundary, recursive
   candidate classification, single-node proof, giant-node review,
   PanelDisplayStyle discipline, reusable-pattern extraction, modal/form/list
@@ -105,6 +129,10 @@ If a discrepancy arises between this agent file and the output contract:
 - method-semantics validation
 - typing validation
 - code ↔ spec topology validation
+- TOP spec shape validation: canonical `type` or approved equivalent, not
+  ad hoc `id`/`name` pseudo-spec trees (`CONV-009`)
+- generated layout/topology validation: `top_src/<branch-id>/`, effective
+  `props.dir`, and prompt layout mirror the TOP tree (`CONV-010`)
 - prompt ↔ code synchronization validation
 - semantic preservation validation
 - source-platform leakage validation
@@ -135,6 +163,10 @@ If a discrepancy arises between this agent file and the output contract:
   asset/semantic paths; shared `MIGRATION_STATUS.md` preserves previous branch
   history; unrelated branch workspaces and unrelated legacy files are untouched
   unless an adapter/integration change is explicitly justified and logged
+- independent checkpoint validation: branch checkpoints are persisted and
+  validation re-reads current skill/target artifacts adversarially
+- dedicated migration branch validation: branch name, git safety gate, write
+  timing, unrelated changes, local commit policy, and no-push policy
 </validation_focus>
 
 <handoff_rules>

@@ -35,6 +35,8 @@ If a discrepancy arises between this agent file and the output contract:
 
 <allowed>
 - inspect project structure enough to identify migration candidates
+- verify that Migration Infrastructure Agent confirmed the dedicated migration
+  branch and wrote the git safety gate before planning writes
 - honor an explicit user-selected starting scope
 - when no starting scope is provided, choose the best starting scope by isolation, risk, behavior coverage, and dependency visibility
 - create or update `top/migration/<branch-id>/MIGRATION_PLAN.md`
@@ -47,6 +49,9 @@ If a discrepancy arises between this agent file and the output contract:
 
 <forbidden>
 - generate implementation code
+- create or update migration plan/workflow files before the dedicated migration
+  branch is active and the git safety gate is logged
+- push to remote
 - create implementation prompts before the plan names the branch, source root, and validation gates
 - skip behavior evidence discovery planning
 - proceed without writing or updating the migration plan
@@ -56,6 +61,8 @@ If a discrepancy arises between this agent file and the output contract:
 
 <validation_focus>
 - plan has explicit scope, branch id, phases, owners/agents, artifacts, gates, and rollback points
+- plan names the dedicated git branch, normally `top-migration/<branch-id>`,
+  and confirms that migration writes are allowed only on that branch
 - workflow JSON mirrors the plan and names phase ids, responsible agents,
   statuses, gates, outputs, and next phases
 - if user named a starting scope, the plan treats it as the migration scope root,
