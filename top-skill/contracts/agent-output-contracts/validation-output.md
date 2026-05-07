@@ -28,11 +28,21 @@ result:
 - workflow_gaps
 
 details:
+- validation_context_independence_check
+- validation_evidence
 - checks_performed
 - passed_checks
 - failed_checks
 - confirmed_violations
 - possible_violations
+- artifacts_reviewed
+- files_inspected
+- canon_rules_checked
+- detection_patterns_used
+- generator_self_validation_claim_check
+- rejection_tickets
+- generator_learning_ledger_update_required
+- incremental_validation_check
 - spec_sync_check
 - drift_check
 - source_path_check
@@ -80,6 +90,35 @@ next_step:
 
 - Validation must remain a strict pass/fail check
 - `core_violations`, `skill_convention_violations`, and `workflow_gaps` must be separated
+- Validation must be independent and adversarial. Previous generator, repair,
+  modeling, migration, or implementation reports are claims to inspect, not
+  proof. Treating them as proof is `WF-024`; relying on prior chat context or
+  memory is `WF-021`.
+- `validation_evidence` must list artifacts reviewed, files inspected, checks
+  performed, canon rules checked, search/detection patterns used, artifact
+  types reviewed, per-check violation/no-violation evidence, ambiguities, and
+  unresolved limits. A PASS without this evidence is `WF-025`.
+- `generator_self_validation_claim_check` must report whether executor output
+  claimed its own validation verdict. Claims such as `TOP-clean`, `CORE-015
+  clean`, `canon compliant`, `validation passed`, `no violations`,
+  `ready_for_manual_QA`, `ready_for_use`, or `final_status: pass` from the
+  executor are `WF-023`.
+- If validation fails, the validator must create a structured rejection ticket
+  and append a rejection entry to `top/migration/MIGRATION_LOG.md`. Missing
+  rejection traceability is `WF-027`.
+- A rejection ticket must include `rejection_id`, `validator_agent`, `phase`,
+  `attempt_number`, `artifact_under_review`, `files_checked`,
+  `canon_rules_checked`, `violation_code`, `violation_summary`, `evidence`,
+  `why_invalid`, `required_repair`, `forbidden_repairs`, and
+  `return_to_agent`.
+- `generator_learning_ledger_update_required` must identify whether
+  `top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md` must be updated.
+  Missing read/update is `WF-028`; repeated rejected strategy is `WF-029`.
+- Retry limits are `max_repair_attempts_per_validation_gate: 3` and
+  `max_same_violation_repeats: 2`; exceeding them is `WF-030`.
+- `incremental_validation_check` must report whether the smallest meaningful
+  artifacts were validated as they appeared, using micro-check, meso-check, and
+  macro-check gates from `canon/validation-rejection-protocol.md`.
 - `accepted_deviations` may document only TOP-canon-defined migration
   waypoints, and must not remove the corresponding violation from
   `core_violations`
@@ -109,6 +148,9 @@ next_step:
 - Validation must report `CORE-035` when content-owned setter/mutation handles
   cross the content boundary through controller fields, APIs, access contracts,
   adapters, helpers, or callbacks
+- Validation must report `CORE-036` when a public TOP node/controller artifact
+  is a target-framework wrapper around concrete content, or when
+  external/parent/adapter code can name the wrapper to reach concrete content
 - Validation must report `CONV-007` when a new migration branch spec is stored
   as an ad hoc root-level file in `top/` instead of under `top/specs/` without an
   established project convention
@@ -154,6 +196,11 @@ next_step:
   unrelated work was mixed into migration output, when push occurred without
   explicit user request, or when local commits were not requested or
   phase-documented.
+- Validation must report `WF-023` through `WF-030` for generator
+  self-validation claims, contaminated validation context, validation without
+  artifact evidence, final audit accepting unproven validation, missing
+  rejection log entry, missing generator learning ledger update, repeated
+  rejected strategy, and exceeded repair circuit breaker.
 - `migration_decomposition_check`, `giant_node_review_check`,
   `panel_display_style_check`, `post_generation_source_validation_check`,
   `accepted_deviation_discipline_check`, and

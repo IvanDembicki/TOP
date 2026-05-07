@@ -532,6 +532,22 @@ must re-read the current skill rules and target artifacts in its own pass. A
 generation or repair self-check is evidence to inspect, not a substitute for
 validation.
 
+Incremental validation is mandatory. Validate the smallest meaningful artifact
+as soon as it exists; do not build on unvalidated architecture.
+
+Checkpoint granularity follows `canon/validation-rejection-protocol.md`:
+- micro-check: one small artifact or action, such as branch safety, one spec
+  node, one prompt file, one generated controller/content/contracts shape, one
+  folder path, one rejection ticket, or one suspicious content import;
+- meso-check: a related artifact group, such as scope boundaries,
+  decomposition proposal, spec skeleton, prompt subtree, generated node group,
+  or adapter group;
+- macro-check: a full phase, such as modeling, generation, repair cycle,
+  integration, or final audit.
+
+Any micro-check result of `REVIEW_REQUIRED` or `FAIL` must trigger deeper
+validation before the next large step.
+
 ## Mg-1c. Active migration workspace ownership
 
 The active migration workspace is agent-owned. The legacy application remains

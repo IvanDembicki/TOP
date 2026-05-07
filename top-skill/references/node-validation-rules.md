@@ -29,6 +29,9 @@ Required checks:
   parents, siblings, children, adapters, helpers, generated callers, and other
   nodes do not import, instantiate, type against, downcast to, inspect, store,
   or call the concrete content class (`CORE-033`);
+- no public node/controller artifact is a target-framework wrapper around
+  concrete content, and no external/parent/adapter file can name concrete
+  content or a wrapper around it (`CORE-036`);
 - controller public APIs do not return platform view fragments, render/build
   trees, content fragments, style/layout fragments, JSX/widget/composable
   fragments, animation objects, content-owned setter handles, or mutation
@@ -386,6 +389,8 @@ Required checks for migration branches:
   selectors, status panels, action panels, and repeated structures are
   classified as local details, nodes, state nodes, black boxes, or reusable
   library nodes.
+- public wrappers around concrete content are rejected rather than treated as
+  valid helper components (`CORE-036`);
 - generated folder layout mirrors the approved TOP tree through the declared
   source root, effective `props.dir`, and prompt layout; semantic subtrees are
   not flattened into a wrapper folder without explicit materialization

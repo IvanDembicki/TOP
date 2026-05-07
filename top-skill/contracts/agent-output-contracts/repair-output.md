@@ -24,6 +24,8 @@ result:
 - repaired_artifact
 - violations_addressed
 - behavior_violations_addressed
+- rejection_ticket_addressed
+- generator_learning_ledger_read
 - migration_log_entry
 
 details:
@@ -54,6 +56,18 @@ next_step:
   `migration_log_entry` must identify the appended `top/migration/MIGRATION_LOG.md`
   entry and any `top/migration/<branch-id>/MIGRATION_WORKFLOW.json` phase/status update
   entry
+- Repair is an executor report, not a validation verdict. Repair must not claim
+  `TOP-clean`, `canon compliant`, `validation passed`, `no violations`,
+  `ready_for_manual_QA`, `ready_for_use`, or equivalent validation status for
+  its own artifacts (`WF-023`).
+- For migration repairs, `rejection_ticket_addressed` must identify the
+  validation rejection ticket that drives the repair. Repair may satisfy the
+  rejection; it must not override it.
+- For migration repairs, `generator_learning_ledger_read` must identify the
+  branch-local `top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md` entry
+  read before repair. Repair must not repeat a rejected strategy (`WF-029`).
+- Repair must respect `max_repair_attempts_per_validation_gate: 3` and
+  `max_same_violation_repeats: 2`; exceeding either limit is `WF-030`.
 - Repair output must report if a fix leaves a documented core deviation in place; such a deviation is not resolved
 - Repair output must report `CORE-029` if the repair introduced semantic runtime input into a Node/Controller
 - Repair output must report an invalid repair if it replaces `CORE-029` with duplicate derivation of the same shared fact, or replaces Invariant 14 with Node/Controller runtime input tunneling

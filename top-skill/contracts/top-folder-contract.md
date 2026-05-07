@@ -47,7 +47,9 @@ top/
     <branch-id>/
       MIGRATION_WORKFLOW.json
       MIGRATION_PLAN.md
+      GENERATOR_LEARNING_LEDGER.md
       reports/
+        rejections/
     MIGRATION_STATUS.md
     MIGRATION_LOG.md
   assets/
@@ -98,6 +100,7 @@ must maintain these files:
 ```text
 top/migration/<branch-id>/MIGRATION_PLAN.md
 top/migration/<branch-id>/MIGRATION_WORKFLOW.json
+top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md
 top/migration/<branch-id>/reports/**
 top/migration/MIGRATION_STATUS.md
 top/migration/MIGRATION_LOG.md
@@ -189,6 +192,32 @@ not invent identical fake forensic timestamps.
 The log is for forensic replay. It must not be rewritten to make the migration
 look cleaner after the fact. Corrections are new entries.
 
+Failed validation must create a rejection ticket under the active branch reports,
+for example:
+
+```text
+top/migration/<branch-id>/reports/rejections/<rejection-id>.md
+```
+
+The validator, not the generator, appends the rejection entry to
+`top/migration/MIGRATION_LOG.md`. A rejection ticket must include rejection id,
+validator agent, phase, attempt number, artifact under review, files checked,
+canon rules checked, violation code, evidence, why the artifact is invalid,
+required repair, forbidden repairs, and the return-to agent.
+
+`top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md` is the branch-local
+negative-constraint ledger for generators and repair agents. It records
+rejected strategies and must be read before later generation or repair in that
+branch. Repeating a rejected strategy without validator-approved justification
+is a workflow violation.
+
+Incremental validation checkpoints are public-record entries. Each micro-check,
+meso-check, and macro-check must append a compact entry to
+`top/migration/MIGRATION_LOG.md` or to a branch-local report referenced by the
+log. Required fields are `checkpoint_id`, `checkpoint_type`, `phase`, `agent`,
+`artifact`, `checks_performed`, `result`, failure evidence when applicable, and
+`next_action`.
+
 ## Active migration workspace ownership
 
 The active migration workspace is agent-owned. The legacy application remains
@@ -205,6 +234,7 @@ top/specs/<branch-id>.json
 top/prompts/<branch-id>/**
 top/migration/<branch-id>/MIGRATION_PLAN.md
 top/migration/<branch-id>/MIGRATION_WORKFLOW.json
+top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md
 top/migration/<branch-id>/reports/**
 top/migration/<branch-id>/**
 top/assets/**

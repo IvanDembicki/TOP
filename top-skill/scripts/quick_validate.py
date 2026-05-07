@@ -16,8 +16,10 @@ REQUIRED_PATHS = [
     "AI_PRELOAD_CONTEXT.md",
     "rules/skill-maintenance-rules.md",
     "canon/architectural-invariants.md",
+    "canon/agent-power-separation.md",
     "canon/controller-content-rules.md",
     "canon/forbidden-confusions.md",
+    "canon/validation-rejection-protocol.md",
     "canon/validation-rules.md",
     "rules/violation-catalog.md",
     "rules/pattern-recognition.md",
@@ -256,6 +258,8 @@ def check_top_governance_consistency(root):
 
     quickstart = read_text(root / "QUICKSTART_MIN_READS.md")
     required_migration_reads = [
+        "canon/agent-power-separation.md",
+        "canon/validation-rejection-protocol.md",
         "agents/migration-infrastructure-agent.md",
         "agents/migration-planning-agent.md",
         "agents/canon-precheck-agent.md",
@@ -276,6 +280,8 @@ def check_top_governance_consistency(root):
 
     required_modeling_reads = [
         "canon/migration.md",
+        "canon/agent-power-separation.md",
+        "canon/validation-rejection-protocol.md",
         "agents/canon-precheck-agent.md",
         "contracts/agent-output-contracts/migration-infrastructure-output.md",
         "contracts/agent-output-contracts/migration-plan-output.md",
@@ -317,6 +323,8 @@ def check_top_governance_consistency(root):
 
     hydration_required = {
         "migration": [
+            "canon/agent-power-separation.md",
+            "canon/validation-rejection-protocol.md",
             "agents/canon-precheck-agent.md",
             "contracts/agent-output-contracts/canon-precheck-output.md",
             "agents/final-audit-agent.md",
@@ -327,6 +335,8 @@ def check_top_governance_consistency(root):
             "prompts/generate-top-node.md",
         ],
         "generation-pipeline": [
+            "canon/agent-power-separation.md",
+            "canon/validation-rejection-protocol.md",
             "agents/top-modeling-agent.md",
             "contracts/agent-output-contracts/top-modeling-output.md",
             "agents/canon-precheck-agent.md",
@@ -338,6 +348,8 @@ def check_top_governance_consistency(root):
         ],
         "modeling-refactor": [
             "canon/migration.md",
+            "canon/agent-power-separation.md",
+            "canon/validation-rejection-protocol.md",
             "references/migration-heuristics.md",
             "agents/canon-precheck-agent.md",
             "contracts/agent-output-contracts/migration-infrastructure-output.md",
@@ -424,6 +436,7 @@ def check_required_phrases(root):
         ("rules/violation-catalog.md", "CORE-033"),
         ("rules/violation-catalog.md", "CORE-034"),
         ("rules/violation-catalog.md", "CORE-035"),
+        ("rules/violation-catalog.md", "CORE-036"),
         ("rules/violation-catalog.md", "Locally implemented content"),
         ("rules/pattern-recognition.md", "Locally implemented content conditional selection"),
         ("rules/pattern-recognition.md", "Context data injection"),
@@ -445,6 +458,14 @@ def check_required_phrases(root):
         ("rules/violation-catalog.md", "WF-020"),
         ("rules/violation-catalog.md", "WF-021"),
         ("rules/violation-catalog.md", "WF-022"),
+        ("rules/violation-catalog.md", "WF-023"),
+        ("rules/violation-catalog.md", "WF-024"),
+        ("rules/violation-catalog.md", "WF-025"),
+        ("rules/violation-catalog.md", "WF-026"),
+        ("rules/violation-catalog.md", "WF-027"),
+        ("rules/violation-catalog.md", "WF-028"),
+        ("rules/violation-catalog.md", "WF-029"),
+        ("rules/violation-catalog.md", "WF-030"),
         ("contracts/top-folder-contract.md", "top_src/<branch-id>/"),
         ("contracts/top-folder-contract.md", "top/specs/settings-branch.json"),
         ("contracts/top-folder-contract.md", "MIGRATION_WORKFLOW.json"),
@@ -467,6 +488,14 @@ def check_required_phrases(root):
         ("canon/migration.md", "Mandatory dedicated git branch"),
         ("canon/migration.md", "top-migration/<branch-id>"),
         ("canon/migration.md", "remote push: forbidden unless the user explicitly requests push"),
+        ("canon/agent-power-separation.md", "four branches"),
+        ("canon/agent-power-separation.md", "Agent claims are not evidence"),
+        ("canon/agent-power-separation.md", "The executor produces artifacts"),
+        ("canon/validation-rejection-protocol.md", "Validate the smallest meaningful artifact"),
+        ("canon/validation-rejection-protocol.md", "micro-check"),
+        ("canon/validation-rejection-protocol.md", "meso-check"),
+        ("canon/validation-rejection-protocol.md", "macro-check"),
+        ("canon/validation-rejection-protocol.md", "GENERATOR_LEARNING_LEDGER.md"),
         ("agents/migration-infrastructure-agent.md", "MIGRATION_PLAN.md"),
         ("agents/migration-infrastructure-agent.md", "MIGRATION_WORKFLOW.json"),
         ("agents/migration-infrastructure-agent.md", "dedicated migration branch"),
@@ -538,6 +567,24 @@ def check_required_phrases(root):
         ("contracts/agent-output-contracts/validation-output.md", "independent_checkpoint_check"),
         ("contracts/agent-output-contracts/validation-output.md", "dedicated_migration_branch_check"),
         ("contracts/agent-output-contracts/migration-infrastructure-output.md", "git_safety_gate"),
+        ("canon/core-axioms.md", "The executor produces artifacts"),
+        ("canon/core-axioms.md", "The validator produces verdicts"),
+        ("canon/core-axioms.md", "No agent may validate its own output"),
+        ("rules/violation-catalog.md", "Generator self-validation claim"),
+        ("rules/violation-catalog.md", "Contaminated validation context"),
+        ("rules/violation-catalog.md", "Validation without artifact evidence"),
+        ("rules/violation-catalog.md", "Final audit accepted unproven validation"),
+        ("contracts/agent-output-contracts/validation-output.md", "rejection_id"),
+        ("contracts/top-folder-contract.md", "GENERATOR_LEARNING_LEDGER.md"),
+        ("canon/core-axioms.md", "max_repair_attempts_per_validation_gate"),
+        ("rules/violation-catalog.md", "Public wrapper around concrete content"),
+        ("canon/core-axioms.md", "Node atomicity"),
+        ("canon/core-axioms.md", "Folder structure must mirror"),
+        ("canon/validation-rules.md", "`type` names the actual node type"),
+        ("hydration-manifest.json", "canon/agent-power-separation.md"),
+        ("hydration-manifest.json", "canon/validation-rejection-protocol.md"),
+        ("skill.json", "canon/agent-power-separation.md"),
+        ("skill.json", "canon/validation-rejection-protocol.md"),
     ]
     errors = []
     for file_name, phrase in checks:
@@ -670,6 +717,45 @@ def check_migration_git_branch_safety_consistency(root):
     for file_name, phrase in no_push_terms:
         if phrase not in read_text(root / file_name).lower():
             errors.append(f"{file_name}: no-push policy wording missing")
+    return errors
+
+
+def check_validation_control_consistency(root):
+    errors = []
+    required_phrases = [
+        ("canon/core-axioms.md", "The executor produces artifacts"),
+        ("canon/core-axioms.md", "The validator produces verdicts"),
+        ("canon/core-axioms.md", "No agent may validate its own output"),
+        ("canon/validation-rules.md", "clean, adversarial context"),
+        ("contracts/agent-output-contracts/validation-output.md", "validation_evidence"),
+        ("contracts/agent-output-contracts/validation-output.md", "generator_self_validation_claim_check"),
+        ("contracts/agent-output-contracts/validation-output.md", "rejection_id"),
+        ("contracts/top-folder-contract.md", "GENERATOR_LEARNING_LEDGER.md"),
+        ("contracts/agent-output-contracts/final-audit-output.md", "validator_audit_check"),
+        ("rules/violation-catalog.md", "WF-023"),
+        ("rules/violation-catalog.md", "WF-024"),
+        ("rules/violation-catalog.md", "WF-025"),
+        ("rules/violation-catalog.md", "WF-026"),
+        ("rules/violation-catalog.md", "WF-027"),
+        ("rules/violation-catalog.md", "WF-028"),
+        ("rules/violation-catalog.md", "WF-029"),
+        ("rules/violation-catalog.md", "WF-030"),
+    ]
+    for file_name, phrase in required_phrases:
+        if phrase not in read_text(root / file_name):
+            errors.append(f"{file_name}: validation control phrase missing: {phrase}")
+
+    executor_files = [
+        "agents/generation-agent.md",
+        "agents/repair-agent.md",
+        "agents/top-modeling-agent.md",
+        "agents/migration-agent.md",
+        "prompts/generate-top-node.md",
+    ]
+    for file_name in executor_files:
+        text = read_text(root / file_name)
+        if "WF-023" not in text or "validation passed" not in text:
+            errors.append(f"{file_name}: generator self-validation prohibition missing")
     return errors
 
 
@@ -984,6 +1070,7 @@ def run(root):
         ("runtime branch binding consistency", check_runtime_branch_binding_consistency),
         ("branch-scoped migration control", check_branch_scoped_migration_control_consistency),
         ("migration git branch safety", check_migration_git_branch_safety_consistency),
+        ("validation control consistency", check_validation_control_consistency),
         ("project spec shape", check_project_spec_shape),
     ]
     all_errors = []

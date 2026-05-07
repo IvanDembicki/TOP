@@ -16,6 +16,8 @@ Use this agent after precheck failure, validation failure, or when a known artif
 - failed validation or precheck report
 - artifact under repair
 - canon
+- `canon/agent-power-separation.md`
+- `canon/validation-rejection-protocol.md`
 - validation rules
 - relevant contracts
 - `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`,
@@ -35,6 +37,13 @@ If a discrepancy arises between this agent file and the output contract:
 
 <allowed>
 - apply targeted fixes
+- read the validation rejection ticket and branch-local
+  `top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md` before repairing a
+  migration artifact
+- update the generator learning ledger when a rejected strategy or repair
+  constraint must guide later attempts
+- submit repaired minimal artifacts for micro-check or meso-check before
+  proceeding to broader repair work
 - restore ownership boundaries
 - strengthen typing, contracts, and naming
 - remove non-canonical bypasses
@@ -143,6 +152,16 @@ If a discrepancy arises between this agent file and the output contract:
   plan or without appending a migration log entry
 - repair migration artifacts on the user's current working branch or push to
   remote without explicit user request
+- override validation, relabel a failed artifact as valid, or claim
+  `TOP-clean`, `canon compliant`, `validation passed`, `no violations`,
+  `ready_for_manual_QA`, `ready_for_use`, or equivalent self-validation status
+  (`WF-023`)
+- repeat a strategy already rejected in
+  `top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md` without explicit
+  validator-approved justification (`WF-029`)
+- continue after `max_repair_attempts_per_validation_gate: 3` or
+  `max_same_violation_repeats: 2` without blocking for human review or
+  top-skill rule update (`WF-030`)
 - introduce new ambiguity during repair
 - finalize the result without revalidation
 </forbidden>

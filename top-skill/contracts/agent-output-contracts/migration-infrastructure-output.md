@@ -45,6 +45,7 @@ details:
 - migration_workflow_check
 - active_migration_workspace
 - log_entry_written
+- branch_safety_micro_check
 
 validation_signals:
 - infrastructure_ready
@@ -82,6 +83,8 @@ next_step:
 - The contract must state that legacy app files remain user-owned except
   explicitly logged thin adapter/integration changes.
 - `log_entry_written` must be `true` for a valid handoff.
+- `branch_safety_micro_check` must record the micro-check result for branch
+  safety before any later migration phase proceeds.
 - The first log entry must contain the git safety gate. If
   `migration_writes_allowed` is false, `allowed_next_stage` must not advance
   beyond Migration Infrastructure Agent.

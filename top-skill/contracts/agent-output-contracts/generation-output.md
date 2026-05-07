@@ -36,6 +36,7 @@ result:
 - target_adaptation_decisions_applied
 - implementation_source_root_used
 - migration_plan_alignment
+- generator_learning_ledger_read
 - post_generation_architectural_self_check
 - migration_log_entry
 
@@ -77,6 +78,20 @@ spec_sync_handoff:
 - `architectural_deviations` must be empty for a valid result
 - `non_canonical_deviation_present` must be `false` for a valid result
 - `allowed_next_stage` must be `Spec Sync Agent` for a valid result in `generation-pipeline`
+- Generation output is an executor report, not a validation verdict. The
+  executor produces artifacts. The validator produces verdicts. The log records
+  both. The canon governs all.
+- Generation must not claim `TOP-clean`, `CORE-015 clean`, `canon compliant`,
+  `validation passed`, `no violations`, `ready_for_manual_QA`, `ready_for_use`,
+  `final_status: pass`, or equivalent verdicts for its own artifacts. Such
+  claims are `WF-023`.
+- `post_generation_architectural_self_check` is a mechanical self-check only.
+  It may list files inspected and known risks, but it must end by submitting
+  artifacts to independent Validation Agent review.
+- For migration tasks, `generator_learning_ledger_read` must identify the
+  `top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md` entry or state that
+  no ledger existed yet. The generator must not repeat a rejected strategy
+  recorded there.
 - `spec_sync_handoff` is required if any synchronized artifact was created, modified, or deleted
 - Synchronized artifacts are `src/`, generated/materialized implementation artifacts, JSON specs, implementation prompts, `top/assets/`, `top/presentation/`, `top/semantic/`, and persisted `top/adaptations/` artifacts
 - `requires_drift_check` must be `true` whenever synchronized artifacts changed

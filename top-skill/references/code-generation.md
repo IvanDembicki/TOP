@@ -259,6 +259,10 @@ must not import, instantiate, type against, downcast to, inspect, store, or call
 that concrete content. Only the owning controller creates it, and the owning
 controller stores and uses it as `IContentAccess`/target-equivalent.
 
+Generated code must not create public target-framework wrappers around concrete
+content. A public node/controller artifact is a controller boundary, not a
+wrapper that exposes or renders private content (`CORE-036`).
+
 Generated controller APIs must not return platform view fragments,
 render/build trees, content fragments, JSX/widget/composable fragments,
 style/layout fragments, animation objects, content-owned setter handles, or
@@ -626,7 +630,8 @@ booleans used in content to compute visibility/disabled/opacity values, effect
 workflows or pending action execution in content, mutation body construction in
 content, router/navigation calls in content, alert/business decisions in
 content, controller-to-content command channels, constructor/setter injection,
-and helper components that bypass TOP classification.
+public wrappers around concrete content, and helper components that bypass TOP
+classification.
 
 Code is not considered correct until the validation rules confirm that:
 - the class of violation has been identified;

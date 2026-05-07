@@ -16,7 +16,9 @@
         "rules/task-modes.md",
         "rules/violation-catalog.md",
         "canon/architectural-invariants.md",
-        "canon/validation-rules.md"
+        "canon/validation-rules.md",
+        "canon/agent-power-separation.md",
+        "canon/validation-rejection-protocol.md"
       ],
       "readiness_rule": "Use for runtime skill loading and hydrated task execution. Hydration must validate references before stable work begins."
     },
@@ -41,6 +43,7 @@
       "required_artifacts": [
         "top/migration/<branch-id>/MIGRATION_WORKFLOW.json",
         "top/migration/<branch-id>/MIGRATION_PLAN.md",
+        "top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md",
         "top/migration/MIGRATION_STATUS.md",
         "top/migration/MIGRATION_LOG.md"
       ],

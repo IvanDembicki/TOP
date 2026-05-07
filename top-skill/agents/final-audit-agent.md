@@ -16,6 +16,8 @@ Use this agent only after validation has passed or when a final architectural co
 - validated artifact
 - validation results
 - canon
+- `canon/agent-power-separation.md`
+- `canon/validation-rejection-protocol.md`
 - contracts
 - relevant model context if needed
 - Behavior Preservation Plan when auditing a migrated scope with legacy tests
@@ -39,6 +41,7 @@ If a discrepancy arises between this agent file and the output contract:
 
 <forbidden>
 - override failed validation
+- accept validation as proven without auditing the validator's evidence
 - finalize a migrated scope with unclosed behavior preservation gaps
 - finalize a result while confirmed core violations or accepted core deviations remain
 - convert a documented migration waypoint into Final Audit `PASS`
@@ -51,6 +54,11 @@ If a discrepancy arises between this agent file and the output contract:
 - finalize a migrated scope when validation did not confirm the dedicated
   migration branch, git safety gate, no-push policy, and allowed local commit
   policy
+- accept generator, repair, modeling, migration, or implementation
+  self-validation claims as final evidence (`WF-023`)
+- accept a validation report that lacks artifacts reviewed, files inspected,
+  canon rules checked, search/detection patterns, rejection status, or current
+  artifact evidence (`WF-025`, `WF-026`)
 - replace the verdict with vague commentary
 - treat convention or convenience as proof of canonicality
 </forbidden>
@@ -62,6 +70,13 @@ If a discrepancy arises between this agent file and the output contract:
 - the final result is canonical, not merely functional
 - remaining risks do not invalidate the result
 - the readiness statement is justified by actual validation status
+- validator audit: validation ran after generation/repair, inspected current
+  artifacts, listed files and invariants checked, rejected executor
+  self-validation, closed or routed rejection tickets, and did not rely on
+  contaminated context (`WF-026`)
+- incremental validation audit: micro-check, meso-check, and macro-check gates
+  exist for the relevant migration/generation phases and unresolved
+  `REVIEW_REQUIRED` or `FAIL` checkpoints do not remain
 - readiness is classified precisely as `ready_for_generation`,
   `ready_for_integration`, `ready_for_manual_QA`, or
   `ready_for_production_candidate`

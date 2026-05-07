@@ -10,6 +10,7 @@ Minimum:
 - `rules/violation-classification.md`
 - `canon/core-axioms.md`
 - `canon/validation-rules.md`
+- `canon/agent-power-separation.md`
 - `agents/index.md`
 - `contracts/agent-output-contracts/validation-output.md`
 - `contracts/agent-output-contracts/final-audit-output.md`
@@ -22,6 +23,8 @@ Minimum:
 - `canon/core-axioms.md`
 - `canon/migration.md`
 - `canon/validation-rules.md`
+- `canon/agent-power-separation.md`
+- `canon/validation-rejection-protocol.md`
 - `agents/index.md`
 - `agents/canon-precheck-agent.md`
 - `agents/top-modeling-agent.md`
@@ -44,6 +47,8 @@ Minimum:
 - `rules/task-modes.md`
 - `canon/core-axioms.md`
 - `canon/validation-rules.md`
+- `canon/agent-power-separation.md`
+- `canon/validation-rejection-protocol.md`
 - `agents/index.md`
 - `agents/top-modeling-agent.md`
 - `agents/canon-precheck-agent.md`
@@ -73,6 +78,8 @@ Minimum:
 - `rules/task-modes.md`
 - `canon/migration.md`
 - `canon/validation-rules.md`
+- `canon/agent-power-separation.md`
+- `canon/validation-rejection-protocol.md`
 - `rules/violation-catalog.md`
 - `agents/index.md`
 - `agents/migration-infrastructure-agent.md`

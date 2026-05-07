@@ -10,6 +10,17 @@ that access should be modeled through `Controller`.
 `Content` is implementation-side structure.
 It must not be treated as a second public interface by convenience.
 
+Concrete locally implemented content is private to its owning controller. No
+external file may import, instantiate, render, type-reference, store, call, or
+wrap another node's concrete content. Content does not form architectural
+trees. Controllers compose controllers; content must not compose foreign
+content.
+
+A public target-framework wrapper around concrete content is a boundary leak
+(`CORE-036`). Parent, adapter, sibling, and external code interact with the
+child controller public API, never with child content or a wrapper around child
+content.
+
 ## Rule 3 — Do not flatten the split into naming only
 
 The pair `Controller` / `Content` must not be reduced to decorative labels.

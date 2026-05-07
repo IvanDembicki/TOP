@@ -23,6 +23,8 @@ Use this agent only after the model has passed canon precheck, semantic interpre
 - target adaptation plan
 - target technology
 - canon
+- `canon/agent-power-separation.md`
+- `canon/validation-rejection-protocol.md`
 - validation rules
 - generation contract
 </inputs>
@@ -38,6 +40,13 @@ If a discrepancy arises between this agent file and the output contract:
 
 <allowed>
 - generate only from approved structure, semantic layer, and target adaptation plan
+- produce artifacts and mechanical self-check evidence only; independent
+  Validation Agent produces verdicts
+- read `top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md` before later
+  generation in a migration branch and treat rejected strategies as negative
+  constraints
+- submit each smallest meaningful generated artifact for the required
+  micro-check or meso-check before building larger dependent artifacts
 - use the strongest realistic typing supported by the technology
 - use explicit and descriptive naming
 - preserve architectural ownership boundaries
@@ -94,6 +103,9 @@ If a discrepancy arises between this agent file and the output contract:
 - use hidden retention or bypass around content
 - materialize a TOP controller as a framework-rendered component, widget, composable, render/build function, platform UI lifecycle object, or equivalent target-renderable entity
 - finalize generation without validation readiness
+- claim `TOP-clean`, `CORE-015 clean`, `canon compliant`, `validation passed`,
+  `no violations`, `ready_for_manual_QA`, `ready_for_use`, `final_status:
+  pass`, or any equivalent validation verdict for generated artifacts (`WF-023`)
 - declare generation complete without post-generation architectural validation
   readiness for actual generated controller, content, contract, bridge, helper,
   modal, adapter, and generated constants/helper files
@@ -149,6 +161,8 @@ Generate only what the spec and prompt explicitly define. Do not add features, a
 - no local convenience weakens canon
 - generated target artifacts preserve semantic intent without source-platform leakage
 - generated or adapted tests cover each mapped preserved behavior requirement
+- artifact manifest is complete enough for independent validation; it is not a
+  validation verdict
 </validation_focus>
 
 <handoff_rules>

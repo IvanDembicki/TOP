@@ -5,7 +5,7 @@ description: Skill for designing, generating, and validating systems built with 
 
 # TOP Skill
 
-**Version:** 1.1.23
+**Version:** 1.1.25
 **Last updated:** 2026-05-06 17:41 -07:00
 **Invocation:** `/top`
 
@@ -314,6 +314,9 @@ Strong signals for activating the skill:
 39. Migration readiness terms must be precise: `ready_for_generation`, `ready_for_integration`, `ready_for_manual_QA`, and `ready_for_production_candidate` are separate statuses. Do not use unqualified `ready_for_use` for a model that is only ready for generation or for generated code that has not passed architectural validation.
 40. Migration uses persistent checkpoints and independent validation. Infrastructure, scope/decomposition, model/spec, canon precheck, generation, post-generation validation, repair, and final audit checkpoints must be written as branch-scoped artifacts or append-only log entries before handoff. Validation and final audit must re-read current skill rules and target artifacts adversarially; generator/repair self-checks are evidence to inspect, not a substitute for validation. Missing checkpoints are `WF-020`; non-independent validation is `WF-021`.
 41. Every TOP migration must run on a dedicated git branch before any migration write. The default branch name is `top-migration/<branch-id>`. Migration Infrastructure Agent must inspect git status, detect the initial branch, create or switch to the dedicated migration branch, confirm checkout, and append the git safety gate to `top/migration/MIGRATION_LOG.md` before creating or modifying migration artifacts, generated files, adapters, route files, legacy integration files, or project source files. Migration agents must not push to remote unless the user explicitly requests push, and local commits require explicit request or a documented commit phase. Violations are `WF-022`.
+42. Agent power separation is canonical. The executor produces artifacts. The validator produces verdicts. The log records both. The canon governs all. No agent may validate its own output. Generation, repair, modeling, migration, and implementation agents must not claim `TOP-clean`, `CORE-015 clean`, `canon compliant`, `validation passed`, `no violations`, `ready_for_manual_QA`, `ready_for_use`, `final_status: pass`, or equivalent verdicts for their own artifacts. Validation must use a clean adversarial context and artifact evidence. See `canon/agent-power-separation.md`.
+43. Validation rejection protocol is canonical. Failed validation creates rejection tickets, log entries, and generator learning ledger updates. Validate the smallest meaningful artifact as soon as it exists; use micro-check, meso-check, and macro-check gates instead of building on unvalidated architecture. Violations are `WF-023` through `WF-030`. See `canon/validation-rejection-protocol.md`.
+44. Absolute content privacy includes public wrapper prohibition. If external code can name a node's concrete content class, encapsulation is broken. The runtime TOP tree is a tree of controllers, not content objects and not public target-framework wrappers around content. Public wrappers around concrete content are `CORE-036`.
 
 Normative chain for the generative layer:
 

@@ -30,6 +30,8 @@ result:
 - effective_tier
 
 details:
+- precheck_context_independence_check
+- artifacts_inspected
 - required_repairs
 - block_reason
 - tier_mismatch_reason
@@ -50,6 +52,9 @@ next_step:
 - `block_reason` is required when `failed` or `blocked`
 - `effective_tier` is required
 - Intake proposes `proposed_tier`, Canon Precheck confirms `effective_tier`
+- Canon Precheck is judicial. It must inspect current model artifacts against
+  canon and must not accept modeler self-validation claims as evidence.
+- `artifacts_inspected` must list the actual specs/prompts/models reviewed.
 - Free text outside the required structure is prohibited
 
 ## Semantic validity rule

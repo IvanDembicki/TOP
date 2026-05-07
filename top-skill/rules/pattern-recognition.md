@@ -203,6 +203,50 @@ Candidate `WF-021` signals:
 - final audit trusts type-check or generator output without adversarially
   re-reading generated source, specs, prompts, contracts, and logs.
 
+### Group A6b — Validation control and rejection protocol signals
+
+Candidate `WF-023` signals:
+- generation, repair, modeling, migration, or implementation reports use
+  verdict phrases such as `TOP-clean`, `CORE-015 clean`, `canon compliant`,
+  `validation passed`, `no violations`, `ready_for_manual_QA`,
+  `ready_for_use`, or `final_status: pass` for their own artifacts.
+
+Candidate `WF-024` signals:
+- validation treats previous agent reports, migration log commentary, or chat
+  history as proof instead of re-reading current artifacts.
+
+Candidate `WF-025` signals:
+- PASS without artifacts reviewed, files inspected, canon rules checked,
+  detection/search patterns, artifact types, or per-check evidence.
+
+Candidate `WF-026` signals:
+- Final Audit accepts validation without auditing validation evidence, file
+  lists, current-artifact inspection, and rejection closure.
+
+Candidate `WF-027` signals:
+- failed validation without a rejection ticket or appended validator log entry.
+
+Candidate `WF-028` signals:
+- generation/repair after rejection without reading or updating
+  `top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md`.
+
+Candidate `WF-029` signals:
+- a later generation/repair repeats a strategy already rejected in the generator
+  learning ledger.
+
+Candidate `WF-030` signals:
+- more than `max_repair_attempts_per_validation_gate: 3` repair attempts at one
+  gate;
+- more than `max_same_violation_repeats: 2` repeats of the same violation.
+
+Incremental validation signals:
+- a large generation or migration phase proceeds without micro-check entries
+  for newly created specs, prompts, generated node files, folders, or rejection
+  tickets;
+- related artifact groups are handed off without a meso-check for topology,
+  boundaries, layout, or prompt/spec consistency;
+- a full phase reaches final audit without a macro-check for the phase.
+
 ### Group A7 — Migration git branch safety signals
 
 Candidate `WF-022` signals:
@@ -221,6 +265,32 @@ Candidate `WF-022` signals:
 Canonical repair is not to continue writing. Stop, preserve user work, ask for
 commit/stash/branch clarification when needed, switch/create the dedicated
 migration branch, append the git safety gate, then resume migration writes.
+
+### Group A8 — Public wrapper, node atomicity, and spec/layout signals
+
+Candidate `CORE-036` signals:
+- a public node/controller artifact is just a target-framework wrapper around
+  concrete locally implemented content;
+- external/parent/adapter code can name a concrete content class or wrapper to
+  reach content.
+
+Candidate node atomicity signals:
+- one node owns several unrelated workflows, modal systems, form systems, list
+  item families, bridge clusters, or state sections;
+- a screen section is dismissed as "just part of the screen" without node
+  candidacy analysis.
+
+Candidate folder/tree layout signals:
+- generated node files for a semantic subtree are flattened into one branch
+  folder without explicit materialization rationale;
+- child nodes do not have child folders under the parent folder when the target
+  materialization policy would allow it.
+
+Candidate strict TOP spec shape signals:
+- node-like objects use generic `type` values such as `Node`, `Component`,
+  `View`, or `Controller` while real identity appears only in `id`/`name`;
+- node-like objects omit canonical `type`, `doc`, `prompt`, `props`, or
+  `children` without a project-approved equivalent.
 
 ### Group B — Visibility and style manipulation
 

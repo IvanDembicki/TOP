@@ -15,6 +15,8 @@ Use this agent after generation, after repair, or when reviewing an existing arc
 <inputs>
 - target artifact
 - canon
+- `canon/agent-power-separation.md`
+- `canon/validation-rejection-protocol.md`
 - validation rules
 - contracts
 - relevant modeling outputs if available
@@ -26,6 +28,10 @@ Use this agent after generation, after repair, or when reviewing an existing arc
 - Re-read every target artifact that the validation report lists as checked.
 - Do not rely on prior session reads, previous generation context, memory of older skill versions, or earlier inspections of target files as validation evidence.
 - If the needed skill references or target artifacts were not read in the current pass, report validation as incomplete.
+- Use a clean, adversarial validation context. The only evidence sources are
+  artifacts under review, current top-skill canon/rules/contracts, relevant
+  specs/prompts, and migration log chronology. Previous agent reports are
+  claims, not proof.
 </freshness_rules>
 
 <outputs>
@@ -42,6 +48,8 @@ If a discrepancy arises between this agent file and the output contract:
 - treat all non-canonical patterns as violations
 - list violations explicitly
 - fail the result even if it compiles or works locally
+- create structured rejection tickets when validation fails
+- append validation rejection entries to `top/migration/MIGRATION_LOG.md`
 </allowed>
 
 <forbidden>
@@ -81,6 +89,8 @@ If a discrepancy arises between this agent file and the output contract:
   objects, content-owned setters, or mutation handles (`CORE-034`)
 - accept content-owned setter/mutation handles crossing into controllers,
   parents, adapters, helpers, or access contracts (`CORE-035`)
+- accept a public target-framework wrapper around concrete locally implemented
+  content (`CORE-036`)
 - accept controller-to-content presentation commands, presentation state pushes,
   or imperative mutations into locally implemented content
 - accept constructor data injection or post-construction setter-style
@@ -93,6 +103,22 @@ If a discrepancy arises between this agent file and the output contract:
 - accept final validation based only on generator/repair self-checks, prior
   chat context, or remembered reads instead of independent current-pass file
   reads (`WF-021`)
+- accept executor self-validation claims such as `TOP-clean`, `CORE-015 clean`,
+  `canon compliant`, `validation passed`, `no violations`,
+  `ready_for_manual_QA`, `ready_for_use`, or `final_status: pass` (`WF-023`)
+- treat prior generator/repair/modeling reports or migration log commentary as
+  proof instead of claims to inspect (`WF-024`)
+- report PASS without artifact evidence: artifacts reviewed, files inspected,
+  checks performed, canon rules checked, search/detection patterns, artifact
+  types, per-check evidence, and ambiguities (`WF-025`)
+- fail validation without creating a rejection ticket and log entry (`WF-027`)
+- route back to generation or repair without requiring
+  `top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md` update/read when a
+  strategy was rejected (`WF-028`)
+- allow the same rejected strategy to be repeated without explicit
+  validator-approved reason (`WF-029`)
+- continue repair loops past `max_repair_attempts_per_validation_gate: 3` or
+  `max_same_violation_repeats: 2` without blocking (`WF-030`)
 - accept migration handoff that skipped a persistent checkpoint for
   infrastructure, scope/decomposition, model/spec, precheck, generation,
   post-generation validation, repair, or final audit (`WF-020`)
@@ -118,6 +144,7 @@ If a discrepancy arises between this agent file and the output contract:
 - concrete content privacy validation (`CORE-033`)
 - controller fragment-output validation (`CORE-034`)
 - content-owned setter bridge validation (`CORE-035`)
+- public wrapper around concrete content validation (`CORE-036`)
 - one-controller zero-or-one-content validation and helper classification
 - migration decomposition validation: scope-vs-node-boundary, recursive
   candidate classification, single-node proof, giant-node review,
@@ -167,6 +194,12 @@ If a discrepancy arises between this agent file and the output contract:
   validation re-reads current skill/target artifacts adversarially
 - dedicated migration branch validation: branch name, git safety gate, write
   timing, unrelated changes, local commit policy, and no-push policy
+- validation control validation: generator self-validation claims, clean
+  validation context, artifact evidence, rejection ticket/log, generator
+  learning ledger, repeated rejected strategies, and repair circuit breaker
+  (`WF-023` through `WF-030`)
+- incremental validation validation: micro-check, meso-check, and macro-check
+  gates validate the smallest meaningful artifact as soon as it exists
 </validation_focus>
 
 <handoff_rules>

@@ -44,6 +44,8 @@ If a discrepancy arises between this agent file and the output contract:
 - define canonical project artifact layout: specs under `top/specs/`, prompts
   under `top/prompts/`, migration status under `top/migration/`, and
   implementation artifacts under the declared source root (`top_src/` by default)
+- report modeling assumptions and artifact manifests without claiming validation
+  verdicts for its own model
 </allowed>
 
 <forbidden>
@@ -69,6 +71,9 @@ If a discrepancy arises between this agent file and the output contract:
   the implementation source root
 - in migration mode, model without a current migration workflow and plan or
   without appending a migration log entry before handoff
+- claim `canon compliant`, `validation passed`, `no violations`,
+  `ready_for_generation`, or equivalent validation/precheck verdicts for its
+  own model (`WF-023`)
 </forbidden>
 
 <validation_focus>

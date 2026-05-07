@@ -18,6 +18,13 @@ rules:
 - if current_attempt >= max_attempts and not stable → escalate
 - pass requires full behavior coverage
 - pass requires preserved legacy test-covered behavior to be represented in prompts and covered by TOP-compatible tests when the node belongs to a migration scope
+- pass requires independent artifact evidence: artifacts reviewed, files
+  inspected, canon rules checked, search/detection patterns used, and per-check
+  evidence
+- previous generator/repair reports are claims, not proof; executor
+  self-validation claims are `WF-023`
+- failed validation must create a structured rejection ticket and require a
+  `top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md` update before repair
 
 ---
 

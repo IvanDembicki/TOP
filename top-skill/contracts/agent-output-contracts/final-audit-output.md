@@ -30,6 +30,8 @@ result:
 - workflow_gaps
 
 details:
+- validator_audit_check
+- incremental_validation_audit
 - remaining_risks
 - behavior_preservation_gate
 - unresolved_limits
@@ -48,6 +50,16 @@ next_step:
 ## Rules
 
 - Final audit cannot override failed validation
+- Final audit audits the validator. It must verify validation ran after
+  generation or repair, inspected current artifacts, listed files inspected,
+  checked current canon invariants, did not rely on generator self-validation
+  claims, closed or routed all rejection tickets, and did not use previous agent
+  claims as proof.
+- Accepting validation that lacks artifact evidence or was contaminated by
+  executor claims is `WF-026`.
+- `incremental_validation_audit` must verify that required micro-check,
+  meso-check, and macro-check gates exist for the relevant workflow and that no
+  unresolved `REVIEW_REQUIRED` or `FAIL` checkpoint remains.
 - Final audit cannot mark the result ready if `core_violations` is non-empty
 - Final audit cannot mark the result ready if `accepted_deviations` contains a
   core violation or migration waypoint

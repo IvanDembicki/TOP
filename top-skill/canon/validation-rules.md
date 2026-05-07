@@ -87,6 +87,26 @@ Canonical repair for context data injection:
 - Validation/review must re-read target artifacts in the current pass.
 - Prior session reads, old skill memory, previous generation context, or earlier file inspections are not validation evidence.
 - If a report lists a file as checked without reading it in the current pass, validation is incomplete.
+- The executor produces artifacts. The validator produces verdicts. The log
+  records both. The canon governs all.
+- No agent may validate its own output. Generator, repair, modeling, migration,
+  and implementation reports may provide mechanical self-check evidence, but
+  they must not claim `TOP-clean`, `CORE-015 clean`, `canon compliant`,
+  `validation passed`, `no violations`, `ready_for_manual_QA`, `ready_for_use`,
+  `final_status: pass`, or equivalent verdicts for their own artifacts. Such
+  claims are `WF-023`.
+- Validation must use a clean, adversarial context: artifacts under review,
+  current top-skill canon/rules, validation contract/checklist, relevant
+  specs/prompts, and the migration log as chronology only. Treating previous
+  agent reports as proof is `WF-024`.
+- A validation PASS must include artifact evidence: artifacts reviewed, files
+  inspected, checks performed, canon rules checked, search/detection patterns,
+  artifact types, per-check violation/no-violation evidence, ambiguities, and
+  unresolved limits. Missing evidence is `WF-025`.
+- Final Audit must audit the validator. It must verify validation ran after
+  generation/repair, inspected current artifacts, listed files and invariants,
+  rejected generator self-validation claims, closed rejection tickets, and did
+  not rely on self-validation. Failure is `WF-026`.
 
 ## Content validation
 - Content has no architectural will.
@@ -132,6 +152,11 @@ Canonical repair for context data injection:
   fragments must be classified as child nodes, state nodes, black-box
   components, bridge boundaries, reusable library nodes, or private target-local
   implementation detail inside that one content object.
+- If external code can name, import, instantiate, type against, or wrap a
+  node's concrete content class, content privacy is broken. A public
+  target-framework wrapper around private content is `CORE-036`. The runtime
+  TOP tree is a tree of controllers, not content objects or public wrappers
+  around content.
 
 ## Semantic event/request validation
 - Locally implemented content reports semantic intent to its owning controller
@@ -233,6 +258,15 @@ Behavioral analysis and typing analysis are independent passes. The absence of b
   declared source root, effective `props.dir`, and prompt layout. A flat
   generated folder that collapses a semantic subtree without explicit
   materialization rationale is `CONV-010`.
+- Folder structure must mirror the approved TOP tree: child nodes normally have
+  child folders under their parent folder. Exceptions require explicit
+  materialization rationale for leaf nodes, closely paired state nodes,
+  target-specific hidden files, or black-box internals.
+- TOP spec shape is strict. A node object uses `type`, `doc`, `prompt`,
+  `props`, and `children` as its canonical shape. `type` names the actual node type.
+  Generic values such as `Node`, `Component`, `View`, or `Controller`
+  with the real identity moved into `id`/`name` are `CONV-009` unless a
+  project-approved equivalent is explicitly documented.
 - A migration/materialization handoff without canonical paths, source root, and
   honest phase status is `WF-013`.
 - A migration-mode task that creates or changes TOP artifacts without
@@ -267,10 +301,26 @@ Behavioral analysis and typing analysis are independent passes. The absence of b
   scope/decomposition, model/spec, canon precheck, generation, post-generation
   validation, repair when needed, and final audit. Each checkpoint must write or
   update the relevant branch-scoped artifacts before handoff.
+- Short checkpoint pipeline must include, when applicable: git safety gate,
+  scope discovery, scope verification, decomposition proposal, decomposition
+  verification, spec skeleton generation, spec shape verification, prompt
+  generation, prompt verification, generation per node/group, post-generation
+  validation, repair/revalidation, integration/adapters, integration
+  validation, and final audit. Each checkpoint must append a compact log entry.
 - Validation must be adversarial and independent from generation or repair
   context. Generator self-checks are evidence to inspect, not a substitute for
   validation. A validation pass must re-read target artifacts and current skill
   rules before judging.
+- If validation fails, the validator must create a structured rejection ticket
+  and append the rejection entry to `top/migration/MIGRATION_LOG.md`. Missing
+  rejection traceability is `WF-027`.
+- The branch-local `top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md`
+  must record rejected strategies and must be read before later generation or
+  repair. Missing ledger read/update is `WF-028`; repeating a rejected strategy
+  is `WF-029`.
+- Retry limits are `max_repair_attempts_per_validation_gate: 3` and
+  `max_same_violation_repeats: 2`. Exceeding them is `WF-030` and blocks the
+  workflow until human review or top-skill rule update.
 - Migration writes must happen only on a confirmed dedicated git branch,
   normally `top-migration/<branch-id>`. Validation must fail with `WF-022` if
   migration writes happened before branch confirmation, if the first migration

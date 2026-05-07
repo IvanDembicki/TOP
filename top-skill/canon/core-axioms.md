@@ -7,6 +7,33 @@ Clarity and unambiguity take priority over brevity or conciseness.
 
 All structural and naming decisions must support fast, reliable understanding of the code at scale, without requiring implicit knowledge or guesswork.
 
+## Pipeline power separation
+
+The executor produces artifacts. The validator produces verdicts. The log
+records both. The canon governs all.
+
+No agent may validate its own output. Generation, repair, modeling, migration,
+and implementation agents may report generated files, assumptions, mechanical
+checks, type checks, known issues, and an artifact manifest submitted for
+validation. They must not claim `TOP-clean`, `CORE-015 clean`, `canon
+compliant`, `validation passed`, `no violations`, `ready_for_manual_QA`,
+`ready_for_use`, or `final_status: pass` for their own artifacts.
+
+Validation, canon precheck, and final audit must operate from a clean,
+adversarial context: current top-skill canon/rules, current artifacts under
+review, relevant specs/prompts/contracts, and migration log chronology only.
+Previous agent reports are claims, not proof. A pass verdict without artifact
+evidence is invalid.
+
+Failed validation creates a structured rejection and a repair obligation.
+Rejected strategies are recorded in the branch-local
+`top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md` and become negative
+constraints for later generation or repair attempts.
+
+Detailed branch definitions and evidence rules live in
+`canon/agent-power-separation.md`. Rejection, ledger, and incremental
+validation rules live in `canon/validation-rejection-protocol.md`.
+
 ## Typing
 
 - Object typing must be as strict, explicit, and complete as the technology reasonably permits.
@@ -86,6 +113,15 @@ against, downcast to, inspect, store, or call concrete content classes.
 A node may expose public controller-level values or opaque placement handles
 where canon permits. It must not expose concrete content or content-owned
 platform primitives as a route around controller ownership.
+
+If external code can name a node's concrete content class, encapsulation is
+already broken. The runtime TOP tree is a tree of controllers, not content
+objects and not public target-framework wrappers around content.
+
+A public node artifact must not be a target-framework wrapper around private
+content. Target-specific example only; not a canonical model term: a React-like
+component that merely renders a private content class is not a TOP controller.
+It is a public wrapper around concrete content (`CORE-036`).
 
 ## One controller, zero-or-one content
 
@@ -199,6 +235,16 @@ bridge hooks, many pending actions/mutations, or multiple independent
 modal/form/list/workflow responsibilities is not "complete" by having a large
 contract. It is a decomposition-risk signal until proven otherwise.
 
+Node atomicity is required. A node must be small, simple, and single-purpose
+enough to regenerate and validate in isolation. A screen section, modal, form,
+list item, card, state branch, bridge, or workflow fragment is a node candidate
+until the model proves otherwise.
+
+Folder structure must mirror the approved TOP tree. Child nodes normally live
+in child folders under the parent folder. A flat branch folder that mixes all
+node files is a layout/topology smell unless the model explicitly records a
+target/materialization exception.
+
 `PanelDisplayStyle` is not a substitute for node decomposition. It may represent
 an already-resolved display value for a stable structural section, but it must
 not conceal state alternatives, lifecycle-bearing branches, independent
@@ -212,10 +258,21 @@ audit. Each checkpoint must persist branch-scoped artifacts and append the
 shared migration log before handoff. A later agent must be able to resume from
 the artifacts without trusting previous chat context.
 
+Validate the smallest meaningful artifact as soon as it exists. Micro-checks
+catch single-artifact risks, meso-checks validate related artifact groups, and
+macro-checks validate full phases. Do not build on unvalidated architecture.
+
 Execution and verification must remain independent. The agent that generated or
 repaired a branch may perform a self-check, but final validation must re-read
 the current skill and target artifacts and must judge adversarially against the
 canon, not against the generator's explanation.
+
+The canonical retry limits are:
+- `max_repair_attempts_per_validation_gate: 3`;
+- `max_same_violation_repeats: 2`.
+
+If either limit is exceeded, the workflow is blocked until human review or a
+top-skill rule update resolves the repeated failure.
 
 ## Behavioral coherence
 

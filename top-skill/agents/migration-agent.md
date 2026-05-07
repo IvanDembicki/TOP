@@ -27,6 +27,8 @@ it does not require the standard pipeline to have run first.
 - technology context
 - scope: full project or specific module/area
 - canon
+- `canon/agent-power-separation.md`
+- `canon/validation-rejection-protocol.md`
 - validation rules
 </inputs>
 
@@ -354,6 +356,10 @@ traces of expected behavior, not only as files that should pass.
 - derive behavioural contracts from existing code before replacement
 - discover test-covered behavior and route it through Behavior Preservation Agent
 - verify that migrated code satisfies the behavioural contract
+- produce migration artifacts, assumptions, and self-check evidence without
+  claiming validation verdicts for its own output
+- schedule micro-check, meso-check, and macro-check validation gates as soon as
+  the corresponding migration artifacts exist
 </allowed>
 
 <forbidden>
@@ -392,6 +398,9 @@ traces of expected behavior, not only as files that should pass.
 - calling direct global store access architecturally correct unless it has been
   modeled as a connector/data access boundary
 - accepting a deviation without target repair direction and expiry condition
+- claiming `TOP-clean`, `canon compliant`, `validation passed`, `no violations`,
+  `ready_for_generation`, `ready_for_manual_QA`, or equivalent validation
+  verdicts for its own migration artifacts (`WF-023`)
 </forbidden>
 
 <validation_focus>

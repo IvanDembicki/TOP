@@ -32,6 +32,8 @@ If a discrepancy arises between this agent file and the output contract:
 <allowed>
 - validate the model strictly against canon
 - treat all non-canonical structures as violations
+- use a clean, adversarial context; prior modeling or migration reports are
+  claims to inspect, not proof
 - block generation if the model is invalid
 - require explicit repair before generation continues
 </allowed>
@@ -41,6 +43,9 @@ If a discrepancy arises between this agent file and the output contract:
 - treat convenience as justification for weak structure
 - ignore unresolved ambiguity in the model
 - downgrade violations into optional recommendations
+- accept modeler self-validation claims such as `canon compliant`,
+  `validation passed`, `no violations`, or equivalent as a precheck verdict
+  (`WF-023`)
 </forbidden>
 
 <validation_focus>

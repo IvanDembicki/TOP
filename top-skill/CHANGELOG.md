@@ -7,6 +7,39 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.25] — 2026-05-07
+
+- Added `canon/agent-power-separation.md` to formalize four-branch governance:
+  legislative canon/rules, executive generation/migration/repair, judicial
+  validation/audit, and public logs/trace.
+- Added `canon/validation-rejection-protocol.md` for rejection tickets,
+  rejection log entries, generator learning ledger usage, repair circuit
+  breakers, and incremental micro/meso/macro validation.
+- Clarified claims vs evidence: agent claims are not evidence; artifacts,
+  diffs, searches, checks, test output, and rejection tickets are evidence.
+- Hydrated the new governance canon in validation, migration, modeling,
+  generation, maintenance, and full tiers.
+- Extended quick validation to require the new governance files, hydration, and
+  incremental validation protocol phrases.
+
+## [1.1.24] — 2026-05-06
+
+- Added validation-control separation: executors produce artifacts, validators
+  produce verdicts, logs record both, and canon governs all.
+- Added workflow violations for generator self-validation claims, contaminated
+  validation context, validation without artifact evidence, final audit
+  accepting unproven validation, missing rejection logging, missing generator
+  learning ledger updates, repeated rejected strategies, and repair circuit
+  breaker exhaustion (`WF-023` through `WF-030`).
+- Added Validation Rejection Protocol and branch-local
+  `GENERATOR_LEARNING_LEDGER.md` requirements.
+- Added `CORE-036` for public wrappers around concrete locally implemented
+  content and strengthened node atomicity, folder/tree layout mirror, and strict
+  TOP spec shape checks.
+- Extended generation, repair, validation, final audit, orchestration,
+  contracts, prompts, pattern recognition, and quick validation checks for the
+  new validation-control rules.
+
 ## [1.1.23] — 2026-05-06
 
 - Added mandatory dedicated migration git branch safety: every migration must

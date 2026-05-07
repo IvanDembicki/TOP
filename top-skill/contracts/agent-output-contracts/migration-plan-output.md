@@ -32,6 +32,7 @@ result:
 - agent_work_packages
 - decomposition_work_packages
 - validation_gates
+- incremental_validation_gates
 - rollback_points
 - migration_log_entry
 
@@ -61,6 +62,8 @@ next_step:
   `top/migration/MIGRATION_STATUS.md` updates must preserve previous branch
   history.
 - `agent_work_packages` must list the migration stages and responsible agents.
+- `incremental_validation_gates` must list planned micro-check, meso-check, and
+  macro-check gates for the smallest meaningful artifacts and phase groups.
 - `workflow_phase_updates` must list the phase ids, statuses, gates, outputs,
   and next phases written to the workflow JSON.
 - `planned_artifacts` must include spec, prompt, status, log, and source-root

@@ -16,6 +16,8 @@ Use this agent whenever a task enters the skill or whenever the current stage mu
 - current task state
 - outputs from previous agents
 - canon and validation rules
+- `canon/agent-power-separation.md`
+- `canon/validation-rejection-protocol.md`
 - contracts
 - known missing inputs or blocked conditions
 </inputs>
@@ -45,6 +47,11 @@ Routing meta-agent. No dedicated output contract — produces pipeline routing m
 - perform validation instead of the validation agent
 - bypass canon precheck or validation
 - finalize a task with unresolved failed gates
+- let an executor route around a failed validation by claiming its own artifacts
+  are valid (`WF-023`)
+- continue a repair loop after `max_repair_attempts_per_validation_gate: 3` or
+  `max_same_violation_repeats: 2` without human review or top-skill rule update
+  (`WF-030`)
 </forbidden>
 
 <validation_focus>
@@ -73,6 +80,25 @@ Routing meta-agent. No dedicated output contract — produces pipeline routing m
 - repair changed no synchronized artifacts -> `Validation Agent`
 - validation pass -> `Final Audit Agent`
 </handoff_rules>
+
+## Validation rejection routing
+
+When Validation Agent fails a migration artifact, Orchestrator must require:
+
+- a structured rejection ticket;
+- a rejection entry appended by the validator to `top/migration/MIGRATION_LOG.md`;
+- a branch-local `top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md`
+  update before another generation or repair attempt;
+- retry counters for the validation gate and same violation.
+
+The generator or repair agent may repair artifacts, but it may not override the
+validation verdict. Rejected strategies become negative constraints for later
+attempts.
+
+Orchestrator must prefer incremental validation. Route to a micro-check after
+the smallest meaningful artifact exists, to a meso-check after a related
+artifact group exists, and to a macro-check after a full phase. Do not route a
+workflow forward when a required checkpoint is `REVIEW_REQUIRED` or `FAIL`.
 
 ## Migration control-plane routing
 

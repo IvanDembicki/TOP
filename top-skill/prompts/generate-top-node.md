@@ -13,6 +13,14 @@ output_contract:
 
 rules:
 - no architecture change
+- generation is an executor activity: produce artifacts, mechanical checks,
+  known risks, and an artifact manifest for validation; do not claim
+  `TOP-clean`, `CORE-015 clean`, `canon compliant`, `validation passed`,
+  `no violations`, `ready_for_manual_QA`, `ready_for_use`, or equivalent
+  validation verdicts for generated artifacts (`WF-023`)
+- in migration mode, read
+  `top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md` before generating
+  after a rejection and do not repeat a rejected strategy
 - generate from Layer B semantic intent and Layer C target adaptation, not from source-platform primitives
 - for migrated scopes, generate from normalized requirements in the Behavior Preservation Plan as well as Layer B and Layer C
 - for migrated scopes, preserve the approved recursive decomposition. Do not

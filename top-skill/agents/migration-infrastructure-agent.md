@@ -21,6 +21,8 @@ Migration Planning Agent or Migration Agent.
 - existing `top/` and `top_src/` folders, if any
 - user-provided migration scope, if any
 - canon
+- `canon/agent-power-separation.md`
+- `canon/validation-rejection-protocol.md`
 - `contracts/top-folder-contract.md`
 </inputs>
 
@@ -80,6 +82,7 @@ If a discrepancy arises between this agent file and the output contract:
   application files remain user-owned except explicitly logged thin
   adapters/integration wiring
 - initial log entry exists
+- branch safety micro-check is recorded before any later migration phase
 - no noncanonical TOP layout is introduced
 </validation_focus>
 

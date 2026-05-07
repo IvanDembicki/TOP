@@ -23,6 +23,8 @@ Use this agent after Migration Infrastructure Agent and before Migration Agent.
 - existing `top/` artifacts
 - existing migration log
 - canon and migration rules
+- `canon/agent-power-separation.md`
+- `canon/validation-rejection-protocol.md`
 </inputs>
 
 <outputs>
@@ -75,6 +77,8 @@ If a discrepancy arises between this agent file and the output contract:
   and single-node proof when applicable
 - plan includes Behavior Preservation Agent routing when tests or executable behavior evidence exist
 - plan includes validation and repair loop gates
+- plan includes micro-check, meso-check, and macro-check gates for the smallest
+  meaningful artifacts and phase groups
 - plan references shared append-only `top/migration/MIGRATION_LOG.md`
 </validation_focus>
 

@@ -245,6 +245,12 @@ This is a hard boundary. Moving concrete content access into a helper, adapter,
 factory, hook, closure, or generated method bag is still concrete content
 exposure.
 
+If external code can name a concrete content class, privacy is broken. A public
+target-framework wrapper around concrete content is also concrete content
+exposure (`CORE-036`). Runtime TOP trees are controller trees, not content
+trees. Parent, adapter, sibling, and external code must interact with child
+controller public APIs, not with child content or wrappers around child content.
+
 ### One controller, zero-or-one content
 
 A TOP node has exactly one controller. It may have no content, or it may have
