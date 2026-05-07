@@ -64,6 +64,8 @@ details:
 - concrete_content_privacy_check
 - controller_fragment_output_check
 - content_owned_setter_bridge_check
+- controller_runtime_shape_check
+- controller_tree_topology_check
 - top_spec_shape_check
 - generated_layout_topology_check
 - independent_checkpoint_check
@@ -151,6 +153,12 @@ next_step:
 - Validation must report `CORE-036` when a public TOP node/controller artifact
   is a target-framework wrapper around concrete content, or when
   external/parent/adapter code can name the wrapper to reach concrete content
+- Validation must report `CORE-037` when a TOP controller artifact does not
+  participate in the runtime controller tree: missing runtime node
+  base/interface, missing parent/context or root context, missing lifecycle,
+  missing child ownership/registration, missing declared child policy or
+  explicit leaf status, declared children not constructed as child controllers,
+  or controller-shaped service/helper/module with no spec tree position.
 - Validation must report `CONV-007` when a new migration branch spec is stored
   as an ad hoc root-level file in `top/` instead of under `top/specs/` without an
   established project convention
@@ -207,7 +215,8 @@ next_step:
   `migration_workspace_write_check` must explicitly report `pass`, `fail`, or
   `not_applicable`.
 - `concrete_content_privacy_check`, `controller_fragment_output_check`,
-  `content_owned_setter_bridge_check`, `top_spec_shape_check`,
+  `content_owned_setter_bridge_check`, `controller_runtime_shape_check`,
+  `controller_tree_topology_check`, `top_spec_shape_check`,
   `generated_layout_topology_check`, and `independent_checkpoint_check` must
   explicitly report `pass`, `fail`, or `not_applicable`.
 - `dedicated_migration_branch_check` must explicitly report `pass`, `fail`, or
@@ -238,6 +247,13 @@ next_step:
   files, including controller files, locally implemented content files,
   contracts, bridge components, helper components, modal files, adapters, and
   generated constants/helpers. Type-check success is not TOP validation.
+- `controller_runtime_shape_check` must include the
+  `generated-controller-runtime-shape` micro-check for generated controller
+  files.
+- `controller_tree_topology_check` must include the `controller-tree-topology`
+  meso-check for generated subtrees.
+- After repair, validation restarts from the nearest complete validation gate
+  affected by the repair.
 - If `test_covered_behavior_preserved` is false, `overall_status` must be `fail`
 - Commentary cannot substitute for validation
 - Free text outside the required structure is prohibited

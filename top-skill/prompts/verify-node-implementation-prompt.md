@@ -95,6 +95,18 @@ Check:
   black-box boundaries are not configured after construction through
   setter-style data/config/state/presentation injection (`CORE-032`);
 - confirmation that the public node/controller artifact is not itself a renderable framework component, widget, composable, render/build function, platform UI lifecycle object, or equivalent target-renderable entity;
+- confirmation that every generated TOP controller participates in the runtime
+  controller tree: it extends the project runtime node base or implements the
+  project runtime node interface, has parent/context or root/host context, has
+  or inherits lifecycle, has child ownership/registration and children access,
+  declares child policy or explicit leaf status, and maps to its spec tree
+  position;
+- confirmation that child construction creates child controllers/node objects,
+  not child content, public wrappers, render fragments, or target artifacts
+  posing as TOP children;
+- confirmation that the `generated-controller-runtime-shape` micro-check and
+  `controller-tree-topology` meso-check passed or are explicitly
+  not_applicable;
 - confirmation that documented renderable-controller waypoints remain reported as `CORE-026` and do not produce validation/final-audit pass;
 - confirmation that render output is produced only by Content or adapter-side artifacts;
 - confirmation that locally implemented content contains no conditional
@@ -161,6 +173,8 @@ Categorize them as:
 - locally implemented content output derivation (`CORE-015`);
 - controller-to-content presentation command or mutation push into locally
   implemented content (`CORE-015`);
+- controller-shaped service/helper/module that does not participate in the
+  runtime controller tree (`CORE-037`);
 - invalid shared derived fact repair that swaps `CORE-029` with Invariant 14 or Invariant 14 with `CORE-029`;
 - instability / ambiguity in prompt;
 - artifact placement mismatch.

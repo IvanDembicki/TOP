@@ -91,6 +91,11 @@ If a discrepancy arises between this agent file and the output contract:
   parents, adapters, helpers, or access contracts (`CORE-035`)
 - accept a public target-framework wrapper around concrete locally implemented
   content (`CORE-036`)
+- accept a controller-shaped service/helper/module as a TOP controller when it
+  does not participate in the runtime controller tree (`CORE-037`)
+- accept generated controller files without the
+  `generated-controller-runtime-shape` micro-check or generated subtrees without
+  the `controller-tree-topology` meso-check
 - accept controller-to-content presentation commands, presentation state pushes,
   or imperative mutations into locally implemented content
 - accept constructor data injection or post-construction setter-style
@@ -145,6 +150,11 @@ If a discrepancy arises between this agent file and the output contract:
 - controller fragment-output validation (`CORE-034`)
 - content-owned setter bridge validation (`CORE-035`)
 - public wrapper around concrete content validation (`CORE-036`)
+- runtime controller tree validation (`CORE-037`): controller base/interface,
+  parent/root context, child ownership, children access, lifecycle, child
+  construction policy, leaf mechanics, and child-controller construction
+- generated-controller-runtime-shape micro-check
+- controller-tree-topology meso-check
 - one-controller zero-or-one-content validation and helper classification
 - migration decomposition validation: scope-vs-node-boundary, recursive
   candidate classification, single-node proof, giant-node review,

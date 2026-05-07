@@ -77,6 +77,26 @@ Review for extraction when the surface contains:
 
 The review must classify the hidden candidates before precheck can pass.
 
+## H-4a. Controller-shaped service instead of runtime node
+
+During migration, a generated file named `*Controller` is not enough. A TOP
+controller must participate in the runtime controller tree.
+
+Signals:
+- controller artifact has no parent/context or root/host context;
+- no runtime node base/interface is inherited or implemented;
+- no child ownership/registration, children access, lifecycle, disposal, or
+  child construction policy appears;
+- declared child nodes are represented as content/helpers/render fragments
+  instead of child controllers;
+- controller is a collection of functions around stores, hooks, services, or
+  API calls with no spec tree position.
+
+If these signals appear, classify the artifact as possible `CORE-037` and send
+it to controller runtime shape validation. The repair is to restore runtime node
+mechanics or reclassify the file as connector/service/helper rather than a TOP
+controller.
+
 ## H-5. PanelDisplayStyle cluster
 
 Many `PanelDisplayStyle` or equivalent display-token methods in one node are a

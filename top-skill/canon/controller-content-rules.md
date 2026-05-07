@@ -21,6 +21,20 @@ A public target-framework wrapper around concrete content is a boundary leak
 child controller public API, never with child content or a wrapper around child
 content.
 
+## Rule 2a — Controller tree is mandatory
+
+TOP runtime is a tree of controller objects.
+
+A controller without tree position is not a TOP controller. A controller-shaped
+service/helper/module with no runtime node base/interface, no parent/context or
+root context, no child ownership, no lifecycle, no child policy, and no spec
+tree position is not a TOP node.
+
+Every generated TOP controller must extend the project runtime node base or
+implement the project runtime node interface. Child construction creates child
+controllers/node objects, not child content, public wrappers, render fragments,
+or target artifacts posing as child nodes.
+
 ## Rule 3 — Do not flatten the split into naming only
 
 The pair `Controller` / `Content` must not be reduced to decorative labels.

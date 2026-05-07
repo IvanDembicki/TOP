@@ -292,6 +292,41 @@ Candidate strict TOP spec shape signals:
 - node-like objects omit canonical `type`, `doc`, `prompt`, `props`, or
   `children` without a project-approved equivalent.
 
+### Group A9 — Runtime controller tree shape signals
+
+TOP generation must produce a controller tree, not controller-shaped service
+files.
+
+Candidate `CORE-037` signals:
+- a class/function/module is named or treated as a controller but does not
+  extend the project runtime node base or implement the project runtime node
+  interface;
+- a non-root static controller has no parent/context relation;
+- a root controller has no root/host context or runtime tree root mechanics;
+- a controller has no child ownership/registration, children access, lifecycle,
+  disposal/cleanup, or declared child policy;
+- a non-leaf spec node's generated controller does not construct child
+  controllers;
+- a declared child is represented only as content, public wrapper, render
+  fragment, or target artifact;
+- a controller file is only a collection of functions, hooks, helpers, or
+  service calls with no relationship to spec tree position;
+- generated folder topology and child construction do not mirror the spec tree.
+
+Canonical repair:
+- make the artifact a real runtime node controller by extending/inheriting the
+  project runtime node base or implementing the project node interface;
+- attach static nodes to parent/context and root nodes to root/host context;
+- add/inherit lifecycle, child ownership, children access, and child policy;
+- construct child controllers at their tree positions;
+- reclassify service/helper logic as connector, data controller, black-box
+  boundary, or private implementation detail when it is not a TOP node.
+
+Required checkpoints:
+- micro-check `generated-controller-runtime-shape` after each generated
+  controller file;
+- meso-check `controller-tree-topology` after each generated subtree.
+
 ### Group B — Visibility and style manipulation
 
 - `el.style.display = 'none' / 'block'` — conditional hiding based on mode (not model data)

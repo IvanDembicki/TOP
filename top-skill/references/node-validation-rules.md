@@ -185,6 +185,79 @@ Canonical correction direction:
 
 ---
 
+## 2c. Runtime Controller Tree Validation
+
+Required checks:
+- TOP runtime is a tree of controllers, not a set of controller-shaped service
+  files;
+- every spec node has a corresponding controller artifact unless the model
+  explicitly declares a non-runtime/source-only artifact;
+- every generated TOP controller extends the project's canonical TOP node base
+  class or implements the canonical TOP node runtime interface for the
+  target/project;
+- every non-root static controller has parent/context or inherited
+  parent/context;
+- every root controller has root/host context and runtime tree root mechanics;
+- every controller has or inherits lifecycle, child ownership/registration,
+  children access, and a declared child construction policy;
+- every leaf controller has or inherits runtime node mechanics even when it has
+  no children;
+- every non-leaf controller constructs child controllers/node objects according
+  to spec;
+- no declared child is represented only as content, a public wrapper, a render
+  fragment, or a target artifact posing as a child node;
+- no controller-shaped service/helper/module is treated as a TOP node without
+  runtime tree position (`CORE-037`).
+
+Micro-check after each generated controller file:
+
+```text
+checkpoint: generated-controller-runtime-shape
+artifact: controller file
+checks:
+- has/inherits runtime node base or interface;
+- has parent/context or root context;
+- has/inherits lifecycle;
+- has declared child policy or explicit leaf declaration;
+- creates child controllers if non-leaf;
+- does not import foreign concrete content;
+- does not expose concrete content;
+result: PASS | REVIEW_REQUIRED | FAIL
+```
+
+Meso-check after generating a subtree:
+
+```text
+checkpoint: controller-tree-topology
+checks:
+- spec tree;
+- generated folder tree;
+- generated controller artifacts;
+- child construction logic;
+- prompt child rules;
+```
+
+The meso-check must verify that spec parent-child relations appear as
+controller parent-child relations, no child is represented only as content, no
+child node is missing a controller, no unmodeled generated controller exists
+without explicit reason, and generated source paths mirror the spec tree.
+
+After repair, validation restarts from the nearest complete validation gate
+instead of checking only the edited line. Repair can close one violation while
+introducing another.
+
+Canonical correction direction:
+- replace controller-shaped services with real node controllers that attach to
+  parent/context or root context;
+- add/inherit the project runtime node base/interface;
+- move child creation into parent-owned child-controller construction;
+- convert child content/wrapper/render fragments into child controllers,
+  black-box content, or external target artifacts according to the model;
+- rerun the controller runtime shape and controller-tree-topology checks after
+  repair.
+
+---
+
 ## 3. Content behavior validation
 
 Required checks:

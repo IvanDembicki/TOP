@@ -7,6 +7,32 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.27] — 2026-05-07
+
+- Added the runtime controller tree invariant: TOP runtime is a tree of
+  controller objects, and a controller without tree position is not a TOP
+  controller.
+- Added `CORE-037` for controller-shaped service/helper/module artifacts that
+  do not participate in the runtime controller tree.
+- Strengthened generation, validation, repair, final audit, prompts, contracts,
+  and pattern recognition with `generated-controller-runtime-shape` micro-checks
+  and `controller-tree-topology` meso-checks.
+- Required post-repair validation to restart from the nearest complete
+  validation gate affected by the repair.
+
+## [1.1.26] — 2026-05-07
+
+- Added a canonical rich typed TOP node pseudocode best-practice sample to
+  `references/code-generation.md`, including the matching spec-tree fragment,
+  runtime/library node entity binding, controller/content contracts, and
+  target-language downgrade rules.
+- Clarified that canonical node examples model the strongest architectural
+  form first, while target languages may explicitly downgrade unsupported type
+  system constructs without weakening TOP boundaries.
+- Linked the generation prompt and Generation Agent to the new spec-fragment to
+  typed-architecture reference so generated runtime/library nodes do not drift
+  into props-style or weak composition patterns.
+
 ## [1.1.25] — 2026-05-07
 
 - Added `canon/agent-power-separation.md` to formalize four-branch governance:

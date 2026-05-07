@@ -34,6 +34,26 @@ domain. If it becomes a view, component, widget, renderable artifact,
 render/build function, platform UI lifecycle object, or public runtime input
 receiver for content composition, the node model is invalid.
 
+The runtime TOP tree is a tree of controller objects. A controller without tree
+position is not a TOP controller. A controller-shaped service/helper/module with
+no parent/context or root context, no child ownership, no lifecycle, and no
+relationship to the spec tree is not a TOP node even if the file or class name
+ends with `Controller`.
+
+Canonical formula: A controller without tree position is not a TOP controller.
+
+Every node controller must either extend the project's canonical TOP node base
+class or implement the canonical TOP node runtime interface for the
+target/project. The concrete names are local, but the roles are required:
+parent/context or root/host context, children access, child ownership and
+registration, lifecycle, child construction policy, refresh/invalidate/update
+lifecycle when applicable, disposal/cleanup, and materialized output access
+through its private content boundary when content exists.
+
+Root controllers remain runtime tree roots. Leaf controllers remain runtime
+tree nodes. A root has root/host context instead of ordinary parent; a leaf may
+declare no children, but it still has or inherits runtime node mechanics.
+
 If a node has content, the node must consist of two distinct classes:
 - `Controller`
 - `Content`

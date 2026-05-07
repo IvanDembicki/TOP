@@ -228,6 +228,68 @@ This symmetry is mandatory even when one direction currently has no methods. An 
 
 This is especially important when content wraps a large platform component, widget, native view, or third-party object. The concrete content object may expose many public methods, but the controller may be allowed to use only one or two of them. `IContentAccess` cuts off the rest of the concrete surface and keeps the content implementation replaceable, portable, and verifiable.
 
+### Runtime controller tree
+
+TOP runtime is a tree of controller objects.
+
+A controller without tree position is not a TOP controller. A TOP controller is
+the public runtime object of a TOP node; it is not a standalone service/helper
+module and not merely a file named `*Controller`.
+
+Every generated TOP node controller must participate in the runtime controller
+tree by extending the project's canonical TOP node base class or implementing
+the canonical TOP node runtime interface for the active target/project.
+
+The exact API names are target/project-specific. The required roles are
+canonical:
+- parent/context reference, or root/host context for a root node;
+- child ownership and child registration;
+- children access;
+- lifecycle;
+- child construction policy;
+- refresh/invalidate/update lifecycle entry when applicable;
+- disposal/cleanup lifecycle;
+- materialized output access through the node's own content boundary when it
+  has content;
+- sibling access only through parent/declarative child collection mechanisms
+  when the base runtime supports them;
+- ancestor navigation only through allowed typed mechanisms.
+
+Static node constructors attach the node to the runtime tree. They receive only
+parent/context as semantic input. Runtime-created branch roots may receive
+parent/context plus one canonical Runtime Branch Binding input when the branch
+needs entity attachment.
+
+Root nodes are not exempt. A root controller may have no ordinary parent, but
+it must still be a runtime tree root with root/host context, child ownership,
+lifecycle, branch identity, integration boundary, and materialized output access
+through its own content boundary when it has content.
+
+Leaf nodes are not exempt. A leaf controller may have no children, but it must
+still attach to parent/context, have or inherit lifecycle, be represented in the
+spec/prompt, and own its private content boundary when it has content.
+
+Child construction must create child controllers/node objects, not child content
+objects, render fragments, public wrapper components, or target artifacts
+pretending to be child nodes.
+
+```text
+parent controller -> child controller
+child controller -> private content boundary
+```
+
+Forbidden:
+- creating child content directly as a child node;
+- creating public wrapper components as child nodes;
+- creating child render fragments as children;
+- composing child content inside parent content;
+- treating framework components as TOP child nodes unless they are explicitly
+  classified as black-box content or external target artifacts.
+
+TOP generation must produce a controller tree, not a set of controller-shaped
+service files. A controller-shaped service/helper/module with no runtime tree
+position is `CORE-037`.
+
 ### Absolute content privacy
 
 Concrete locally implemented content is private to its owning controller. It is

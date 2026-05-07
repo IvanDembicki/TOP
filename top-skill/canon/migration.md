@@ -538,10 +538,11 @@ as soon as it exists; do not build on unvalidated architecture.
 Checkpoint granularity follows `canon/validation-rejection-protocol.md`:
 - micro-check: one small artifact or action, such as branch safety, one spec
   node, one prompt file, one generated controller/content/contracts shape, one
-  folder path, one rejection ticket, or one suspicious content import;
+  generated-controller-runtime-shape check, one folder path, one rejection
+  ticket, or one suspicious content import;
 - meso-check: a related artifact group, such as scope boundaries,
   decomposition proposal, spec skeleton, prompt subtree, generated node group,
-  or adapter group;
+  controller-tree-topology check, or adapter group;
 - macro-check: a full phase, such as modeling, generation, repair cycle,
   integration, or final audit.
 

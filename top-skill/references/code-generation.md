@@ -210,6 +210,32 @@ Every node always has a controller.
 
 If a node has no content, generation may produce only a controller class.
 
+Generated TOP runtime must be a tree of controller objects. TOP generation must
+produce a controller tree, not controller-shaped service files.
+
+Canonical formula: TOP generation must produce a controller tree, not
+controller-shaped service files.
+
+Every generated TOP node controller must extend the project's canonical TOP node
+base class or implement the canonical TOP node runtime interface for the active
+target/project. A controller without tree position is not a TOP controller.
+
+Required runtime node mechanics are role-based, not name-based:
+- parent/context reference, or root/host context for a root node;
+- child registration and child ownership;
+- children access;
+- lifecycle;
+- child construction policy;
+- refresh/invalidate/update lifecycle entry when applicable;
+- disposal/cleanup lifecycle;
+- materialized output access through the node's own content boundary when it
+  has content.
+
+Static nodes receive parent/context and attach to the runtime tree. Runtime
+branch roots may additionally receive one canonical Runtime Branch Binding
+input. Root controllers must still be runtime tree roots. Leaf controllers may
+have no children, but they must still have or inherit runtime node mechanics.
+
 If a node has content, generation must preserve the architectural split:
 - a separate controller class;
 - a separate concrete content class;
@@ -612,6 +638,610 @@ The verification loop must check not only behavior but also the architectural co
   instead of collapsing hidden states, data owners, bridge boundaries, forms,
   modals, lists, or reusable structures back into one hub node or helper
   component wrapper.
+- whether every generated controller participates in the runtime controller
+  tree instead of being a standalone controller-shaped service/helper file.
+- whether child construction creates child controllers/node objects rather than
+  child content, public wrappers, render fragments, or target artifacts posing
+  as TOP children.
+
+---
+
+## 13.1. Canonical Rich Typed TOP Node Pseudocode
+
+Canonical TOP pseudocode must use the richest reasonable typed form. It is a
+maximum-information architectural model, not the weakest common denominator of
+possible target languages.
+
+Reason: a rich canonical model can be downgraded into simpler target languages.
+A weak or minimal model cannot reliably be upgraded into a strict architecture.
+
+Canonical pseudocode should include, where meaningful:
+- abstract classes;
+- explicit interfaces;
+- public / protected / private access modifiers;
+- readonly/final fields;
+- nullable / non-nullable types;
+- strict parent, child, content, and entity typing;
+- explicit getters;
+- explicit lifecycle methods;
+- narrow controller/content access contracts;
+- protected factory/build methods;
+- comments explaining access boundaries.
+
+Node id is not mandatory. A static TOP node is identified by its place in the
+tree. Stable identity is optional and belongs in a separate identity contract,
+for example `IIdentifiableNode`. Runtime, library, data, persistent, diffable,
+or logged nodes implement identity only when the model requires it.
+
+Every canonical node pseudocode example must include the matching spec-tree
+fragment. The JSON spec fragment shows the architectural source of the
+runtime/class structure. The pseudocode shows how that architecture materializes
+into typed controller, content, node, and entity contracts.
+
+The following example is canonical as a best-practice sample for runtime/lib
+node generation. It is self-contained so agents can see the whole pattern in
+one place: explanation, matching spec fragment, rich typed pseudocode, boundary
+comments, and target-language downgrade rules.
+
+### Spec fragment
+
+```json
+{
+  "type": "DeviceList",
+  "doc": "Runtime container that creates DeviceItem runtime nodes from device data entities.",
+  "prompt": "prompts/devices/DeviceList.prompt.md",
+  "props": {
+    "contentType": "view",
+    "childPolicy": "runtime-list",
+    "runtimeChildType": "lib:devices.DeviceItem"
+  },
+  "children": [
+    {
+      "type": "lib:devices.DeviceItem",
+      "doc": "Runtime library node representing one device entity.",
+      "prompt": "prompts/devices/library/DeviceItem.prompt.md",
+      "props": {
+        "contentType": "view",
+        "entityBinding": "IDeviceEntityAccess"
+      },
+      "children": [
+        {
+          "type": "DeviceItemTitle",
+          "doc": "Displays the resolved device title.",
+          "prompt": "prompts/devices/library/DeviceItemTitle.prompt.md",
+          "props": {
+            "contentType": "view",
+            "entityBinding": "IDeviceEntityAccess"
+          }
+        },
+        {
+          "type": "DeviceItemActions",
+          "doc": "Provides actions for the device item.",
+          "prompt": "prompts/devices/library/DeviceItemActions.prompt.md",
+          "props": {
+            "contentType": "view",
+            "entityBinding": "IDeviceEntityAccess"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+DeviceList is a fixed architectural node. DeviceItem is a runtime/library node
+type. It is described once in the spec but instantiated many times at runtime,
+one instance per `IDeviceEntityAccess`.
+
+DeviceItemTitle and DeviceItemActions are fixed children of each DeviceItem
+instance. They receive the same entity binding through parent-owned
+construction. The entity binding is not arbitrary props injection. It is a
+narrow model/data access contract that binds the runtime node to the data
+entity it represents.
+
+Child materialized outputs in this example are opaque placement handles. Parent
+content may place them, but must not inspect, mutate, configure, or use them as
+behavior channels.
+
+### Rich canonical pseudocode
+
+```text
+// ============================================================
+// TOP canonical rich typed pseudocode skeleton
+// This is not target-language code.
+// It is a maximum-information architectural model.
+// Target languages may downgrade unsupported constructs explicitly.
+// ============================================================
+
+
+// ------------------------------------------------------------
+// Common platform-neutral types
+// ------------------------------------------------------------
+
+type MaterializedOutput = PlatformMaterializedOutput
+type NodeId = string
+
+interface IDisposable {
+  public dispose(): void
+}
+
+interface IRefreshable {
+  public refresh(): void
+}
+
+
+// ------------------------------------------------------------
+// Base node contracts
+// ------------------------------------------------------------
+
+interface ITopNode extends IDisposable, IRefreshable {
+  public get parent(): ITopNode | null
+  public get children(): ReadonlyList<ITopNode>
+}
+
+// Optional identity contract.
+// Do not put id into ITopNode.
+// Static nodes are identified by their place in the tree.
+interface IIdentifiableNode {
+  public get id(): NodeId
+}
+
+
+// ------------------------------------------------------------
+// Abstract runtime node
+// ------------------------------------------------------------
+
+abstract class TopNode<
+  TParent extends ITopNode | null,
+  TChild extends ITopNode
+> implements ITopNode {
+
+  protected readonly _parent: TParent
+  private readonly _children: MutableList<TChild>
+
+  protected constructor(parent: TParent) {
+    this._parent = parent
+    this._children = new MutableList<TChild>()
+  }
+
+  public get parent(): TParent {
+    return this._parent
+  }
+
+  public get children(): ReadonlyList<TChild> {
+    return this._children.asReadonly()
+  }
+
+  protected registerTypedChild(child: TChild): void {
+    this._children.add(child)
+  }
+
+  protected unregisterTypedChild(child: TChild): void {
+    this._children.remove(child)
+  }
+
+  protected abstract buildChildren(): void
+
+  public refresh(): void {
+    for (child in this._children) {
+      child.refresh()
+    }
+  }
+
+  public dispose(): void {
+    for (child in this._children.reversed()) {
+      child.dispose()
+    }
+
+    this._children.clear()
+  }
+}
+
+
+// ------------------------------------------------------------
+// Model/data access contract
+// ------------------------------------------------------------
+
+// This is entity context binding, not arbitrary props injection.
+// The runtime node represents one device entity and receives
+// a narrow access contract for that entity.
+interface IDeviceEntityAccess {
+  public get deviceId(): string
+  public get resolvedDisplayName(): string
+  public get resolvedStatusText(): string
+
+  public requestRename(newName: string): void
+}
+
+
+// ------------------------------------------------------------
+// DeviceItem internal contracts
+// ------------------------------------------------------------
+
+// Controller -> Content access.
+// The controller owns content only through this narrow contract.
+interface IDeviceItemContentAccess extends IDisposable, IRefreshable {
+  public getView(): MaterializedOutput
+}
+
+// Content -> Controller access.
+// Content receives only this interface, never the concrete controller type.
+interface IDeviceItemControllerAccess {
+  public get displayName(): string
+  public get statusText(): string
+
+  public getTitleView(): MaterializedOutput
+  public getActionsView(): MaterializedOutput
+
+  public requestRename(newName: string): void
+}
+
+
+// ------------------------------------------------------------
+// DeviceItemNode
+// Runtime lib-node instance bound to one data/entity node.
+// ------------------------------------------------------------
+
+class DeviceItemNode
+  extends TopNode<ITopNode, ITopNode>
+  implements IDeviceItemControllerAccess {
+
+  private readonly _entity: IDeviceEntityAccess
+  private readonly _content: IDeviceItemContentAccess
+
+  private _titleChild: DeviceItemTitleNode
+  private _actionsChild: DeviceItemActionsNode
+
+  public constructor(
+    parent: ITopNode,
+    entity: IDeviceEntityAccess
+  ) {
+    super(parent)
+
+    this._entity = entity
+
+    // Content receives only narrow controller access.
+    // It must not receive children, props, callbacks, services,
+    // raw data packets, or the concrete controller class type.
+    this._content = this.createContent(this.asControllerAccess())
+
+    this.buildChildren()
+  }
+
+  protected buildChildren(): void {
+    // Parent-owned child construction.
+    // Children receive parent + narrow entity binding.
+    this._titleChild = new DeviceItemTitleNode(this, this._entity)
+    this._actionsChild = new DeviceItemActionsNode(this, this._entity)
+
+    this.registerTypedChild(this._titleChild)
+    this.registerTypedChild(this._actionsChild)
+  }
+
+  protected createContent(
+    controllerAccess: IDeviceItemControllerAccess
+  ): IDeviceItemContentAccess {
+    return new DeviceItemContent(controllerAccess)
+  }
+
+  private asControllerAccess(): IDeviceItemControllerAccess {
+    return this
+  }
+
+  public get displayName(): string {
+    return this._entity.resolvedDisplayName
+  }
+
+  public get statusText(): string {
+    return this._entity.resolvedStatusText
+  }
+
+  public getView(): MaterializedOutput {
+    return this._content.getView()
+  }
+
+  public getTitleView(): MaterializedOutput {
+    return this._titleChild.getView()
+  }
+
+  public getActionsView(): MaterializedOutput {
+    return this._actionsChild.getView()
+  }
+
+  public requestRename(newName: string): void {
+    this._entity.requestRename(newName)
+    this.refresh()
+  }
+
+  public override refresh(): void {
+    this._titleChild.refresh()
+    this._actionsChild.refresh()
+    this._content.refresh()
+  }
+
+  public override dispose(): void {
+    this._titleChild.dispose()
+    this._actionsChild.dispose()
+    this._content.dispose()
+
+    super.dispose()
+  }
+}
+
+
+// ------------------------------------------------------------
+// DeviceItemContent
+// Owns platform-specific representation.
+// Does not know child nodes directly.
+// ------------------------------------------------------------
+
+class DeviceItemContent implements IDeviceItemContentAccess {
+
+  private readonly _controller: IDeviceItemControllerAccess
+  private readonly _root: PlatformPrimitive
+
+  public constructor(controller: IDeviceItemControllerAccess) {
+    this._controller = controller
+    this._root = this.createRoot()
+
+    this.composeStaticLayout()
+  }
+
+  private createRoot(): PlatformPrimitive {
+    return Platform.createContainer()
+  }
+
+  private composeStaticLayout(): void {
+    // Content does not import or instantiate child content.
+    // It asks its controller for child materialized outputs.
+    this._root.add(this._controller.getTitleView())
+    this._root.add(this._controller.getActionsView())
+  }
+
+  public getView(): MaterializedOutput {
+    return this._root
+  }
+
+  public refresh(): void {
+    // Content applies already-resolved primitive/output values only.
+    this._root.setText("displayNameSlot", this._controller.displayName)
+    this._root.setText("statusSlot", this._controller.statusText)
+  }
+
+  public dispose(): void {
+    this._root.dispose()
+  }
+}
+
+
+// ------------------------------------------------------------
+// DeviceItemTitle child node
+// ------------------------------------------------------------
+
+interface IDeviceItemTitleContentAccess extends IDisposable, IRefreshable {
+  public getView(): MaterializedOutput
+}
+
+interface IDeviceItemTitleControllerAccess {
+  public get titleText(): string
+}
+
+class DeviceItemTitleNode
+  extends TopNode<DeviceItemNode, ITopNode>
+  implements IDeviceItemTitleControllerAccess {
+
+  private readonly _entity: IDeviceEntityAccess
+  private readonly _content: IDeviceItemTitleContentAccess
+
+  public constructor(
+    parent: DeviceItemNode,
+    entity: IDeviceEntityAccess
+  ) {
+    super(parent)
+
+    this._entity = entity
+    this._content = this.createContent(this.asControllerAccess())
+
+    this.buildChildren()
+  }
+
+  protected buildChildren(): void {
+    // No static children.
+  }
+
+  protected createContent(
+    controllerAccess: IDeviceItemTitleControllerAccess
+  ): IDeviceItemTitleContentAccess {
+    return new DeviceItemTitleContent(controllerAccess)
+  }
+
+  private asControllerAccess(): IDeviceItemTitleControllerAccess {
+    return this
+  }
+
+  public get titleText(): string {
+    return this._entity.resolvedDisplayName
+  }
+
+  public getView(): MaterializedOutput {
+    return this._content.getView()
+  }
+
+  public override refresh(): void {
+    this._content.refresh()
+  }
+
+  public override dispose(): void {
+    this._content.dispose()
+    super.dispose()
+  }
+}
+
+
+// ------------------------------------------------------------
+// DeviceItemActions child node
+// ------------------------------------------------------------
+
+interface IDeviceItemActionsContentAccess extends IDisposable, IRefreshable {
+  public getView(): MaterializedOutput
+}
+
+interface IDeviceItemActionsControllerAccess {
+  public requestRename(newName: string): void
+}
+
+class DeviceItemActionsNode
+  extends TopNode<DeviceItemNode, ITopNode>
+  implements IDeviceItemActionsControllerAccess {
+
+  private readonly _entity: IDeviceEntityAccess
+  private readonly _content: IDeviceItemActionsContentAccess
+
+  public constructor(
+    parent: DeviceItemNode,
+    entity: IDeviceEntityAccess
+  ) {
+    super(parent)
+
+    this._entity = entity
+    this._content = this.createContent(this.asControllerAccess())
+
+    this.buildChildren()
+  }
+
+  protected buildChildren(): void {
+    // No static children.
+  }
+
+  protected createContent(
+    controllerAccess: IDeviceItemActionsControllerAccess
+  ): IDeviceItemActionsContentAccess {
+    return new DeviceItemActionsContent(controllerAccess)
+  }
+
+  private asControllerAccess(): IDeviceItemActionsControllerAccess {
+    return this
+  }
+
+  public getView(): MaterializedOutput {
+    return this._content.getView()
+  }
+
+  public requestRename(newName: string): void {
+    this._entity.requestRename(newName)
+    this.refresh()
+  }
+
+  public override refresh(): void {
+    this._content.refresh()
+  }
+
+  public override dispose(): void {
+    this._content.dispose()
+    super.dispose()
+  }
+}
+
+
+// ------------------------------------------------------------
+// DeviceItemTitleContent
+// Applies already-resolved title text to a static title slot.
+// ------------------------------------------------------------
+
+class DeviceItemTitleContent implements IDeviceItemTitleContentAccess {
+
+  private readonly _controller: IDeviceItemTitleControllerAccess
+  private readonly _root: PlatformPrimitive
+
+  public constructor(controller: IDeviceItemTitleControllerAccess) {
+    this._controller = controller
+    this._root = Platform.createTextContainer()
+    this.composeStaticLayout()
+  }
+
+  private composeStaticLayout(): void {
+    // Static structure only. No conditional selection and no text derivation.
+    this._root.createTextSlot("titleSlot")
+  }
+
+  public getView(): MaterializedOutput {
+    return this._root
+  }
+
+  public refresh(): void {
+    this._root.setText("titleSlot", this._controller.titleText)
+  }
+
+  public dispose(): void {
+    this._root.dispose()
+  }
+}
+
+
+// ------------------------------------------------------------
+// DeviceItemActionsContent
+// Reports local semantic intent to the owning controller.
+// ------------------------------------------------------------
+
+class DeviceItemActionsContent implements IDeviceItemActionsContentAccess {
+
+  private readonly _controller: IDeviceItemActionsControllerAccess
+  private readonly _root: PlatformPrimitive
+
+  public constructor(controller: IDeviceItemActionsControllerAccess) {
+    this._controller = controller
+    this._root = Platform.createActionContainer()
+    this.composeStaticLayout()
+  }
+
+  private composeStaticLayout(): void {
+    // Local platform event binding is materialization mechanics.
+    // The semantic decision remains in the controller/entity boundary.
+    this._root.bindInputCommit("renameInput", this.onRenameCommitted)
+  }
+
+  private onRenameCommitted(newName: string): void {
+    this._controller.requestRename(newName)
+  }
+
+  public getView(): MaterializedOutput {
+    return this._root
+  }
+
+  public refresh(): void {
+    // No output values are derived here.
+  }
+
+  public dispose(): void {
+    this._root.dispose()
+  }
+}
+```
+
+### Rules for target-language downgrading
+
+1. The canonical skeleton is not implementation code. It is the richest
+   architecture model from which target-specific code is derived.
+2. Target languages may downgrade unsupported constructs. If a language has no
+   `protected` modifier, for example, generated code must emulate the boundary
+   by convention and document the downgrade.
+3. Content constructors receive exactly one argument: a narrow controller access
+   interface implemented by the owning node/controller.
+4. Content constructors must not receive the concrete controller class type,
+   children, child content, callbacks, flags, config, services, stores,
+   arbitrary props, raw model data packets, or other semantic values.
+5. Runtime/library nodes may receive entity context binding in their
+   constructor. This must be a narrow model/data access interface, not a props
+   bag.
+6. Children are constructed by the parent node. Child nodes receive their parent
+   and, when required, narrow entity binding.
+7. Content may request child materialized outputs only through its controller
+   access. Content must not know child content classes or child node internals.
+8. Base `ITopNode` must not require `id`. Optional identity belongs in
+   `IIdentifiableNode`.
+9. Any future canonical node example must include the spec fragment, rich typed
+   pseudocode, comments explaining access boundaries, and an explanation of how
+   the spec produces the class/runtime structure.
 
 ---
 

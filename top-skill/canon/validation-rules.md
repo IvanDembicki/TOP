@@ -174,6 +174,22 @@ Canonical repair for context data injection:
 ## Controller validation
 - Controller owns behavior, lifecycle, orchestration, branching.
 - Controller remains a controller-only artifact.
+- TOP runtime is a tree of controllers. A controller without tree position is
+  not a TOP controller.
+- Every generated TOP node controller extends the project's canonical TOP node
+  base class or implements the canonical TOP node runtime interface for the
+  target/project.
+- Every non-root static controller has parent/context or inherited
+  parent/context. Every root controller has root/host context and runtime tree
+  root mechanics.
+- Every controller has or inherits lifecycle, child ownership/registration
+  mechanics, children access, and a declared child construction policy. Leaf
+  controllers may declare no children, but they still require runtime node
+  mechanics.
+- Child construction creates child controllers/node objects, not child content,
+  public wrappers, render fragments, or target artifacts posing as TOP children.
+- A controller-shaped service/helper/module with no runtime tree position is
+  `CORE-037`.
 - Controller is not itself a view, component, widget, composable, render function, route/screen component, framework lifecycle UI object, or public runtime input receiver for content composition.
 - Controller does not return render output, render trees, platform views, layout fragments, style objects, animation objects, or content artifacts.
 - Controller is not mounted, registered, invoked, or executed by the target runtime as the renderable UI/content entity.
@@ -458,3 +474,31 @@ content, mutation body construction in content, navigation/routing in content,
 alert/business decisions in content, controller-to-content command channels,
 constructor or setter injection, and helper components that are unclassified
 black boxes or local legacy wrappers.
+
+Validation must also detect controller-shaped service/helper files that do not
+participate in the runtime controller tree. A generated TOP controller must have
+or inherit runtime node base/interface mechanics, parent/context or root
+context, lifecycle, child ownership, and declared child policy.
+
+After each controller file is generated, run the
+`generated-controller-runtime-shape` micro-check:
+- has or inherits the runtime node base/interface;
+- has parent/context or root/host context;
+- has or inherits lifecycle;
+- has declared child policy or explicit leaf declaration;
+- creates child controllers when non-leaf;
+- does not import foreign concrete content;
+- does not expose concrete content.
+
+After a generated subtree exists, run the `controller-tree-topology`
+meso-check:
+- spec parent-child relations appear as controller parent-child relations;
+- no child is represented only as content/component;
+- no child node is missing a controller;
+- no generated controller exists outside the spec without explicit reason;
+- folder tree mirrors the spec tree.
+
+After repair, validation restarts from the nearest complete validation gate. A
+repaired controller file reruns controller runtime shape; changed child
+construction reruns subtree topology; content privacy repair reruns the full
+content privacy scan; spec shape repair reruns spec shape and prompt sync.

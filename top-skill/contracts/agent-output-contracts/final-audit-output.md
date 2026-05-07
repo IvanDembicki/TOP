@@ -32,6 +32,7 @@ result:
 details:
 - validator_audit_check
 - incremental_validation_audit
+- controller_tree_audit
 - remaining_risks
 - behavior_preservation_gate
 - unresolved_limits
@@ -60,6 +61,9 @@ next_step:
 - `incremental_validation_audit` must verify that required micro-check,
   meso-check, and macro-check gates exist for the relevant workflow and that no
   unresolved `REVIEW_REQUIRED` or `FAIL` checkpoint remains.
+- `controller_tree_audit` must verify that validation checked
+  `generated-controller-runtime-shape`, `controller-tree-topology`, and absence
+  of `CORE-037` for generated TOP controller artifacts.
 - Final audit cannot mark the result ready if `core_violations` is non-empty
 - Final audit cannot mark the result ready if `accepted_deviations` contains a
   core violation or migration waypoint

@@ -90,6 +90,13 @@ If a discrepancy arises between this agent file and the output contract:
 - repair concrete content privacy breaches by moving imports/instantiation/
   typing/downcasts/calls back inside the owning controller and storing the
   content only as `IContentAccess`
+- repair `CORE-037` by replacing controller-shaped services/helpers with real
+  runtime node controllers that extend the project node base or implement the
+  project runtime node interface, attach to parent/context or root context,
+  declare child policy, own lifecycle, and construct child controllers
+- after repairing controller runtime shape, rerun validation from the nearest
+  complete gate: controller file repair reruns `generated-controller-runtime-shape`;
+  child construction repair reruns `controller-tree-topology`
 - repair controller fragment-output APIs by replacing platform/content fragment
   returns with controller-level values or canon-permitted opaque placement
   handles, and by modeling hidden fragments as child/state/black-box/library
@@ -138,6 +145,10 @@ If a discrepancy arises between this agent file and the output contract:
 - repair a concrete content privacy breach by wrapping the concrete content in
   a facade, helper, adapter, method bag, or external factory while leaving it
   externally reachable
+- repair `CORE-037` by renaming a service/helper/module as `Controller` without
+  adding runtime tree mechanics and spec tree position
+- repair missing child-controller construction by creating child content,
+  wrappers, render fragments, or target artifacts instead of child controllers
 - repair controller fragment-output by renaming render fragments as handles when
   the caller can still inspect, mutate, or platform-operate on them
 - repair content-owned setter bridges by moving the same setter through another
@@ -182,6 +193,10 @@ If a discrepancy arises between this agent file and the output contract:
   renaming them or moving the same mutation through another channel
 - repairs remove context data injection instead of renaming the injection path
   or turning it into setter-style post-construction configuration
+- repairs restore runtime controller tree participation instead of producing
+  controller-shaped service files
+- repairs restart validation from the nearest complete validation gate after
+  controller runtime shape, topology, content privacy, or spec shape changes
 - repairs do not reclassify non-canon core violations as accepted deviations
 - documented migration waypoints remain reported as core violations until structurally removed
 </validation_focus>

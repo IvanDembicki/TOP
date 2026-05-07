@@ -41,6 +41,10 @@ rules:
 - do not lose, weaken, omit from prompts, or leave uncovered behavior proven by legacy tests
 - generate or adapt TOP-compatible tests for each prompt requirement derived from legacy tests
 - classify missing Behavior Preservation Plan as `WF-010` and test-covered behavior loss as `CORE-028`
+- use `references/code-generation.md` section "Canonical Rich Typed TOP Node Pseudocode"
+  as the best-practice reference for spec fragment -> rich typed
+  pseudocode -> target-language derivation when generating runtime/library
+  nodes or documenting canonical skeletons
 - generate only into the approved implementation source root (`top_src/` by
   default); for new migration branches use `top_src/<branch-id>/` unless the
   approved model declares another root
@@ -51,6 +55,19 @@ rules:
 - enforce Controller Role Purity
 - generate context attachment, not data injection: TOP object construction
   attaches the object to its ownership context and does not fill it with values
+- generate a runtime controller tree, not controller-shaped service/helper
+  files. A controller without tree position is not a TOP controller.
+- generated TOP controllers must extend the project runtime node base or
+  implement the project runtime node interface. They must have or inherit
+  parent/context or root/host context, child ownership, children access,
+  lifecycle, child construction policy, disposal/cleanup, and materialized
+  output access through their own content boundary when content exists.
+- child construction must create child controllers/node objects, not child
+  content, public wrapper components, render fragments, or target artifacts
+  posing as child nodes.
+- after each controller file, produce evidence for the
+  `generated-controller-runtime-shape` micro-check; after each subtree, produce
+  evidence for the `controller-tree-topology` meso-check
 - static node constructors receive only parent/context as semantic input
 - runtime-created branch roots may receive parent/context plus one canonical
   Runtime Branch Binding input: entity context reference, stable identity key,

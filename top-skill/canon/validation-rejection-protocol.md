@@ -106,6 +106,13 @@ Repair must not:
 - mark a hard violation as accepted residual;
 - broaden the violation into a vague migration waypoint.
 
+After repair, validation restarts from the nearest complete validation gate. A
+repair must not be judged only by checking the edited line or the single
+reported symptom. If one controller file was repaired, rerun
+`generated-controller-runtime-shape`; if child construction changed, rerun
+`controller-tree-topology`; if content privacy changed, rerun the full content
+privacy scan; if spec shape changed, rerun spec shape and prompt-sync checks.
+
 ## Repair circuit breaker
 
 Canonical limits:
@@ -204,12 +211,14 @@ prompt creation
 
 generation per node
 -> micro-check: generated controller/content/contracts shape
+-> micro-check: generated-controller-runtime-shape
 -> micro-check: no concrete content exposure
 -> micro-check: no content conditionals
 -> micro-check: folder path mirrors spec path
 
 generation group
 -> meso-check: controller tree composition
+-> meso-check: controller-tree-topology
 -> meso-check: no public wrappers around content
 -> meso-check: no controller render fragments
 
@@ -219,6 +228,7 @@ post-generation validation
 repair cycle
 -> micro-check: rejection ticket exists
 -> micro-check: learning ledger updated
+-> micro-check: repaired artifact reruns nearest complete validation gate
 -> meso-check: repair did not repeat rejected strategy
 
 final audit
@@ -239,6 +249,7 @@ Examples:
 - large controller access surface -> decomposition review;
 - public content import -> hard fail;
 - public wrapper around content -> hard fail;
+- controller-shaped service/helper without runtime tree mechanics -> hard fail;
 - generic `type: "Node"` in spec -> hard fail;
 - content conditional -> hard fail;
 - ambiguous black-box component -> review-required or fail;
@@ -265,4 +276,3 @@ next_action:
 
 PASS entries should be short. FAIL and REVIEW_REQUIRED entries must contain
 enough detail to reproduce the decision.
-

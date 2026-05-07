@@ -123,6 +123,36 @@ content. Target-specific example only; not a canonical model term: a React-like
 component that merely renders a private content class is not a TOP controller.
 It is a public wrapper around concrete content (`CORE-036`).
 
+## Runtime controller tree
+
+TOP runtime is a tree of controllers.
+
+A TOP controller is not just a file with methods. It is the public runtime
+object of a TOP node. A controller without tree position is not a TOP
+controller.
+
+Canonical formula: A controller without tree position is not a TOP controller.
+
+Every generated TOP node controller must either extend the project's canonical
+TOP node base class or implement the canonical TOP node runtime interface for
+the active target/project. The exact names are project-specific, but the roles
+are canonical: parent/context reference, child ownership/registration, children
+access, lifecycle, child construction policy, refresh/invalidate/update
+lifecycle when applicable, disposal/cleanup lifecycle, and materialized output
+access through the node's own content boundary when content exists.
+
+A root controller may have no ordinary parent, but it must still be a runtime
+tree root with root/host context, child ownership, lifecycle, branch identity,
+integration boundary, and materialized output access when it has content.
+
+A leaf controller may have no children, but it must still attach to
+parent/context, have or inherit lifecycle, correspond to the spec/prompt, and
+own its private content boundary when it has content.
+
+TOP generation must produce a controller tree, not a set of controller-shaped
+service files. A controller-shaped service/helper/module with no runtime tree
+position is not a TOP node (`CORE-037`).
+
 ## One controller, zero-or-one content
 
 A TOP node has exactly one controller. It may have zero or one locally

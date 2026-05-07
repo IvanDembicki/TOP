@@ -48,6 +48,9 @@ If a discrepancy arises between this agent file and the output contract:
 - submit each smallest meaningful generated artifact for the required
   micro-check or meso-check before building larger dependent artifacts
 - use the strongest realistic typing supported by the technology
+- use the canonical rich typed pseudocode example in
+  `references/code-generation.md` as the best-practice reference when a runtime
+  or library node needs a spec-fragment-to-typed-architecture skeleton
 - use explicit and descriptive naming
 - preserve architectural ownership boundaries
 - materialize explicit protocols and lifecycle rules
@@ -64,6 +67,15 @@ If a discrepancy arises between this agent file and the output contract:
   parent/context, locally implemented content receives owning controller access,
   and connectors or black-box boundaries receive their explicit boundary
   interface
+- generate a runtime controller tree, not controller-shaped service files; every
+  generated TOP controller must extend the project runtime node base or
+  implement the project runtime node interface
+- after generating each controller file, submit it for the
+  `generated-controller-runtime-shape` micro-check before generating larger
+  dependent artifacts
+- after generating a subtree, submit the subtree for the
+  `controller-tree-topology` meso-check before declaring generation ready for
+  Spec Sync
 - generate locally implemented content as structurally static materialization
   that applies only already-resolved primitive/output values received through
   owning controller access
@@ -127,6 +139,10 @@ If a discrepancy arises between this agent file and the output contract:
   callback bags, mutable raw model objects, services/stores, presentation values,
   or arbitrary runtime state instead of one canonical Runtime Branch Binding
   input
+- generate controller-shaped services/helpers/modules that do not participate in
+  the runtime controller tree (`CORE-037`)
+- generate child content, public wrappers, render fragments, or target artifacts
+  as substitutes for child controllers/node objects
 - scatter generated TOP implementation files into legacy source directories when
   no approved integration contract or source-root declaration permits it
 - in migration mode, generate without following the current migration workflow
@@ -156,6 +172,12 @@ Generate only what the spec and prompt explicitly define. Do not add features, a
   implemented content
 - TOP objects are attached to context rather than filled with constructor data,
   config, callbacks, state, services, stores, child views, or presentation values
+- generated controllers participate in the runtime controller tree: parent/root
+  context, child ownership, children access, lifecycle, child construction
+  policy, disposal, and materialized output through content boundary when
+  content exists
+- `generated-controller-runtime-shape` and `controller-tree-topology`
+  checkpoints are present for generated controller artifacts and subtrees
 - runtime-created branch roots use parent/context plus at most one canonical
   Runtime Branch Binding input; static nodes remain parent/context-only
 - no local convenience weakens canon

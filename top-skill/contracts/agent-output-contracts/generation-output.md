@@ -38,6 +38,8 @@ result:
 - migration_plan_alignment
 - generator_learning_ledger_read
 - post_generation_architectural_self_check
+- generated_controller_runtime_shape_self_check
+- controller_tree_topology_self_check
 - migration_log_entry
 
 details:
@@ -103,6 +105,16 @@ spec_sync_handoff:
   files: controller files, locally implemented content files, contracts, bridge
   components, helper components, modal files, adapters, and generated
   constants/helpers. Type-check success does not satisfy this field.
+- `generated_controller_runtime_shape_self_check` must list each generated
+  controller file and the mechanical evidence submitted for the
+  `generated-controller-runtime-shape` micro-check: runtime node base/interface,
+  parent/context or root context, lifecycle, child policy, child-controller
+  construction when non-leaf, no foreign concrete content import, and no
+  concrete content exposure.
+- `controller_tree_topology_self_check` must summarize the
+  `controller-tree-topology` meso-check evidence for generated subtrees: spec
+  tree, generated folder tree, generated controller artifacts, child
+  construction logic, and prompt child rules.
 - `generated_source_files_reviewed` must list the files read for the
   post-generation architectural self-check, or explain why generation produced
   no source files.

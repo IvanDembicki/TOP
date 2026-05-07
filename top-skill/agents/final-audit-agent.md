@@ -77,6 +77,9 @@ If a discrepancy arises between this agent file and the output contract:
 - incremental validation audit: micro-check, meso-check, and macro-check gates
   exist for the relevant migration/generation phases and unresolved
   `REVIEW_REQUIRED` or `FAIL` checkpoints do not remain
+- controller tree audit: validation confirmed `generated-controller-runtime-shape`
+  for generated controller files and `controller-tree-topology` for generated
+  subtrees, and no `CORE-037` controller-shaped service/helper remains
 - readiness is classified precisely as `ready_for_generation`,
   `ready_for_integration`, `ready_for_manual_QA`, or
   `ready_for_production_candidate`
