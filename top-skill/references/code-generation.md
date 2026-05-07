@@ -729,15 +729,23 @@ comments, and target-language downgrade rules.
 }
 ```
 
-DeviceList is a fixed architectural node. DeviceItem is a runtime/library node
-type. It is described once in the spec but instantiated many times at runtime,
-one instance per `IDeviceEntityAccess`.
+The JSON fragment is the architectural source. `DeviceList` is the fixed
+container node. `lib:devices.DeviceItem` is a runtime/library node type. It is
+described once in the spec but instantiated many times at runtime, one instance
+per `IDeviceEntityAccess`. The pseudocode materializes both the fixed container
+and the runtime item node type.
 
-DeviceItemTitle and DeviceItemActions are fixed children of each DeviceItem
-instance. They receive the same entity binding through parent-owned
-construction. The entity binding is not arbitrary props injection. It is a
-narrow model/data access contract that binds the runtime node to the data
-entity it represents.
+`DeviceItemTitle` and `DeviceItemActions` are fixed children of each
+`DeviceItem` runtime instance. They receive the same entity binding through
+parent-owned construction. The entity binding is not arbitrary props injection.
+It is a narrow model/data access contract that binds the runtime node to the
+data entity it represents.
+
+The props used here are canonical spec metadata defined by the node model:
+`childPolicy`, `runtimeChildType`, and `entityBinding`. They affect generation
+only by declaring parent-owned runtime child construction and narrow entity
+binding. They must not be confused with target runtime props, config bags,
+callback bags, or data injection.
 
 Child materialized outputs in this example are opaque placement handles. Parent
 content may place them, but must not inspect, mutate, configure, or use them as
@@ -760,6 +768,7 @@ behavior channels.
 
 type MaterializedOutput = PlatformMaterializedOutput
 type NodeId = string
+type NoChildNode = never
 
 interface IDisposable {
   public dispose(): void
@@ -791,6 +800,13 @@ interface IIdentifiableNode {
 // Abstract runtime node
 // ------------------------------------------------------------
 
+// Child registration is parent-owned.
+// The base constructor stores the parent reference only.
+// The parent registers each child immediately after constructing it.
+// A method such as buildChildren() is optional and exists only on
+// nodes that actually construct child nodes. Leaf nodes do not declare it.
+// Leaf nodes use NoChildNode as the child type in this rich pseudocode.
+// Target languages without a bottom type may emulate this by convention.
 abstract class TopNode<
   TParent extends ITopNode | null,
   TChild extends ITopNode
@@ -819,8 +835,6 @@ abstract class TopNode<
   protected unregisterTypedChild(child: TChild): void {
     this._children.remove(child)
   }
-
-  protected abstract buildChildren(): void
 
   public refresh(): void {
     for (child in this._children) {
@@ -853,10 +867,148 @@ interface IDeviceEntityAccess {
   public requestRename(newName: string): void
 }
 
+interface IDeviceListParentContext extends ITopNode {
+  public getDeviceEntities(): ReadonlyList<IDeviceEntityAccess>
+}
+
+
+// ------------------------------------------------------------
+// DeviceList internal contracts
+// ------------------------------------------------------------
+
+interface IDeviceListChildNode extends ITopNode {
+  public getView(): MaterializedOutput
+}
+
+interface IDeviceListContentAccess extends IDisposable, IRefreshable {
+  public getView(): MaterializedOutput
+}
+
+interface IDeviceListControllerAccess {
+  public getItemViews(): ReadonlyList<MaterializedOutput>
+}
+
+
+// ------------------------------------------------------------
+// DeviceListNode
+// Fixed architectural node that owns runtime DeviceItem children.
+// ------------------------------------------------------------
+
+class DeviceListNode
+  extends TopNode<IDeviceListParentContext, IDeviceListChildNode>
+  implements IDeviceListControllerAccess {
+
+  private readonly _content: IDeviceListContentAccess
+  private readonly _itemChildren: MutableList<DeviceItemNode>
+
+  public constructor(parent: IDeviceListParentContext) {
+    super(parent)
+
+    this._itemChildren = new MutableList<DeviceItemNode>()
+    this._content = this.createContent(this.asControllerAccess())
+
+    this.synchronizeRuntimeChildren()
+  }
+
+  protected createContent(
+    controllerAccess: IDeviceListControllerAccess
+  ): IDeviceListContentAccess {
+    return new DeviceListContent(controllerAccess)
+  }
+
+  private asControllerAccess(): IDeviceListControllerAccess {
+    return this
+  }
+
+  protected synchronizeRuntimeChildren(): void {
+    // Runtime-list synchronization is the child policy of DeviceList.
+    // Concrete diffing/reuse is target- and project-specific. This neutral
+    // skeleton shows ownership and binding without prescribing an algorithm.
+    for (item in this._itemChildren.reversed()) {
+      this.unregisterTypedChild(item)
+      item.dispose()
+    }
+
+    this._itemChildren.clear()
+
+    for (entity in this.parent.getDeviceEntities()) {
+      // Runtime Branch Binding: each DeviceItem receives parent plus one
+      // narrow entity access contract. This is not scattered data injection.
+      let item = new DeviceItemNode(this, entity)
+
+      this._itemChildren.add(item)
+      this.registerTypedChild(item)
+    }
+  }
+
+  public getItemViews(): ReadonlyList<MaterializedOutput> {
+    return this._itemChildren.map(item => item.getView()).asReadonly()
+  }
+
+  public getView(): MaterializedOutput {
+    return this._content.getView()
+  }
+
+  public override refresh(): void {
+    this.synchronizeRuntimeChildren()
+    this._content.refresh()
+  }
+
+  public override dispose(): void {
+    this._content.dispose()
+    super.dispose()
+    this._itemChildren.clear()
+  }
+}
+
+
+// ------------------------------------------------------------
+// DeviceListContent
+// Owns static list materialization for DeviceList.
+// ------------------------------------------------------------
+
+class DeviceListContent implements IDeviceListContentAccess {
+
+  private readonly _controller: IDeviceListControllerAccess
+  private readonly _root: PlatformPrimitive
+
+  public constructor(controller: IDeviceListControllerAccess) {
+    this._controller = controller
+    this._root = Platform.createContainer()
+
+    this.composeStaticLayout()
+  }
+
+  private composeStaticLayout(): void {
+    // Static structural slot only. The slot name is target-local structure,
+    // not a derived output value.
+    this._root.createListSlot("deviceItemListSlot")
+  }
+
+  public getView(): MaterializedOutput {
+    return this._root
+  }
+
+  public refresh(): void {
+    this._root.replaceChildren(
+      "deviceItemListSlot",
+      this._controller.getItemViews()
+    )
+  }
+
+  public dispose(): void {
+    this._root.dispose()
+  }
+}
+
 
 // ------------------------------------------------------------
 // DeviceItem internal contracts
 // ------------------------------------------------------------
+
+interface IDeviceItemChildNode extends ITopNode {
+  public getView(): MaterializedOutput
+}
 
 // Controller -> Content access.
 // The controller owns content only through this narrow contract.
@@ -883,8 +1035,8 @@ interface IDeviceItemControllerAccess {
 // ------------------------------------------------------------
 
 class DeviceItemNode
-  extends TopNode<ITopNode, ITopNode>
-  implements IDeviceItemControllerAccess {
+  extends TopNode<DeviceListNode, IDeviceItemChildNode>
+  implements IDeviceListChildNode, IDeviceItemControllerAccess {
 
   private readonly _entity: IDeviceEntityAccess
   private readonly _content: IDeviceItemContentAccess
@@ -893,7 +1045,7 @@ class DeviceItemNode
   private _actionsChild: DeviceItemActionsNode
 
   public constructor(
-    parent: ITopNode,
+    parent: DeviceListNode,
     entity: IDeviceEntityAccess
   ) {
     super(parent)
@@ -960,10 +1112,7 @@ class DeviceItemNode
   }
 
   public override dispose(): void {
-    this._titleChild.dispose()
-    this._actionsChild.dispose()
     this._content.dispose()
-
     super.dispose()
   }
 }
@@ -1027,8 +1176,8 @@ interface IDeviceItemTitleControllerAccess {
 }
 
 class DeviceItemTitleNode
-  extends TopNode<DeviceItemNode, ITopNode>
-  implements IDeviceItemTitleControllerAccess {
+  extends TopNode<DeviceItemNode, NoChildNode>
+  implements IDeviceItemChildNode, IDeviceItemTitleControllerAccess {
 
   private readonly _entity: IDeviceEntityAccess
   private readonly _content: IDeviceItemTitleContentAccess
@@ -1041,12 +1190,8 @@ class DeviceItemTitleNode
 
     this._entity = entity
     this._content = this.createContent(this.asControllerAccess())
-
-    this.buildChildren()
-  }
-
-  protected buildChildren(): void {
-    // No static children.
+    // Leaf node: no buildChildren() method is declared because this class
+    // constructs no child nodes.
   }
 
   protected createContent(
@@ -1091,8 +1236,8 @@ interface IDeviceItemActionsControllerAccess {
 }
 
 class DeviceItemActionsNode
-  extends TopNode<DeviceItemNode, ITopNode>
-  implements IDeviceItemActionsControllerAccess {
+  extends TopNode<DeviceItemNode, NoChildNode>
+  implements IDeviceItemChildNode, IDeviceItemActionsControllerAccess {
 
   private readonly _entity: IDeviceEntityAccess
   private readonly _content: IDeviceItemActionsContentAccess
@@ -1105,12 +1250,8 @@ class DeviceItemActionsNode
 
     this._entity = entity
     this._content = this.createContent(this.asControllerAccess())
-
-    this.buildChildren()
-  }
-
-  protected buildChildren(): void {
-    // No static children.
+    // Leaf node: no buildChildren() method is declared because this class
+    // constructs no child nodes.
   }
 
   protected createContent(
@@ -1239,9 +1380,15 @@ class DeviceItemActionsContent implements IDeviceItemActionsContentAccess {
    access. Content must not know child content classes or child node internals.
 8. Base `ITopNode` must not require `id`. Optional identity belongs in
    `IIdentifiableNode`.
-9. Any future canonical node example must include the spec fragment, rich typed
-   pseudocode, comments explaining access boundaries, and an explanation of how
-   the spec produces the class/runtime structure.
+9. `buildChildren()` or an equivalent child construction method is optional. It
+   exists only on nodes that actually construct child nodes. Leaf nodes must not
+   declare empty child-construction methods.
+10. Runtime/list spec props such as `childPolicy`, `runtimeChildType`, and
+    `entityBinding` are declarative model metadata. They must be defined before
+    use and must not become target runtime props or data injection.
+11. Any future canonical node example must include the spec fragment, rich typed
+    pseudocode, comments explaining access boundaries, and an explanation of how
+    the spec produces the class/runtime structure.
 
 ---
 

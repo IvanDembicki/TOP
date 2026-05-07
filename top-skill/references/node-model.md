@@ -467,6 +467,31 @@ how children are created and replaced, the model is incomplete.
 
 See `references/child-contract.md` — the formal description of the two child contract modes.
 
+### 7.1. Runtime List and Entity Binding Spec Vocabulary
+
+The following spec props are canonical child-policy metadata when a project uses
+runtime/library child generation:
+
+- `props.childPolicy` declares how the parent owns and materializes children.
+  `runtime-list` means the parent owns a mutable runtime list of homogeneous
+  child node instances. It is declarative spec metadata, not runtime props,
+  config, or data injection.
+- `props.runtimeChildType` names the modeled runtime/library child type created
+  under that child policy. It must refer to a declared node type or library node
+  type, such as `lib:devices.DeviceItem`; it must not become an arbitrary
+  component/class name invented during generation.
+- `props.entityBinding` names the narrow entity/model access contract required
+  to bind a runtime branch instance to the entity it represents. It is a
+  canonical Runtime Branch Binding input, not arbitrary props injection, not a
+  raw data packet, and not a config/callback bag.
+
+Generation uses these props only to preserve the modeled child policy:
+parent-owned runtime child construction, narrow entity binding for each runtime
+child, and explicit controller/content contracts inside the child. Agents must
+not introduce new spec props silently; every project-level prop must be defined
+in canon, reference material, or a project-local spec vocabulary before it is
+used as implementation truth.
+
 ---
 
 ## 8. Single-Child Mutable Nodes

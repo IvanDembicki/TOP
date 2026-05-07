@@ -7,6 +7,16 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.28] — 2026-05-07
+
+- Fixed the canonical rich typed pseudocode example so `buildChildren()` is an
+  optional child-construction method rather than a mandatory base method.
+- Added the missing `DeviceListNode` fixed container example that owns and
+  synchronizes runtime `DeviceItemNode` children through runtime-list policy.
+- Tightened the example's child contracts and parent-owned registration
+  comments, and defined `childPolicy`, `runtimeChildType`, and `entityBinding`
+  as canonical node-model metadata.
+
 ## [1.1.27] — 2026-05-07
 
 - Added the runtime controller tree invariant: TOP runtime is a tree of

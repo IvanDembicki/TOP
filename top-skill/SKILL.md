@@ -5,8 +5,8 @@ description: Skill for designing, generating, and validating systems built with 
 
 # TOP Skill
 
-**Version:** 1.1.27
-**Last updated:** 2026-05-07 12:49 -07:00
+**Version:** 1.1.28
+**Last updated:** 2026-05-07 13:14 -07:00
 **Invocation:** `/top`
 
 > **Rule for AI:** whenever any top-skill file is modified, update the date and time in this field to the current values.
