@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/pass-invocation-evidence.schema.json",
+  "title": "TOP Pass Invocation Evidence",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "workflowId",
+    "runId",
+    "passId",
+    "role",
+    "adapterKind",
+    "invocationId",
+    "contextId",
+    "runnerName",
+    "processId",
+    "command",
+    "startedAt",
+    "endedAt",
+    "exitCode",
+    "taskCapsuleRef",
+    "contextPackageRef",
+    "handoffArtifactRef",
+    "contextHash",
+    "handoffHash",
+    "freshContext",
+    "receivedOnlyContextPackage",
+    "modelInvocationEvidence",
+    "limitations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "workflowId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "passId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "role": {
+      "type": "string",
+      "minLength": 1
+    },
+    "adapterKind": {
+      "enum": [
+        "process",
+        "llm-api",
+        "external-agent-runtime",
+        "manual"
+      ]
+    },
+    "invocationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "contextId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runnerName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "processId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "command": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "startedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "endedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "exitCode": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "taskCapsuleRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "contextPackageRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "handoffArtifactRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "contextHash": {
+      "type": "string",
+      "minLength": 1
+    },
+    "handoffHash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "freshContext": {
+      "type": "boolean"
+    },
+    "receivedOnlyContextPackage": {
+      "type": "boolean"
+    },
+    "modelInvocationEvidence": {
+      "type": "boolean"
+    },
+    "artifactWrites": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifactWrite"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "artifactWrite": {
+      "type": "object",
+      "required": [
+        "ref",
+        "sha256"
+      ],
+      "properties": {
+        "ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "modelInvocationEvidence": {
+            "const": true
+          }
+        },
+        "required": [
+          "modelInvocationEvidence"
+        ]
+      },
+      "then": {
+        "properties": {
+          "freshContext": {
+            "const": true
+          },
+          "receivedOnlyContextPackage": {
+            "const": true
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

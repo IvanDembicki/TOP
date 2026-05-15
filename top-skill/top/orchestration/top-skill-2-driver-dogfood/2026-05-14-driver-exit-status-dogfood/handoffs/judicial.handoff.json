@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-driver-dogfood",
+  "passId": "judicial",
+  "taskId": "judicial-task",
+  "role": "judicial",
+  "agentName": "judicial-process-dogfood",
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "inputReferences": [
+    "handoffs/executive.handoff.json",
+    "runner/runner-report.json",
+    "workflow/run-package-layout.md",
+    "top/validation/output-rules.md",
+    "SKILL.md",
+    "CHANGELOG.md",
+    "skill.json",
+    "release-metadata.json",
+    "hydration-manifest.json",
+    "top/spec.json"
+  ],
+  "outputReferences": [
+    "handoffs/judicial.handoff.json"
+  ],
+  "filesRead": [
+    "contexts/judicial.context-package.json",
+    "capsules/judicial.task-capsule.json",
+    "handoffs/executive.handoff.json",
+    "workflow/run-package-layout.md",
+    "top/validation/output-rules.md",
+    "SKILL.md",
+    "CHANGELOG.md"
+  ],
+  "filesChanged": [
+    "handoffs/judicial.handoff.json"
+  ],
+  "commandsRun": [
+    "scratch/process_pass.py"
+  ],
+  "status": "done",
+  "executionEvidence": {
+    "executionIsolationLevel": "protocol-followed-by-agent",
+    "verificationEvidenceLevel": "agent-claimed",
+    "runnerName": null,
+    "separateInvocationIds": [],
+    "schemaValidationCommand": null,
+    "hardCheckCommands": [],
+    "limitations": [
+      "Process dogfood pass records a handoff but does not prove LLM context isolation."
+    ]
+  },
+  "limitations": [
+    "This dogfood pass is process-backed and cannot certify delivery complete.",
+    "The actual skill edit was made by the current Codex context before the driver run."
+  ],
+  "didNotDo": [
+    "repair implementation",
+    "certify delivery without hard-check evidence"
+  ],
+  "handoffTo": "certification",
+  "mayEditFiles": false,
+  "mayValidate": true,
+  "mayRepair": false,
+  "mayReport": true,
+  "mayCertifyDelivery": false
+}

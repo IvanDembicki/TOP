@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-artifact-dogfood",
+  "taskId": "executive-task",
+  "role": "executive",
+  "objective": "Record the intentionally invalid repair-target artifact for judicial review.",
+  "allowedActions": [
+    "read repair-target artifact",
+    "write executive handoff"
+  ],
+  "forbiddenActions": [
+    "edit artifacts",
+    "validate own output",
+    "certify delivery",
+    "use hidden prior chat"
+  ],
+  "inputReferences": [],
+  "contextSlices": [
+    "Inspect artifacts/repair-target.json and identify that it is intentionally invalid.",
+    "Return an executive handoff only; do not repair the artifact in this pass.",
+    "Use status done when the initial handoff records the broken artifact for judicial review."
+  ],
+  "outputContract": "handoffs/executive.handoff.json",
+  "requiredChecks": [],
+  "stopCondition": "Write one handoff artifact and stop.",
+  "mayEditFiles": false,
+  "mayValidate": false,
+  "mayRepair": false,
+  "mayReport": false,
+  "mayCertifyDelivery": false
+}

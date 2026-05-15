@@ -7,6 +7,275 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.0] — 2026-05-14
+
+- Promoted the top-skill 2.0 harness protocol to the first runner-enforced
+  orchestration release.
+- Release scope includes task capsules, isolated LLM/API pass invocations,
+  handoff artifacts, invocation evidence, hard checks, repair loops, bounded
+  artifact writes, post-repair judicial validation, delivery certification,
+  certification snapshots, run-state derivation, false-complete regression
+  fixtures, and read-only run verification.
+- Validated the release boundary with certified real dogfood runs for codegen,
+  repair-loop, and repair-artifact workflows.
+- Explicitly deferred durable execution, observability dashboards,
+  multi-provider adapters, and platform-specific architecture rules to later
+  releases.
+
+## [1.2.22] — 2026-05-14
+
+- Added bounded repair artifact writes through task-capsule
+  `artifactWriteRequests` and invocation-evidence `artifactWrites`.
+- Updated the `llm-api` adapter to materialize only exact allowed artifact refs
+  and record written artifact hashes.
+- Added `scripts/validate_repair_artifact_fixture.py` and the
+  `--repair-artifact-dogfood` run profile for real repair-output validation.
+- Tightened certification and run verification so complete delivery after a
+  repair also requires the final judicial pass to read the repaired refs.
+
+## [1.2.21] — 2026-05-14
+
+- Fixed repair-loop pass input references so judicial and repair passes do not
+  depend on `runner/runner-report.json` before the runner has produced it.
+- Clarified the LLM adapter prompt so handoff `status: done` means the pass
+  handoff completed, not that delivery was certified.
+
+## [1.2.20] — 2026-05-14
+
+- Fixed repair-loop executive task context so every delivery-required
+  repair-loop pass starts with concrete context slices instead of placeholder
+  context.
+
+## [1.2.19] — 2026-05-14
+
+- Updated repair-loop scaffolds to include the required `top-skill-quick-validate`
+  hard check, allowing a real runner-enforced repair-loop dogfood to reach
+  certified delivery when all gates pass.
+
+## [1.2.18] — 2026-05-14
+
+- Added `workflow/repair-pass-contract.md` for bounded repair authority,
+  attempt limits, repair handoff requirements, and post-repair judicial law.
+- Added `scripts/create_orchestration_run.py --repair-loop` to scaffold
+  `executive -> judicial-initial -> repair-1 -> judicial` run packages.
+- Tightened certification and read-only run verification so delivery complete
+  after a repair requires a judicial handoff from a pass after the latest
+  completed repair pass.
+- Extended orchestration regression fixtures to block repair self-certification
+  and repair without post-repair judicial validation.
+
+## [1.2.17] — 2026-05-14
+
+- Added `scripts/validate_orchestration_regressions.py`, a no-network
+  regression harness for orchestration delivery evidence.
+- The fixtures cover valid certified, valid not-certified, missing judicial
+  handoff, required hard check `not_verified`, schema-validated false complete,
+  process-only false complete, and stale snapshot scenarios.
+- Wired the regression harness into `scripts/quick_validate.py` so future
+  changes cannot silently reintroduce false `delivery complete` paths.
+
+## [1.2.16] — 2026-05-14
+
+- Fixed `scripts/adapters/llm_api_adapter.py` so listed task-capsule input
+  references can resolve from the run root or skill root.
+- Documented that the adapter may read only explicitly listed references and
+  must reject references that escape both roots.
+- Re-ran the generated-code dogfood after the fix so judicial validation could
+  inspect the generated fixture artifacts.
+
+## [1.2.15] — 2026-05-14
+
+- Added `examples/driver-status-badge/`, a tiny generated TOP code fixture for
+  orchestration driver status output.
+- Added the fixture to package examples and top governance examples.
+- Dogfooded the generated-code change through a real LLM-backed orchestration
+  run with runner-enforced isolation, hard-check evidence, certification, and
+  read-only verification.
+
+## [1.2.14] — 2026-05-14
+
+- Clarified `scripts/run_orchestration_workflow.py` exit/status semantics in
+  the run package contract.
+- Required human-facing driver results to name the final verifier status and
+  `deliveryStatus`; exit code `0` alone is not a delivery verdict.
+- Dogfooded the change through a process-backed orchestration workflow package,
+  which correctly remained `RUN_VALID not-certified`.
+
+## [1.2.13] — 2026-05-14
+
+- Added `scripts/run_orchestration_workflow.py`, an ordered driver for one
+  orchestration run package.
+- The driver coordinates run package creation, protocol runner execution,
+  delivery certification, snapshot verification, and the final read-only run
+  verifier.
+- Added quick validation smoke coverage for a process-backed two-pass workflow
+  that must finish as `RUN_VALID not-certified`, proving the driver does not
+  upgrade process evidence into runner-enforced delivery.
+
+## [1.2.12] — 2026-05-14
+
+- Added `scripts/validate_orchestration_run.py`, a read-only verifier for one
+  orchestration run package.
+- The verifier checks runner workflow/report consistency, independent judicial
+  handoff evidence, delivery certification, certification snapshot freshness,
+  and `run-state.json` consistency.
+- Added quick validation smoke coverage for `RUN_VALID certified` and
+  `RUN_STALE`.
+
+## [1.2.11] — 2026-05-13
+
+- Updated `scripts/top_protocol_runner.py` to refresh `run-state.json`
+  automatically after writing a runner report.
+- Updated `scripts/certify_orchestration_run.py` to refresh `run-state.json`
+  after certification and snapshot verification.
+- Added `--skip-state-update` diagnostics escape hatch for runner and
+  certification scripts.
+
+## [1.2.10] — 2026-05-13
+
+- Added `workflow/run-state-machine.md` as the process-state contract for one
+  orchestration run package.
+- Added `top/schemas/run-state.schema.json` and `scripts/update_orchestration_state.py`
+  to derive `run-state.json` from runner, judicial, delivery certification, and
+  certification snapshot artifacts.
+- Updated run scaffolding so new packages start with `run-state.json` in
+  `scaffolded` state.
+
+## [1.2.9] — 2026-05-13
+
+- Added certification snapshots to `scripts/certify_orchestration_run.py`.
+  Certification now writes `reports/certification-snapshot.json` with hashes of
+  checked run-package artifacts.
+- Added `--verify-snapshot` to detect stale delivery certification after a
+  checked artifact changes.
+- Added `top/schemas/certification-snapshot.schema.json` and documented stale
+  certification detection in workflow contracts.
+
+## [1.2.8] — 2026-05-13
+
+- Added `workflow/delivery-certification-procedure.md` as the post-run
+  certification contract for turning runner evidence plus judicial handoff into
+  validation and delivery artifacts.
+- Added `scripts/certify_orchestration_run.py` to write
+  `reports/validation-report.json`, `reports/delivery-certification.json`, and
+  `reports/final-audit.md` for one run package.
+- Certified the live `llm-api` smoke run after runner-enforced evidence,
+  model invocation evidence, independent judicial handoff, and required hard
+  checks all passed.
+
+## [1.2.7] — 2026-05-13
+
+- Added `scripts/create_orchestration_run.py --llm-smoke` to create a bounded
+  two-pass `llm-api` smoke run with concrete context slices, portable pass
+  commands, and a required `top-skill-quick-validate` hard check.
+- Updated the protocol runner report to prefer adapter-written invocation and
+  context ids when pass invocation evidence exists.
+- Tightened the LLM API adapter prompt and normalization so model handoffs get
+  an explicit output shape and cannot reference the wrong task capsule.
+
+## [1.2.6] — 2026-05-13
+
+- Added `workflow/llm-api-adapter-contract.md` for real LLM/API pass execution.
+- Added `scripts/adapters/llm_api_adapter.py`, a no-dependency adapter that
+  reads runner context, calls a separate OpenAI Responses-compatible endpoint,
+  writes one handoff artifact, and records pass invocation evidence.
+- The adapter sets `modelInvocationEvidence: true` only after a real model/API
+  response. Dry-run, missing credentials, network failure, or invalid model
+  output produce blocked evidence instead of false runner-enforced claims.
+
+## [1.2.5] — 2026-05-13
+
+- Added portable structured runner command support with `commandType:
+  python-script`, `scriptRef`, `scriptBaseRef`, `args`, and `cwdRef`.
+- Updated the pilot runner workflow to remove Windows-style `..\\..\\` paths.
+- Tightened runner pass status semantics: a delivery-required pass without a
+  pass command and without adapter-provided model invocation evidence is
+  `not_verified`, even if a handoff file already exists.
+- Added context package checks that block placeholder judicial/certification
+  context and empty required judicial/certification input references.
+- Changed `validate_execution_evidence.py` CLI output from ambiguous `OK` to
+  `ARTIFACT_VALID` plus delivery/certification status summaries.
+
+## [1.2.4] — 2026-05-12
+
+- Expanded runner governance from process/check execution into a fuller harness
+  contract with context packages and pass invocation evidence.
+- Added `workflow/pass-invocation-contract.md`,
+  `top/schemas/context-package.schema.json`, and
+  `top/schemas/pass-invocation-evidence.schema.json`.
+- Updated `scripts/top_protocol_runner.py` to materialize context packages,
+  record invocation evidence, pass context/evidence paths to adapters, and
+  require strong adapter evidence before reporting `runner-enforced`.
+- Updated run package layout and scaffolding to include `contexts/` and
+  `invocations/`.
+
+## [1.2.3] — 2026-05-12
+
+- Added `workflow/activation-and-operating-procedure.md` to define when 2.0
+  orchestration activates and how orchestrator, pass handoffs, runner gate,
+  judicial validation, and certification operate.
+- Hydrated the activation procedure and added it to governance manifests,
+  validation rules, and quick validation requirements.
+- Fixed orchestration run scaffolding text writes so the pilot run works on
+  Python versions where `Path.write_text` does not accept `newline`.
+- Tightened protocol runner pass result semantics so `not-verified` and
+  `not-certified` handoffs cannot appear as passing required passes.
+- Added `reports/final-audit.md` to the run package layout and scaffold,
+  matching the delivery certification reference.
+- Kept the release protocol-only: activation makes missing enforcement visible
+  and does not claim runner-enforced isolation.
+
+## [1.2.2] — 2026-05-12
+
+- Added `workflow/run-package-layout.md` as the canonical filesystem layout for
+  one orchestration run package.
+- Added `scripts/create_orchestration_run.py` to scaffold task capsules,
+  placeholder handoffs, runner workflow, validation report, delivery
+  certification, run README, and append-only run log.
+- Scaffolded runs start as `protocol-defined` and `not-certified` so they
+  cannot be mistaken for runner-enforced or delivery-complete output.
+
+## [1.2.1] — 2026-05-12
+
+- Added `workflow/runner-contract.md` as the minimal executable harness
+  contract for runner workflow and runner report artifacts.
+- Added `top/schemas/runner-workflow.schema.json` and
+  `top/schemas/runner-report.schema.json`.
+- Added `scripts/top_protocol_runner.py` to validate task capsule to handoff
+  consistency, run required hard-check commands with blocking exit codes, and
+  produce execution evidence without falsely claiming runner-enforced isolation.
+- Extended `quick_validate.py` with protocol-runner smoke coverage.
+
+## [1.2.0] — 2026-05-12
+
+- Introduced the top-skill 2.0 protocol layer as an additive harness protocol,
+  without claiming runner-enforced execution.
+- Added `workflow/enforcement-evidence-model.md` as the root delivery-honesty
+  contract, with separate execution isolation and verification evidence axes,
+  protocol-only mode, false substitutes, and delivery law.
+- Added task capsule, handoff artifact, role pack, and orchestrator protocol
+  contracts plus schemas for reusable execution evidence, capsules, handoffs,
+  agent workflow, validation reports, and delivery certification.
+- Added `scripts/validate_execution_evidence.py` as a no-dependency hard
+  validator with smoke coverage in `quick_validate.py` for protocol-only
+  not-certified output and false delivery-complete rejection.
+- Required delivery certification to distinguish protocol-followed,
+  schema-validated, runner-enforced, and hard-check-verified evidence, blocking
+  `complete` when independent judicial handoff or required hard checks are
+  missing.
+
+## [1.1.29] — 2026-05-07
+
+- Strengthened AI Separation of Powers with an explicit no self-certified
+  delivery rule, required judicial validation after executive generation or
+  repair, and report-evidence requirements.
+- Added workflow/schema governance for agent passes, validation reports, and
+  delivery certification, and extended migration workflow schema with
+  separation-of-powers delivery fields.
+- Added blocking delivery-gate checks for content child imports, prompt-code
+  contract drift, node global store access, bridge callback injection, and
+  self-audited pass reports.
+
 ## [1.1.28] — 2026-05-07
 
 - Fixed the canonical rich typed pseudocode example so `buildChildren()` is an

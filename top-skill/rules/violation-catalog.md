@@ -118,6 +118,7 @@ Violations of the execution process. Affect pipeline validity, not TOP Core itse
 | WF-028 | Missing generator learning ledger update | A validation rejection or repair attempt does not update/read the branch-local `top/migration/<branch-id>/GENERATOR_LEARNING_LEDGER.md` before the next generation or repair attempt. |
 | WF-029 | Repeated rejected strategy | A generation or repair agent repeats a strategy already rejected for the same branch/violation without an explicit validator-approved reason. Rejected strategies become negative constraints. |
 | WF-030 | Repair circuit breaker exceeded | A validation gate exceeds `max_repair_attempts_per_validation_gate: 3` or the same violation repeats more than `max_same_violation_repeats: 2` without escalation to human review or top-skill rule update. |
+| WF-031 | Self-certified or falsely certified delivery | Delivery is declared `complete` by the same pass that generated, migrated, synchronized, or repaired the artifacts; delivery completion lacks runner-enforced execution isolation, hard-check-verified validation evidence, a valid independent judicial handoff artifact, checked files, commands/searches run, violation classes checked, failures, or unverified areas; a required gate is `fail` or `not_verified`; protocol-only execution is reported as `runner-enforced`; or a reporting/public-record pass upgrades blocked/partial/not-verified judicial findings to complete. |
 
 ---
 

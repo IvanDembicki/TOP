@@ -28,8 +28,13 @@ result:
 - workflow_gaps
 
 details:
+- execution_evidence
 - validation_context_independence_check
 - validation_evidence
+- judicial_handoff_artifact_check
+- required_hard_checks
+- protocol_only_mode_check
+- runner_enforcement_claim_check
 - checks_performed
 - passed_checks
 - failed_checks
@@ -70,12 +75,21 @@ details:
 - generated_layout_topology_check
 - independent_checkpoint_check
 - dedicated_migration_branch_check
+- separation_of_powers_check
+- delivery_report_gate_check
+- content_child_import_check
+- prompt_code_contract_drift_check
+- node_global_store_access_check
+- bridge_callback_injection_check
+- self_audited_pass_report_check
 - semantic_preservation_check
 - behavior_preservation_check
 - source_platform_leakage_check
 - target_adaptation_coherence_check
 
 validation_signals:
+- execution_isolation_level
+- verification_evidence_level
 - blocking_failures
 - non_blocking_issues
 - unresolved_drift
@@ -92,6 +106,25 @@ next_step:
 
 - Validation must remain a strict pass/fail check
 - `core_violations`, `skill_convention_violations`, and `workflow_gaps` must be separated
+- `execution_evidence` must include `executionIsolationLevel`,
+  `verificationEvidenceLevel`, `runnerName`, `separateInvocationIds`,
+  `schemaValidationCommand`, `hardCheckCommands`, and `limitations`.
+- `executionIsolationLevel` and `verificationEvidenceLevel` are independent
+  axes. Schema validation is not role isolation; hard checks are not role
+  isolation.
+- In protocol-only mode, validation may report
+  `executionIsolationLevel: protocol-followed-by-agent`, but must not report
+  `runner-enforced`.
+- `runner_enforcement_claim_check` must fail when a workflow claims
+  `runner-enforced` without external runner name, separate invocation ids,
+  separate contexts, and explicit handoff artifact references.
+- `required_hard_checks` must list every required executable check with `id`,
+  `description`, `requiredForComplete`, `status`, `command`, and `evidence`.
+- Required hard-check status `fail` or `not_verified` blocks delivery complete.
+- A hard check result without a judicial handoff is evidence, but not a judicial
+  verdict.
+- A judicial handoff without required hard-check evidence cannot certify
+  delivery complete.
 - Validation must be independent and adversarial. Previous generator, repair,
   modeling, migration, or implementation reports are claims to inspect, not
   proof. Treating them as proof is `WF-024`; relying on prior chat context or
@@ -221,6 +254,36 @@ next_step:
   explicitly report `pass`, `fail`, or `not_applicable`.
 - `dedicated_migration_branch_check` must explicitly report `pass`, `fail`, or
   `not_applicable`.
+- `separation_of_powers_check` must explicitly report `pass`, `fail`, or
+  `not_applicable`; it fails when generation/repair and validation/final audit
+  are performed by the same pass for the same artifact set.
+- `delivery_report_gate_check` must explicitly report `pass`, `fail`, or
+  `not_applicable`; it fails when a report says `complete` without
+  runner-enforced execution isolation, hard-check-verified validation evidence,
+  independent judicial validation evidence, a valid independent judicial
+  handoff artifact, required checked files, commands/searches run, violation
+  classes checked, failures, and unverified areas.
+- `content_child_import_check` must explicitly report `pass`, `fail`, or
+  `not_applicable`; it fails when parent locally implemented content imports,
+  instantiates, renders, or types against child concrete content classes instead
+  of requesting child materialized outputs through controller access.
+- `prompt_code_contract_drift_check` must explicitly report `pass`, `fail`, or
+  `not_applicable`; it fails when prompts/specs require one controller/content
+  contract shape but implementation materializes a different architectural
+  contract without an approved prompt/spec update.
+- `node_global_store_access_check` must explicitly report `pass`, `fail`, or
+  `not_applicable`; it fails when Node/controller files directly import or call
+  React hooks, Zustand/global stores, route/navigation hooks, UI framework
+  hooks, runtime singleton state, or target hook APIs instead of explicit
+  bridge/runtime/data boundaries.
+- `bridge_callback_injection_check` must explicitly report `pass`, `fail`, or
+  `not_applicable`; raw callbacks entering TOP objects must be wrapped in an
+  explicit bridge/runtime/context boundary unless validation proves the callback
+  is target-local and non-semantic.
+- `self_audited_pass_report_check` must explicitly report `pass`, `fail`, or
+  `not_applicable`; delivery fails when the same pass generated/repaired the
+  artifacts, wrote validation/final audit, and declared completion without an
+  independent judicial pass.
 - `spec_sync_check` must explicitly report `pass`, `fail`, or `not_applicable`
 - `drift_check` must explicitly report `pass`, `fail`, or `not_applicable`; when applicable it must cover JSON topology, prompts, Expected Materialization, project-local TOP artifacts, and materialized implementation artifacts
 - `top_layout_check` must explicitly report `pass`, `fail`, or `not_applicable`

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-release-candidate",
+  "runId": "2026-05-14-2-0-0-rc",
+  "passId": "judicial",
+  "role": "judicial",
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "handoffArtifactRef": "handoffs/judicial.handoff.json",
+  "inputReferences": [
+    "handoffs/repair-1.handoff.json",
+    "invocations/repair-1.invocation-evidence.json",
+    "artifacts/repair-target.json"
+  ],
+  "contextSlices": [
+    "Validate the explicitly referenced repair-target artifact and handoffs.",
+    "This is the final post-repair judicial pass. Use status done only when artifacts/repair-target.json has statusLabel Ready, isValid true, and repairedBy repair-1.",
+    "Use status blocked if the repaired artifact is missing or still invalid.",
+    "Do not repair implementation artifacts and do not certify delivery."
+  ],
+  "forbiddenInputs": [
+    "full prior chat transcript unless explicitly listed in inputReferences",
+    "unbounded agent memory",
+    "implementation files outside task capsule scope unless explicitly referenced"
+  ],
+  "materializedBy": "top-protocol-runner",
+  "materializedAt": "2026-05-15T02:01:06Z",
+  "contextHash": "5bb3574bae94507dc8499a492da1e4403fd9390573b849224da2d4e85cee485a",
+  "limitations": [
+    "Context package records bounded inputs; it does not by itself prove LLM context isolation."
+  ]
+}

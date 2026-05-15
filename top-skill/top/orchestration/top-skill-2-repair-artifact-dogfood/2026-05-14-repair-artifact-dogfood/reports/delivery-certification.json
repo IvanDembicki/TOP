@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "1.0",
+  "certificationId": "2026-05-14-repair-artifact-dogfood-delivery-certification",
+  "workflowId": "top-skill-2-repair-artifact-dogfood",
+  "deliveryStatus": "complete",
+  "executionEvidence": {
+    "executionIsolationLevel": "runner-enforced",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "resp_0661a8e9df408fcb006a06766e4a4c8192a7a02eade19cbae6",
+      "resp_011a35412d075627006a0676750d3481a28ce328f34e16f9fb",
+      "resp_04016d5a8b75a44b006a0676847120819eb2db33897442f3cc",
+      "resp_0965dd454bddebd6006a06768d1a20819f8e1736a3ef9d3313"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B scripts/quick_validate.py .",
+      "python -B scripts/validate_repair_artifact_fixture.py artifacts/repair-target.json"
+    ],
+    "limitations": [
+      "Scaffolded runner workflow.",
+      "LLM API adapter is configured; runner-enforced evidence requires successful API credentials and separate model invocations."
+    ]
+  },
+  "judicialValidationRef": "reports/validation-report.json",
+  "judicialHandoffRef": "handoffs/judicial.handoff.json",
+  "validationReportRef": "reports/validation-report.json",
+  "finalAuditReportRef": "reports/final-audit.md",
+  "generationOrRepairPassIds": [
+    "executive",
+    "repair-1"
+  ],
+  "repairAttemptIds": [
+    "repair-1"
+  ],
+  "judicialPassId": "judicial",
+  "separationOfPowersProof": [
+    "Runner report records separate required pass invocation ids.",
+    "Runner report records separate required pass context ids.",
+    "Judicial handoff has validation authority and no edit/repair/certification authority.",
+    "Required hard checks passed before certification."
+  ],
+  "requiredHardChecks": [
+    {
+      "id": "top-skill-quick-validate",
+      "description": "Run top-skill package validation.",
+      "requiredForComplete": true,
+      "status": "pass",
+      "command": "python -B scripts/quick_validate.py .",
+      "evidence": [
+        "quick_validate: OK\nvalidated: D:\\TOP\\top-skill\nhard_checks: 22\nagent_review_candidates: 0"
+      ]
+    },
+    {
+      "id": "repair-artifact-fixture",
+      "description": "Validate the repaired artifact dogfood fixture.",
+      "requiredForComplete": true,
+      "status": "pass",
+      "command": "python -B scripts/validate_repair_artifact_fixture.py artifacts/repair-target.json",
+      "evidence": [
+        "validate_repair_artifact_fixture: OK\nartifact: D:\\TOP\\top-skill\\top\\orchestration\\top-skill-2-repair-artifact-dogfood\\2026-05-14-repair-artifact-dogfood\\artifacts\\repair-target.json"
+      ]
+    }
+  ],
+  "blockingChecks": [
+    {
+      "checkId": "runner-evidence",
+      "status": "pass",
+      "evidence": [
+        "runnerStatus=pass",
+        "executionIsolationLevel=runner-enforced",
+        "verificationEvidenceLevel=hard-check-verified"
+      ]
+    },
+    {
+      "checkId": "required-pass-status",
+      "status": "pass",
+      "evidence": [
+        "executive:pass",
+        "judicial-initial:pass",
+        "repair-1:pass",
+        "judicial:pass"
+      ]
+    },
+    {
+      "checkId": "adapter-invocation-evidence",
+      "status": "pass",
+      "evidence": [
+        "executive:fresh=True,contextPackageOnly=True,modelEvidence=True",
+        "judicial-initial:fresh=True,contextPackageOnly=True,modelEvidence=True",
+        "repair-1:fresh=True,contextPackageOnly=True,modelEvidence=True",
+        "judicial:fresh=True,contextPackageOnly=True,modelEvidence=True"
+      ]
+    },
+    {
+      "checkId": "separate-invocation-and-context-ids",
+      "status": "pass",
+      "evidence": [
+        "invocationIds=4",
+        "contextIds=4"
+      ]
+    },
+    {
+      "checkId": "required-hard-checks",
+      "status": "pass",
+      "evidence": [
+        "top-skill-quick-validate:pass",
+        "repair-artifact-fixture:pass"
+      ]
+    },
+    {
+      "checkId": "independent-judicial-handoff",
+      "status": "pass",
+      "evidence": [
+        "judicialPassId=judicial",
+        "judicial handoff is independent from executive/repair authority"
+      ]
+    },
+    {
+      "checkId": "post-repair-judicial-validation",
+      "status": "pass",
+      "evidence": [
+        "judicialPassId=judicial",
+        "postRepairPassIds=repair-1",
+        "repairedRefs=artifacts/repair-target.json"
+      ]
+    },
+    {
+      "checkId": "self-certification",
+      "status": "pass",
+      "evidence": [
+        "No executive or repair handoff certified delivery."
+      ]
+    }
+  ],
+  "knownExclusions": [
+    "Certification scope is this orchestration run package only; it is not a general top-skill release claim."
+  ],
+  "noBlockingInScopeViolations": true,
+  "generationAndValidationSeparate": true,
+  "noUnverifiedRequiredGates": true,
+  "noRequiredGateFailedOrNotVerified": true
+}

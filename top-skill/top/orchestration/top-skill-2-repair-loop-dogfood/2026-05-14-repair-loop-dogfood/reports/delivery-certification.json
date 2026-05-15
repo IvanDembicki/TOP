@@ -1,0 +1,130 @@
+{
+  "schemaVersion": "1.0",
+  "certificationId": "2026-05-14-repair-loop-dogfood-delivery-certification",
+  "workflowId": "top-skill-2-repair-loop-dogfood",
+  "deliveryStatus": "not-certified",
+  "executionEvidence": {
+    "executionIsolationLevel": "runner-enforced",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "resp_08c98646394f650e006a066e5ddd94819c906cd28067de02d7",
+      "resp_0e6f9a9082c9d264006a066e6272e481a295376d19cc904f03",
+      "resp_0d0c4a14c837c633006a066e714ec0819e9c6bfad24ef145dc",
+      "resp_03916b31038b945e006a066e9f160c819081a7b1f132988ff9"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B scripts/quick_validate.py ."
+    ],
+    "limitations": [
+      "Scaffolded runner workflow.",
+      "LLM API adapter is configured; runner-enforced evidence requires successful API credentials and separate model invocations."
+    ]
+  },
+  "judicialValidationRef": "reports/validation-report.json",
+  "judicialHandoffRef": "handoffs/judicial.handoff.json",
+  "validationReportRef": "reports/validation-report.json",
+  "finalAuditReportRef": "reports/final-audit.md",
+  "generationOrRepairPassIds": [
+    "executive",
+    "repair-1"
+  ],
+  "repairAttemptIds": [
+    "repair-1"
+  ],
+  "judicialPassId": "judicial",
+  "separationOfPowersProof": [
+    "Runner report records separate required pass invocation ids.",
+    "Runner report records separate required pass context ids.",
+    "Judicial handoff has validation authority and no edit/repair/certification authority.",
+    "Required hard checks passed before certification."
+  ],
+  "requiredHardChecks": [
+    {
+      "id": "top-skill-quick-validate",
+      "description": "Run top-skill package validation.",
+      "requiredForComplete": true,
+      "status": "pass",
+      "command": "python -B scripts/quick_validate.py .",
+      "evidence": [
+        "quick_validate: OK\nvalidated: D:\\TOP\\top-skill\nhard_checks: 21\nagent_review_candidates: 0"
+      ]
+    }
+  ],
+  "blockingChecks": [
+    {
+      "checkId": "runner-evidence",
+      "status": "fail",
+      "evidence": [
+        "runnerStatus=fail",
+        "executionIsolationLevel=runner-enforced",
+        "verificationEvidenceLevel=hard-check-verified"
+      ]
+    },
+    {
+      "checkId": "required-pass-status",
+      "status": "fail",
+      "evidence": [
+        "executive:fail",
+        "judicial-initial:not_verified",
+        "repair-1:pass",
+        "judicial:not_verified"
+      ]
+    },
+    {
+      "checkId": "adapter-invocation-evidence",
+      "status": "pass",
+      "evidence": [
+        "executive:fresh=True,contextPackageOnly=True,modelEvidence=True",
+        "judicial-initial:fresh=True,contextPackageOnly=True,modelEvidence=True",
+        "repair-1:fresh=True,contextPackageOnly=True,modelEvidence=True",
+        "judicial:fresh=True,contextPackageOnly=True,modelEvidence=True"
+      ]
+    },
+    {
+      "checkId": "separate-invocation-and-context-ids",
+      "status": "pass",
+      "evidence": [
+        "invocationIds=4",
+        "contextIds=4"
+      ]
+    },
+    {
+      "checkId": "required-hard-checks",
+      "status": "pass",
+      "evidence": [
+        "top-skill-quick-validate:pass"
+      ]
+    },
+    {
+      "checkId": "independent-judicial-handoff",
+      "status": "fail",
+      "evidence": [
+        "judicial handoff status must be done or complete"
+      ]
+    },
+    {
+      "checkId": "post-repair-judicial-validation",
+      "status": "pass",
+      "evidence": [
+        "judicialPassId=judicial",
+        "postRepairPassIds=repair-1"
+      ]
+    },
+    {
+      "checkId": "self-certification",
+      "status": "pass",
+      "evidence": [
+        "No executive or repair handoff certified delivery."
+      ]
+    }
+  ],
+  "knownExclusions": [
+    "Certification scope is this orchestration run package only; it is not a general top-skill release claim."
+  ],
+  "noBlockingInScopeViolations": false,
+  "generationAndValidationSeparate": false,
+  "noUnverifiedRequiredGates": false,
+  "noRequiredGateFailedOrNotVerified": false
+}

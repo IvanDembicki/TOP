@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-artifact-dogfood",
+  "taskId": "repair-1-task",
+  "role": "repair",
+  "objective": "Repair the bounded repair-target artifact and write one repair handoff.",
+  "allowedActions": [
+    "read prior judicial handoff",
+    "write artifacts/repair-target.json",
+    "write repair handoff"
+  ],
+  "forbiddenActions": [
+    "validate own repair",
+    "certify delivery",
+    "write files outside artifactWriteRequests"
+  ],
+  "inputReferences": [
+    "handoffs/judicial-initial.handoff.json",
+    "artifacts/repair-target.json"
+  ],
+  "contextSlices": [
+    "Repair only artifacts/repair-target.json using artifactWrites.",
+    "Write JSON content with component DriverStatusBadge, statusLabel Ready, isValid true, and repairedBy repair-1.",
+    "Do not validate your own repair and do not certify delivery.",
+    "Return a repair handoff with status done and list artifacts/repair-target.json in filesChanged/outputReferences."
+  ],
+  "outputContract": "handoffs/repair-1.handoff.json",
+  "requiredChecks": [],
+  "stopCondition": "Write one handoff artifact and stop.",
+  "artifactWriteRequests": [
+    {
+      "ref": "artifacts/repair-target.json",
+      "description": "Rewrite the fixture JSON so statusLabel is Ready, isValid is true, and repairedBy is repair-1.",
+      "required": true
+    }
+  ],
+  "mayEditFiles": true,
+  "mayValidate": false,
+  "mayRepair": true,
+  "mayReport": false,
+  "mayCertifyDelivery": false
+}

@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-orchestration",
+  "runId": "2026-05-12-activation-pilot",
+  "runnerName": "top-protocol-runner",
+  "mode": "maintenance",
+  "runnerCapabilities": {
+    "launchesSeparateProcesses": false,
+    "launchesSeparateInvocations": false,
+    "isolatesContexts": false,
+    "executesHardChecks": true,
+    "validatesHandoffs": true
+  },
+  "passes": [
+    {
+      "passId": "executive",
+      "role": "executive",
+      "taskCapsuleRef": "capsules/executive.task-capsule.json",
+      "handoffArtifactRef": "handoffs/executive.handoff.json",
+      "invocationId": "2026-05-12-activation-pilot-executive-invocation",
+      "contextId": "2026-05-12-activation-pilot-executive-context",
+      "adapterKind": "process",
+      "contextPackageRef": "contexts/executive.context-package.json",
+      "invocationEvidenceRef": "invocations/executive.invocation-evidence.json",
+      "freshContextRequired": true,
+      "command": null,
+      "cwd": null,
+      "timeoutSeconds": 300,
+      "requiredForDelivery": true
+    },
+    {
+      "passId": "judicial",
+      "role": "judicial",
+      "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+      "handoffArtifactRef": "handoffs/judicial.handoff.json",
+      "invocationId": "2026-05-12-activation-pilot-judicial-invocation",
+      "contextId": "2026-05-12-activation-pilot-judicial-context",
+      "adapterKind": "process",
+      "contextPackageRef": "contexts/judicial.context-package.json",
+      "invocationEvidenceRef": "invocations/judicial.invocation-evidence.json",
+      "freshContextRequired": true,
+      "command": null,
+      "cwd": null,
+      "timeoutSeconds": 300,
+      "requiredForDelivery": true
+    },
+    {
+      "passId": "certification",
+      "role": "certification",
+      "taskCapsuleRef": "capsules/certification.task-capsule.json",
+      "handoffArtifactRef": "handoffs/certification.handoff.json",
+      "invocationId": "2026-05-12-activation-pilot-certification-invocation",
+      "contextId": "2026-05-12-activation-pilot-certification-context",
+      "adapterKind": "process",
+      "contextPackageRef": "contexts/certification.context-package.json",
+      "invocationEvidenceRef": "invocations/certification.invocation-evidence.json",
+      "freshContextRequired": true,
+      "command": null,
+      "cwd": null,
+      "timeoutSeconds": 300,
+      "requiredForDelivery": true
+    }
+  ],
+  "hardChecks": [
+    {
+      "id": "top-skill-quick-validate",
+      "description": "Run top-skill package quick validation from the orchestration run package.",
+      "requiredForComplete": true,
+      "commandType": "python-script",
+      "scriptRef": "scripts/quick_validate.py",
+      "scriptBaseRef": "skill-root",
+      "args": [
+        "."
+      ],
+      "cwdRef": "skill-root",
+      "timeoutSeconds": 120
+    }
+  ],
+  "deliveryCertificationRef": "reports/delivery-certification.json",
+  "limitations": [
+    "Scaffolded runner workflow.",
+    "No pass commands are configured; this pilot validates handoff consistency and hard checks only.",
+    "No external runner-enforced invocation evidence is present."
+  ]
+}

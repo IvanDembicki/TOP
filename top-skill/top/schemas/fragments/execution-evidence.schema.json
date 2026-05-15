@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/fragments/execution-evidence.schema.json",
+  "title": "TOP Execution Evidence",
+  "type": "object",
+  "required": [
+    "executionIsolationLevel",
+    "verificationEvidenceLevel",
+    "runnerName",
+    "separateInvocationIds",
+    "schemaValidationCommand",
+    "hardCheckCommands",
+    "limitations"
+  ],
+  "properties": {
+    "executionIsolationLevel": {
+      "enum": [
+        "protocol-defined",
+        "protocol-followed-by-agent",
+        "schema-validated",
+        "runner-enforced"
+      ]
+    },
+    "verificationEvidenceLevel": {
+      "enum": [
+        "none",
+        "agent-claimed",
+        "schema-validated",
+        "hard-check-verified"
+      ]
+    },
+    "runnerName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "separateInvocationIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "schemaValidationCommand": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "hardCheckCommands": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "executionIsolationLevel": {
+            "const": "runner-enforced"
+          }
+        },
+        "required": [
+          "executionIsolationLevel"
+        ]
+      },
+      "then": {
+        "properties": {
+          "runnerName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "separateInvocationIds": {
+            "minItems": 2
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "verificationEvidenceLevel": {
+            "const": "hard-check-verified"
+          }
+        },
+        "required": [
+          "verificationEvidenceLevel"
+        ]
+      },
+      "then": {
+        "properties": {
+          "hardCheckCommands": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

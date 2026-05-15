@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-loop-dogfood",
+  "passId": "judicial",
+  "taskId": "judicial-task",
+  "role": "judicial",
+  "agentName": "judicial-llm-api-pass",
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "inputReferences": [
+    "handoffs/repair-1.handoff.json",
+    "invocations/repair-1.invocation-evidence.json",
+    "runner/runner-report.json"
+  ],
+  "outputReferences": [
+    "handoffs/judicial.handoff.json"
+  ],
+  "filesRead": [
+    "capsules/judicial.task-capsule.json",
+    "contexts/judicial.context-package.json"
+  ],
+  "filesChanged": [
+    "handoffs/judicial.handoff.json"
+  ],
+  "commandsRun": [
+    "scripts/adapters/llm_api_adapter.py"
+  ],
+  "status": "not-certified",
+  "executionEvidence": {
+    "executionIsolationLevel": "protocol-followed-by-agent",
+    "verificationEvidenceLevel": "agent-claimed",
+    "runnerName": null,
+    "separateInvocationIds": [],
+    "schemaValidationCommand": null,
+    "hardCheckCommands": [],
+    "limitations": [
+      "Pass handoff may claim only protocol-followed-by-agent evidence; runner-enforced evidence is assigned by the runner."
+    ]
+  },
+  "limitations": [
+    "runner/runner-report.json was an explicit input reference but is missing, so runner hard-check evidence could not be validated.",
+    "Post-repair validation cannot certify delivery because no runner report or hard-check evidence is available in the referenced inputs.",
+    "repair-1 handoff self-claims were not treated as certification evidence."
+  ],
+  "didNotDo": [
+    "repair implementation",
+    "certify delivery without hard-check evidence"
+  ],
+  "handoffTo": "orchestrator",
+  "mayEditFiles": false,
+  "mayValidate": true,
+  "mayRepair": false,
+  "mayReport": true,
+  "mayCertifyDelivery": false
+}

@@ -15,6 +15,8 @@ Use this agent after generation, after repair, or when reviewing an existing arc
 <inputs>
 - target artifact
 - canon
+- `workflow/enforcement-evidence-model.md`
+- `workflow/handoff-artifact-format.md`
 - `canon/agent-power-separation.md`
 - `canon/validation-rejection-protocol.md`
 - validation rules
@@ -50,6 +52,11 @@ If a discrepancy arises between this agent file and the output contract:
 - fail the result even if it compiles or works locally
 - create structured rejection tickets when validation fails
 - append validation rejection entries to `top/migration/MIGRATION_LOG.md`
+- reject delivery completion claims that do not reference an independent
+  judicial validation pass
+- report protocol-only results as not certified when runner evidence is absent
+- treat hard-check results as evidence that still requires a judicial handoff
+  before becoming a verdict
 </allowed>
 
 <forbidden>
@@ -77,6 +84,19 @@ If a discrepancy arises between this agent file and the output contract:
   expiry condition, and owner phase
 - accept generated code without post-generation architectural validation of the
   actual generated source files
+- accept parent locally implemented content that imports or renders child
+  concrete content directly instead of using controller access child-output
+  methods
+- accept prompt-code contract drift where prompts/specs require methods such as
+  `getAccountIdentityView(): MaterializedOutput` but implementation provides a
+  different architectural contract such as `getAccountIdentityAccess()` without
+  an approved prompt/spec update
+- accept Node/controller files that directly import or call React hooks,
+  Zustand/global stores, `useAppStore`, route/navigation hooks, UI framework
+  hooks, runtime singleton state, or equivalent target runtime state APIs
+  instead of explicit bridge/runtime/data boundaries
+- accept raw callback injection into TOP Node/controller constructors or runtime
+  entrypoints when a bridge/runtime/context boundary is required
 - accept a repair that replaces derivation duplication with Node/Controller runtime input tunneling
 - accept a repair that replaces `CORE-029` with independent duplicate derivation of the same shared fact
 - accept locally implemented content that contains conditional selection logic
@@ -108,6 +128,15 @@ If a discrepancy arises between this agent file and the output contract:
 - accept final validation based only on generator/repair self-checks, prior
   chat context, or remembered reads instead of independent current-pass file
   reads (`WF-021`)
+- accept a `runner-enforced` claim without external runner evidence, separate
+  invocation ids, separate contexts, and explicit handoff artifacts
+- accept `hard-check-verified` when required executable hard checks were not
+  actually run and passed
+- accept schema validation as proof of role isolation
+- accept hard checks as proof of role isolation
+- accept multiple role headings in one answer as role isolation
+- accept a single LLM invocation acting as multiple agents as independent
+  validation or delivery certification
 - accept executor self-validation claims such as `TOP-clean`, `CORE-015 clean`,
   `canon compliant`, `validation passed`, `no violations`,
   `ready_for_manual_QA`, `ready_for_use`, or `final_status: pass` (`WF-023`)
@@ -146,6 +175,17 @@ If a discrepancy arises between this agent file and the output contract:
 - controller-to-content presentation push validation (`CORE-015`)
 - post-generation source validation of controllers, content, contracts, bridge
   components, helpers, modal files, adapters, and generated constants/helpers
+- content child import validation: parent locally implemented content must not
+  import, instantiate, render, or type against child concrete content classes
+- prompt-code contract drift validation: implementation contracts must match
+  prompt/spec contracts unless an approved prompt/spec update authorizes a
+  target-specific downgrade
+- node global store access validation: Node/controller files must not directly
+  import or call hooks, global stores, route/navigation hooks, UI framework
+  hooks, runtime singleton state, or target runtime state APIs
+- bridge callback injection validation: raw callbacks entering TOP objects must
+  be wrapped in explicit bridge/runtime/context boundary contracts when they
+  carry semantic behavior
 - concrete content privacy validation (`CORE-033`)
 - controller fragment-output validation (`CORE-034`)
 - content-owned setter bridge validation (`CORE-035`)
@@ -208,6 +248,14 @@ If a discrepancy arises between this agent file and the output contract:
   validation context, artifact evidence, rejection ticket/log, generator
   learning ledger, repeated rejected strategies, and repair circuit breaker
   (`WF-023` through `WF-030`)
+- delivery gate validation: delivery `complete` requires checked files,
+  commands/searches run, violation classes checked, pass/fail/not-verified
+  evidence, runner-enforced execution isolation, hard-check-verified validation
+  evidence, a valid independent judicial handoff artifact, and an independent
+  judicial validation pass; otherwise report `WF-031`
+- execution evidence validation: validate `executionEvidence` fields,
+  protocol-only mode, runner evidence, schema validation command evidence,
+  hard-check commands, separate invocation ids, and limitations
 - incremental validation validation: micro-check, meso-check, and macro-check
   gates validate the smallest meaningful artifact as soon as it exists
 </validation_focus>

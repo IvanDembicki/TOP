@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-release-candidate",
+  "runId": "2026-05-14-2-0-0-rc",
+  "passId": "executive",
+  "role": "executive",
+  "taskCapsuleRef": "capsules/executive.task-capsule.json",
+  "handoffArtifactRef": "handoffs/executive.handoff.json",
+  "inputReferences": [],
+  "contextSlices": [
+    "Inspect artifacts/repair-target.json and identify that it is intentionally invalid.",
+    "Return an executive handoff only; do not repair the artifact in this pass.",
+    "Use status done when the initial handoff records the broken artifact for judicial review."
+  ],
+  "forbiddenInputs": [
+    "full prior chat transcript unless explicitly listed in inputReferences",
+    "unbounded agent memory",
+    "implementation files outside task capsule scope unless explicitly referenced"
+  ],
+  "materializedBy": "top-protocol-runner",
+  "materializedAt": "2026-05-15T02:00:22Z",
+  "contextHash": "10a73053e13eeabc36e99c3ad32edc9f2d4e9edf6bc0ceb67295c1b9e19244f1",
+  "limitations": [
+    "Context package records bounded inputs; it does not by itself prove LLM context isolation."
+  ]
+}

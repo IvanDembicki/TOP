@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/run-state.schema.json",
+  "title": "TOP Orchestration Run State",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "workflowId",
+    "runId",
+    "currentState",
+    "previousState",
+    "derivedAt",
+    "derivedBy",
+    "stateEvidence",
+    "artifactRefs",
+    "allowedNextStates",
+    "limitations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "workflowId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "currentState": {
+      "$ref": "#/$defs/runState"
+    },
+    "previousState": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/runState"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "derivedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "derivedBy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stateEvidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "checkId",
+          "status",
+          "details"
+        ],
+        "properties": {
+          "checkId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "pass",
+              "fail",
+              "blocked",
+              "not_verified",
+              "current",
+              "stale",
+              "missing"
+            ]
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "artifactRefs": {
+      "type": "object",
+      "required": [
+        "runnerWorkflow",
+        "runnerReport",
+        "judicialHandoff",
+        "deliveryCertification",
+        "certificationSnapshot"
+      ],
+      "properties": {
+        "runnerWorkflow": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runnerReport": {
+          "type": "string",
+          "minLength": 1
+        },
+        "judicialHandoff": {
+          "type": "string",
+          "minLength": 1
+        },
+        "deliveryCertification": {
+          "type": "string",
+          "minLength": 1
+        },
+        "certificationSnapshot": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "allowedNextStates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/runState"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "runState": {
+      "enum": [
+        "scaffolded",
+        "passes-executed",
+        "runner-verified",
+        "judicial-validated",
+        "not-certified",
+        "certified",
+        "stale",
+        "failed"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

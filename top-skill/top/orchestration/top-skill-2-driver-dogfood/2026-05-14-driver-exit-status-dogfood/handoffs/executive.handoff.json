@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-driver-dogfood",
+  "passId": "executive",
+  "taskId": "executive-task",
+  "role": "executive",
+  "agentName": "executive-process-dogfood",
+  "taskCapsuleRef": "capsules/executive.task-capsule.json",
+  "inputReferences": [
+    "workflow/run-package-layout.md",
+    "top/validation/output-rules.md",
+    "SKILL.md",
+    "CHANGELOG.md",
+    "skill.json",
+    "release-metadata.json",
+    "hydration-manifest.json",
+    "top/spec.json"
+  ],
+  "outputReferences": [
+    "handoffs/executive.handoff.json"
+  ],
+  "filesRead": [
+    "contexts/executive.context-package.json",
+    "capsules/executive.task-capsule.json"
+  ],
+  "filesChanged": [
+    "handoffs/executive.handoff.json"
+  ],
+  "commandsRun": [
+    "scratch/process_pass.py"
+  ],
+  "status": "done",
+  "executionEvidence": {
+    "executionIsolationLevel": "protocol-followed-by-agent",
+    "verificationEvidenceLevel": "agent-claimed",
+    "runnerName": null,
+    "separateInvocationIds": [],
+    "schemaValidationCommand": null,
+    "hardCheckCommands": [],
+    "limitations": [
+      "Process dogfood pass records a handoff but does not prove LLM context isolation."
+    ]
+  },
+  "limitations": [
+    "This dogfood pass is process-backed and cannot certify delivery complete.",
+    "The actual skill edit was made by the current Codex context before the driver run."
+  ],
+  "didNotDo": [
+    "make additional project edits",
+    "validate own output",
+    "certify delivery",
+    "write final audit"
+  ],
+  "handoffTo": "judicial",
+  "mayEditFiles": false,
+  "mayValidate": false,
+  "mayRepair": false,
+  "mayReport": false,
+  "mayCertifyDelivery": false
+}

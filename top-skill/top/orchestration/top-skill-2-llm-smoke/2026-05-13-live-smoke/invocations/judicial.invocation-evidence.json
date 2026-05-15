@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-llm-smoke",
+  "runId": "2026-05-13-live-smoke",
+  "passId": "judicial",
+  "role": "judicial",
+  "adapterKind": "llm-api",
+  "invocationId": "resp_0f01fdf846dce07d006a04bf21c6e08191b04e8bc955655726",
+  "contextId": "resp_0f01fdf846dce07d006a04bf21c6e08191b04e8bc955655726-fresh-context",
+  "runnerName": "top-protocol-runner",
+  "processId": 14088,
+  "command": "scripts/adapters/llm_api_adapter.py",
+  "startedAt": "2026-05-13T18:12:49Z",
+  "endedAt": "2026-05-13T18:12:56Z",
+  "exitCode": 0,
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "contextPackageRef": "contexts/judicial.context-package.json",
+  "handoffArtifactRef": "handoffs/judicial.handoff.json",
+  "contextHash": "24dd19e3fc2325f8ef3203413359be75863c36eaed1e282354a6d1f0ef45b829",
+  "handoffHash": "1da021746809ae551f7f5589eda35fba6e6d76d3269462a492cead6528e72833",
+  "freshContext": true,
+  "receivedOnlyContextPackage": true,
+  "modelInvocationEvidence": true,
+  "limitations": [
+    "LLM API invocation completed in a fresh request using only context package inputs."
+  ]
+}

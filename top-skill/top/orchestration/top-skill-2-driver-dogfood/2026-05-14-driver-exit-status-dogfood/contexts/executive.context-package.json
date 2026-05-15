@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-driver-dogfood",
+  "runId": "2026-05-14-driver-exit-status-dogfood",
+  "passId": "executive",
+  "role": "executive",
+  "taskCapsuleRef": "capsules/executive.task-capsule.json",
+  "handoffArtifactRef": "handoffs/executive.handoff.json",
+  "inputReferences": [
+    "workflow/run-package-layout.md",
+    "top/validation/output-rules.md",
+    "SKILL.md",
+    "CHANGELOG.md",
+    "skill.json",
+    "release-metadata.json",
+    "hydration-manifest.json",
+    "top/spec.json"
+  ],
+  "contextSlices": [
+    "Dogfood scope: driver exit/status semantics were clarified in workflow/run-package-layout.md and top/validation/output-rules.md.",
+    "Version metadata was bumped to 1.2.14.",
+    "This process-backed pass may record a handoff only; it cannot prove LLM context isolation."
+  ],
+  "forbiddenInputs": [
+    "full prior chat transcript unless explicitly listed in inputReferences",
+    "unbounded agent memory",
+    "implementation files outside task capsule scope unless explicitly referenced"
+  ],
+  "materializedBy": "top-protocol-runner",
+  "materializedAt": "2026-05-14T19:14:24Z",
+  "contextHash": "96d74a7d0176ef1bdbb493289a0a8200ebe758727dc82071f255ecd73b41a85e",
+  "limitations": [
+    "Context package records bounded inputs; it does not by itself prove LLM context isolation."
+  ]
+}

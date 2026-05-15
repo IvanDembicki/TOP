@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-artifact-dogfood",
+  "taskId": "judicial-task",
+  "role": "judicial",
+  "objective": "Validate the explicitly referenced handoff and repair-target artifact for this pass.",
+  "allowedActions": [
+    "read listed inputs",
+    "write judicial handoff"
+  ],
+  "forbiddenActions": [
+    "repair implementation artifacts",
+    "certify delivery complete",
+    "use hidden prior chat"
+  ],
+  "inputReferences": [
+    "handoffs/repair-1.handoff.json",
+    "invocations/repair-1.invocation-evidence.json",
+    "artifacts/repair-target.json"
+  ],
+  "contextSlices": [
+    "Validate the explicitly referenced repair-target artifact and handoffs.",
+    "This is the final post-repair judicial pass. Use status done only when artifacts/repair-target.json has statusLabel Ready, isValid true, and repairedBy repair-1.",
+    "Use status blocked if the repaired artifact is missing or still invalid.",
+    "Do not repair implementation artifacts and do not certify delivery."
+  ],
+  "outputContract": "handoffs/judicial.handoff.json",
+  "requiredChecks": [],
+  "stopCondition": "Write one handoff artifact and stop.",
+  "mayEditFiles": false,
+  "mayValidate": true,
+  "mayRepair": false,
+  "mayReport": true,
+  "mayCertifyDelivery": false
+}

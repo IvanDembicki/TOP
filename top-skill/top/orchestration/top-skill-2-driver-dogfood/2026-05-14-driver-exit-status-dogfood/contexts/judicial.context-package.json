@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-driver-dogfood",
+  "runId": "2026-05-14-driver-exit-status-dogfood",
+  "passId": "judicial",
+  "role": "judicial",
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "handoffArtifactRef": "handoffs/judicial.handoff.json",
+  "inputReferences": [
+    "handoffs/executive.handoff.json",
+    "runner/runner-report.json",
+    "workflow/run-package-layout.md",
+    "top/validation/output-rules.md",
+    "SKILL.md",
+    "CHANGELOG.md",
+    "skill.json",
+    "release-metadata.json",
+    "hydration-manifest.json",
+    "top/spec.json"
+  ],
+  "contextSlices": [
+    "Validate the dogfood run package evidence for the driver exit/status semantics change.",
+    "Treat process pass evidence as process evidence only; it is not LLM context isolation.",
+    "Do not certify delivery complete from this process-backed run."
+  ],
+  "forbiddenInputs": [
+    "full prior chat transcript unless explicitly listed in inputReferences",
+    "unbounded agent memory",
+    "implementation files outside task capsule scope unless explicitly referenced"
+  ],
+  "materializedBy": "top-protocol-runner",
+  "materializedAt": "2026-05-14T19:14:24Z",
+  "contextHash": "50c6cec1c0f92386a99854f69809798fa4c356bddef756e103f70bd7afe001bf",
+  "limitations": [
+    "Context package records bounded inputs; it does not by itself prove LLM context isolation."
+  ]
+}

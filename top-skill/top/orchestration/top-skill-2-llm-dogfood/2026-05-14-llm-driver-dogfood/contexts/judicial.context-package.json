@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-llm-dogfood",
+  "runId": "2026-05-14-llm-driver-dogfood",
+  "passId": "judicial",
+  "role": "judicial",
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "handoffArtifactRef": "handoffs/judicial.handoff.json",
+  "inputReferences": [
+    "handoffs/executive.handoff.json",
+    "invocations/executive.invocation-evidence.json"
+  ],
+  "contextSlices": [
+    "Independently inspect the supplied executive handoff and invocation evidence.",
+    "Treat adapter invocation evidence as execution evidence only; do not certify delivery complete.",
+    "Write a judicial handoff with status done when the executive handoff is structurally coherent and no self-certification claim is present.",
+    "Do not repair implementation artifacts and do not certify delivery."
+  ],
+  "forbiddenInputs": [
+    "full prior chat transcript unless explicitly listed in inputReferences",
+    "unbounded agent memory",
+    "implementation files outside task capsule scope unless explicitly referenced"
+  ],
+  "materializedBy": "top-protocol-runner",
+  "materializedAt": "2026-05-14T19:29:06Z",
+  "contextHash": "349359ccb7575475a81a9d0e5c4b923de3e5e8de057be8277b17f97fd5d989ab",
+  "limitations": [
+    "Context package records bounded inputs; it does not by itself prove LLM context isolation."
+  ]
+}

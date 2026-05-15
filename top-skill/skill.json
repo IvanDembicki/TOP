@@ -1,7 +1,7 @@
 {
   "name": "top-skill",
   "displayName": "Tree-Oriented Programming Skill",
-  "version": "1.1.28",
+  "version": "2.0.0",
   "description": "Skill for designing, analyzing, generating and validating systems built with Tree-Oriented Programming (TOP) paradigm.",
   "author": {
     "name": "Ivans Dembickis",
@@ -17,7 +17,35 @@
     "spec": "top/spec.json",
     "artifact_manifest": "top/artifact-manifest.json",
     "mode_manifest": "top/modes/mode-manifest.json",
-    "validation_rules": "top/validation/output-rules.md"
+    "validation_rules": "top/validation/output-rules.md",
+    "enforcement_evidence_model": "workflow/enforcement-evidence-model.md",
+    "activation_procedure": "workflow/activation-and-operating-procedure.md",
+    "task_capsule_schema": "top/schemas/task-capsule.schema.json",
+    "handoff_artifact_schema": "top/schemas/handoff-artifact.schema.json",
+    "execution_evidence_schema": "top/schemas/fragments/execution-evidence.schema.json",
+    "execution_evidence_validator": "scripts/validate_execution_evidence.py",
+    "runner_contract": "workflow/runner-contract.md",
+    "pass_invocation_contract": "workflow/pass-invocation-contract.md",
+    "llm_api_adapter_contract": "workflow/llm-api-adapter-contract.md",
+    "repair_pass_contract": "workflow/repair-pass-contract.md",
+    "delivery_certification_procedure": "workflow/delivery-certification-procedure.md",
+    "run_state_machine": "workflow/run-state-machine.md",
+    "run_package_layout": "workflow/run-package-layout.md",
+    "runner_workflow_schema": "top/schemas/runner-workflow.schema.json",
+    "runner_report_schema": "top/schemas/runner-report.schema.json",
+    "context_package_schema": "top/schemas/context-package.schema.json",
+    "pass_invocation_evidence_schema": "top/schemas/pass-invocation-evidence.schema.json",
+    "certification_snapshot_schema": "top/schemas/certification-snapshot.schema.json",
+    "run_state_schema": "top/schemas/run-state.schema.json",
+    "protocol_runner": "scripts/top_protocol_runner.py",
+    "llm_api_adapter": "scripts/adapters/llm_api_adapter.py",
+    "orchestration_certifier": "scripts/certify_orchestration_run.py",
+    "orchestration_run_scaffold": "scripts/create_orchestration_run.py",
+    "orchestration_state_updater": "scripts/update_orchestration_state.py",
+    "orchestration_run_verifier": "scripts/validate_orchestration_run.py",
+    "orchestration_regression_harness": "scripts/validate_orchestration_regressions.py",
+    "repair_artifact_fixture_validator": "scripts/validate_repair_artifact_fixture.py",
+    "orchestration_workflow_driver": "scripts/run_orchestration_workflow.py"
   },
   "language": "en",
   "modes": [
@@ -62,6 +90,7 @@
   ],
   "examples": [
     "examples/edit-toggle-btn/README.md",
+    "examples/driver-status-badge/README.md",
     "examples/recursive-library/tree.json",
     "examples/tree-editor/README.md"
   ],

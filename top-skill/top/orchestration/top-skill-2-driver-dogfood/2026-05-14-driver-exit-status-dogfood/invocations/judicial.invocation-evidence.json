@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-driver-dogfood",
+  "runId": "2026-05-14-driver-exit-status-dogfood",
+  "passId": "judicial",
+  "role": "judicial",
+  "adapterKind": "process",
+  "invocationId": "2026-05-14-driver-exit-status-dogfood-judicial-invocation",
+  "contextId": "2026-05-14-driver-exit-status-dogfood-judicial-context",
+  "runnerName": "top-protocol-runner",
+  "processId": null,
+  "command": "C:\\Program Files\\Inkscape\\bin\\python.exe -B D:\\TOP\\top-skill\\top\\orchestration\\top-skill-2-driver-dogfood\\2026-05-14-driver-exit-status-dogfood\\scratch\\process_pass.py",
+  "startedAt": "2026-05-14T19:14:24Z",
+  "endedAt": "2026-05-14T19:14:25Z",
+  "exitCode": 0,
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "contextPackageRef": "contexts/judicial.context-package.json",
+  "handoffArtifactRef": "handoffs/judicial.handoff.json",
+  "contextHash": "50c6cec1c0f92386a99854f69809798fa4c356bddef756e103f70bd7afe001bf",
+  "handoffHash": "a29c01e6f1f1d29a920a19cb7c3a094b6744abdfe9206ea6b4c8d4bda05d16fd",
+  "freshContext": true,
+  "receivedOnlyContextPackage": false,
+  "modelInvocationEvidence": false,
+  "limitations": [
+    "Runner-observed process evidence is not proof of separate LLM context.",
+    "An adapter must write invocation evidence with modelInvocationEvidence=true to support runner-enforced isolation."
+  ]
+}

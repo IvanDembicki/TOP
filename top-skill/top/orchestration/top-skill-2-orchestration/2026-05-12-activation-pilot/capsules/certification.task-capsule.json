@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-orchestration",
+  "taskId": "certification-task",
+  "role": "certification",
+  "objective": "Run certification pass certification.",
+  "allowedActions": [
+    "certify only when delivery law evidence exists"
+  ],
+  "forbiddenActions": [
+    "invent judicial verdict",
+    "ignore hard-check failures"
+  ],
+  "inputReferences": [
+    "handoffs/judicial.handoff.json",
+    "reports/validation-report.json",
+    "runner/runner-report.json"
+  ],
+  "contextSlices": [
+    "Read judicial handoff, validation report, runner report, and delivery certification gates.",
+    "Keep delivery not-certified unless delivery law evidence exists."
+  ],
+  "outputContract": "handoffs/certification.handoff.json",
+  "requiredChecks": [],
+  "stopCondition": "Write one handoff artifact and stop.",
+  "mayEditFiles": false,
+  "mayValidate": false,
+  "mayRepair": false,
+  "mayReport": true,
+  "mayCertifyDelivery": true
+}

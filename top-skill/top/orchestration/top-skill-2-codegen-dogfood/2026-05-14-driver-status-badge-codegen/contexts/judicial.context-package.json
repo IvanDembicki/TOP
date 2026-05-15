@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-codegen-dogfood",
+  "runId": "2026-05-14-driver-status-badge-codegen",
+  "passId": "judicial",
+  "role": "judicial",
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "handoffArtifactRef": "handoffs/judicial.handoff.json",
+  "inputReferences": [
+    "handoffs/executive.handoff.json",
+    "invocations/executive.invocation-evidence.json",
+    "examples/driver-status-badge/README.md",
+    "examples/driver-status-badge/DriverStatusBadgeController.ts",
+    "examples/driver-status-badge/DriverStatusBadgeControllerAccess.ts",
+    "examples/driver-status-badge/DriverStatusBadgeContent.ts",
+    "examples/driver-status-badge/driver-status-badge.tree.json",
+    "workflow/run-package-layout.md",
+    "top/validation/output-rules.md",
+    "SKILL.md",
+    "CHANGELOG.md",
+    "skill.json",
+    "top/spec.json"
+  ],
+  "contextSlices": [
+    "Independently inspect the generated fixture and supplied executive handoff.",
+    "Verify that Content asks owner through a narrow access contract and does not decide workflow readiness.",
+    "Treat adapter invocation evidence as execution evidence; delivery certification is handled by the certifier.",
+    "Write a judicial handoff with status done when the fixture is structurally coherent and no self-certification claim is present.",
+    "Do not repair implementation artifacts and do not certify delivery."
+  ],
+  "forbiddenInputs": [
+    "full prior chat transcript unless explicitly listed in inputReferences",
+    "unbounded agent memory",
+    "implementation files outside task capsule scope unless explicitly referenced"
+  ],
+  "materializedBy": "top-protocol-runner",
+  "materializedAt": "2026-05-14T19:37:46Z",
+  "contextHash": "51b522b20c85e7ad569c8b4608e624489ec6e0b894c6450f99e740bd9c2d0ce9",
+  "limitations": [
+    "Context package records bounded inputs; it does not by itself prove LLM context isolation."
+  ]
+}

@@ -239,6 +239,22 @@ Candidate `WF-030` signals:
   gate;
 - more than `max_same_violation_repeats: 2` repeats of the same violation.
 
+Candidate `WF-031` signals:
+- a generation, repair, migration, or spec-sync pass also writes validation or
+  final-audit claims and declares delivery `complete`;
+- delivery `complete` appears without a separate judicial pass id, validation
+  report reference, judicial handoff artifact reference, or final audit report
+  reference;
+- delivery `complete` appears without `executionIsolationLevel:
+  runner-enforced` and `verificationEvidenceLevel: hard-check-verified`;
+- protocol-only execution claims `runner-enforced`;
+- schema validation or hard-check output is treated as proof of role isolation;
+- a required hard-check gate is `fail` or `not_verified`;
+- `GENERATION_OUTPUT.md` claims delivery completion rather than generation
+  completion;
+- public-record summaries upgrade `blocked`, `partial`, `fail`, or
+  `not_verified` judicial findings to complete.
+
 Incremental validation signals:
 - a large generation or migration phase proceeds without micro-check entries
   for newly created specs, prompts, generated node files, folders, or rejection
@@ -265,6 +281,31 @@ Candidate `WF-022` signals:
 Canonical repair is not to continue writing. Stop, preserve user work, ask for
 commit/stash/branch clarification when needed, switch/create the dedicated
 migration branch, append the git safety gate, then resume migration writes.
+
+### Group A7b — Required post-generation delivery gate signals
+
+Blocking validation candidates:
+- Content Child Import Violation: parent `*Content` artifacts import,
+  instantiate, render, or type against child concrete content classes instead of
+  requesting child materialized outputs through controller access.
+- Prompt-Code Contract Drift: prompts/specs require child-output methods such
+  as `getAccountIdentityView(): MaterializedOutput`, but implementation
+  materializes a different architectural contract such as
+  `getAccountIdentityAccess()` without an approved prompt/spec update.
+- Node Global Store Access Violation: `*Node` or controller artifacts directly
+  import or call React hooks, Zustand/global stores, `useAppStore`,
+  route/navigation hooks, UI framework hooks, runtime singleton state, or
+  target hook APIs instead of explicit bridge/runtime/data boundaries.
+- Bridge Callback Injection Violation: TOP nodes/controllers receive raw
+  callback functions from route/framework layers instead of a narrow bridge or
+  runtime context boundary.
+- Self-Audited Pass Report Warning: the same pass generated/repaired artifacts,
+  wrote validation/final audit, and declared completion without independent
+  judicial evidence.
+
+These patterns are validation-gate candidates. Quick scripts may surface them,
+but the Validation Agent must inspect actual files, prompts, and specs before
+issuing the final architectural verdict.
 
 ### Group A8 — Public wrapper, node atomicity, and spec/layout signals
 

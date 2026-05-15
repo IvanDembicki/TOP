@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-orchestration",
+  "passId": "certification",
+  "taskId": "certification-task",
+  "role": "certification",
+  "agentName": "certification-agent",
+  "taskCapsuleRef": "capsules/certification.task-capsule.json",
+  "inputReferences": [
+    "handoffs/executive.handoff.json",
+    "handoffs/judicial.handoff.json",
+    "runner/runner-report.json",
+    "reports/validation-report.json"
+  ],
+  "outputReferences": [
+    "reports/delivery-certification.json"
+  ],
+  "filesRead": [
+    "handoffs/executive.handoff.json",
+    "handoffs/judicial.handoff.json",
+    "runner/runner-report.json",
+    "reports/validation-report.json"
+  ],
+  "filesChanged": [
+    "reports/delivery-certification.json",
+    "handoffs/certification.handoff.json"
+  ],
+  "commandsRun": [],
+  "status": "not-certified",
+  "executionEvidence": {
+    "executionIsolationLevel": "schema-validated",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "2026-05-12-activation-pilot-executive-invocation",
+      "2026-05-12-activation-pilot-judicial-invocation",
+      "2026-05-12-activation-pilot-certification-invocation"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B ..\\..\\..\\..\\scripts\\quick_validate.py ..\\..\\..\\.."
+    ],
+    "limitations": [
+      "Hard check evidence exists.",
+      "Runner-enforced isolation does not exist.",
+      "Delivery law is not satisfied."
+    ]
+  },
+  "limitations": [
+    "Certification pass records not-certified because runner-enforced isolation and independent judicial invocation are absent."
+  ],
+  "didNotDo": [
+    "invent judicial verdict",
+    "ignore hard-check failures"
+  ],
+  "handoffTo": "done",
+  "mayEditFiles": false,
+  "mayValidate": false,
+  "mayRepair": false,
+  "mayReport": true,
+  "mayCertifyDelivery": true
+}

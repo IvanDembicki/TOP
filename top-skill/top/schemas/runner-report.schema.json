@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/runner-report.schema.json",
+  "title": "TOP Runner Report",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "workflowId",
+    "runId",
+    "runnerName",
+    "runnerStatus",
+    "executionEvidence",
+    "passResults",
+    "hardCheckResults",
+    "deliveryCertificationResult",
+    "limitations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "workflowId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runnerName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runnerStatus": {
+      "enum": [
+        "pass",
+        "fail",
+        "blocked",
+        "not_verified"
+      ]
+    },
+    "executionEvidence": {
+      "$ref": "https://top.local/schemas/fragments/execution-evidence.schema.json"
+    },
+    "passResults": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/passResult"
+      }
+    },
+    "hardCheckResults": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/hardCheckResult"
+      }
+    },
+    "deliveryCertificationResult": {
+      "type": "object",
+      "required": [
+        "status",
+        "ref",
+        "errors"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "not_applicable"
+          ]
+        },
+        "ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "passResult": {
+      "type": "object",
+      "required": [
+        "passId",
+        "role",
+        "invocationId",
+        "contextId",
+        "status",
+        "errors"
+      ],
+      "properties": {
+        "passId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "invocationId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contextId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "adapterKind": {
+          "enum": [
+            "process",
+            "llm-api",
+            "external-agent-runtime",
+            "manual"
+          ]
+        },
+        "contextPackageRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "invocationEvidenceRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "freshContext": {
+          "type": "boolean"
+        },
+        "receivedOnlyContextPackage": {
+          "type": "boolean"
+        },
+        "modelInvocationEvidence": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "blocked",
+            "not_verified"
+          ]
+        },
+        "exitCode": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "hardCheckResult": {
+      "type": "object",
+      "required": [
+        "id",
+        "requiredForComplete",
+        "status",
+        "command",
+        "exitCode",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredForComplete": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "not_verified",
+            "not_applicable"
+          ]
+        },
+        "command": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "exitCode": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

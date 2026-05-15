@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "1.0",
+  "certificationId": "2026-05-14-driver-exit-status-dogfood-delivery-certification",
+  "workflowId": "top-skill-2-driver-dogfood",
+  "deliveryStatus": "not-certified",
+  "executionEvidence": {
+    "executionIsolationLevel": "schema-validated",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "2026-05-14-driver-exit-status-dogfood-executive-invocation",
+      "2026-05-14-driver-exit-status-dogfood-judicial-invocation"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B scripts/quick_validate.py ."
+    ],
+    "limitations": [
+      "Dogfood runner workflow for driver exit/status semantics.",
+      "Passes are separate processes, not separate model invocations.",
+      "No external runner-enforced invocation evidence is present.",
+      "Runner isolation was not accepted as runner-enforced evidence."
+    ]
+  },
+  "judicialValidationRef": "reports/validation-report.json",
+  "judicialHandoffRef": "handoffs/judicial.handoff.json",
+  "validationReportRef": "reports/validation-report.json",
+  "finalAuditReportRef": "reports/final-audit.md",
+  "generationOrRepairPassIds": [
+    "executive"
+  ],
+  "judicialPassId": "judicial",
+  "separationOfPowersProof": [
+    "Runner report records separate required pass invocation ids.",
+    "Runner report records separate required pass context ids.",
+    "Judicial handoff has validation authority and no edit/repair/certification authority.",
+    "Required hard checks passed before certification."
+  ],
+  "requiredHardChecks": [
+    {
+      "id": "top-skill-quick-validate",
+      "description": "Run top-skill package validation.",
+      "requiredForComplete": true,
+      "status": "pass",
+      "command": "python -B scripts/quick_validate.py .",
+      "evidence": [
+        "quick_validate: OK\nvalidated: D:\\TOP\\top-skill\nhard_checks: 20\nagent_review_candidates: 0"
+      ]
+    }
+  ],
+  "blockingChecks": [
+    {
+      "checkId": "runner-evidence",
+      "status": "fail",
+      "evidence": [
+        "runnerStatus=pass",
+        "executionIsolationLevel=schema-validated",
+        "verificationEvidenceLevel=hard-check-verified"
+      ]
+    },
+    {
+      "checkId": "required-pass-status",
+      "status": "pass",
+      "evidence": [
+        "executive:pass",
+        "judicial:pass"
+      ]
+    },
+    {
+      "checkId": "adapter-invocation-evidence",
+      "status": "fail",
+      "evidence": [
+        "executive:fresh=True,contextPackageOnly=False,modelEvidence=False",
+        "judicial:fresh=True,contextPackageOnly=False,modelEvidence=False"
+      ]
+    },
+    {
+      "checkId": "separate-invocation-and-context-ids",
+      "status": "pass",
+      "evidence": [
+        "invocationIds=2",
+        "contextIds=2"
+      ]
+    },
+    {
+      "checkId": "required-hard-checks",
+      "status": "pass",
+      "evidence": [
+        "top-skill-quick-validate:pass"
+      ]
+    },
+    {
+      "checkId": "independent-judicial-handoff",
+      "status": "pass",
+      "evidence": [
+        "judicialPassId=judicial",
+        "judicial handoff is independent from executive/repair authority"
+      ]
+    },
+    {
+      "checkId": "self-certification",
+      "status": "pass",
+      "evidence": [
+        "No executive or repair handoff certified delivery."
+      ]
+    }
+  ],
+  "knownExclusions": [
+    "Certification scope is this orchestration run package only; it is not a general top-skill release claim."
+  ],
+  "noBlockingInScopeViolations": false,
+  "generationAndValidationSeparate": false,
+  "noUnverifiedRequiredGates": false,
+  "noRequiredGateFailedOrNotVerified": false
+}

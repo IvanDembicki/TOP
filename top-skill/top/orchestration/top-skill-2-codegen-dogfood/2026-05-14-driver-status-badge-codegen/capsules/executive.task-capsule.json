@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-codegen-dogfood",
+  "taskId": "executive-task",
+  "role": "executive",
+  "objective": "Review the generated driver-status-badge TOP code fixture and write one executive handoff for the code-generation dogfood run.",
+  "allowedActions": [
+    "read task capsule",
+    "read generated fixture artifacts",
+    "write executive handoff"
+  ],
+  "forbiddenActions": [
+    "edit project files",
+    "validate own output",
+    "certify delivery",
+    "claim runner-enforced isolation",
+    "use hidden prior chat"
+  ],
+  "inputReferences": [
+    "examples/driver-status-badge/README.md",
+    "examples/driver-status-badge/DriverStatusBadgeController.ts",
+    "examples/driver-status-badge/DriverStatusBadgeControllerAccess.ts",
+    "examples/driver-status-badge/DriverStatusBadgeContent.ts",
+    "examples/driver-status-badge/driver-status-badge.tree.json",
+    "workflow/run-package-layout.md",
+    "top/validation/output-rules.md",
+    "SKILL.md",
+    "CHANGELOG.md",
+    "skill.json",
+    "top/spec.json"
+  ],
+  "contextSlices": [
+    "This is a real generated-code dogfood run for top-skill 2.0 orchestration.",
+    "The generated fixture is examples/driver-status-badge/.",
+    "The executive pass must not edit files through the LLM adapter; it records scoped generated artifacts and stops.",
+    "Do not validate your own output and do not claim runner-enforced isolation."
+  ],
+  "outputContract": "handoffs/executive.handoff.json",
+  "requiredChecks": [],
+  "stopCondition": "Write one handoff artifact and stop.",
+  "mayEditFiles": false,
+  "mayValidate": false,
+  "mayRepair": false,
+  "mayReport": false,
+  "mayCertifyDelivery": false
+}

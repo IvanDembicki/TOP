@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/context-package.schema.json",
+  "title": "TOP Context Package",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "workflowId",
+    "runId",
+    "passId",
+    "role",
+    "taskCapsuleRef",
+    "handoffArtifactRef",
+    "inputReferences",
+    "contextSlices",
+    "forbiddenInputs",
+    "materializedBy",
+    "materializedAt",
+    "contextHash",
+    "limitations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "workflowId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "passId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "role": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taskCapsuleRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "handoffArtifactRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputReferences": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "contextSlices": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "forbiddenInputs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "materializedBy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "materializedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "contextHash": {
+      "type": "string",
+      "minLength": 1
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "additionalProperties": false
+}

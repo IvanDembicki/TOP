@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-orchestration",
+  "runId": "2026-05-12-activation-pilot",
+  "passId": "certification",
+  "role": "certification",
+  "taskCapsuleRef": "capsules/certification.task-capsule.json",
+  "handoffArtifactRef": "handoffs/certification.handoff.json",
+  "inputReferences": [
+    "handoffs/judicial.handoff.json",
+    "reports/validation-report.json",
+    "runner/runner-report.json"
+  ],
+  "contextSlices": [
+    "Read judicial handoff, validation report, runner report, and delivery certification gates.",
+    "Keep delivery not-certified unless delivery law evidence exists."
+  ],
+  "forbiddenInputs": [
+    "full prior chat transcript unless explicitly listed in inputReferences",
+    "unbounded agent memory",
+    "implementation files outside task capsule scope unless explicitly referenced"
+  ],
+  "materializedBy": "top-protocol-runner",
+  "materializedAt": "2026-05-13T08:48:56Z",
+  "contextHash": "48093f1b362e79acb712bb156a7736092bba42262d5df5d087e70752fbbb136c",
+  "limitations": [
+    "Context package records bounded inputs; it does not by itself prove LLM context isolation."
+  ]
+}

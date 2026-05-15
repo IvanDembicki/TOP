@@ -1,0 +1,213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/task-capsule.schema.json",
+  "title": "TOP Task Capsule",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "workflowId",
+    "taskId",
+    "role",
+    "objective",
+    "allowedActions",
+    "forbiddenActions",
+    "inputReferences",
+    "contextSlices",
+    "outputContract",
+    "mayEditFiles",
+    "mayValidate",
+    "mayRepair",
+    "mayReport",
+    "mayCertifyDelivery",
+    "stopCondition"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "workflowId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taskId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "role": {
+      "enum": [
+        "orchestrator",
+        "context-builder",
+        "executive",
+        "judicial",
+        "repair",
+        "reporting",
+        "certification"
+      ]
+    },
+    "objective": {
+      "type": "string",
+      "minLength": 1
+    },
+    "allowedActions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "forbiddenActions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "inputReferences": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "contextSlices": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "outputContract": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requiredChecks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": []
+    },
+    "artifactWriteRequests": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifactWriteRequest"
+      },
+      "default": []
+    },
+    "mayEditFiles": {
+      "type": "boolean"
+    },
+    "mayValidate": {
+      "type": "boolean"
+    },
+    "mayRepair": {
+      "type": "boolean"
+    },
+    "mayReport": {
+      "type": "boolean"
+    },
+    "mayCertifyDelivery": {
+      "type": "boolean"
+    },
+    "stopCondition": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "artifactWriteRequest": {
+      "type": "object",
+      "required": [
+        "ref",
+        "description",
+        "required"
+      ],
+      "properties": {
+        "ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "role": {
+            "const": "executive"
+          }
+        },
+        "required": [
+          "role"
+        ]
+      },
+      "then": {
+        "properties": {
+          "mayValidate": {
+            "const": false
+          },
+          "mayCertifyDelivery": {
+            "const": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "role": {
+            "const": "judicial"
+          }
+        },
+        "required": [
+          "role"
+        ]
+      },
+      "then": {
+        "properties": {
+          "mayEditFiles": {
+            "const": false
+          },
+          "mayRepair": {
+            "const": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "role": {
+            "const": "repair"
+          }
+        },
+        "required": [
+          "role"
+        ]
+      },
+      "then": {
+        "properties": {
+          "mayValidate": {
+            "const": false
+          },
+          "mayCertifyDelivery": {
+            "const": false
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

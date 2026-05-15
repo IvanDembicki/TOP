@@ -55,6 +55,9 @@
         "$ref": "#/$defs/gate"
       }
     },
+    "executionEvidence": {
+      "$ref": "https://top.local/schemas/fragments/execution-evidence.schema.json"
+    },
     "handoffRules": {
       "type": "array",
       "items": {
@@ -66,6 +69,12 @@
       "items": {
         "$ref": "#/$defs/decision"
       }
+    },
+    "separationOfPowers": {
+      "$ref": "#/$defs/separationOfPowers"
+    },
+    "deliveryCertification": {
+      "$ref": "#/$defs/deliveryCertification"
     }
   },
   "$defs": {
@@ -147,6 +156,7 @@
             "pending",
             "pass",
             "fail",
+            "not_verified",
             "not_applicable"
           ]
         },
@@ -209,8 +219,177 @@
         }
       },
       "additionalProperties": false
+    },
+    "separationOfPowers": {
+      "type": "object",
+      "required": [
+        "executivePassId",
+        "judicialPassId",
+        "reportingPassId",
+        "selfCertificationAllowed"
+      ],
+      "properties": {
+        "executivePassId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "judicialPassId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reportingPassId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selfCertificationAllowed": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "deliveryCertification": {
+      "type": "object",
+      "required": [
+        "status",
+        "executionEvidence",
+        "judicialPassId",
+        "judicialHandoffRef",
+        "validationReportRef",
+        "selfCertificationAllowed",
+        "requiredHardChecks",
+        "noRequiredGateFailedOrNotVerified"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "not-started",
+            "in-progress",
+            "blocked",
+            "partial",
+            "not-verified",
+            "not-certified",
+            "complete"
+          ]
+        },
+        "executionEvidence": {
+          "$ref": "https://top.local/schemas/fragments/execution-evidence.schema.json"
+        },
+        "judicialPassId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "judicialHandoffRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "validationReportRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "finalAuditReportRef": {
+          "type": "string"
+        },
+        "certifiedByPassId": {
+          "type": "string"
+        },
+        "selfCertificationAllowed": {
+          "const": false
+        },
+        "requiredHardChecks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/hardCheck"
+          }
+        },
+        "noRequiredGateFailedOrNotVerified": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "complete"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "executionEvidence": {
+                "properties": {
+                  "executionIsolationLevel": {
+                    "const": "runner-enforced"
+                  },
+                  "verificationEvidenceLevel": {
+                    "const": "hard-check-verified"
+                  }
+                }
+              },
+              "noRequiredGateFailedOrNotVerified": {
+                "const": true
+              }
+            },
+            "required": [
+              "judicialHandoffRef",
+              "finalAuditReportRef",
+              "certifiedByPassId",
+              "noRequiredGateFailedOrNotVerified"
+            ]
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "hardCheck": {
+      "type": "object",
+      "required": [
+        "id",
+        "description",
+        "requiredForComplete",
+        "status",
+        "command",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredForComplete": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "not_verified",
+            "not_applicable"
+          ]
+        },
+        "command": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false
 }
-

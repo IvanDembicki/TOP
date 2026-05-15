@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-llm-smoke",
+  "taskId": "executive-task",
+  "role": "executive",
+  "objective": "Execute a bounded LLM API smoke pass and write one executive handoff artifact without editing project files.",
+  "allowedActions": [
+    "read task capsule",
+    "read context package",
+    "write executive handoff"
+  ],
+  "forbiddenActions": [
+    "edit project files",
+    "validate own output",
+    "certify delivery",
+    "claim runner-enforced isolation",
+    "use hidden prior chat"
+  ],
+  "inputReferences": [],
+  "contextSlices": [
+    "This is a bounded top-skill 2.0 runner smoke pass.",
+    "Do not edit project files. Produce only the executive handoff artifact.",
+    "Report status done if the supplied task capsule can be followed.",
+    "Do not validate your own output and do not claim runner-enforced isolation."
+  ],
+  "outputContract": "handoffs/executive.handoff.json",
+  "requiredChecks": [],
+  "stopCondition": "Write one handoff artifact and stop.",
+  "mayEditFiles": false,
+  "mayValidate": false,
+  "mayRepair": false,
+  "mayReport": false,
+  "mayCertifyDelivery": false
+}

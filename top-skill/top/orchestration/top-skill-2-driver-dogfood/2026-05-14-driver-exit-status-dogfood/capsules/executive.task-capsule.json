@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-driver-dogfood",
+  "taskId": "executive-task",
+  "role": "executive",
+  "objective": "Record the already-applied driver exit/status semantics dogfood change without making additional file edits.",
+  "allowedActions": [
+    "read scoped dogfood context",
+    "write executive handoff"
+  ],
+  "forbiddenActions": [
+    "make additional project edits",
+    "validate own output",
+    "certify delivery",
+    "write final audit"
+  ],
+  "inputReferences": [
+    "workflow/run-package-layout.md",
+    "top/validation/output-rules.md",
+    "SKILL.md",
+    "CHANGELOG.md",
+    "skill.json",
+    "release-metadata.json",
+    "hydration-manifest.json",
+    "top/spec.json"
+  ],
+  "contextSlices": [
+    "Dogfood scope: driver exit/status semantics were clarified in workflow/run-package-layout.md and top/validation/output-rules.md.",
+    "Version metadata was bumped to 1.2.14.",
+    "This process-backed pass may record a handoff only; it cannot prove LLM context isolation."
+  ],
+  "outputContract": "handoffs/executive.handoff.json",
+  "requiredChecks": [],
+  "stopCondition": "Write one handoff artifact and stop.",
+  "mayEditFiles": false,
+  "mayValidate": false,
+  "mayRepair": false,
+  "mayReport": false,
+  "mayCertifyDelivery": false
+}

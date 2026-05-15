@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "1.0",
+  "reportId": "2026-05-14-repair-loop-dogfood-validation-report",
+  "workflowId": "top-skill-2-repair-loop-dogfood",
+  "judicialPassId": "judicial",
+  "judicialHandoffRef": "handoffs/judicial.handoff.json",
+  "repairAttemptIds": [
+    "repair-1"
+  ],
+  "executionEvidence": {
+    "executionIsolationLevel": "runner-enforced",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "resp_08c98646394f650e006a066e5ddd94819c906cd28067de02d7",
+      "resp_0e6f9a9082c9d264006a066e6272e481a295376d19cc904f03",
+      "resp_0d0c4a14c837c633006a066e714ec0819e9c6bfad24ef145dc",
+      "resp_03916b31038b945e006a066e9f160c819081a7b1f132988ff9"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B scripts/quick_validate.py ."
+    ],
+    "limitations": [
+      "Scaffolded runner workflow.",
+      "LLM API adapter is configured; runner-enforced evidence requires successful API credentials and separate model invocations."
+    ]
+  },
+  "artifactScope": "orchestration run package 2026-05-14-repair-loop-dogfood",
+  "checkedFiles": [
+    "runner/runner-workflow.json",
+    "runner/runner-report.json",
+    "handoffs/judicial.handoff.json",
+    "invocations/executive.invocation-evidence.json",
+    "invocations/judicial-initial.invocation-evidence.json",
+    "invocations/repair-1.invocation-evidence.json",
+    "invocations/judicial.invocation-evidence.json"
+  ],
+  "commandsRun": [
+    "python -B scripts/certify_orchestration_run.py --root <run-package>"
+  ],
+  "requiredHardChecks": [
+    {
+      "id": "top-skill-quick-validate",
+      "description": "Run top-skill package validation.",
+      "requiredForComplete": true,
+      "status": "pass",
+      "command": "python -B scripts/quick_validate.py .",
+      "evidence": [
+        "quick_validate: OK\nvalidated: D:\\TOP\\top-skill\nhard_checks: 21\nagent_review_candidates: 0"
+      ]
+    }
+  ],
+  "violationClassesChecked": [
+    "runner-enforced-isolation",
+    "hard-check-evidence",
+    "independent-judicial-handoff",
+    "required-pass-status",
+    "self-certification",
+    "post-repair-judicial-validation"
+  ],
+  "gateResults": [
+    {
+      "gateId": "runner-evidence",
+      "violationClass": "runner-evidence",
+      "status": "fail",
+      "evidence": [
+        "runnerStatus=fail",
+        "executionIsolationLevel=runner-enforced",
+        "verificationEvidenceLevel=hard-check-verified"
+      ]
+    },
+    {
+      "gateId": "required-pass-status",
+      "violationClass": "runner-pass",
+      "status": "fail",
+      "evidence": [
+        "executive:fail",
+        "judicial-initial:not_verified",
+        "repair-1:pass",
+        "judicial:not_verified"
+      ]
+    },
+    {
+      "gateId": "adapter-invocation-evidence",
+      "violationClass": "runner-invocation",
+      "status": "pass",
+      "evidence": [
+        "executive:fresh=True,contextPackageOnly=True,modelEvidence=True",
+        "judicial-initial:fresh=True,contextPackageOnly=True,modelEvidence=True",
+        "repair-1:fresh=True,contextPackageOnly=True,modelEvidence=True",
+        "judicial:fresh=True,contextPackageOnly=True,modelEvidence=True"
+      ]
+    },
+    {
+      "gateId": "separate-invocation-and-context-ids",
+      "violationClass": "runner-invocation",
+      "status": "pass",
+      "evidence": [
+        "invocationIds=4",
+        "contextIds=4"
+      ]
+    },
+    {
+      "gateId": "required-hard-checks",
+      "violationClass": "hard-check",
+      "status": "pass",
+      "evidence": [
+        "top-skill-quick-validate:pass"
+      ]
+    },
+    {
+      "gateId": "independent-judicial-handoff",
+      "violationClass": "judicial-validation",
+      "status": "fail",
+      "evidence": [
+        "judicial handoff status must be done or complete"
+      ]
+    },
+    {
+      "gateId": "post-repair-judicial-validation",
+      "violationClass": "repair-loop",
+      "status": "pass",
+      "evidence": [
+        "judicialPassId=judicial",
+        "postRepairPassIds=repair-1"
+      ]
+    },
+    {
+      "gateId": "self-certification",
+      "violationClass": "separation-of-powers",
+      "status": "pass",
+      "evidence": [
+        "No executive or repair handoff certified delivery."
+      ]
+    }
+  ],
+  "blockingViolations": [
+    "runner-evidence: runnerStatus=fail, executionIsolationLevel=runner-enforced, verificationEvidenceLevel=hard-check-verified",
+    "required-pass-status: executive:fail, judicial-initial:not_verified, repair-1:pass, judicial:not_verified",
+    "independent-judicial-handoff: judicial handoff status must be done or complete"
+  ],
+  "unverifiedAreas": [
+    "Delivery law gates did not all pass."
+  ],
+  "finalValidationStatus": "fail",
+  "independence": {
+    "currentFilesRead": true,
+    "executorClaimsIgnored": true,
+    "samePassAsGenerationOrRepair": false,
+    "selfCertificationDetected": false
+  }
+}

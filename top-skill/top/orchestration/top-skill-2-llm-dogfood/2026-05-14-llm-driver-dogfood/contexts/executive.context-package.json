@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-llm-dogfood",
+  "runId": "2026-05-14-llm-driver-dogfood",
+  "passId": "executive",
+  "role": "executive",
+  "taskCapsuleRef": "capsules/executive.task-capsule.json",
+  "handoffArtifactRef": "handoffs/executive.handoff.json",
+  "inputReferences": [],
+  "contextSlices": [
+    "This is a bounded top-skill 2.0 runner smoke pass.",
+    "Do not edit project files. Produce only the executive handoff artifact.",
+    "Report status done if the supplied task capsule can be followed.",
+    "Do not validate your own output and do not claim runner-enforced isolation."
+  ],
+  "forbiddenInputs": [
+    "full prior chat transcript unless explicitly listed in inputReferences",
+    "unbounded agent memory",
+    "implementation files outside task capsule scope unless explicitly referenced"
+  ],
+  "materializedBy": "top-protocol-runner",
+  "materializedAt": "2026-05-14T19:29:00Z",
+  "contextHash": "6bb129f3620602d57b55266a80ff69272b878678a3dba70956ccc9b86bcedd7c",
+  "limitations": [
+    "Context package records bounded inputs; it does not by itself prove LLM context isolation."
+  ]
+}

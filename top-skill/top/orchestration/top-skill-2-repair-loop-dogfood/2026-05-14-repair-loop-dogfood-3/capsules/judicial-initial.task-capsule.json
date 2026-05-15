@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-loop-dogfood",
+  "taskId": "judicial-initial-task",
+  "role": "judicial",
+  "objective": "Run judicial pass judicial-initial.",
+  "allowedActions": [
+    "validate current artifacts",
+    "write judicial verdict"
+  ],
+  "forbiddenActions": [
+    "repair implementation",
+    "certify delivery without hard-check evidence"
+  ],
+  "inputReferences": [
+    "handoffs/executive.handoff.json",
+    "invocations/executive.invocation-evidence.json"
+  ],
+  "contextSlices": [
+    "Validate only the artifacts and handoffs explicitly listed in inputReferences.",
+    "If this is the final judicial pass, validate post-repair artifacts and ignore repair self-claims.",
+    "The runner report is produced after pass execution, so do not require it inside this judicial pass.",
+    "Use status done when the judicial handoff is complete; done is not a delivery certification claim.",
+    "Do not repair implementation artifacts and do not certify delivery."
+  ],
+  "outputContract": "handoffs/judicial-initial.handoff.json",
+  "requiredChecks": [],
+  "stopCondition": "Write one handoff artifact and stop.",
+  "mayEditFiles": false,
+  "mayValidate": true,
+  "mayRepair": false,
+  "mayReport": true,
+  "mayCertifyDelivery": false
+}

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-driver-dogfood",
+  "runId": "2026-05-14-driver-exit-status-dogfood",
+  "runnerName": "top-protocol-runner",
+  "mode": "maintenance",
+  "runnerCapabilities": {
+    "launchesSeparateProcesses": true,
+    "launchesSeparateInvocations": false,
+    "isolatesContexts": false,
+    "executesHardChecks": true,
+    "validatesHandoffs": true
+  },
+  "passes": [
+    {
+      "passId": "executive",
+      "role": "executive",
+      "taskCapsuleRef": "capsules/executive.task-capsule.json",
+      "handoffArtifactRef": "handoffs/executive.handoff.json",
+      "invocationId": "2026-05-14-driver-exit-status-dogfood-executive-invocation",
+      "contextId": "2026-05-14-driver-exit-status-dogfood-executive-context",
+      "adapterKind": "process",
+      "contextPackageRef": "contexts/executive.context-package.json",
+      "invocationEvidenceRef": "invocations/executive.invocation-evidence.json",
+      "freshContextRequired": true,
+      "command": null,
+      "cwd": null,
+      "commandType": "python-script",
+      "scriptRef": "process_pass.py",
+      "scriptBaseRef": "scratch",
+      "cwdRef": "runner-root",
+      "args": [],
+      "timeoutSeconds": 300,
+      "requiredForDelivery": true
+    },
+    {
+      "passId": "judicial",
+      "role": "judicial",
+      "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+      "handoffArtifactRef": "handoffs/judicial.handoff.json",
+      "invocationId": "2026-05-14-driver-exit-status-dogfood-judicial-invocation",
+      "contextId": "2026-05-14-driver-exit-status-dogfood-judicial-context",
+      "adapterKind": "process",
+      "contextPackageRef": "contexts/judicial.context-package.json",
+      "invocationEvidenceRef": "invocations/judicial.invocation-evidence.json",
+      "freshContextRequired": true,
+      "command": null,
+      "cwd": null,
+      "commandType": "python-script",
+      "scriptRef": "process_pass.py",
+      "scriptBaseRef": "scratch",
+      "cwdRef": "runner-root",
+      "args": [],
+      "timeoutSeconds": 300,
+      "requiredForDelivery": true
+    }
+  ],
+  "hardChecks": [
+    {
+      "id": "top-skill-quick-validate",
+      "description": "Run top-skill package validation.",
+      "requiredForComplete": true,
+      "commandType": "python-script",
+      "scriptRef": "scripts/quick_validate.py",
+      "scriptBaseRef": "skill-root",
+      "args": [
+        "."
+      ],
+      "cwdRef": "skill-root",
+      "timeoutSeconds": 300
+    }
+  ],
+  "deliveryCertificationRef": "reports/delivery-certification.json",
+  "limitations": [
+    "Dogfood runner workflow for driver exit/status semantics.",
+    "Passes are separate processes, not separate model invocations.",
+    "No external runner-enforced invocation evidence is present."
+  ]
+}

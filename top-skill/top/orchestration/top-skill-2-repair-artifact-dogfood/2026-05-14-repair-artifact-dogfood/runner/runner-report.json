@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-artifact-dogfood",
+  "runId": "2026-05-14-repair-artifact-dogfood",
+  "runnerName": "top-protocol-runner",
+  "runnerStatus": "pass",
+  "executionEvidence": {
+    "executionIsolationLevel": "runner-enforced",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "resp_0661a8e9df408fcb006a06766e4a4c8192a7a02eade19cbae6",
+      "resp_011a35412d075627006a0676750d3481a28ce328f34e16f9fb",
+      "resp_04016d5a8b75a44b006a0676847120819eb2db33897442f3cc",
+      "resp_0965dd454bddebd6006a06768d1a20819f8e1736a3ef9d3313"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B scripts/quick_validate.py .",
+      "python -B scripts/validate_repair_artifact_fixture.py artifacts/repair-target.json"
+    ],
+    "limitations": [
+      "Scaffolded runner workflow.",
+      "LLM API adapter is configured; runner-enforced evidence requires successful API credentials and separate model invocations."
+    ]
+  },
+  "passResults": [
+    {
+      "passId": "executive",
+      "role": "executive",
+      "invocationId": "resp_0661a8e9df408fcb006a06766e4a4c8192a7a02eade19cbae6",
+      "contextId": "resp_0661a8e9df408fcb006a06766e4a4c8192a7a02eade19cbae6-fresh-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/executive.context-package.json",
+      "invocationEvidenceRef": "invocations/executive.invocation-evidence.json",
+      "freshContext": true,
+      "receivedOnlyContextPackage": true,
+      "modelInvocationEvidence": true,
+      "status": "pass",
+      "exitCode": 0,
+      "errors": []
+    },
+    {
+      "passId": "judicial-initial",
+      "role": "judicial",
+      "invocationId": "resp_011a35412d075627006a0676750d3481a28ce328f34e16f9fb",
+      "contextId": "resp_011a35412d075627006a0676750d3481a28ce328f34e16f9fb-fresh-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/judicial-initial.context-package.json",
+      "invocationEvidenceRef": "invocations/judicial-initial.invocation-evidence.json",
+      "freshContext": true,
+      "receivedOnlyContextPackage": true,
+      "modelInvocationEvidence": true,
+      "status": "pass",
+      "exitCode": 0,
+      "errors": []
+    },
+    {
+      "passId": "repair-1",
+      "role": "repair",
+      "invocationId": "resp_04016d5a8b75a44b006a0676847120819eb2db33897442f3cc",
+      "contextId": "resp_04016d5a8b75a44b006a0676847120819eb2db33897442f3cc-fresh-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/repair-1.context-package.json",
+      "invocationEvidenceRef": "invocations/repair-1.invocation-evidence.json",
+      "freshContext": true,
+      "receivedOnlyContextPackage": true,
+      "modelInvocationEvidence": true,
+      "status": "pass",
+      "exitCode": 0,
+      "errors": []
+    },
+    {
+      "passId": "judicial",
+      "role": "judicial",
+      "invocationId": "resp_0965dd454bddebd6006a06768d1a20819f8e1736a3ef9d3313",
+      "contextId": "resp_0965dd454bddebd6006a06768d1a20819f8e1736a3ef9d3313-fresh-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/judicial.context-package.json",
+      "invocationEvidenceRef": "invocations/judicial.invocation-evidence.json",
+      "freshContext": true,
+      "receivedOnlyContextPackage": true,
+      "modelInvocationEvidence": true,
+      "status": "pass",
+      "exitCode": 0,
+      "errors": []
+    }
+  ],
+  "hardCheckResults": [
+    {
+      "id": "top-skill-quick-validate",
+      "requiredForComplete": true,
+      "status": "pass",
+      "command": "python -B scripts/quick_validate.py .",
+      "exitCode": 0,
+      "evidence": [
+        "quick_validate: OK\nvalidated: D:\\TOP\\top-skill\nhard_checks: 22\nagent_review_candidates: 0"
+      ]
+    },
+    {
+      "id": "repair-artifact-fixture",
+      "requiredForComplete": true,
+      "status": "pass",
+      "command": "python -B scripts/validate_repair_artifact_fixture.py artifacts/repair-target.json",
+      "exitCode": 0,
+      "evidence": [
+        "validate_repair_artifact_fixture: OK\nartifact: D:\\TOP\\top-skill\\top\\orchestration\\top-skill-2-repair-artifact-dogfood\\2026-05-14-repair-artifact-dogfood\\artifacts\\repair-target.json"
+      ]
+    }
+  ],
+  "deliveryCertificationResult": {
+    "status": "pass",
+    "ref": "reports/delivery-certification.json",
+    "errors": []
+  },
+  "limitations": [
+    "Scaffolded runner workflow.",
+    "LLM API adapter is configured; runner-enforced evidence requires successful API credentials and separate model invocations."
+  ]
+}

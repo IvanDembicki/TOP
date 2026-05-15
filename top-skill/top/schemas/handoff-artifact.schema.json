@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/handoff-artifact.schema.json",
+  "title": "TOP Handoff Artifact",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "workflowId",
+    "passId",
+    "taskId",
+    "role",
+    "agentName",
+    "taskCapsuleRef",
+    "inputReferences",
+    "outputReferences",
+    "filesRead",
+    "filesChanged",
+    "commandsRun",
+    "status",
+    "executionEvidence",
+    "mayEditFiles",
+    "mayValidate",
+    "mayRepair",
+    "mayReport",
+    "mayCertifyDelivery",
+    "limitations",
+    "didNotDo",
+    "handoffTo"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "workflowId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "passId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taskId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "role": {
+      "enum": [
+        "orchestrator",
+        "context-builder",
+        "executive",
+        "judicial",
+        "repair",
+        "reporting",
+        "certification"
+      ]
+    },
+    "agentName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taskCapsuleRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputReferences": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "outputReferences": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "filesRead": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "filesChanged": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "commandsRun": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "status": {
+      "enum": [
+        "not-started",
+        "in-progress",
+        "done",
+        "failed",
+        "blocked",
+        "not-verified",
+        "not-certified",
+        "partial",
+        "complete"
+      ]
+    },
+    "executionEvidence": {
+      "$ref": "https://top.local/schemas/fragments/execution-evidence.schema.json"
+    },
+    "mayEditFiles": {
+      "type": "boolean"
+    },
+    "mayValidate": {
+      "type": "boolean"
+    },
+    "mayRepair": {
+      "type": "boolean"
+    },
+    "mayReport": {
+      "type": "boolean"
+    },
+    "mayCertifyDelivery": {
+      "type": "boolean"
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "didNotDo": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "handoffTo": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "role": {
+            "const": "executive"
+          }
+        },
+        "required": [
+          "role"
+        ]
+      },
+      "then": {
+        "properties": {
+          "mayValidate": {
+            "const": false
+          },
+          "mayCertifyDelivery": {
+            "const": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "complete"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "mayCertifyDelivery": {
+            "const": true
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

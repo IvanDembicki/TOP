@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/delivery-certification.schema.json",
+  "title": "TOP Delivery Certification",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "certificationId",
+    "workflowId",
+    "deliveryStatus",
+    "executionEvidence",
+    "judicialValidationRef",
+    "judicialHandoffRef",
+    "validationReportRef",
+    "finalAuditReportRef",
+    "generationOrRepairPassIds",
+    "judicialPassId",
+    "separationOfPowersProof",
+    "requiredHardChecks",
+    "blockingChecks",
+    "knownExclusions",
+    "noBlockingInScopeViolations",
+    "generationAndValidationSeparate",
+    "noUnverifiedRequiredGates",
+    "noRequiredGateFailedOrNotVerified"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "certificationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workflowId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "deliveryStatus": {
+      "enum": [
+        "not-started",
+        "in-progress",
+        "blocked",
+        "partial",
+        "not-verified",
+        "not-certified",
+        "complete"
+      ]
+    },
+    "executionEvidence": {
+      "$ref": "https://top.local/schemas/fragments/execution-evidence.schema.json"
+    },
+    "judicialValidationRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "judicialHandoffRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "validationReportRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "finalAuditReportRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generationOrRepairPassIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "repairAttemptIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "judicialPassId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "separationOfPowersProof": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "requiredHardChecks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/hardCheck"
+      }
+    },
+    "blockingChecks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/blockingCheck"
+      }
+    },
+    "knownExclusions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "noBlockingInScopeViolations": {
+      "type": "boolean"
+    },
+    "generationAndValidationSeparate": {
+      "type": "boolean"
+    },
+    "noUnverifiedRequiredGates": {
+      "type": "boolean"
+    },
+    "noRequiredGateFailedOrNotVerified": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "blockingCheck": {
+      "type": "object",
+      "required": [
+        "checkId",
+        "status",
+        "evidence"
+      ],
+      "properties": {
+        "checkId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "not_verified",
+            "not_applicable"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "hardCheck": {
+      "type": "object",
+      "required": [
+        "id",
+        "description",
+        "requiredForComplete",
+        "status",
+        "command",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredForComplete": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "not_verified",
+            "not_applicable"
+          ]
+        },
+        "command": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "deliveryStatus": {
+            "const": "complete"
+          }
+        },
+        "required": [
+          "deliveryStatus"
+        ]
+      },
+      "then": {
+        "properties": {
+          "executionEvidence": {
+            "properties": {
+              "executionIsolationLevel": {
+                "const": "runner-enforced"
+              },
+              "verificationEvidenceLevel": {
+                "const": "hard-check-verified"
+              }
+            }
+          },
+          "noBlockingInScopeViolations": {
+            "const": true
+          },
+          "generationAndValidationSeparate": {
+            "const": true
+          },
+          "noUnverifiedRequiredGates": {
+            "const": true
+          },
+          "noRequiredGateFailedOrNotVerified": {
+            "const": true
+          }
+        },
+        "required": [
+          "judicialHandoffRef",
+          "judicialValidationRef",
+          "validationReportRef",
+          "finalAuditReportRef"
+        ]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

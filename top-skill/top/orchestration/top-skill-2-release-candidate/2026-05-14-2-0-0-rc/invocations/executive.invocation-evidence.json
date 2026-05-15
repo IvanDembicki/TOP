@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-release-candidate",
+  "runId": "2026-05-14-2-0-0-rc",
+  "passId": "executive",
+  "role": "executive",
+  "adapterKind": "llm-api",
+  "invocationId": "resp_00a54831a45c42ff006a067e38345c81a2a7469db06eee590c",
+  "contextId": "resp_00a54831a45c42ff006a067e38345c81a2a7469db06eee590c-fresh-context",
+  "runnerName": "top-protocol-runner",
+  "processId": 8480,
+  "command": "scripts/adapters/llm_api_adapter.py",
+  "startedAt": "2026-05-15T02:00:23Z",
+  "endedAt": "2026-05-15T02:00:39Z",
+  "exitCode": 0,
+  "taskCapsuleRef": "capsules/executive.task-capsule.json",
+  "contextPackageRef": "contexts/executive.context-package.json",
+  "handoffArtifactRef": "handoffs/executive.handoff.json",
+  "contextHash": "10a73053e13eeabc36e99c3ad32edc9f2d4e9edf6bc0ceb67295c1b9e19244f1",
+  "handoffHash": "352fad4dd4cdcc2dca8f42a8a4bf5cf4c0cee9a95498c0a43016d315e70cb30a",
+  "freshContext": true,
+  "receivedOnlyContextPackage": true,
+  "modelInvocationEvidence": true,
+  "artifactWrites": [],
+  "limitations": [
+    "LLM API invocation completed in a fresh request using only context package inputs."
+  ]
+}

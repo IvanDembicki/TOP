@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-orchestration",
+  "taskId": "executive-task",
+  "role": "executive",
+  "objective": "Add the top-skill 2.0 activation and operating procedure, connect it to self-governance manifests, and fix the run scaffold text-write bug found by the pilot.",
+  "allowedActions": [
+    "create or modify authorized artifacts"
+  ],
+  "forbiddenActions": [
+    "validate own output",
+    "certify delivery",
+    "write final audit"
+  ],
+  "inputReferences": [
+    "workflow/enforcement-evidence-model.md",
+    "workflow/run-package-layout.md",
+    "workflow/orchestrator-protocol.md",
+    "scripts/create_orchestration_run.py",
+    "top/artifact-manifest.json",
+    "top/modes/mode-manifest.json",
+    "hydration-manifest.json"
+  ],
+  "contextSlices": [
+    "Only update protocol-layer orchestration governance.",
+    "Do not touch React Native or private TOP target rules.",
+    "Keep the result protocol-only; do not claim runner-enforced isolation."
+  ],
+  "outputContract": "handoffs/executive.handoff.json",
+  "requiredChecks": [
+    "Create or select a canonical run package.",
+    "Keep delivery status not-certified unless delivery law evidence exists.",
+    "Use quick_validate through the protocol runner as a hard-check pilot."
+  ],
+  "stopCondition": "Write one handoff artifact and stop.",
+  "mayEditFiles": true,
+  "mayValidate": false,
+  "mayRepair": false,
+  "mayReport": false,
+  "mayCertifyDelivery": false
+}

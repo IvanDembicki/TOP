@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-artifact-dogfood",
+  "runId": "2026-05-14-repair-artifact-dogfood",
+  "runnerName": "top-protocol-runner",
+  "mode": "validation",
+  "runnerCapabilities": {
+    "launchesSeparateProcesses": true,
+    "launchesSeparateInvocations": true,
+    "isolatesContexts": true,
+    "executesHardChecks": true,
+    "validatesHandoffs": true
+  },
+  "passes": [
+    {
+      "passId": "executive",
+      "role": "executive",
+      "taskCapsuleRef": "capsules/executive.task-capsule.json",
+      "handoffArtifactRef": "handoffs/executive.handoff.json",
+      "invocationId": "2026-05-14-repair-artifact-dogfood-executive-invocation",
+      "contextId": "2026-05-14-repair-artifact-dogfood-executive-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/executive.context-package.json",
+      "invocationEvidenceRef": "invocations/executive.invocation-evidence.json",
+      "freshContextRequired": true,
+      "command": null,
+      "cwd": null,
+      "commandType": "python-script",
+      "scriptRef": "scripts/adapters/llm_api_adapter.py",
+      "scriptBaseRef": "skill-root",
+      "args": [],
+      "cwdRef": "runner-root",
+      "timeoutSeconds": 300,
+      "requiredForDelivery": true
+    },
+    {
+      "passId": "judicial-initial",
+      "role": "judicial",
+      "taskCapsuleRef": "capsules/judicial-initial.task-capsule.json",
+      "handoffArtifactRef": "handoffs/judicial-initial.handoff.json",
+      "invocationId": "2026-05-14-repair-artifact-dogfood-judicial-initial-invocation",
+      "contextId": "2026-05-14-repair-artifact-dogfood-judicial-initial-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/judicial-initial.context-package.json",
+      "invocationEvidenceRef": "invocations/judicial-initial.invocation-evidence.json",
+      "freshContextRequired": true,
+      "command": null,
+      "cwd": null,
+      "commandType": "python-script",
+      "scriptRef": "scripts/adapters/llm_api_adapter.py",
+      "scriptBaseRef": "skill-root",
+      "args": [],
+      "cwdRef": "runner-root",
+      "timeoutSeconds": 300,
+      "requiredForDelivery": true
+    },
+    {
+      "passId": "repair-1",
+      "role": "repair",
+      "taskCapsuleRef": "capsules/repair-1.task-capsule.json",
+      "handoffArtifactRef": "handoffs/repair-1.handoff.json",
+      "invocationId": "2026-05-14-repair-artifact-dogfood-repair-1-invocation",
+      "contextId": "2026-05-14-repair-artifact-dogfood-repair-1-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/repair-1.context-package.json",
+      "invocationEvidenceRef": "invocations/repair-1.invocation-evidence.json",
+      "freshContextRequired": true,
+      "command": null,
+      "cwd": null,
+      "commandType": "python-script",
+      "scriptRef": "scripts/adapters/llm_api_adapter.py",
+      "scriptBaseRef": "skill-root",
+      "args": [],
+      "cwdRef": "runner-root",
+      "timeoutSeconds": 300,
+      "requiredForDelivery": true
+    },
+    {
+      "passId": "judicial",
+      "role": "judicial",
+      "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+      "handoffArtifactRef": "handoffs/judicial.handoff.json",
+      "invocationId": "2026-05-14-repair-artifact-dogfood-judicial-invocation",
+      "contextId": "2026-05-14-repair-artifact-dogfood-judicial-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/judicial.context-package.json",
+      "invocationEvidenceRef": "invocations/judicial.invocation-evidence.json",
+      "freshContextRequired": true,
+      "command": null,
+      "cwd": null,
+      "commandType": "python-script",
+      "scriptRef": "scripts/adapters/llm_api_adapter.py",
+      "scriptBaseRef": "skill-root",
+      "args": [],
+      "cwdRef": "runner-root",
+      "timeoutSeconds": 300,
+      "requiredForDelivery": true
+    }
+  ],
+  "hardChecks": [
+    {
+      "id": "top-skill-quick-validate",
+      "description": "Run top-skill package validation.",
+      "requiredForComplete": true,
+      "commandType": "python-script",
+      "scriptRef": "scripts/quick_validate.py",
+      "scriptBaseRef": "skill-root",
+      "args": [
+        "."
+      ],
+      "cwdRef": "skill-root",
+      "timeoutSeconds": 300
+    },
+    {
+      "id": "repair-artifact-fixture",
+      "description": "Validate the repaired artifact dogfood fixture.",
+      "requiredForComplete": true,
+      "commandType": "python-script",
+      "scriptRef": "scripts/validate_repair_artifact_fixture.py",
+      "scriptBaseRef": "skill-root",
+      "args": [
+        "artifacts/repair-target.json"
+      ],
+      "cwdRef": "runner-root",
+      "timeoutSeconds": 300
+    }
+  ],
+  "deliveryCertificationRef": "reports/delivery-certification.json",
+  "limitations": [
+    "Scaffolded runner workflow.",
+    "LLM API adapter is configured; runner-enforced evidence requires successful API credentials and separate model invocations."
+  ],
+  "repairPolicy": {
+    "maxRepairAttempts": 1,
+    "repairPassIds": [
+      "repair-1"
+    ],
+    "finalJudicialPassId": "judicial",
+    "requiresPostRepairJudicial": true,
+    "limitations": [
+      "This scaffold creates one bounded repair attempt; additional attempts require explicit new pass ids or a new run."
+    ]
+  }
+}

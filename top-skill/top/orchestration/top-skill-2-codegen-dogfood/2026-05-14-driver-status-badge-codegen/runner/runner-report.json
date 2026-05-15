@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-codegen-dogfood",
+  "runId": "2026-05-14-driver-status-badge-codegen",
+  "runnerName": "top-protocol-runner",
+  "runnerStatus": "pass",
+  "executionEvidence": {
+    "executionIsolationLevel": "runner-enforced",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "resp_0d80d38cc5c9732c006a06247f6a6c8193aed8e8c016c21a57",
+      "resp_06d6ea92e95870c9006a06248a50ec819eab5820e6fbc71bae"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B scripts/quick_validate.py ."
+    ],
+    "limitations": [
+      "Scaffolded runner workflow.",
+      "LLM API adapter is configured; runner-enforced evidence requires successful API credentials and separate model invocations."
+    ]
+  },
+  "passResults": [
+    {
+      "passId": "executive",
+      "role": "executive",
+      "invocationId": "resp_0d80d38cc5c9732c006a06247f6a6c8193aed8e8c016c21a57",
+      "contextId": "resp_0d80d38cc5c9732c006a06247f6a6c8193aed8e8c016c21a57-fresh-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/executive.context-package.json",
+      "invocationEvidenceRef": "invocations/executive.invocation-evidence.json",
+      "freshContext": true,
+      "receivedOnlyContextPackage": true,
+      "modelInvocationEvidence": true,
+      "status": "pass",
+      "exitCode": 0,
+      "errors": []
+    },
+    {
+      "passId": "judicial",
+      "role": "judicial",
+      "invocationId": "resp_06d6ea92e95870c9006a06248a50ec819eab5820e6fbc71bae",
+      "contextId": "resp_06d6ea92e95870c9006a06248a50ec819eab5820e6fbc71bae-fresh-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/judicial.context-package.json",
+      "invocationEvidenceRef": "invocations/judicial.invocation-evidence.json",
+      "freshContext": true,
+      "receivedOnlyContextPackage": true,
+      "modelInvocationEvidence": true,
+      "status": "pass",
+      "exitCode": 0,
+      "errors": []
+    }
+  ],
+  "hardCheckResults": [
+    {
+      "id": "top-skill-quick-validate",
+      "requiredForComplete": true,
+      "status": "pass",
+      "command": "python -B scripts/quick_validate.py .",
+      "exitCode": 0,
+      "evidence": [
+        "quick_validate: OK\nvalidated: D:\\TOP\\top-skill\nhard_checks: 20\nagent_review_candidates: 0"
+      ]
+    }
+  ],
+  "deliveryCertificationResult": {
+    "status": "pass",
+    "ref": "reports/delivery-certification.json",
+    "errors": []
+  },
+  "limitations": [
+    "Scaffolded runner workflow.",
+    "LLM API adapter is configured; runner-enforced evidence requires successful API credentials and separate model invocations."
+  ]
+}

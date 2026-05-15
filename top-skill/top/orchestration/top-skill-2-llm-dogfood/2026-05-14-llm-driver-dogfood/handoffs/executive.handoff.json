@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-llm-dogfood",
+  "passId": "executive",
+  "taskId": "executive-task",
+  "role": "executive",
+  "agentName": "executive-llm-api-pass",
+  "taskCapsuleRef": "capsules/executive.task-capsule.json",
+  "inputReferences": [],
+  "outputReferences": [
+    "handoffs/executive.handoff.json"
+  ],
+  "filesRead": [
+    "capsules/executive.task-capsule.json",
+    "contexts/executive.context-package.json"
+  ],
+  "filesChanged": [
+    "handoffs/executive.handoff.json"
+  ],
+  "commandsRun": [
+    "scripts/adapters/llm_api_adapter.py"
+  ],
+  "status": "done",
+  "executionEvidence": {
+    "executionIsolationLevel": "protocol-followed-by-agent",
+    "verificationEvidenceLevel": "agent-claimed",
+    "runnerName": null,
+    "separateInvocationIds": [],
+    "schemaValidationCommand": null,
+    "hardCheckCommands": [],
+    "limitations": [
+      "Pass handoff may claim only protocol-followed-by-agent evidence; runner-enforced evidence is assigned by the runner."
+    ]
+  },
+  "limitations": [],
+  "didNotDo": [
+    "edit project files",
+    "validate own output",
+    "certify delivery",
+    "claim runner-enforced isolation",
+    "use hidden prior chat"
+  ],
+  "handoffTo": "orchestrator",
+  "mayEditFiles": false,
+  "mayValidate": false,
+  "mayRepair": false,
+  "mayReport": false,
+  "mayCertifyDelivery": false
+}

@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/certification-snapshot.schema.json",
+  "title": "TOP Certification Snapshot",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "workflowId",
+    "runId",
+    "snapshotStatus",
+    "certifiedAt",
+    "certifiedBy",
+    "deliveryStatus",
+    "executionEvidence",
+    "artifacts",
+    "limitations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "workflowId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "snapshotStatus": {
+      "enum": [
+        "current",
+        "stale"
+      ]
+    },
+    "certifiedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "certifiedBy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "deliveryStatus": {
+      "enum": [
+        "not-certified",
+        "complete"
+      ]
+    },
+    "executionEvidence": {
+      "$ref": "https://top.local/schemas/fragments/execution-evidence.schema.json"
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "ref",
+          "role",
+          "sha256"
+        ],
+        "properties": {
+          "ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "additionalProperties": false
+}

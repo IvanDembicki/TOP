@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-orchestration",
+  "passId": "judicial",
+  "taskId": "judicial-task",
+  "role": "judicial",
+  "agentName": "judicial-agent",
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "inputReferences": [
+    "handoffs/executive.handoff.json",
+    "runner/runner-report.json",
+    "reports/validation-report.json"
+  ],
+  "outputReferences": [
+    "reports/validation-report.json"
+  ],
+  "filesRead": [
+    "handoffs/executive.handoff.json",
+    "runner/runner-workflow.json",
+    "runner/runner-report.json",
+    "reports/delivery-certification.json"
+  ],
+  "filesChanged": [
+    "reports/validation-report.json",
+    "handoffs/judicial.handoff.json"
+  ],
+  "commandsRun": [
+    "python -B scripts\\top_protocol_runner.py runner\\runner-workflow.json --root top\\orchestration\\top-skill-2-orchestration\\2026-05-12-activation-pilot --execute-hard-checks --report-out runner\\runner-report.json"
+  ],
+  "status": "not-verified",
+  "executionEvidence": {
+    "executionIsolationLevel": "schema-validated",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "2026-05-12-activation-pilot-executive-invocation",
+      "2026-05-12-activation-pilot-judicial-invocation",
+      "2026-05-12-activation-pilot-certification-invocation"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B ..\\..\\..\\..\\scripts\\quick_validate.py ..\\..\\..\\.."
+    ],
+    "limitations": [
+      "Runner report validated schemas and hard checks.",
+      "No external runner-enforced role isolation was accepted.",
+      "Judicial review was recorded in the same conversation context, so it cannot certify independent validation."
+    ]
+  },
+  "limitations": [
+    "This is a protocol pilot judicial handoff, not an externally isolated judicial invocation.",
+    "Validation evidence is useful but not sufficient for delivery complete."
+  ],
+  "didNotDo": [
+    "repair implementation",
+    "certify delivery without hard-check evidence"
+  ],
+  "handoffTo": "certification",
+  "mayEditFiles": false,
+  "mayValidate": true,
+  "mayRepair": false,
+  "mayReport": true,
+  "mayCertifyDelivery": false
+}

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-codegen-dogfood",
+  "taskId": "judicial-task",
+  "role": "judicial",
+  "objective": "Independently validate the generated driver-status-badge TOP code fixture, executive handoff, and invocation evidence.",
+  "allowedActions": [
+    "read generated fixture artifacts",
+    "read executive handoff",
+    "read invocation evidence",
+    "write judicial verdict handoff"
+  ],
+  "forbiddenActions": [
+    "repair implementation artifacts",
+    "certify delivery complete",
+    "ignore missing evidence",
+    "use hidden prior chat"
+  ],
+  "inputReferences": [
+    "handoffs/executive.handoff.json",
+    "invocations/executive.invocation-evidence.json",
+    "examples/driver-status-badge/README.md",
+    "examples/driver-status-badge/DriverStatusBadgeController.ts",
+    "examples/driver-status-badge/DriverStatusBadgeControllerAccess.ts",
+    "examples/driver-status-badge/DriverStatusBadgeContent.ts",
+    "examples/driver-status-badge/driver-status-badge.tree.json",
+    "workflow/run-package-layout.md",
+    "top/validation/output-rules.md",
+    "SKILL.md",
+    "CHANGELOG.md",
+    "skill.json",
+    "top/spec.json"
+  ],
+  "contextSlices": [
+    "Independently inspect the generated fixture and supplied executive handoff.",
+    "Verify that Content asks owner through a narrow access contract and does not decide workflow readiness.",
+    "Treat adapter invocation evidence as execution evidence; delivery certification is handled by the certifier.",
+    "Write a judicial handoff with status done when the fixture is structurally coherent and no self-certification claim is present.",
+    "Do not repair implementation artifacts and do not certify delivery."
+  ],
+  "outputContract": "handoffs/judicial.handoff.json",
+  "requiredChecks": [],
+  "stopCondition": "Write one handoff artifact and stop.",
+  "mayEditFiles": false,
+  "mayValidate": true,
+  "mayRepair": false,
+  "mayReport": true,
+  "mayCertifyDelivery": false
+}

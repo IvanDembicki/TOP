@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-loop-dogfood",
+  "runId": "2026-05-14-repair-loop-dogfood-3",
+  "passId": "executive",
+  "role": "executive",
+  "taskCapsuleRef": "capsules/executive.task-capsule.json",
+  "handoffArtifactRef": "handoffs/executive.handoff.json",
+  "inputReferences": [],
+  "contextSlices": [
+    "Execute the initial bounded repair-loop dogfood pass using only this task capsule.",
+    "Return an executive handoff that identifies a small scoped output and at least one limitation for judicial review.",
+    "Do not validate your own output and do not certify delivery."
+  ],
+  "forbiddenInputs": [
+    "full prior chat transcript unless explicitly listed in inputReferences",
+    "unbounded agent memory",
+    "implementation files outside task capsule scope unless explicitly referenced"
+  ],
+  "materializedBy": "top-protocol-runner",
+  "materializedAt": "2026-05-15T00:58:15Z",
+  "contextHash": "3fd3040d30c02872292a974d51011ac148e70bd22af713c1040fa16bb98dfa2b",
+  "limitations": [
+    "Context package records bounded inputs; it does not by itself prove LLM context isolation."
+  ]
+}

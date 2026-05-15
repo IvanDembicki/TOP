@@ -5,6 +5,7 @@
       "mode": "analysis-only",
       "maturity": "stable",
       "requires_materialization": false,
+      "certifies_delivery": false,
       "required_agents": [
         "Validation Agent"
       ],
@@ -17,6 +18,7 @@
       "mode": "modeling-refactor",
       "maturity": "stable",
       "requires_materialization": false,
+      "certifies_delivery": false,
       "required_agents": [
         "TOP Modeling Agent",
         "Canon Precheck Agent",
@@ -31,6 +33,7 @@
       "mode": "generation-pipeline",
       "maturity": "stable",
       "requires_materialization": true,
+      "certifies_delivery": "only-with-runner-enforced-evidence",
       "required_agents": [
         "TOP Modeling Agent",
         "Canon Precheck Agent",
@@ -49,6 +52,7 @@
       "mode": "migration",
       "maturity": "stable",
       "requires_materialization": "task-dependent",
+      "certifies_delivery": "only-with-runner-enforced-evidence",
       "required_agents": [
         "Migration Infrastructure Agent",
         "Migration Planning Agent",
@@ -74,6 +78,7 @@
       "mode": "spec-change",
       "maturity": "stable",
       "requires_materialization": false,
+      "certifies_delivery": false,
       "required_agents": [
         "Spec Change Verification Agent",
         "Validation Agent"
@@ -84,6 +89,35 @@
       ]
     }
   ],
+  "execution_governance": {
+    "root_contract": "workflow/enforcement-evidence-model.md",
+    "activation_procedure": "workflow/activation-and-operating-procedure.md",
+    "protocol_only_default": true,
+    "runner_required_for_delivery_complete": true,
+    "execution_evidence_schema": "top/schemas/fragments/execution-evidence.schema.json",
+    "task_capsule_schema": "top/schemas/task-capsule.schema.json",
+    "handoff_artifact_schema": "top/schemas/handoff-artifact.schema.json",
+    "runner_contract": "workflow/runner-contract.md",
+    "pass_invocation_contract": "workflow/pass-invocation-contract.md",
+    "llm_api_adapter_contract": "workflow/llm-api-adapter-contract.md",
+    "repair_pass_contract": "workflow/repair-pass-contract.md",
+    "run_state_machine": "workflow/run-state-machine.md",
+    "run_package_layout": "workflow/run-package-layout.md",
+    "runner_workflow_schema": "top/schemas/runner-workflow.schema.json",
+    "runner_report_schema": "top/schemas/runner-report.schema.json",
+    "context_package_schema": "top/schemas/context-package.schema.json",
+    "pass_invocation_evidence_schema": "top/schemas/pass-invocation-evidence.schema.json",
+    "run_state_schema": "top/schemas/run-state.schema.json",
+    "protocol_runner": "scripts/top_protocol_runner.py",
+    "llm_api_adapter": "scripts/adapters/llm_api_adapter.py",
+    "orchestration_run_scaffold": "scripts/create_orchestration_run.py",
+    "orchestration_state_updater": "scripts/update_orchestration_state.py",
+    "orchestration_run_verifier": "scripts/validate_orchestration_run.py",
+    "orchestration_regression_harness": "scripts/validate_orchestration_regressions.py",
+    "repair_artifact_fixture_validator": "scripts/validate_repair_artifact_fixture.py",
+    "orchestration_workflow_driver": "scripts/run_orchestration_workflow.py",
+    "delivery_certification_schema": "top/schemas/delivery-certification.schema.json"
+  },
   "supporting_task_tiers": [
     "validation",
     "maintenance"
@@ -92,7 +126,40 @@
     "Mode maturity in this manifest is the source of truth for release labeling.",
     "A mode cannot skip required agents in its active task path.",
     "Migration mode must create or update MIGRATION_WORKFLOW.json before scope analysis, modeling, generation, validation, or repair.",
-    "Ready output cannot rely on undocumented memory of prior turns or prior skill versions."
+    "Ready output cannot rely on undocumented memory of prior turns or prior skill versions.",
+    "Agent workflow passes that can affect delivery must be representable by top/schemas/agent-workflow.schema.json.",
+    "Task capsules that affect delivery must follow top/schemas/task-capsule.schema.json.",
+    "Pass handoffs that affect delivery must follow top/schemas/handoff-artifact.schema.json.",
+    "Runner workflows must follow top/schemas/runner-workflow.schema.json and produce runner reports shaped by top/schemas/runner-report.schema.json.",
+    "Runner-enforced isolation requires context packages and pass invocation evidence shaped by workflow/pass-invocation-contract.md.",
+    "LLM API pass execution must follow workflow/llm-api-adapter-contract.md and write invocation evidence only after a real model/API request.",
+    "A process adapter alone is not proof of LLM context isolation.",
+    "A repair pass is not a verdict and cannot validate or certify its own repair.",
+    "Delivery complete after repair requires a later independent judicial pass over post-repair artifacts.",
+    "Repair artifact writes are allowed only for exact refs listed in task-capsule artifactWriteRequests and must be recorded as invocation-evidence artifactWrites.",
+    "Portable runner workflows should use structured command specs instead of OS-specific relative path strings.",
+    "A delivery-required pass without a pass command and without model invocation evidence is not_verified.",
+    "Required judicial and certification context packages must not contain placeholder context slices or empty input references.",
+    "Delivery-affecting implementation, validation, repair, and certification must follow workflow/activation-and-operating-procedure.md before work begins.",
+    "Orchestration run packages must use top/orchestration/<workflow-id>/<run-id>/ and start as protocol-defined and not-certified.",
+    "Orchestration run package process state must be derived into run-state.json and must not replace delivery certification.",
+    "Runner and certification scripts must refresh run-state.json automatically after evidence-changing operations unless explicitly skipped for diagnostics.",
+    "Run package readiness must be checked by scripts/validate_orchestration_run.py before treating a run as valid, stale, or invalid.",
+    "Orchestration regression fixtures must pass before treating false-complete protection as intact.",
+    "The orchestration workflow driver must not replace the verifier; its final claim must come from scripts/validate_orchestration_run.py.",
+    "The protocol runner may prove hard-check execution and handoff consistency, but it must not claim runner-enforced isolation unless external invocation evidence is explicitly accepted.",
+    "Execution evidence must follow top/schemas/fragments/execution-evidence.schema.json.",
+    "executionIsolationLevel and verificationEvidenceLevel are separate axes and must not be collapsed into one status.",
+    "Schema validation is not role isolation, and hard checks are not role isolation.",
+    "A single LLM invocation instructed to act as multiple agents is simulated separation, not runner-enforced isolation.",
+    "No pass may report runner-enforced unless an external runner launched separate passes with separate contexts and explicit handoff artifacts.",
+    "Executive generation, migration, spec sync, and repair passes cannot declare delivery complete.",
+    "Delivery complete requires runner-enforced execution isolation, hard-check-verified validation evidence, a valid independent judicial handoff artifact, and no required gate with fail or not_verified status.",
+    "A hard check result without a judicial handoff is evidence, but not a judicial verdict.",
+    "A judicial handoff without required hard-check evidence cannot certify delivery complete.",
+    "Delivery complete requires an independent judicial validation pass represented by validation-report.schema.json, handoff-artifact.schema.json, and delivery-certification.schema.json.",
+    "Final audit must not use complete, certified, delivery complete, or equivalent wording unless the delivery evidence gate passes.",
+    "A reporting/public-record pass may summarize judicial findings but must not override a blocked, partial, failed, or not-verified judicial result."
   ],
   "stable_release_scope": [
     "analysis-only",

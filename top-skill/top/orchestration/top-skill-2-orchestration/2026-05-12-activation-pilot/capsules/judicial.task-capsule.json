@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-orchestration",
+  "taskId": "judicial-task",
+  "role": "judicial",
+  "objective": "Run judicial pass judicial.",
+  "allowedActions": [
+    "validate current artifacts",
+    "write judicial verdict"
+  ],
+  "forbiddenActions": [
+    "repair implementation",
+    "certify delivery without hard-check evidence"
+  ],
+  "inputReferences": [
+    "handoffs/executive.handoff.json",
+    "runner/runner-report.json"
+  ],
+  "contextSlices": [
+    "Validate current artifacts, executive handoff, runner report, and required hard-check evidence.",
+    "Do not use unbounded prior chat or executor claims as verdict evidence."
+  ],
+  "outputContract": "handoffs/judicial.handoff.json",
+  "requiredChecks": [],
+  "stopCondition": "Write one handoff artifact and stop.",
+  "mayEditFiles": false,
+  "mayValidate": true,
+  "mayRepair": false,
+  "mayReport": true,
+  "mayCertifyDelivery": false
+}

@@ -5,8 +5,8 @@ description: Skill for designing, generating, and validating systems built with 
 
 # TOP Skill
 
-**Version:** 1.1.28
-**Last updated:** 2026-05-07 13:14 -07:00
+**Version:** 2.0.0
+**Last updated:** 2026-05-14 18:59 -07:00
 **Invocation:** `/top`
 
 > **Rule for AI:** whenever any top-skill file is modified, update the date and time in this field to the current values.
@@ -28,7 +28,42 @@ The self-governance source artifacts live under:
 - `top/modes/mode-manifest.json`
 - `top/validation/output-rules.md`
 - `top/shared-rules/skill-governance.md`
+- `workflow/enforcement-evidence-model.md`
+- `workflow/activation-and-operating-procedure.md`
+- `workflow/task-capsule-format.md`
+- `workflow/handoff-artifact-format.md`
+- `workflow/role-packs.md`
+- `workflow/orchestrator-protocol.md`
+- `workflow/runner-contract.md`
+- `workflow/pass-invocation-contract.md`
+- `workflow/llm-api-adapter-contract.md`
+- `workflow/repair-pass-contract.md`
+- `workflow/delivery-certification-procedure.md`
+- `workflow/run-state-machine.md`
+- `workflow/run-package-layout.md`
+- `top/schemas/fragments/execution-evidence.schema.json`
+- `top/schemas/task-capsule.schema.json`
+- `top/schemas/handoff-artifact.schema.json`
+- `top/schemas/runner-workflow.schema.json`
+- `top/schemas/runner-report.schema.json`
+- `top/schemas/context-package.schema.json`
+- `top/schemas/pass-invocation-evidence.schema.json`
+- `top/schemas/certification-snapshot.schema.json`
+- `top/schemas/run-state.schema.json`
+- `top/schemas/agent-workflow.schema.json`
+- `top/schemas/validation-report.schema.json`
+- `top/schemas/delivery-certification.schema.json`
 - `top/schemas/migration-workflow.schema.json`
+- `scripts/validate_execution_evidence.py`
+- `scripts/top_protocol_runner.py`
+- `scripts/adapters/llm_api_adapter.py`
+- `scripts/certify_orchestration_run.py`
+- `scripts/create_orchestration_run.py`
+- `scripts/update_orchestration_state.py`
+- `scripts/validate_orchestration_run.py`
+- `scripts/validate_orchestration_regressions.py`
+- `scripts/validate_repair_artifact_fixture.py`
+- `scripts/run_orchestration_workflow.py`
 
 These artifacts apply the same factory-style rule used for generated skills:
 a skill is not a loose prompt; it is a controlled tree of responsibilities,
@@ -42,6 +77,118 @@ top/migration/<branch-id>/MIGRATION_WORKFLOW.json
 
 Markdown may explain migration intent, but the workflow JSON controls phase
 state, gates, and handoff validation.
+
+The top-skill 2.0 protocol layer is introduced in version 1.2.0 as a
+protocol-only harness contract. It defines task capsules, handoff artifacts,
+role packs, orchestration rules, execution evidence, and delivery certification
+gates. It does not claim runner-enforced isolation unless an external runner
+provides separate invocations, separate contexts, and hard-check evidence.
+
+Version 1.2.1 adds the first executable protocol runner gate:
+`scripts/top_protocol_runner.py`. It validates runner workflow artifacts,
+handoff/capsule consistency, and hard-check exit codes. It still does not claim
+runner-enforced isolation unless external invocation evidence is explicitly
+accepted.
+
+Version 1.2.2 adds the canonical orchestration run package layout and scaffold
+script. A new run starts as `protocol-defined` and `not-certified` until actual
+runner, judicial, hard-check, and delivery evidence is produced.
+
+Version 1.2.3 adds the activation and operating procedure that tells agents
+when to start 2.0 orchestration and how the orchestrator, pass handoffs, runner
+gate, judicial validation, and certification loop operate.
+
+Version 1.2.4 expands the runner into a real harness contract with context
+packages, pass invocation evidence, adapter kinds, and stricter
+runner-enforced isolation gates.
+
+Version 1.2.5 tightens runner portability and evidence semantics: structured
+`python-script` command specs replace OS-specific relative paths, required
+passes without real invocation evidence stay `not_verified`, placeholder
+judicial/certification context is blocked, and the evidence validator reports
+artifact validity separately from delivery certification.
+
+Version 1.2.6 adds the first real LLM API pass adapter. The adapter can launch
+one pass through a separate model/API request, write the handoff artifact, and
+write pass invocation evidence for runner-enforced eligibility.
+
+Version 1.2.7 adds an `--llm-smoke` run profile that creates a concrete
+two-pass `llm-api` runner workflow for testing real external invocation
+evidence without claiming delivery complete.
+
+Version 1.2.8 adds the post-run certification gate. The gate reads runner
+evidence and an independent judicial handoff, writes validation and delivery
+certification artifacts, and reports delivery complete only when delivery law
+gates pass.
+
+Version 1.2.9 adds certification snapshot and stale detection. A certified run
+records hashes of checked run-package artifacts and can later verify whether
+that certification still matches current artifacts.
+
+Version 1.2.10 adds explicit run package state tracking. `run-state.json` is
+derived from runner, judicial, certification, and snapshot artifacts by
+`scripts/update_orchestration_state.py`, making `scaffolded`, `runner-verified`,
+`certified`, `stale`, and failed states searchable without replacing delivery
+certification.
+
+Version 1.2.11 wires run state into execution. The protocol runner and
+certification script now refresh `run-state.json` automatically after runner
+report, certification, and snapshot verification changes, with
+`--skip-state-update` reserved for diagnostics.
+
+Version 1.2.12 adds the read-only orchestration run verifier. It checks one run
+package as a complete evidence object and reports `RUN_VALID certified`,
+`RUN_VALID not-certified`, `RUN_STALE`, or `RUN_INVALID` with blocking reasons.
+
+Version 1.2.13 adds the orchestration workflow driver. It runs the ordered
+create/runner/certification/snapshot/verifier sequence and treats the final
+read-only verifier status as the only valid workflow readiness claim.
+
+Version 1.2.14 clarifies driver exit/status semantics. Driver exit codes are
+operational evidence only; final readiness wording must still name the
+read-only verifier status and `deliveryStatus`.
+
+Version 1.2.15 adds a tiny generated TOP code fixture for orchestration driver
+status output and dogfoods it through a real LLM-backed code-generation
+orchestration run.
+
+Version 1.2.16 fixes LLM adapter input materialization for code-generation
+runs. Explicit task-capsule input references may now resolve from the run root
+or skill root while still rejecting path escapes.
+
+Version 1.2.17 adds orchestration regression fixtures for false-complete
+scenarios. The harness checks valid certified, valid not-certified, missing
+judicial handoff, required hard check `not_verified`, schema-validated false
+complete, process-only false complete, and stale snapshot cases.
+
+Version 1.2.18 adds the repair pass contract and bounded repair-loop scaffold.
+If a repair pass runs, delivery complete is invalid unless a later judicial pass
+validates the post-repair artifacts.
+
+Version 1.2.19 makes repair-loop scaffolds include the required package hard
+check, so a real runner-enforced repair-loop dogfood can reach certified
+delivery when all gates pass.
+
+Version 1.2.20 fixes repair-loop executive context so every delivery-required
+repair-loop pass starts with concrete context slices instead of placeholders.
+
+Version 1.2.21 fixes repair-loop pass inputs so judicial and repair passes do
+not require the runner report before the runner has produced it, and clarifies
+that handoff `status: done` is not a delivery certification claim.
+
+Version 1.2.22 adds bounded repair artifact writes. Repair task capsules may
+name exact `artifactWriteRequests`; the `llm-api` adapter may materialize only
+those refs, records `artifactWrites` in invocation evidence, and the repair
+artifact dogfood profile proves a post-repair judicial pass reads the repaired
+artifact before certification.
+
+Version 2.0.0 is the first runner-enforced orchestration release. It freezes
+the 2.0 harness scope around task capsules, isolated LLM/API pass invocations,
+handoff artifacts, invocation evidence, hard checks, repair loops, bounded
+artifact writes, post-repair judicial validation, delivery certification, and
+read-only run verification. It does not include durable execution,
+observability dashboards, multi-provider adapters, or platform-specific
+architecture rules.
 
 ---
 

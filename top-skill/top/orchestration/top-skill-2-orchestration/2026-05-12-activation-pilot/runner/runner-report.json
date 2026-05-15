@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-orchestration",
+  "runId": "2026-05-12-activation-pilot",
+  "runnerName": "top-protocol-runner",
+  "runnerStatus": "not_verified",
+  "executionEvidence": {
+    "executionIsolationLevel": "schema-validated",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "2026-05-12-activation-pilot-executive-invocation",
+      "2026-05-12-activation-pilot-judicial-invocation",
+      "2026-05-12-activation-pilot-certification-invocation"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B scripts/quick_validate.py ."
+    ],
+    "limitations": [
+      "Scaffolded runner workflow.",
+      "No pass commands are configured; this pilot validates handoff consistency and hard checks only.",
+      "No external runner-enforced invocation evidence is present.",
+      "Runner isolation was not accepted as runner-enforced evidence."
+    ]
+  },
+  "passResults": [
+    {
+      "passId": "executive",
+      "role": "executive",
+      "invocationId": "2026-05-12-activation-pilot-executive-invocation",
+      "contextId": "2026-05-12-activation-pilot-executive-context",
+      "adapterKind": "process",
+      "contextPackageRef": "contexts/executive.context-package.json",
+      "invocationEvidenceRef": "invocations/executive.invocation-evidence.json",
+      "freshContext": false,
+      "receivedOnlyContextPackage": false,
+      "modelInvocationEvidence": false,
+      "status": "not_verified",
+      "exitCode": null,
+      "errors": []
+    },
+    {
+      "passId": "judicial",
+      "role": "judicial",
+      "invocationId": "2026-05-12-activation-pilot-judicial-invocation",
+      "contextId": "2026-05-12-activation-pilot-judicial-context",
+      "adapterKind": "process",
+      "contextPackageRef": "contexts/judicial.context-package.json",
+      "invocationEvidenceRef": "invocations/judicial.invocation-evidence.json",
+      "freshContext": false,
+      "receivedOnlyContextPackage": false,
+      "modelInvocationEvidence": false,
+      "status": "not_verified",
+      "exitCode": null,
+      "errors": []
+    },
+    {
+      "passId": "certification",
+      "role": "certification",
+      "invocationId": "2026-05-12-activation-pilot-certification-invocation",
+      "contextId": "2026-05-12-activation-pilot-certification-context",
+      "adapterKind": "process",
+      "contextPackageRef": "contexts/certification.context-package.json",
+      "invocationEvidenceRef": "invocations/certification.invocation-evidence.json",
+      "freshContext": false,
+      "receivedOnlyContextPackage": false,
+      "modelInvocationEvidence": false,
+      "status": "not_verified",
+      "exitCode": null,
+      "errors": []
+    }
+  ],
+  "hardCheckResults": [
+    {
+      "id": "top-skill-quick-validate",
+      "requiredForComplete": true,
+      "status": "pass",
+      "command": "python -B scripts/quick_validate.py .",
+      "exitCode": 0,
+      "evidence": [
+        "quick_validate: OK\nvalidated: D:\\TOP\\top-skill\nhard_checks: 16\nagent_review_candidates: 0"
+      ]
+    }
+  ],
+  "deliveryCertificationResult": {
+    "status": "pass",
+    "ref": "reports/delivery-certification.json",
+    "errors": []
+  },
+  "limitations": [
+    "Scaffolded runner workflow.",
+    "No pass commands are configured; this pilot validates handoff consistency and hard checks only.",
+    "No external runner-enforced invocation evidence is present.",
+    "One or more required pass handoffs are not pass/complete."
+  ]
+}

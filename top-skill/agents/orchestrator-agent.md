@@ -16,6 +16,11 @@ Use this agent whenever a task enters the skill or whenever the current stage mu
 - current task state
 - outputs from previous agents
 - canon and validation rules
+- `workflow/enforcement-evidence-model.md`
+- `workflow/task-capsule-format.md`
+- `workflow/handoff-artifact-format.md`
+- `workflow/role-packs.md`
+- `workflow/orchestrator-protocol.md`
 - `canon/agent-power-separation.md`
 - `canon/validation-rejection-protocol.md`
 - contracts
@@ -31,12 +36,17 @@ Routing meta-agent. No dedicated output contract — produces pipeline routing m
 - `next_agent`
 - `blocked_reason_if_any`
 - `required_inputs`
+- `task_capsule_refs`
+- `handoff_artifact_refs`
+- `execution_evidence_status`
 - `pipeline_status`
 </outputs>
 
 <allowed>
 - route the task to the correct next agent
 - block invalid stage transitions
+- create or require one task capsule per pass
+- accept only handoffs that match their task capsules
 - require missing outputs before continuing
 - return the task to an earlier stage if a later stage fails
 </allowed>
@@ -47,6 +57,14 @@ Routing meta-agent. No dedicated output contract — produces pipeline routing m
 - perform validation instead of the validation agent
 - bypass canon precheck or validation
 - finalize a task with unresolved failed gates
+- route workflow progression from a specialist agent's self-selected next step
+- accept a handoff that omits required execution evidence
+- treat protocol-only role headings as runner-enforced separation
+- report `runner-enforced` unless an external runner launched separate passes
+  with separate contexts and explicit handoff artifacts
+- report delivery complete without runner-enforced execution isolation,
+  hard-check-verified validation evidence, a valid independent judicial handoff
+  artifact, and no required gate with `fail` or `not_verified` status
 - let an executor route around a failed validation by claiming its own artifacts
   are valid (`WF-023`)
 - continue a repair loop after `max_repair_attempts_per_validation_gate: 3` or
@@ -57,6 +75,8 @@ Routing meta-agent. No dedicated output contract — produces pipeline routing m
 <validation_focus>
 - stage order is valid
 - required outputs exist before handoff
+- each pass has one role, one task capsule, and one handoff artifact
+- executionIsolationLevel and verificationEvidenceLevel are reported separately
 - no mandatory validation gate is skipped
 - no agent expands its role informally
 </validation_focus>
@@ -99,6 +119,14 @@ Orchestrator must prefer incremental validation. Route to a micro-check after
 the smallest meaningful artifact exists, to a meso-check after a related
 artifact group exists, and to a macro-check after a full phase. Do not route a
 workflow forward when a required checkpoint is `REVIEW_REQUIRED` or `FAIL`.
+
+## Protocol-only execution governance
+
+Without an external runner, Orchestrator may define capsules and require
+handoffs, but it must mark the workflow as protocol-only. A single LLM
+invocation instructed to act as several roles is simulated separation, not
+enforced isolation. Simulated separation cannot certify independent validation
+or delivery complete.
 
 ## Migration control-plane routing
 

@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "1.0",
+  "reportId": "2026-05-12-activation-pilot-validation-report",
+  "workflowId": "top-skill-2-orchestration",
+  "judicialPassId": "judicial",
+  "judicialHandoffRef": "handoffs/judicial.handoff.json",
+  "executionEvidence": {
+    "executionIsolationLevel": "schema-validated",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "2026-05-12-activation-pilot-executive-invocation",
+      "2026-05-12-activation-pilot-judicial-invocation",
+      "2026-05-12-activation-pilot-certification-invocation"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B ..\\..\\..\\..\\scripts\\quick_validate.py ..\\..\\..\\.."
+    ],
+    "limitations": [
+      "Runner report passed schema and hard-check gates.",
+      "Role isolation remains schema-validated only; no external runner-enforced invocation evidence was accepted.",
+      "This judicial artifact is not an independently launched judicial pass."
+    ]
+  },
+  "artifactScope": "top-skill 1.2.3 activation procedure integration and orchestration pilot artifacts",
+  "checkedFiles": [
+    "workflow/activation-and-operating-procedure.md",
+    "workflow/enforcement-evidence-model.md",
+    "workflow/orchestrator-protocol.md",
+    "workflow/run-package-layout.md",
+    "skill.json",
+    "release-metadata.json",
+    "hydration-manifest.json",
+    "top/spec.json",
+    "top/artifact-manifest.json",
+    "top/modes/mode-manifest.json",
+    "top/validation/output-rules.md",
+    "top/shared-rules/skill-governance.md",
+    "top/README.md",
+    "scripts/quick_validate.py",
+    "scripts/create_orchestration_run.py",
+    "runner/runner-report.json"
+  ],
+  "commandsRun": [
+    "python -B scripts\\top_protocol_runner.py runner\\runner-workflow.json --root top\\orchestration\\top-skill-2-orchestration\\2026-05-12-activation-pilot --execute-hard-checks --report-out runner\\runner-report.json"
+  ],
+  "requiredHardChecks": [
+    {
+      "id": "top-skill-quick-validate",
+      "description": "Run top-skill package quick validation from the orchestration run package.",
+      "requiredForComplete": true,
+      "status": "pass",
+      "command": "python -B ..\\..\\..\\..\\scripts\\quick_validate.py ..\\..\\..\\..",
+      "evidence": [
+        "quick_validate: OK; hard_checks: 16; agent_review_candidates: 0"
+      ]
+    }
+  ],
+  "violationClassesChecked": [
+    "hydration-manifest consistency",
+    "top governance consistency",
+    "schema parse",
+    "execution evidence gates",
+    "runner workflow gates",
+    "run package layout"
+  ],
+  "gateResults": [
+    {
+      "gateId": "quick-validate",
+      "violationClass": "package-governance",
+      "status": "pass",
+      "evidence": [
+        "runner/runner-report.json reports quick_validate: OK with 16 hard checks and 0 review candidates."
+      ]
+    },
+    {
+      "gateId": "runner-report",
+      "violationClass": "execution-evidence",
+      "status": "not_verified",
+      "evidence": [
+        "top_protocol_runner produced hard-check-verified evidence, but runnerStatus is not_verified because required judicial and certification handoffs are not pass/complete."
+      ]
+    },
+    {
+      "gateId": "external-role-isolation",
+      "violationClass": "separation-of-powers",
+      "status": "not_verified",
+      "evidence": [
+        "The protocol runner did not accept external runner-enforced invocation evidence."
+      ]
+    }
+  ],
+  "blockingViolations": [],
+  "unverifiedAreas": [
+    "External runner-enforced role isolation is not verified.",
+    "Independent judicial invocation is not verified."
+  ],
+  "finalValidationStatus": "not_verified",
+  "independence": {
+    "currentFilesRead": true,
+    "executorClaimsIgnored": true,
+    "samePassAsGenerationOrRepair": false,
+    "selfCertificationDetected": false
+  }
+}

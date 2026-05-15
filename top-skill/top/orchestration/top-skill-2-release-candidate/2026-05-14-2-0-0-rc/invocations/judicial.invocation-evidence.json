@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-release-candidate",
+  "runId": "2026-05-14-2-0-0-rc",
+  "passId": "judicial",
+  "role": "judicial",
+  "adapterKind": "llm-api",
+  "invocationId": "resp_0293d0e18a9b2051006a067e6376f881939c4da232d8659ad3",
+  "contextId": "resp_0293d0e18a9b2051006a067e6376f881939c4da232d8659ad3-fresh-context",
+  "runnerName": "top-protocol-runner",
+  "processId": 8416,
+  "command": "scripts/adapters/llm_api_adapter.py",
+  "startedAt": "2026-05-15T02:01:06Z",
+  "endedAt": "2026-05-15T02:01:11Z",
+  "exitCode": 0,
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "contextPackageRef": "contexts/judicial.context-package.json",
+  "handoffArtifactRef": "handoffs/judicial.handoff.json",
+  "contextHash": "5bb3574bae94507dc8499a492da1e4403fd9390573b849224da2d4e85cee485a",
+  "handoffHash": "498a2457a068402a0b73eced67570e246421c55eb28cfaaff9e3a8014f276ceb",
+  "freshContext": true,
+  "receivedOnlyContextPackage": true,
+  "modelInvocationEvidence": true,
+  "artifactWrites": [],
+  "limitations": [
+    "LLM API invocation completed in a fresh request using only context package inputs."
+  ]
+}

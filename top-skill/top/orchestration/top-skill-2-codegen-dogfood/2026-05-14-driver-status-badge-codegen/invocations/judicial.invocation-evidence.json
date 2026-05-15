@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-codegen-dogfood",
+  "runId": "2026-05-14-driver-status-badge-codegen",
+  "passId": "judicial",
+  "role": "judicial",
+  "adapterKind": "llm-api",
+  "invocationId": "resp_06d6ea92e95870c9006a06248a50ec819eab5820e6fbc71bae",
+  "contextId": "resp_06d6ea92e95870c9006a06248a50ec819eab5820e6fbc71bae-fresh-context",
+  "runnerName": "top-protocol-runner",
+  "processId": 348,
+  "command": "scripts/adapters/llm_api_adapter.py",
+  "startedAt": "2026-05-14T19:37:46Z",
+  "endedAt": "2026-05-14T19:37:57Z",
+  "exitCode": 0,
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "contextPackageRef": "contexts/judicial.context-package.json",
+  "handoffArtifactRef": "handoffs/judicial.handoff.json",
+  "contextHash": "51b522b20c85e7ad569c8b4608e624489ec6e0b894c6450f99e740bd9c2d0ce9",
+  "handoffHash": "79912c2adf5d91cf8eb6c20232f5760fe70943e215cbe25ac138301f25fd6883",
+  "freshContext": true,
+  "receivedOnlyContextPackage": true,
+  "modelInvocationEvidence": true,
+  "limitations": [
+    "LLM API invocation completed in a fresh request using only context package inputs."
+  ]
+}

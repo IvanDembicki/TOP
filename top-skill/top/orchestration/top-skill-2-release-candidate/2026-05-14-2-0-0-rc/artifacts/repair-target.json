@@ -1,0 +1,6 @@
+{
+  "component": "DriverStatusBadge",
+  "statusLabel": "Ready",
+  "isValid": true,
+  "repairedBy": "repair-1"
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-llm-smoke",
+  "runId": "2026-05-13-live-smoke",
+  "passId": "executive",
+  "role": "executive",
+  "adapterKind": "llm-api",
+  "invocationId": "resp_0503437a61811c9e006a04bf1d2bb08196bcd610bf93e40472",
+  "contextId": "resp_0503437a61811c9e006a04bf1d2bb08196bcd610bf93e40472-fresh-context",
+  "runnerName": "top-protocol-runner",
+  "processId": 7840,
+  "command": "scripts/adapters/llm_api_adapter.py",
+  "startedAt": "2026-05-13T18:12:43Z",
+  "endedAt": "2026-05-13T18:12:49Z",
+  "exitCode": 0,
+  "taskCapsuleRef": "capsules/executive.task-capsule.json",
+  "contextPackageRef": "contexts/executive.context-package.json",
+  "handoffArtifactRef": "handoffs/executive.handoff.json",
+  "contextHash": "70f66f9691d8e3b79cb3850cb3866925b464fb9b600afdf7c720b681447a1d78",
+  "handoffHash": "b89fb44fe4a01d01136a11dc8c794ea23f58569cdef3baabd147a529c18c9f87",
+  "freshContext": true,
+  "receivedOnlyContextPackage": true,
+  "modelInvocationEvidence": true,
+  "limitations": [
+    "LLM API invocation completed in a fresh request using only context package inputs."
+  ]
+}

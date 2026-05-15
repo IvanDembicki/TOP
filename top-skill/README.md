@@ -1,6 +1,6 @@
 # TOP Skill — Tree-Oriented Programming
 
-**Version:** 1.1.28 | **License:** MIT | **Invocation:** `/top`
+**Version:** 2.0.0 | **License:** MIT | **Invocation:** `/top`
 
 **TOP turns architecture from a weak social norm into a strong machine-verifiable protocol.**
 
@@ -51,6 +51,8 @@ This is a complete AI-native development system:
 - **Architectural model** — typed tree, node contracts, controller/content split, state machines
 - **Generation protocol** — pipeline `spec → prompt → code → verification`
 - **Validation system** — canon rules, violation catalog, audit agents
+- **Harness protocol** — task capsules, handoff artifacts, execution evidence,
+  and delivery certification gates
 - **Multi-target generation** — one spec tree generates implementations for Web, Android, React Native, and other platforms
 
 The sufficient operational unit in TOP is the pair **`spec + prompt`**. Code is a derived artifact. The spec and prompts remain the source of truth.
@@ -64,7 +66,68 @@ The sufficient operational unit in TOP is the pair **`spec + prompt`**. Code is 
 - `top/spec.json` — skill execution tree and invariants
 - `top/artifact-manifest.json` — required package and migration contracts
 - `top/modes/mode-manifest.json` — stable mode boundaries
+- `workflow/enforcement-evidence-model.md` — root contract for delivery
+  honesty and protocol-only vs runner-enforced evidence
+- `workflow/activation-and-operating-procedure.md` — activation triggers and
+  operating loop for delivery-affecting 2.0 orchestration
+- `workflow/task-capsule-format.md` — one-pass input contract
+- `workflow/handoff-artifact-format.md` — one-pass output contract
+- `workflow/role-packs.md` — minimal role-specific context packs
+- `workflow/orchestrator-protocol.md` — workflow control and routing contract
+- `workflow/runner-contract.md` — executable harness contract for runner
+  workflow and runner report artifacts
+- `workflow/pass-invocation-contract.md` — context package and invocation
+  evidence contract for runner-enforced isolation
+- `workflow/llm-api-adapter-contract.md` — contract for launching one pass
+  through a separate LLM API request
+- `workflow/repair-pass-contract.md` — bounded repair authority and
+  post-repair judicial validation contract
+- `workflow/delivery-certification-procedure.md` — executable post-run
+  delivery certification gate
+- `workflow/run-state-machine.md` — process state model for one run package
+- `workflow/run-package-layout.md` — canonical filesystem package for one
+  orchestration run
 - `top/schemas/migration-workflow.schema.json` — schema for project migration workflow trees
+- `top/schemas/fragments/execution-evidence.schema.json` — reusable execution
+  evidence schema fragment
+- `top/schemas/task-capsule.schema.json` — schema for task capsules
+- `top/schemas/handoff-artifact.schema.json` — schema for handoff artifacts
+- `top/schemas/runner-workflow.schema.json` — schema for protocol runner input
+- `top/schemas/runner-report.schema.json` — schema for protocol runner output
+- `top/schemas/context-package.schema.json` — schema for runner-materialized
+  context packages
+- `top/schemas/pass-invocation-evidence.schema.json` — schema for pass
+  invocation evidence
+- `top/schemas/certification-snapshot.schema.json` — schema for stale
+  certification detection snapshots
+- `top/schemas/run-state.schema.json` — schema for derived run package state
+- `top/schemas/agent-workflow.schema.json` — schema for separated agent passes
+- `top/schemas/validation-report.schema.json` — schema for judicial reports
+- `top/schemas/delivery-certification.schema.json` — schema for delivery
+  certification
+- `scripts/validate_execution_evidence.py` — executable protocol-layer hard
+  validator for delivery evidence gates
+- `scripts/top_protocol_runner.py` — executable runner gate for pass handoffs
+  and hard-check commands
+- `scripts/adapters/llm_api_adapter.py` — LLM API pass adapter that writes
+  handoff and invocation evidence artifacts
+- `scripts/certify_orchestration_run.py` — post-run certification gate that
+  writes validation report, delivery certification, and final audit artifacts
+- `scripts/create_orchestration_run.py` — scaffold a new run package under
+  `top/orchestration/<workflow-id>/<run-id>/`, including `--llm-smoke` packages
+  for testing real `llm-api` invocation evidence and `--repair-loop` packages
+  for bounded repair revalidation, plus `--repair-artifact-dogfood` packages
+  for testing exact-ref repair artifact writes
+- `scripts/update_orchestration_state.py` — derive `run-state.json` from runner,
+  judicial, certification, and snapshot artifacts
+- `scripts/validate_orchestration_run.py` — read-only verifier for one complete
+  run package, returning `RUN_VALID`, `RUN_STALE`, or `RUN_INVALID`
+- `scripts/validate_orchestration_regressions.py` — no-network regression
+  fixtures that block false `complete` scenarios
+- `scripts/validate_repair_artifact_fixture.py` — hard-check validator for the
+  repair artifact dogfood fixture
+- `scripts/run_orchestration_workflow.py` — ordered driver for create, runner,
+  certification, snapshot verification, and final run-package verification
 - `top/validation/output-rules.md` — readiness checks for skill outputs
 
 Migration projects must keep branch-owned control artifacts under

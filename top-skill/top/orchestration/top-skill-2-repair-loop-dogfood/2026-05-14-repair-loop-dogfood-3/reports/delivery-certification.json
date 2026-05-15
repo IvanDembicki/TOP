@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "1.0",
+  "certificationId": "2026-05-14-repair-loop-dogfood-3-delivery-certification",
+  "workflowId": "top-skill-2-repair-loop-dogfood",
+  "deliveryStatus": "complete",
+  "executionEvidence": {
+    "executionIsolationLevel": "runner-enforced",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "resp_06604cee168fa603006a066fa776088197b5c293e55cd8840d",
+      "resp_0f9314b634209b9a006a066fade92081a1b973c84655bfe940",
+      "resp_0459cc0d20fec108006a066fb596388193b9e7f9e1a925b5de",
+      "resp_02fc014bb8dc1f7d006a066fc5b7848192a53088beea55285b"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B scripts/quick_validate.py ."
+    ],
+    "limitations": [
+      "Scaffolded runner workflow.",
+      "LLM API adapter is configured; runner-enforced evidence requires successful API credentials and separate model invocations."
+    ]
+  },
+  "judicialValidationRef": "reports/validation-report.json",
+  "judicialHandoffRef": "handoffs/judicial.handoff.json",
+  "validationReportRef": "reports/validation-report.json",
+  "finalAuditReportRef": "reports/final-audit.md",
+  "generationOrRepairPassIds": [
+    "executive",
+    "repair-1"
+  ],
+  "repairAttemptIds": [
+    "repair-1"
+  ],
+  "judicialPassId": "judicial",
+  "separationOfPowersProof": [
+    "Runner report records separate required pass invocation ids.",
+    "Runner report records separate required pass context ids.",
+    "Judicial handoff has validation authority and no edit/repair/certification authority.",
+    "Required hard checks passed before certification."
+  ],
+  "requiredHardChecks": [
+    {
+      "id": "top-skill-quick-validate",
+      "description": "Run top-skill package validation.",
+      "requiredForComplete": true,
+      "status": "pass",
+      "command": "python -B scripts/quick_validate.py .",
+      "evidence": [
+        "quick_validate: OK\nvalidated: D:\\TOP\\top-skill\nhard_checks: 21\nagent_review_candidates: 0"
+      ]
+    }
+  ],
+  "blockingChecks": [
+    {
+      "checkId": "runner-evidence",
+      "status": "pass",
+      "evidence": [
+        "runnerStatus=pass",
+        "executionIsolationLevel=runner-enforced",
+        "verificationEvidenceLevel=hard-check-verified"
+      ]
+    },
+    {
+      "checkId": "required-pass-status",
+      "status": "pass",
+      "evidence": [
+        "executive:pass",
+        "judicial-initial:pass",
+        "repair-1:pass",
+        "judicial:pass"
+      ]
+    },
+    {
+      "checkId": "adapter-invocation-evidence",
+      "status": "pass",
+      "evidence": [
+        "executive:fresh=True,contextPackageOnly=True,modelEvidence=True",
+        "judicial-initial:fresh=True,contextPackageOnly=True,modelEvidence=True",
+        "repair-1:fresh=True,contextPackageOnly=True,modelEvidence=True",
+        "judicial:fresh=True,contextPackageOnly=True,modelEvidence=True"
+      ]
+    },
+    {
+      "checkId": "separate-invocation-and-context-ids",
+      "status": "pass",
+      "evidence": [
+        "invocationIds=4",
+        "contextIds=4"
+      ]
+    },
+    {
+      "checkId": "required-hard-checks",
+      "status": "pass",
+      "evidence": [
+        "top-skill-quick-validate:pass"
+      ]
+    },
+    {
+      "checkId": "independent-judicial-handoff",
+      "status": "pass",
+      "evidence": [
+        "judicialPassId=judicial",
+        "judicial handoff is independent from executive/repair authority"
+      ]
+    },
+    {
+      "checkId": "post-repair-judicial-validation",
+      "status": "pass",
+      "evidence": [
+        "judicialPassId=judicial",
+        "postRepairPassIds=repair-1"
+      ]
+    },
+    {
+      "checkId": "self-certification",
+      "status": "pass",
+      "evidence": [
+        "No executive or repair handoff certified delivery."
+      ]
+    }
+  ],
+  "knownExclusions": [
+    "Certification scope is this orchestration run package only; it is not a general top-skill release claim."
+  ],
+  "noBlockingInScopeViolations": true,
+  "generationAndValidationSeparate": true,
+  "noUnverifiedRequiredGates": true,
+  "noRequiredGateFailedOrNotVerified": true
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-codegen-dogfood",
+  "runId": "2026-05-14-driver-status-badge-codegen",
+  "passId": "executive",
+  "role": "executive",
+  "adapterKind": "llm-api",
+  "invocationId": "resp_0d80d38cc5c9732c006a06247f6a6c8193aed8e8c016c21a57",
+  "contextId": "resp_0d80d38cc5c9732c006a06247f6a6c8193aed8e8c016c21a57-fresh-context",
+  "runnerName": "top-protocol-runner",
+  "processId": 3352,
+  "command": "scripts/adapters/llm_api_adapter.py",
+  "startedAt": "2026-05-14T19:37:34Z",
+  "endedAt": "2026-05-14T19:37:45Z",
+  "exitCode": 0,
+  "taskCapsuleRef": "capsules/executive.task-capsule.json",
+  "contextPackageRef": "contexts/executive.context-package.json",
+  "handoffArtifactRef": "handoffs/executive.handoff.json",
+  "contextHash": "a1347ab5626f5eaa37c74df60c9f2bde55acd2730e29e55f9b6e47bf92065f20",
+  "handoffHash": "2dc55baa8a6420379d46bfdbd39b4f539eb810e2dc297c2b7cbf9372f07e75b2",
+  "freshContext": true,
+  "receivedOnlyContextPackage": true,
+  "modelInvocationEvidence": true,
+  "limitations": [
+    "LLM API invocation completed in a fresh request using only context package inputs."
+  ]
+}

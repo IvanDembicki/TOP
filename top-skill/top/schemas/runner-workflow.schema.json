@@ -1,0 +1,334 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/runner-workflow.schema.json",
+  "title": "TOP Runner Workflow",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "workflowId",
+    "runId",
+    "runnerName",
+    "mode",
+    "runnerCapabilities",
+    "passes",
+    "hardChecks",
+    "limitations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "workflowId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runnerName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "enum": [
+        "analysis-only",
+        "modeling-refactor",
+        "generation-pipeline",
+        "migration",
+        "spec-change",
+        "validation",
+        "maintenance"
+      ]
+    },
+    "runnerCapabilities": {
+      "type": "object",
+      "required": [
+        "launchesSeparateProcesses",
+        "launchesSeparateInvocations",
+        "isolatesContexts",
+        "executesHardChecks",
+        "validatesHandoffs"
+      ],
+      "properties": {
+        "launchesSeparateProcesses": {
+          "type": "boolean"
+        },
+        "launchesSeparateInvocations": {
+          "type": "boolean"
+        },
+        "isolatesContexts": {
+          "type": "boolean"
+        },
+        "executesHardChecks": {
+          "type": "boolean"
+        },
+        "validatesHandoffs": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "passes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/pass"
+      }
+    },
+    "hardChecks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/hardCheck"
+      }
+    },
+    "deliveryCertificationRef": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "repairPolicy": {
+      "type": "object",
+      "required": [
+        "maxRepairAttempts",
+        "repairPassIds",
+        "finalJudicialPassId",
+        "requiresPostRepairJudicial",
+        "limitations"
+      ],
+      "properties": {
+        "maxRepairAttempts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "repairPassIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "finalJudicialPassId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiresPostRepairJudicial": {
+          "type": "boolean"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "pass": {
+      "type": "object",
+      "required": [
+        "passId",
+        "role",
+        "taskCapsuleRef",
+        "handoffArtifactRef",
+        "invocationId",
+        "contextId",
+        "requiredForDelivery"
+      ],
+      "properties": {
+        "passId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "enum": [
+            "orchestrator",
+            "context-builder",
+            "executive",
+            "judicial",
+            "repair",
+            "reporting",
+            "certification"
+          ]
+        },
+        "taskCapsuleRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "handoffArtifactRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "invocationId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contextId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "adapterKind": {
+          "enum": [
+            "process",
+            "llm-api",
+            "external-agent-runtime",
+            "manual"
+          ]
+        },
+        "contextPackageRef": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "invocationEvidenceRef": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "freshContextRequired": {
+          "type": "boolean"
+        },
+        "command": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "commandType": {
+          "enum": [
+            "python-script"
+          ]
+        },
+        "scriptRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scriptBaseRef": {
+          "enum": [
+            "runner-root",
+            "run-package",
+            "skill-root"
+          ]
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "cwd": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "cwdRef": {
+          "enum": [
+            "runner-root",
+            "run-package",
+            "skill-root"
+          ]
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "requiredForDelivery": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "hardCheck": {
+      "type": "object",
+      "required": [
+        "id",
+        "description",
+        "requiredForComplete"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredForComplete": {
+          "type": "boolean"
+        },
+        "command": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "commandType": {
+          "enum": [
+            "python-script"
+          ]
+        },
+        "scriptRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scriptBaseRef": {
+          "enum": [
+            "runner-root",
+            "run-package",
+            "skill-root"
+          ]
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "cwd": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "cwdRef": {
+          "enum": [
+            "runner-root",
+            "run-package",
+            "skill-root"
+          ]
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

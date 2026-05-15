@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-driver-dogfood",
+  "taskId": "judicial-task",
+  "role": "judicial",
+  "objective": "Run judicial pass judicial.",
+  "allowedActions": [
+    "validate current artifacts",
+    "write judicial verdict"
+  ],
+  "forbiddenActions": [
+    "repair implementation",
+    "certify delivery without hard-check evidence"
+  ],
+  "inputReferences": [
+    "handoffs/executive.handoff.json",
+    "runner/runner-report.json",
+    "workflow/run-package-layout.md",
+    "top/validation/output-rules.md",
+    "SKILL.md",
+    "CHANGELOG.md",
+    "skill.json",
+    "release-metadata.json",
+    "hydration-manifest.json",
+    "top/spec.json"
+  ],
+  "contextSlices": [
+    "Validate the dogfood run package evidence for the driver exit/status semantics change.",
+    "Treat process pass evidence as process evidence only; it is not LLM context isolation.",
+    "Do not certify delivery complete from this process-backed run."
+  ],
+  "outputContract": "handoffs/judicial.handoff.json",
+  "requiredChecks": [],
+  "stopCondition": "Write one handoff artifact and stop.",
+  "mayEditFiles": false,
+  "mayValidate": true,
+  "mayRepair": false,
+  "mayReport": true,
+  "mayCertifyDelivery": false
+}

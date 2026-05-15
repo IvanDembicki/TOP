@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-loop-dogfood",
+  "taskId": "executive-task",
+  "role": "executive",
+  "objective": "Run executive pass executive.",
+  "allowedActions": [
+    "create or modify authorized artifacts"
+  ],
+  "forbiddenActions": [
+    "validate own output",
+    "certify delivery",
+    "write final audit"
+  ],
+  "inputReferences": [],
+  "contextSlices": [
+    "Execute the initial bounded repair-loop dogfood pass using only this task capsule.",
+    "Return an executive handoff that identifies a small scoped output and at least one limitation for judicial review.",
+    "Do not validate your own output and do not certify delivery."
+  ],
+  "outputContract": "handoffs/executive.handoff.json",
+  "requiredChecks": [],
+  "stopCondition": "Write one handoff artifact and stop.",
+  "mayEditFiles": true,
+  "mayValidate": false,
+  "mayRepair": false,
+  "mayReport": false,
+  "mayCertifyDelivery": false
+}

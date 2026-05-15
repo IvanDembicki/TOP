@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0",
+  "root": {
+    "id": "driverStatusBadge",
+    "type": "DriverStatusBadge",
+    "props": {
+      "purpose": "Expose final orchestration verifier and delivery status as a typed generated example.",
+      "verifierStatus": "RUN_VALID certified",
+      "deliveryStatus": "complete",
+      "tone": "success"
+    },
+    "children": []
+  }
+}

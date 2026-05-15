@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-orchestration",
+  "runId": "2026-05-12-activation-pilot",
+  "passId": "judicial",
+  "role": "judicial",
+  "adapterKind": "process",
+  "invocationId": "2026-05-12-activation-pilot-judicial-invocation",
+  "contextId": "2026-05-12-activation-pilot-judicial-context",
+  "runnerName": "top-protocol-runner",
+  "processId": null,
+  "command": null,
+  "startedAt": null,
+  "endedAt": null,
+  "exitCode": null,
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "contextPackageRef": "contexts/judicial.context-package.json",
+  "handoffArtifactRef": "handoffs/judicial.handoff.json",
+  "contextHash": "c027a817f9ba398a98720fa26b3122fe1a93a31121a94289d70322bbc2726495",
+  "handoffHash": "12c472ff65dddc90f08016b7e4651b70bf0134889ab25294668097a855dc662f",
+  "freshContext": false,
+  "receivedOnlyContextPackage": false,
+  "modelInvocationEvidence": false,
+  "limitations": [
+    "Runner-observed process evidence is not proof of separate LLM context.",
+    "An adapter must write invocation evidence with modelInvocationEvidence=true to support runner-enforced isolation."
+  ]
+}

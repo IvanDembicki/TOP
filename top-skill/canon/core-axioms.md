@@ -9,6 +9,8 @@ All structural and naming decisions must support fast, reliable understanding of
 
 ## Pipeline power separation
 
+Canonical name: AI Separation of Powers.
+
 The executor produces artifacts. The validator produces verdicts. The log
 records both. The canon governs all.
 
@@ -18,6 +20,13 @@ checks, type checks, known issues, and an artifact manifest submitted for
 validation. They must not claim `TOP-clean`, `CORE-015 clean`, `canon
 compliant`, `validation passed`, `no violations`, `ready_for_manual_QA`,
 `ready_for_use`, or `final_status: pass` for their own artifacts.
+
+No self-certified delivery: an executive pass may report generation or repair
+completion, but delivery `complete` requires the delivery law from
+`workflow/enforcement-evidence-model.md`: runner-enforced execution isolation,
+hard-check-verified validation evidence, a valid independent judicial handoff
+artifact, and no required gate with `fail` or `not_verified` status. A
+`complete` status without this evidence is itself invalid.
 
 Validation, canon precheck, and final audit must operate from a clean,
 adversarial context: current top-skill canon/rules, current artifacts under

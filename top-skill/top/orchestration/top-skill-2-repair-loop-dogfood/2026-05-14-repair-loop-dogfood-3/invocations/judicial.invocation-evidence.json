@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-loop-dogfood",
+  "runId": "2026-05-14-repair-loop-dogfood-3",
+  "passId": "judicial",
+  "role": "judicial",
+  "adapterKind": "llm-api",
+  "invocationId": "resp_02fc014bb8dc1f7d006a066fc5b7848192a53088beea55285b",
+  "contextId": "resp_02fc014bb8dc1f7d006a066fc5b7848192a53088beea55285b-fresh-context",
+  "runnerName": "top-protocol-runner",
+  "processId": 1888,
+  "command": "scripts/adapters/llm_api_adapter.py",
+  "startedAt": "2026-05-15T00:58:45Z",
+  "endedAt": "2026-05-15T00:59:00Z",
+  "exitCode": 0,
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "contextPackageRef": "contexts/judicial.context-package.json",
+  "handoffArtifactRef": "handoffs/judicial.handoff.json",
+  "contextHash": "f1a0f563fd873d691570ce6f66a333ce664f5f104abddf67e66a5403302c0fa5",
+  "handoffHash": "4a63547d6e8528ae57e80ebca4e984c9a70497f1fb2851bc0ed9e69d9a29d850",
+  "freshContext": true,
+  "receivedOnlyContextPackage": true,
+  "modelInvocationEvidence": true,
+  "limitations": [
+    "LLM API invocation completed in a fresh request using only context package inputs."
+  ]
+}

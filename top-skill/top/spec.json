@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
   "skill_name": "Tree-Oriented Programming Skill",
-  "skill_version": "1.1.28",
+  "skill_version": "2.0.0",
   "status": "stable",
   "purpose": "Design, model, generate, migrate, and validate systems built with Tree-Oriented Programming.",
   "core_thesis": "A TOP skill is not a loose prompt. It is a controlled tree of canon, modes, agents, contracts, schemas, validation rules, and outputs.",
@@ -18,7 +18,29 @@
     "New requirements invalidate old decisions that conflict with them.",
     "Every important migration decision must be traceable through plan, workflow, status, or log evidence.",
     "Structured migration workflow state must be represented in JSON when the schema exists.",
-    "Migration discovers hidden architecture instead of wrapping legacy scopes as single nodes."
+    "Migration discovers hidden architecture instead of wrapping legacy scopes as single nodes.",
+    "Delivery completion requires independent judicial validation evidence and cannot be self-certified by an executive pass.",
+    "The top-skill 2.0 protocol layer is protocol-only unless an external runner proves separate invocations, separate contexts, and explicit handoff artifacts.",
+    "executionIsolationLevel and verificationEvidenceLevel are separate evidence axes and must not be collapsed into one status.",
+    "Delivery complete requires runner-enforced execution isolation, hard-check-verified validation evidence, a valid independent judicial handoff artifact, and no required gate with fail or not_verified status.",
+    "A single LLM invocation instructed to act as multiple roles is simulated separation, not enforced role isolation.",
+    "2.0 orchestration activation is controlled by the activation and operating procedure before delivery-affecting implementation, validation, repair, or certification begins.",
+    "Runner-enforced isolation requires pass invocation evidence from a supported LLM/API or external agent runtime adapter, not only separate process execution.",
+    "Runner workflow commands that refer to skill scripts must be portable structured command refs, not OS-specific relative path strings.",
+    "Required judicial and certification context packages must contain concrete input references and no placeholder context slices.",
+    "The LLM API adapter must write model invocation evidence only after a real separate model/API request.",
+    "LLM smoke run packages must use concrete context slices and must remain not-certified unless real adapter invocation evidence and hard-check evidence exist.",
+    "Delivery certification must be produced by a post-run certification gate that consumes runner evidence and independent judicial handoff artifacts.",
+    "A complete delivery certification must have a current certification snapshot; stale snapshot detection blocks treating old certification as current.",
+    "Run package process state must be derived from artifacts in run-state.json and must not replace delivery certification.",
+    "Runner and certification scripts must refresh run-state.json automatically after evidence-changing operations unless explicitly skipped for diagnostics.",
+    "A run package readiness claim must be verifiable by scripts/validate_orchestration_run.py as RUN_VALID certified, RUN_VALID not-certified, RUN_STALE, or RUN_INVALID.",
+    "The orchestration workflow driver must treat the final read-only verifier status as the only valid workflow readiness claim.",
+    "Driver exit codes are operational evidence only; final readiness wording must name the verifier status and deliveryStatus.",
+    "LLM adapter input references must be explicitly listed and must resolve only inside the run root or skill root.",
+    "Orchestration regression fixtures must keep false delivery-complete scenarios invalid, including missing judicial handoff, not_verified required hard checks, process-only pass evidence, and stale snapshots.",
+    "A repair pass is not a verdict; delivery complete after repair requires a later independent judicial handoff over post-repair artifacts.",
+    "Bounded repair artifact writes must be listed as task-capsule artifactWriteRequests and recorded as invocation-evidence artifactWrites."
   ],
   "tree": {
     "TopSkill": {
@@ -39,6 +61,24 @@
             "rules/task-modes.md",
             "agents/index.md",
             "top/modes/mode-manifest.json"
+          ]
+        },
+        "Workflow": {
+          "type": "orchestration_protocol",
+          "artifacts": [
+            "workflow/enforcement-evidence-model.md",
+            "workflow/activation-and-operating-procedure.md",
+            "workflow/task-capsule-format.md",
+            "workflow/handoff-artifact-format.md",
+            "workflow/role-packs.md",
+            "workflow/orchestrator-protocol.md",
+            "workflow/runner-contract.md",
+            "workflow/pass-invocation-contract.md",
+            "workflow/llm-api-adapter-contract.md",
+            "workflow/repair-pass-contract.md",
+            "workflow/delivery-certification-procedure.md",
+            "workflow/run-state-machine.md",
+            "workflow/run-package-layout.md"
           ]
         },
         "Canon": {
@@ -96,6 +136,18 @@
             "contracts/top-folder-contract.md",
             "contracts/agent-output-contracts/",
             "top/artifact-manifest.json",
+            "top/schemas/fragments/execution-evidence.schema.json",
+            "top/schemas/task-capsule.schema.json",
+            "top/schemas/handoff-artifact.schema.json",
+            "top/schemas/runner-workflow.schema.json",
+            "top/schemas/runner-report.schema.json",
+            "top/schemas/context-package.schema.json",
+            "top/schemas/pass-invocation-evidence.schema.json",
+            "top/schemas/certification-snapshot.schema.json",
+            "top/schemas/run-state.schema.json",
+            "top/schemas/agent-workflow.schema.json",
+            "top/schemas/validation-report.schema.json",
+            "top/schemas/delivery-certification.schema.json",
             "top/schemas/migration-workflow.schema.json"
           ]
         },
@@ -106,6 +158,16 @@
             "rules/pattern-recognition.md",
             "rules/spec-sync-rules.md",
             "rules/review-checklist.md",
+            "scripts/validate_execution_evidence.py",
+            "scripts/top_protocol_runner.py",
+            "scripts/adapters/llm_api_adapter.py",
+            "scripts/certify_orchestration_run.py",
+            "scripts/create_orchestration_run.py",
+            "scripts/update_orchestration_state.py",
+            "scripts/validate_orchestration_run.py",
+            "scripts/validate_orchestration_regressions.py",
+            "scripts/validate_repair_artifact_fixture.py",
+            "scripts/run_orchestration_workflow.py",
             "scripts/quick_validate.py",
             "top/validation/output-rules.md"
           ]
@@ -116,7 +178,12 @@
             "examples/tree-editor/README.md",
             "examples/tree-editor/tree_editor.json",
             "examples/tree-editor/libraries/pane.library.json",
-            "examples/tree-editor/prompts/"
+            "examples/tree-editor/prompts/",
+            "examples/driver-status-badge/README.md",
+            "examples/driver-status-badge/driver-status-badge.tree.json",
+            "examples/driver-status-badge/DriverStatusBadgeController.ts",
+            "examples/driver-status-badge/DriverStatusBadgeControllerAccess.ts",
+            "examples/driver-status-badge/DriverStatusBadgeContent.ts"
           ]
         }
       }

@@ -3,6 +3,8 @@
 This canon defines how AI-agent authority is separated in top-skill workflows
 across four branches.
 
+Canonical name: **AI Separation of Powers**.
+
 The executor produces artifacts.
 The validator produces verdicts.
 The log records both.
@@ -10,6 +12,43 @@ The canon governs all.
 
 No agent may judge its own output. No agent may be the lawmaker, executor,
 judge, and public record for the same artifact.
+
+TOP workflow must separate rule-making, implementation, validation, and
+reporting. When these powers collapse into one agent context, validation
+becomes self-justification instead of control.
+
+## No self-certified delivery
+
+An agent that generated, migrated, refactored, repaired, or synchronized
+artifacts may produce an executor report, but it must not be the final authority
+that certifies those artifacts as valid or delivery-complete.
+
+Delivery evidence is governed by `workflow/enforcement-evidence-model.md`.
+`executionIsolationLevel` and `verificationEvidenceLevel` are separate axes and
+must not be collapsed into one status.
+
+The same agent pass must not:
+- generate or repair implementation;
+- validate that implementation;
+- write the final audit;
+- declare delivery complete.
+
+A separate judicial validation pass is required after any executive generation
+or repair pass. Delivery status may be changed to `complete` only when the
+workflow has runner-enforced execution isolation, hard-check-verified validation
+evidence, a valid independent judicial handoff artifact, and no required gate
+with `fail` or `not_verified` status. Generation may report generation
+completed; it must not report delivery completed.
+
+Schema validation is not role isolation. Hard checks are not role isolation.
+A single LLM invocation instructed to act as multiple agents is simulated
+separation, not enforced separation, and cannot certify independent validation
+or delivery complete.
+
+Dishonest or self-referential validation becomes an alibi, not a check. A
+validation report is invalid if it merely confirms the generator's own
+interpretation without independently testing known violation classes against
+the actual files.
 
 ## Legislative branch — canon and rules
 
@@ -114,6 +153,53 @@ It must record:
 Logs are not decorative reports. Logs are accountability artifacts for the
 human owner. A log entry is not itself validation proof; it is chronology and an
 evidence index.
+
+The public record branch may summarize judicial findings, but it must not
+upgrade blocked, partial, or not-verified status to complete. A `complete`
+status without delivery-law evidence is itself a workflow violation.
+
+## Required judicial pass after executive work
+
+After generation, migration materialization, spec/code synchronization, or
+repair, the judicial pass must:
+- read the actual generated or changed files;
+- ignore `complete`, `pass`, or `fixed` claims unless independently verified;
+- compare implementation against specs, prompts, and contracts;
+- run explicit negative checks for known violation classes;
+- report `blocked` when a blocking violation remains;
+- report `not_verified` when required files or evidence are unavailable.
+
+At minimum, post-generation or post-repair validation must explicitly check:
+- Node/controller files contain no framework rendering identity such as JSX,
+  widgets, composables, render/build functions, or equivalent target-renderable
+  controller roles;
+- locally implemented content does not import, instantiate, or type against
+  child concrete content directly;
+- prompt contracts match implementation contracts unless an approved
+  target-specific downgrade updated the prompt/spec;
+- Node/controller files do not directly access global stores, route/navigation
+  hooks, UI framework hooks, runtime singleton state, or target hook APIs except
+  through explicit bridge/runtime/data boundaries;
+- bridge callbacks are exposed through explicit boundary contracts rather than
+  raw callback injection when they cross into TOP objects;
+- Expected Materialization files exist;
+- route/framework adapters remain thin;
+- TypeScript, lint, schema, and other mechanical checks are reported honestly,
+  with out-of-scope failures separated from in-scope failures.
+
+## Valid report evidence
+
+A report is not valid unless it contains:
+- files checked;
+- commands or search checks run;
+- violation classes checked;
+- what passed;
+- what failed;
+- what could not be verified;
+- whether the result is complete, partial, blocked, or not verified.
+
+If required files are missing from the submitted archive or working copy, the
+report must say `not_verified`, not `pass`.
 
 ## Claims vs evidence
 

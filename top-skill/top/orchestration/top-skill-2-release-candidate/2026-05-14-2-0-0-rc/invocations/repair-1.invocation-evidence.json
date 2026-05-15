@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-release-candidate",
+  "runId": "2026-05-14-2-0-0-rc",
+  "passId": "repair-1",
+  "role": "repair",
+  "adapterKind": "llm-api",
+  "invocationId": "resp_08eac2335626da67006a067e5799dc8195add67828f4d4e35f",
+  "contextId": "resp_08eac2335626da67006a067e5799dc8195add67828f4d4e35f-fresh-context",
+  "runnerName": "top-protocol-runner",
+  "processId": 12924,
+  "command": "scripts/adapters/llm_api_adapter.py",
+  "startedAt": "2026-05-15T02:00:54Z",
+  "endedAt": "2026-05-15T02:01:06Z",
+  "exitCode": 0,
+  "taskCapsuleRef": "capsules/repair-1.task-capsule.json",
+  "contextPackageRef": "contexts/repair-1.context-package.json",
+  "handoffArtifactRef": "handoffs/repair-1.handoff.json",
+  "contextHash": "9ab0520d16d508350a26730840b834d81db3a06cd926aeda0998171e62437b22",
+  "handoffHash": "8d2b97a3a9993c54f6bcaf238c702dcb5bfd90df74e6c00c3dee1648810f7ab7",
+  "freshContext": true,
+  "receivedOnlyContextPackage": true,
+  "modelInvocationEvidence": true,
+  "artifactWrites": [
+    {
+      "ref": "artifacts/repair-target.json",
+      "sha256": "865b9e5ac6befd99eb70be3f88d5c20f794d3d6117bf05c6f904a5928e6c85ca"
+    }
+  ],
+  "limitations": [
+    "LLM API invocation completed in a fresh request using only context package inputs."
+  ]
+}

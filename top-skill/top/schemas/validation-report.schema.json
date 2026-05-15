@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/validation-report.schema.json",
+  "title": "TOP Validation Report",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "reportId",
+    "workflowId",
+    "judicialPassId",
+    "judicialHandoffRef",
+    "executionEvidence",
+    "artifactScope",
+    "checkedFiles",
+    "commandsRun",
+    "requiredHardChecks",
+    "violationClassesChecked",
+    "gateResults",
+    "blockingViolations",
+    "unverifiedAreas",
+    "finalValidationStatus",
+    "independence"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "reportId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workflowId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "judicialPassId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "judicialHandoffRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "repairAttemptIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "executionEvidence": {
+      "$ref": "https://top.local/schemas/fragments/execution-evidence.schema.json"
+    },
+    "artifactScope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "checkedFiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "commandsRun": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "requiredHardChecks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/hardCheck"
+      }
+    },
+    "violationClassesChecked": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "gateResults": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/gateResult"
+      }
+    },
+    "blockingViolations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unverifiedAreas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "finalValidationStatus": {
+      "enum": [
+        "pass",
+        "fail",
+        "blocked",
+        "not_verified"
+      ]
+    },
+    "independence": {
+      "type": "object",
+      "required": [
+        "currentFilesRead",
+        "executorClaimsIgnored",
+        "samePassAsGenerationOrRepair",
+        "selfCertificationDetected"
+      ],
+      "properties": {
+        "currentFilesRead": {
+          "type": "boolean"
+        },
+        "executorClaimsIgnored": {
+          "type": "boolean"
+        },
+        "samePassAsGenerationOrRepair": {
+          "const": false
+        },
+        "selfCertificationDetected": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "gateResult": {
+      "type": "object",
+      "required": [
+        "gateId",
+        "violationClass",
+        "status",
+        "evidence"
+      ],
+      "properties": {
+        "gateId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "violationClass": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "not_verified",
+            "not_applicable"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "hardCheck": {
+      "type": "object",
+      "required": [
+        "id",
+        "description",
+        "requiredForComplete",
+        "status",
+        "command",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredForComplete": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "not_verified",
+            "not_applicable"
+          ]
+        },
+        "command": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "finalValidationStatus": {
+            "const": "pass"
+          }
+        },
+        "required": [
+          "finalValidationStatus"
+        ]
+      },
+      "then": {
+        "properties": {
+          "blockingViolations": {
+            "maxItems": 0
+          },
+          "unverifiedAreas": {
+            "maxItems": 0
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

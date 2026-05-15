@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-codegen-dogfood",
+  "passId": "judicial",
+  "taskId": "judicial-task",
+  "role": "judicial",
+  "agentName": "judicial-llm-api-pass",
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "inputReferences": [
+    "handoffs/executive.handoff.json",
+    "invocations/executive.invocation-evidence.json",
+    "examples/driver-status-badge/README.md",
+    "examples/driver-status-badge/DriverStatusBadgeController.ts",
+    "examples/driver-status-badge/DriverStatusBadgeControllerAccess.ts",
+    "examples/driver-status-badge/DriverStatusBadgeContent.ts",
+    "examples/driver-status-badge/driver-status-badge.tree.json",
+    "workflow/run-package-layout.md",
+    "top/validation/output-rules.md",
+    "SKILL.md",
+    "CHANGELOG.md",
+    "skill.json",
+    "top/spec.json"
+  ],
+  "outputReferences": [
+    "handoffs/judicial.handoff.json"
+  ],
+  "filesRead": [
+    "capsules/judicial.task-capsule.json",
+    "contexts/judicial.context-package.json"
+  ],
+  "filesChanged": [
+    "handoffs/judicial.handoff.json"
+  ],
+  "commandsRun": [
+    "scripts/adapters/llm_api_adapter.py"
+  ],
+  "status": "done",
+  "executionEvidence": {
+    "executionIsolationLevel": "protocol-followed-by-agent",
+    "verificationEvidenceLevel": "agent-claimed",
+    "runnerName": null,
+    "separateInvocationIds": [],
+    "schemaValidationCommand": null,
+    "hardCheckCommands": [],
+    "limitations": [
+      "Pass handoff may claim only protocol-followed-by-agent evidence; runner-enforced evidence is assigned by the runner."
+    ]
+  },
+  "limitations": [],
+  "didNotDo": [
+    "repair implementation artifacts",
+    "certify delivery complete",
+    "ignore missing evidence",
+    "use hidden prior chat"
+  ],
+  "handoffTo": "orchestrator",
+  "mayEditFiles": false,
+  "mayValidate": true,
+  "mayRepair": false,
+  "mayReport": true,
+  "mayCertifyDelivery": false
+}

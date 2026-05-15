@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-orchestration",
+  "runId": "2026-05-12-activation-pilot",
+  "passId": "judicial",
+  "role": "judicial",
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "handoffArtifactRef": "handoffs/judicial.handoff.json",
+  "inputReferences": [
+    "handoffs/executive.handoff.json",
+    "runner/runner-report.json"
+  ],
+  "contextSlices": [
+    "Validate current artifacts, executive handoff, runner report, and required hard-check evidence.",
+    "Do not use unbounded prior chat or executor claims as verdict evidence."
+  ],
+  "forbiddenInputs": [
+    "full prior chat transcript unless explicitly listed in inputReferences",
+    "unbounded agent memory",
+    "implementation files outside task capsule scope unless explicitly referenced"
+  ],
+  "materializedBy": "top-protocol-runner",
+  "materializedAt": "2026-05-13T08:48:56Z",
+  "contextHash": "c027a817f9ba398a98720fa26b3122fe1a93a31121a94289d70322bbc2726495",
+  "limitations": [
+    "Context package records bounded inputs; it does not by itself prove LLM context isolation."
+  ]
+}

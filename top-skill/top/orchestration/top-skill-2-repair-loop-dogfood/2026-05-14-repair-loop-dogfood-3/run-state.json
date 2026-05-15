@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-loop-dogfood",
+  "runId": "2026-05-14-repair-loop-dogfood-3",
+  "currentState": "certified",
+  "derivedAt": "2026-05-15T00:59:02Z",
+  "derivedBy": "scripts/update_orchestration_state.py",
+  "stateEvidence": [
+    {
+      "checkId": "runner-report",
+      "status": "pass",
+      "details": [
+        "runnerStatus=pass"
+      ]
+    },
+    {
+      "checkId": "pass-execution",
+      "status": "pass",
+      "details": [
+        "Pass results or completed handoffs found."
+      ]
+    },
+    {
+      "checkId": "judicial-handoff",
+      "status": "pass",
+      "details": [
+        "Judicial handoff is valid."
+      ]
+    },
+    {
+      "checkId": "delivery-certification",
+      "status": "pass",
+      "details": [
+        "deliveryStatus=complete"
+      ]
+    },
+    {
+      "checkId": "certification-snapshot",
+      "status": "pass",
+      "details": [
+        "Certification snapshot matches checked artifacts."
+      ]
+    }
+  ],
+  "artifactRefs": {
+    "runnerWorkflow": "runner/runner-workflow.json",
+    "runnerReport": "runner/runner-report.json",
+    "judicialHandoff": "handoffs/judicial.handoff.json",
+    "deliveryCertification": "reports/delivery-certification.json",
+    "certificationSnapshot": "reports/certification-snapshot.json"
+  },
+  "limitations": [],
+  "previousState": "certified",
+  "allowedNextStates": [
+    "stale"
+  ]
+}

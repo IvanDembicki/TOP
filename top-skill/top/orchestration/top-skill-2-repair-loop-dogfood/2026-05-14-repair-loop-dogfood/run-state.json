@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-loop-dogfood",
+  "runId": "2026-05-14-repair-loop-dogfood",
+  "currentState": "failed",
+  "derivedAt": "2026-05-15T00:54:06Z",
+  "derivedBy": "scripts/update_orchestration_state.py",
+  "stateEvidence": [
+    {
+      "checkId": "runner-report",
+      "status": "not_verified",
+      "details": [
+        "runnerStatus=fail"
+      ]
+    },
+    {
+      "checkId": "pass-execution",
+      "status": "pass",
+      "details": [
+        "Pass results or completed handoffs found."
+      ]
+    },
+    {
+      "checkId": "judicial-handoff",
+      "status": "not_verified",
+      "details": [
+        "Valid judicial handoff not found."
+      ]
+    },
+    {
+      "checkId": "delivery-certification",
+      "status": "not_verified",
+      "details": [
+        "deliveryStatus=not-certified"
+      ]
+    },
+    {
+      "checkId": "certification-snapshot",
+      "status": "pass",
+      "details": [
+        "Certification snapshot matches checked artifacts."
+      ]
+    }
+  ],
+  "artifactRefs": {
+    "runnerWorkflow": "runner/runner-workflow.json",
+    "runnerReport": "runner/runner-report.json",
+    "judicialHandoff": "handoffs/judicial.handoff.json",
+    "deliveryCertification": "reports/delivery-certification.json",
+    "certificationSnapshot": "reports/certification-snapshot.json"
+  },
+  "limitations": [
+    "Runner or required pass evidence reports failure or blocked status."
+  ],
+  "previousState": "failed",
+  "allowedNextStates": [
+    "passes-executed",
+    "runner-verified",
+    "judicial-validated",
+    "not-certified",
+    "certified"
+  ]
+}

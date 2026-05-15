@@ -1,0 +1,139 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-loop-dogfood",
+  "runId": "2026-05-14-repair-loop-dogfood",
+  "snapshotStatus": "current",
+  "certifiedAt": "2026-05-15T00:54:06Z",
+  "certifiedBy": "scripts/certify_orchestration_run.py",
+  "deliveryStatus": "not-certified",
+  "executionEvidence": {
+    "executionIsolationLevel": "runner-enforced",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "resp_08c98646394f650e006a066e5ddd94819c906cd28067de02d7",
+      "resp_0e6f9a9082c9d264006a066e6272e481a295376d19cc904f03",
+      "resp_0d0c4a14c837c633006a066e714ec0819e9c6bfad24ef145dc",
+      "resp_03916b31038b945e006a066e9f160c819081a7b1f132988ff9"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B scripts/quick_validate.py ."
+    ],
+    "limitations": [
+      "Scaffolded runner workflow.",
+      "LLM API adapter is configured; runner-enforced evidence requires successful API credentials and separate model invocations."
+    ]
+  },
+  "artifacts": [
+    {
+      "ref": "runner/runner-workflow.json",
+      "role": "runner-workflow",
+      "sha256": "b27bed286f3e2c7cac4127b65c70c64d515267d8ccb80ac4c42d24113ded06eb"
+    },
+    {
+      "ref": "runner/runner-report.json",
+      "role": "runner-report",
+      "sha256": "e833e92f9ddbbe508bd223c19a72757b99a188a5941a903a3220684a84be9f93"
+    },
+    {
+      "ref": "capsules/executive.task-capsule.json",
+      "role": "executive:task-capsule",
+      "sha256": "bd929e4a68a7d85fab3cb1b7de7f59126513185d49c466040801d7cca95b41fb"
+    },
+    {
+      "ref": "contexts/executive.context-package.json",
+      "role": "executive:context-package",
+      "sha256": "5a430b6a319b825720a88eba9e6c34d5a706af5956f0bdf68b24991f9477be65"
+    },
+    {
+      "ref": "handoffs/executive.handoff.json",
+      "role": "executive:handoff",
+      "sha256": "33e72d51f969dd6c2f3d79b34198f7a9e01f07e01261229a1ba6ac5ca8937cef"
+    },
+    {
+      "ref": "invocations/executive.invocation-evidence.json",
+      "role": "executive:invocation-evidence",
+      "sha256": "39d2b51b6ce523391d2b847e5bc9250f36b2436a96f476caa588b5c0490df4a6"
+    },
+    {
+      "ref": "capsules/judicial-initial.task-capsule.json",
+      "role": "judicial-initial:task-capsule",
+      "sha256": "ebf8010667c060f16354facb54fb62dae900314c0da9b7cd8250f8bb6c155a5d"
+    },
+    {
+      "ref": "contexts/judicial-initial.context-package.json",
+      "role": "judicial-initial:context-package",
+      "sha256": "7956ef1d9f604e3a01920874ac80d8ed038a77aff558733ff5fe0508651fe581"
+    },
+    {
+      "ref": "handoffs/judicial-initial.handoff.json",
+      "role": "judicial-initial:handoff",
+      "sha256": "a05e9680918edfb0965c92688d2c662fd5f7dca10fe711e4a41fb13434f984fd"
+    },
+    {
+      "ref": "invocations/judicial-initial.invocation-evidence.json",
+      "role": "judicial-initial:invocation-evidence",
+      "sha256": "4c70094e81eebf19a4f60875431b0916a7186ee2df898752147300820ed4b3d5"
+    },
+    {
+      "ref": "capsules/repair-1.task-capsule.json",
+      "role": "repair-1:task-capsule",
+      "sha256": "932654dcc32db1a161e63cbe99570426d93eaa8b57297c0b606ed8cedbbb11d3"
+    },
+    {
+      "ref": "contexts/repair-1.context-package.json",
+      "role": "repair-1:context-package",
+      "sha256": "3cb5daa69bf55dbf9c3cb2cdfa0275dcb92d971cc91905f69bcf39e969c5cb3d"
+    },
+    {
+      "ref": "handoffs/repair-1.handoff.json",
+      "role": "repair-1:handoff",
+      "sha256": "8ff1c0f8bd375f83317c2033ae6584a242f041788efff3e64db23fce9b165175"
+    },
+    {
+      "ref": "invocations/repair-1.invocation-evidence.json",
+      "role": "repair-1:invocation-evidence",
+      "sha256": "d0b7c48688f02c48dddcaca73139b453bacab388eb16a51ca02e08d37d752175"
+    },
+    {
+      "ref": "capsules/judicial.task-capsule.json",
+      "role": "judicial:task-capsule",
+      "sha256": "89d22fdc867586401643ea24ed3a7075c316344f8f18a66530b288c9f6e27f0d"
+    },
+    {
+      "ref": "contexts/judicial.context-package.json",
+      "role": "judicial:context-package",
+      "sha256": "171c53e054b54c6ef45f3f6b674b524940d23b9c229136ef7420f7161d85d472"
+    },
+    {
+      "ref": "handoffs/judicial.handoff.json",
+      "role": "judicial:handoff",
+      "sha256": "f0ba343562c5613d2460461579e9af5a4737bf192fa500621d32706ca20cacfc"
+    },
+    {
+      "ref": "invocations/judicial.invocation-evidence.json",
+      "role": "judicial:invocation-evidence",
+      "sha256": "8cf48a504211e6df0334188dac6678c2c573000727256ba829d52852e527b240"
+    },
+    {
+      "ref": "reports/validation-report.json",
+      "role": "validation-report",
+      "sha256": "ff6f9f79fd72e0712482782dcd77ccd60e05842de75a68bafc5c35f7d9bd44df"
+    },
+    {
+      "ref": "reports/delivery-certification.json",
+      "role": "delivery-certification",
+      "sha256": "83dffe52c14b17653b93dbe536dbe15fecab7f277d56f0b556167e1675fc5cf0"
+    },
+    {
+      "ref": "reports/final-audit.md",
+      "role": "final-audit",
+      "sha256": "8d5891c7c96c6e929913695754984ee2e8efff325d7a35c8e1b64f02391eb474"
+    }
+  ],
+  "limitations": [
+    "Snapshot detects accidental or ordinary post-certification artifact drift inside the run package.",
+    "Snapshot does not protect against a privileged actor rewriting both artifacts and snapshot together."
+  ]
+}

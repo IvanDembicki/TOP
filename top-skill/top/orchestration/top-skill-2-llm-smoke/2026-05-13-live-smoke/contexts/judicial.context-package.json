@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-llm-smoke",
+  "runId": "2026-05-13-live-smoke",
+  "passId": "judicial",
+  "role": "judicial",
+  "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+  "handoffArtifactRef": "handoffs/judicial.handoff.json",
+  "inputReferences": [
+    "handoffs/executive.handoff.json",
+    "invocations/executive.invocation-evidence.json"
+  ],
+  "contextSlices": [
+    "Independently inspect the supplied executive handoff and invocation evidence.",
+    "Treat adapter invocation evidence as execution evidence only; do not certify delivery complete.",
+    "Write a judicial handoff with status done when the executive handoff is structurally coherent and no self-certification claim is present.",
+    "Do not repair implementation artifacts and do not certify delivery."
+  ],
+  "forbiddenInputs": [
+    "full prior chat transcript unless explicitly listed in inputReferences",
+    "unbounded agent memory",
+    "implementation files outside task capsule scope unless explicitly referenced"
+  ],
+  "materializedBy": "top-protocol-runner",
+  "materializedAt": "2026-05-13T18:12:49Z",
+  "contextHash": "24dd19e3fc2325f8ef3203413359be75863c36eaed1e282354a6d1f0ef45b829",
+  "limitations": [
+    "Context package records bounded inputs; it does not by itself prove LLM context isolation."
+  ]
+}

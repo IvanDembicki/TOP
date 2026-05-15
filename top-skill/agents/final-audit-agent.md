@@ -16,6 +16,8 @@ Use this agent only after validation has passed or when a final architectural co
 - validated artifact
 - validation results
 - canon
+- `workflow/enforcement-evidence-model.md`
+- `workflow/handoff-artifact-format.md`
 - `canon/agent-power-separation.md`
 - `canon/validation-rejection-protocol.md`
 - contracts
@@ -37,6 +39,11 @@ If a discrepancy arises between this agent file and the output contract:
 - confirm readiness only when justified
 - state residual risks explicitly
 - identify follow-up improvements that do not change current validity
+- certify delivery complete only when independent judicial validation evidence
+  and delivery certification gates prove that no blocking in-scope violations
+  remain
+- classify protocol-only successful work as not certified when runner evidence
+  or hard-check evidence is absent
 </allowed>
 
 <forbidden>
@@ -56,6 +63,15 @@ If a discrepancy arises between this agent file and the output contract:
   policy
 - accept generator, repair, modeling, migration, or implementation
   self-validation claims as final evidence (`WF-023`)
+- certify delivery complete when the generation/repair pass, validation pass,
+  final audit, and delivery certification collapse into the same pass (`WF-031`)
+- use `complete`, `certified`, `delivery complete`, or equivalent wording unless
+  the delivery evidence gate passes
+- treat schema validation as role isolation
+- treat hard checks without a judicial handoff as a judicial verdict
+- treat a judicial handoff without required hard-check evidence as delivery
+  certification
+- report `runner-enforced` without external runner evidence
 - accept a validation report that lacks artifacts reviewed, files inspected,
   canon rules checked, search/detection patterns, rejection status, or current
   artifact evidence (`WF-025`, `WF-026`)
@@ -74,6 +90,16 @@ If a discrepancy arises between this agent file and the output contract:
   artifacts, listed files and invariants checked, rejected executor
   self-validation, closed or routed rejection tickets, and did not rely on
   contaminated context (`WF-026`)
+- separation of powers audit: delivery certification references a judicial pass
+  distinct from executive generation/repair passes and the public record does
+  not override judicial findings
+- execution evidence audit: `executionIsolationLevel` and
+  `verificationEvidenceLevel` are separate, supported by executionEvidence, and
+  not inflated above the available evidence
+- delivery law audit: delivery complete requires runner-enforced execution
+  isolation, hard-check-verified validation evidence, a valid independent
+  judicial handoff artifact, and no required gate with `fail` or `not_verified`
+  status
 - incremental validation audit: micro-check, meso-check, and macro-check gates
   exist for the relevant migration/generation phases and unresolved
   `REVIEW_REQUIRED` or `FAIL` checkpoints do not remain

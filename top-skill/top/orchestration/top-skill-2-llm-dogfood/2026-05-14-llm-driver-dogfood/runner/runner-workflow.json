@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-llm-dogfood",
+  "runId": "2026-05-14-llm-driver-dogfood",
+  "runnerName": "top-protocol-runner",
+  "mode": "maintenance",
+  "runnerCapabilities": {
+    "launchesSeparateProcesses": true,
+    "launchesSeparateInvocations": true,
+    "isolatesContexts": true,
+    "executesHardChecks": true,
+    "validatesHandoffs": true
+  },
+  "passes": [
+    {
+      "passId": "executive",
+      "role": "executive",
+      "taskCapsuleRef": "capsules/executive.task-capsule.json",
+      "handoffArtifactRef": "handoffs/executive.handoff.json",
+      "invocationId": "2026-05-14-llm-driver-dogfood-executive-invocation",
+      "contextId": "2026-05-14-llm-driver-dogfood-executive-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/executive.context-package.json",
+      "invocationEvidenceRef": "invocations/executive.invocation-evidence.json",
+      "freshContextRequired": true,
+      "command": null,
+      "cwd": null,
+      "commandType": "python-script",
+      "scriptRef": "scripts/adapters/llm_api_adapter.py",
+      "scriptBaseRef": "skill-root",
+      "args": [],
+      "cwdRef": "runner-root",
+      "timeoutSeconds": 300,
+      "requiredForDelivery": true
+    },
+    {
+      "passId": "judicial",
+      "role": "judicial",
+      "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+      "handoffArtifactRef": "handoffs/judicial.handoff.json",
+      "invocationId": "2026-05-14-llm-driver-dogfood-judicial-invocation",
+      "contextId": "2026-05-14-llm-driver-dogfood-judicial-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/judicial.context-package.json",
+      "invocationEvidenceRef": "invocations/judicial.invocation-evidence.json",
+      "freshContextRequired": true,
+      "command": null,
+      "cwd": null,
+      "commandType": "python-script",
+      "scriptRef": "scripts/adapters/llm_api_adapter.py",
+      "scriptBaseRef": "skill-root",
+      "args": [],
+      "cwdRef": "runner-root",
+      "timeoutSeconds": 300,
+      "requiredForDelivery": true
+    }
+  ],
+  "hardChecks": [
+    {
+      "id": "top-skill-quick-validate",
+      "description": "Run top-skill package validation.",
+      "requiredForComplete": true,
+      "commandType": "python-script",
+      "scriptRef": "scripts/quick_validate.py",
+      "scriptBaseRef": "skill-root",
+      "args": [
+        "."
+      ],
+      "cwdRef": "skill-root",
+      "timeoutSeconds": 300
+    }
+  ],
+  "deliveryCertificationRef": "reports/delivery-certification.json",
+  "limitations": [
+    "Scaffolded runner workflow.",
+    "LLM API adapter is configured; runner-enforced evidence requires successful API credentials and separate model invocations."
+  ]
+}

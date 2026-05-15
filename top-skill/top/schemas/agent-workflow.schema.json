@@ -1,0 +1,323 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/agent-workflow.schema.json",
+  "title": "TOP Agent Workflow Separation of Powers",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "workflowId",
+    "mode",
+    "executionEvidence",
+    "passes",
+    "deliveryCertification"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "workflowId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "enum": [
+        "generation-pipeline",
+        "migration",
+        "modeling-refactor",
+        "spec-change",
+        "analysis-only",
+        "validation",
+        "maintenance"
+      ]
+    },
+    "executionEvidence": {
+      "$ref": "https://top.local/schemas/fragments/execution-evidence.schema.json"
+    },
+    "passes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/pass"
+      }
+    },
+    "deliveryCertification": {
+      "$ref": "#/$defs/deliveryCertification"
+    }
+  },
+  "$defs": {
+    "pass": {
+      "type": "object",
+      "required": [
+        "passId",
+        "role",
+        "branch",
+        "agent",
+        "taskCapsuleRef",
+        "handoffArtifactRef",
+        "executionEvidence",
+        "responsibilities",
+        "inputArtifacts",
+        "outputArtifacts",
+        "mayEditFiles",
+        "mayValidate",
+        "mayRepair",
+        "mayReport",
+        "mayDeclareDeliveryComplete"
+      ],
+      "properties": {
+        "passId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "enum": [
+            "orchestrator",
+            "context-builder",
+            "executive",
+            "judicial",
+            "repair",
+            "reporting",
+            "certification"
+          ]
+        },
+        "branch": {
+          "enum": [
+            "legislative",
+            "executive",
+            "judicial",
+            "reporting"
+          ]
+        },
+        "agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "taskCapsuleRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "handoffArtifactRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "executionEvidence": {
+          "$ref": "https://top.local/schemas/fragments/execution-evidence.schema.json"
+        },
+        "responsibilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "inputArtifacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "outputArtifacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mayEditFiles": {
+          "type": "boolean"
+        },
+        "mayValidate": {
+          "type": "boolean"
+        },
+        "mayRepair": {
+          "type": "boolean"
+        },
+        "mayReport": {
+          "type": "boolean"
+        },
+        "mayDeclareDeliveryComplete": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "branch": {
+                "const": "executive"
+              }
+            },
+            "required": [
+              "branch"
+            ]
+          },
+          "then": {
+            "properties": {
+              "mayValidate": {
+                "const": false
+              },
+              "mayDeclareDeliveryComplete": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "role": {
+                "const": "repair"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "then": {
+            "properties": {
+              "mayValidate": {
+                "const": false
+              },
+              "mayDeclareDeliveryComplete": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "branch": {
+                "const": "judicial"
+              }
+            },
+            "required": [
+              "branch"
+            ]
+          },
+          "then": {
+            "properties": {
+              "mayValidate": {
+                "const": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "branch": {
+                "const": "reporting"
+              }
+            },
+            "required": [
+              "branch"
+            ]
+          },
+          "then": {
+            "properties": {
+              "mayValidate": {
+                "const": false
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "deliveryCertification": {
+      "type": "object",
+      "required": [
+        "status",
+        "executionEvidence",
+        "selfCertificationAllowed"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "not-started",
+            "in-progress",
+            "blocked",
+            "partial",
+            "not-verified",
+            "not-certified",
+            "complete"
+          ]
+        },
+        "executionEvidence": {
+          "$ref": "https://top.local/schemas/fragments/execution-evidence.schema.json"
+        },
+        "certifiedByPassId": {
+          "type": "string"
+        },
+        "certifiedByBranch": {
+          "enum": [
+            "judicial"
+          ]
+        },
+        "requiredJudicialPassId": {
+          "type": "string"
+        },
+        "requiredJudicialHandoffRef": {
+          "type": "string"
+        },
+        "requiredReportId": {
+          "type": "string"
+        },
+        "generationOrRepairPassIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "selfCertificationAllowed": {
+          "const": false
+        },
+        "noRequiredGateFailedOrNotVerified": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "complete"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "executionEvidence": {
+                "properties": {
+                  "executionIsolationLevel": {
+                    "const": "runner-enforced"
+                  },
+                  "verificationEvidenceLevel": {
+                    "const": "hard-check-verified"
+                  }
+                }
+              },
+              "noRequiredGateFailedOrNotVerified": {
+                "const": true
+              }
+            },
+            "required": [
+              "certifiedByPassId",
+              "certifiedByBranch",
+              "requiredJudicialPassId",
+              "requiredJudicialHandoffRef",
+              "requiredReportId",
+              "generationOrRepairPassIds",
+              "noRequiredGateFailedOrNotVerified"
+            ]
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

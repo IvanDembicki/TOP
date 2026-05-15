@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-artifact-dogfood",
+  "runId": "2026-05-14-repair-artifact-dogfood",
+  "passId": "executive",
+  "role": "executive",
+  "adapterKind": "llm-api",
+  "invocationId": "resp_0661a8e9df408fcb006a06766e4a4c8192a7a02eade19cbae6",
+  "contextId": "resp_0661a8e9df408fcb006a06766e4a4c8192a7a02eade19cbae6-fresh-context",
+  "runnerName": "top-protocol-runner",
+  "processId": 13940,
+  "command": "scripts/adapters/llm_api_adapter.py",
+  "startedAt": "2026-05-15T01:27:09Z",
+  "endedAt": "2026-05-15T01:27:16Z",
+  "exitCode": 0,
+  "taskCapsuleRef": "capsules/executive.task-capsule.json",
+  "contextPackageRef": "contexts/executive.context-package.json",
+  "handoffArtifactRef": "handoffs/executive.handoff.json",
+  "contextHash": "0372980087a7da280f821b923c6cef9b998e47b328d092fc0c318a9c15e5f3e9",
+  "handoffHash": "60e5317c11e67279418d9c2321ae9e2a29c1ecd9bc599d554f889ca830881ce8",
+  "freshContext": true,
+  "receivedOnlyContextPackage": true,
+  "modelInvocationEvidence": true,
+  "artifactWrites": [],
+  "limitations": [
+    "LLM API invocation completed in a fresh request using only context package inputs."
+  ]
+}

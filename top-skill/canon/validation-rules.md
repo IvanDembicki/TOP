@@ -95,6 +95,15 @@ Canonical repair for context data injection:
   `validation passed`, `no violations`, `ready_for_manual_QA`, `ready_for_use`,
   `final_status: pass`, or equivalent verdicts for their own artifacts. Such
   claims are `WF-023`.
+- No self-certified delivery: delivery `complete` requires the delivery law from
+  `workflow/enforcement-evidence-model.md`: runner-enforced execution
+  isolation, hard-check-verified validation evidence, a valid independent
+  judicial handoff artifact, and no required gate with `fail` or `not_verified`
+  status. If the same pass generated/repaired artifacts, wrote validation/final
+  audit, and declared completion, validation must report `WF-031`.
+- Protocol-only execution must not report `runner-enforced`. Schema validation
+  and hard checks are not role isolation. Multiple role headings in one answer
+  are not enforced separation.
 - Validation must use a clean, adversarial context: artifacts under review,
   current top-skill canon/rules, validation contract/checklist, relevant
   specs/prompts, and the migration log as chronology only. Treating previous
@@ -107,6 +116,19 @@ Canonical repair for context data injection:
   generation/repair, inspected current artifacts, listed files and invariants,
   rejected generator self-validation claims, closed rejection tickets, and did
   not rely on self-validation. Failure is `WF-026`.
+
+## Delivery evidence validation
+
+- Any validation or delivery artifact that affects certification must include
+  `executionEvidence`.
+- `executionIsolationLevel` and `verificationEvidenceLevel` must be reported as
+  separate axes.
+- A hard check result without a judicial handoff is evidence, but not a
+  judicial verdict.
+- A judicial handoff without required hard-check evidence cannot certify
+  delivery complete.
+- Required hard-check gate status `fail` or `not_verified` blocks delivery
+  complete.
 
 ## Content validation
 - Content has no architectural will.

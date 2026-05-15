@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "1.0",
+  "certificationId": "2026-05-12-activation-pilot-delivery-certification",
+  "workflowId": "top-skill-2-orchestration",
+  "deliveryStatus": "not-certified",
+  "executionEvidence": {
+    "executionIsolationLevel": "schema-validated",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "2026-05-12-activation-pilot-executive-invocation",
+      "2026-05-12-activation-pilot-judicial-invocation",
+      "2026-05-12-activation-pilot-certification-invocation"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B ..\\..\\..\\..\\scripts\\quick_validate.py ..\\..\\..\\.."
+    ],
+    "limitations": [
+      "Hard checks were executed and passed.",
+      "Runner isolation was not accepted as runner-enforced evidence.",
+      "Independent judicial invocation was not externally enforced."
+    ]
+  },
+  "judicialValidationRef": "reports/validation-report.json",
+  "judicialHandoffRef": "handoffs/judicial.handoff.json",
+  "validationReportRef": "reports/validation-report.json",
+  "finalAuditReportRef": "reports/final-audit.md",
+  "generationOrRepairPassIds": [
+    "executive"
+  ],
+  "judicialPassId": "judicial",
+  "separationOfPowersProof": [
+    "Task capsules and handoff artifacts exist for executive, judicial, and certification passes.",
+    "Runner report exists and validates handoff consistency and hard checks.",
+    "No external runner-enforced separate LLM invocations were used, so separation remains protocol-level only."
+  ],
+  "requiredHardChecks": [
+    {
+      "id": "top-skill-quick-validate",
+      "description": "Run top-skill package quick validation from the orchestration run package.",
+      "requiredForComplete": true,
+      "status": "pass",
+      "command": "python -B ..\\..\\..\\..\\scripts\\quick_validate.py ..\\..\\..\\..",
+      "evidence": [
+        "quick_validate: OK; hard_checks: 16; agent_review_candidates: 0"
+      ]
+    }
+  ],
+  "blockingChecks": [
+    {
+      "checkId": "required-hard-checks",
+      "status": "pass",
+      "evidence": [
+        "top-skill-quick-validate passed through runner/runner-report.json."
+      ]
+    },
+    {
+      "checkId": "runner-enforced-isolation",
+      "status": "not_verified",
+      "evidence": [
+        "No external runner-enforced separate LLM invocation evidence was accepted."
+      ]
+    },
+    {
+      "checkId": "required-pass-status",
+      "status": "not_verified",
+      "evidence": [
+        "runner/runner-report.json has runnerStatus not_verified because required judicial and certification handoffs are not pass/complete."
+      ]
+    },
+    {
+      "checkId": "independent-judicial-handoff",
+      "status": "not_verified",
+      "evidence": [
+        "Judicial handoff exists as a protocol artifact but was not produced by an externally isolated judicial invocation."
+      ]
+    }
+  ],
+  "knownExclusions": [
+    "External runner-enforced invocation isolation.",
+    "Independently launched judicial validation pass."
+  ],
+  "noBlockingInScopeViolations": true,
+  "generationAndValidationSeparate": false,
+  "noUnverifiedRequiredGates": false,
+  "noRequiredGateFailedOrNotVerified": false
+}

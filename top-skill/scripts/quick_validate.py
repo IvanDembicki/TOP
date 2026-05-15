@@ -1,9 +1,83 @@
 #!/usr/bin/env python3
 import argparse
+import hashlib
 import json
 import re
 import sys
+import tempfile
 from pathlib import Path
+
+
+sys.dont_write_bytecode = True
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+try:
+    from validate_execution_evidence import validate_document
+except Exception as exc:  # pragma: no cover - reported by package validation
+    validate_document = None
+    validate_execution_evidence_import_error = exc
+else:
+    validate_execution_evidence_import_error = None
+
+try:
+    from top_protocol_runner import run_workflow
+except Exception as exc:  # pragma: no cover - reported by package validation
+    run_workflow = None
+    top_protocol_runner_import_error = exc
+else:
+    top_protocol_runner_import_error = None
+
+try:
+    from certify_orchestration_run import certify as certify_orchestration_run
+    from certify_orchestration_run import verify_snapshot as verify_certification_snapshot
+except Exception as exc:  # pragma: no cover - reported by package validation
+    certify_orchestration_run = None
+    verify_certification_snapshot = None
+    certify_orchestration_run_import_error = exc
+else:
+    certify_orchestration_run_import_error = None
+
+try:
+    from update_orchestration_state import update_state as update_orchestration_state
+except Exception as exc:  # pragma: no cover - reported by package validation
+    update_orchestration_state = None
+    update_orchestration_state_import_error = exc
+else:
+    update_orchestration_state_import_error = None
+
+try:
+    from validate_orchestration_run import validate_run as validate_orchestration_run
+except Exception as exc:  # pragma: no cover - reported by package validation
+    validate_orchestration_run = None
+    validate_orchestration_run_import_error = exc
+else:
+    validate_orchestration_run_import_error = None
+
+try:
+    from run_orchestration_workflow import drive as run_orchestration_workflow
+except Exception as exc:  # pragma: no cover - reported by package validation
+    run_orchestration_workflow = None
+    run_orchestration_workflow_import_error = exc
+else:
+    run_orchestration_workflow_import_error = None
+
+try:
+    from validate_orchestration_regressions import run_regressions as run_orchestration_regressions
+except Exception as exc:  # pragma: no cover - reported by package validation
+    run_orchestration_regressions = None
+    run_orchestration_regressions_import_error = exc
+else:
+    run_orchestration_regressions_import_error = None
+
+try:
+    from validate_repair_artifact_fixture import validate as validate_repair_artifact_fixture
+except Exception as exc:  # pragma: no cover - reported by package validation
+    validate_repair_artifact_fixture = None
+    validate_repair_artifact_fixture_import_error = exc
+else:
+    validate_repair_artifact_fixture_import_error = None
 
 
 REQUIRED_PATHS = [
@@ -27,6 +101,16 @@ REQUIRED_PATHS = [
     "rules/review-checklist.md",
     "contracts/top-folder-contract.md",
     "rules/typing-checklist.md",
+    "scripts/validate_execution_evidence.py",
+    "scripts/top_protocol_runner.py",
+    "scripts/adapters/llm_api_adapter.py",
+    "scripts/certify_orchestration_run.py",
+    "scripts/create_orchestration_run.py",
+    "scripts/update_orchestration_state.py",
+    "scripts/validate_orchestration_run.py",
+    "scripts/validate_orchestration_regressions.py",
+    "scripts/validate_repair_artifact_fixture.py",
+    "scripts/run_orchestration_workflow.py",
     "references/node-model.md",
     "references/code-generation.md",
     "references/event-model.md",
@@ -52,6 +136,31 @@ REQUIRED_PATHS = [
     "top/modes/mode-manifest.json",
     "top/validation/output-rules.md",
     "top/shared-rules/skill-governance.md",
+    "workflow/enforcement-evidence-model.md",
+    "workflow/activation-and-operating-procedure.md",
+    "workflow/task-capsule-format.md",
+    "workflow/handoff-artifact-format.md",
+    "workflow/role-packs.md",
+    "workflow/orchestrator-protocol.md",
+    "workflow/runner-contract.md",
+    "workflow/pass-invocation-contract.md",
+    "workflow/llm-api-adapter-contract.md",
+    "workflow/repair-pass-contract.md",
+    "workflow/delivery-certification-procedure.md",
+    "workflow/run-state-machine.md",
+    "workflow/run-package-layout.md",
+    "top/schemas/fragments/execution-evidence.schema.json",
+    "top/schemas/task-capsule.schema.json",
+    "top/schemas/handoff-artifact.schema.json",
+    "top/schemas/runner-workflow.schema.json",
+    "top/schemas/runner-report.schema.json",
+    "top/schemas/context-package.schema.json",
+    "top/schemas/pass-invocation-evidence.schema.json",
+    "top/schemas/certification-snapshot.schema.json",
+    "top/schemas/run-state.schema.json",
+    "top/schemas/agent-workflow.schema.json",
+    "top/schemas/validation-report.schema.json",
+    "top/schemas/delivery-certification.schema.json",
     "top/schemas/migration-workflow.schema.json",
     "top/provenance.json",
 ]
@@ -170,6 +279,48 @@ def check_hydration_manifest(root):
         errors.append("hydration-manifest.json task tier must be a non-empty object")
     if not isinstance(full, list) or not full:
         errors.append("hydration-manifest.json full tier must be a non-empty list")
+
+    required_always = [
+        "workflow/enforcement-evidence-model.md",
+        "workflow/activation-and-operating-procedure.md",
+        "workflow/task-capsule-format.md",
+        "workflow/handoff-artifact-format.md",
+        "workflow/role-packs.md",
+        "workflow/orchestrator-protocol.md",
+        "workflow/runner-contract.md",
+        "workflow/pass-invocation-contract.md",
+        "workflow/llm-api-adapter-contract.md",
+        "workflow/repair-pass-contract.md",
+        "workflow/delivery-certification-procedure.md",
+        "workflow/run-state-machine.md",
+        "workflow/run-package-layout.md",
+        "scripts/validate_execution_evidence.py",
+        "scripts/top_protocol_runner.py",
+        "scripts/adapters/llm_api_adapter.py",
+        "scripts/certify_orchestration_run.py",
+        "scripts/create_orchestration_run.py",
+        "scripts/update_orchestration_state.py",
+        "scripts/validate_orchestration_run.py",
+        "scripts/validate_orchestration_regressions.py",
+        "scripts/validate_repair_artifact_fixture.py",
+        "scripts/run_orchestration_workflow.py",
+        "top/schemas/fragments/execution-evidence.schema.json",
+        "top/schemas/task-capsule.schema.json",
+        "top/schemas/handoff-artifact.schema.json",
+        "top/schemas/runner-workflow.schema.json",
+        "top/schemas/runner-report.schema.json",
+        "top/schemas/context-package.schema.json",
+        "top/schemas/pass-invocation-evidence.schema.json",
+        "top/schemas/certification-snapshot.schema.json",
+        "top/schemas/run-state.schema.json",
+        "top/schemas/agent-workflow.schema.json",
+        "top/schemas/validation-report.schema.json",
+        "top/schemas/delivery-certification.schema.json",
+    ]
+    always_set = set(always) if isinstance(always, list) else set()
+    for item in required_always:
+        if item not in always_set:
+            errors.append(f"hydration-manifest.json always tier missing execution governance file: {item}")
 
     referenced_paths = []
     referenced_paths.extend(collect_hydration_paths(always))
@@ -467,6 +618,7 @@ def check_required_phrases(root):
         ("rules/violation-catalog.md", "WF-028"),
         ("rules/violation-catalog.md", "WF-029"),
         ("rules/violation-catalog.md", "WF-030"),
+        ("rules/violation-catalog.md", "WF-031"),
         ("contracts/top-folder-contract.md", "top_src/<branch-id>/"),
         ("contracts/top-folder-contract.md", "top/specs/settings-branch.json"),
         ("contracts/top-folder-contract.md", "MIGRATION_WORKFLOW.json"),
@@ -490,8 +642,131 @@ def check_required_phrases(root):
         ("canon/migration.md", "top-migration/<branch-id>"),
         ("canon/migration.md", "remote push: forbidden unless the user explicitly requests push"),
         ("canon/agent-power-separation.md", "four branches"),
+        ("canon/agent-power-separation.md", "AI Separation of Powers"),
+        ("canon/agent-power-separation.md", "No self-certified delivery"),
         ("canon/agent-power-separation.md", "Agent claims are not evidence"),
         ("canon/agent-power-separation.md", "The executor produces artifacts"),
+        ("top/schemas/agent-workflow.schema.json", "TOP Agent Workflow Separation of Powers"),
+        ("top/schemas/validation-report.schema.json", "TOP Validation Report"),
+        ("top/schemas/delivery-certification.schema.json", "TOP Delivery Certification"),
+        ("top/schemas/fragments/execution-evidence.schema.json", "TOP Execution Evidence"),
+        ("top/schemas/task-capsule.schema.json", "TOP Task Capsule"),
+        ("top/schemas/handoff-artifact.schema.json", "TOP Handoff Artifact"),
+        ("workflow/enforcement-evidence-model.md", "Delivery Law"),
+        ("workflow/enforcement-evidence-model.md", "Protocol-Only Mode"),
+        ("workflow/enforcement-evidence-model.md", "False Substitutes"),
+        ("workflow/enforcement-evidence-model.md", "executionIsolationLevel"),
+        ("workflow/enforcement-evidence-model.md", "verificationEvidenceLevel"),
+        ("workflow/enforcement-evidence-model.md", "runner-enforced"),
+        ("workflow/enforcement-evidence-model.md", "hard-check-verified"),
+        ("workflow/activation-and-operating-procedure.md", "Activation Triggers"),
+        ("workflow/activation-and-operating-procedure.md", "Protocol-Only Bridge"),
+        ("workflow/activation-and-operating-procedure.md", "Status Reporting"),
+        ("workflow/task-capsule-format.md", "one microprocess pass"),
+        ("workflow/handoff-artifact-format.md", "Required executionEvidence"),
+        ("workflow/role-packs.md", "Role packs define minimal context"),
+        ("workflow/orchestrator-protocol.md", "Workflow, Not Free Agent Loop"),
+        ("workflow/orchestrator-protocol.md", "Write"),
+        ("workflow/orchestrator-protocol.md", "Select"),
+        ("workflow/orchestrator-protocol.md", "Compress"),
+        ("workflow/orchestrator-protocol.md", "Isolate"),
+        ("workflow/runner-contract.md", "The runner is the executable harness layer"),
+        ("workflow/runner-contract.md", "The report is evidence. It is not a judicial verdict by itself"),
+        ("workflow/runner-contract.md", "Portable Commands"),
+        ("workflow/runner-contract.md", "scriptRef"),
+        ("workflow/runner-contract.md", "without adapter-provided model invocation evidence is also `not_verified`"),
+        ("workflow/pass-invocation-contract.md", "Runner-Enforced Isolation Gate"),
+        ("workflow/pass-invocation-contract.md", "modelInvocationEvidence"),
+        ("workflow/pass-invocation-contract.md", "process adapter without model invocation evidence cannot certify"),
+        ("workflow/pass-invocation-contract.md", "placeholder context slices"),
+        ("workflow/llm-api-adapter-contract.md", "scripts/adapters/llm_api_adapter.py"),
+        ("workflow/llm-api-adapter-contract.md", "freshContext: true"),
+        ("workflow/llm-api-adapter-contract.md", "modelInvocationEvidence: true"),
+        ("workflow/repair-pass-contract.md", "Post-Repair Judicial Law"),
+        ("workflow/repair-pass-contract.md", "maxRepairAttempts"),
+        ("workflow/repair-pass-contract.md", "A repair result is not a verdict"),
+        ("workflow/delivery-certification-procedure.md", "scripts/certify_orchestration_run.py"),
+        ("workflow/delivery-certification-procedure.md", "runner report execution evidence is `runner-enforced`"),
+        ("workflow/delivery-certification-procedure.md", "Runner report is evidence. Judicial handoff is verdict"),
+        ("workflow/delivery-certification-procedure.md", "SNAPSHOT_STALE"),
+        ("workflow/run-state-machine.md", "The state machine does not certify delivery by itself"),
+        ("workflow/run-state-machine.md", "scripts/update_orchestration_state.py"),
+        ("workflow/run-state-machine.md", "skip-state-update"),
+        ("workflow/run-state-machine.md", "certified"),
+        ("workflow/run-state-machine.md", "stale"),
+        ("workflow/run-package-layout.md", "top/orchestration/<workflow-id>/<run-id>/"),
+        ("workflow/run-package-layout.md", "A scaffolded run package starts as `protocol-defined` and `not-certified`"),
+        ("workflow/run-package-layout.md", "scripts/certify_orchestration_run.py"),
+        ("workflow/run-package-layout.md", "--verify-snapshot"),
+        ("workflow/run-package-layout.md", "run-state.json"),
+        ("workflow/run-package-layout.md", "final-audit.md"),
+        ("scripts/validate_execution_evidence.py", "delivery complete requires executionIsolationLevel runner-enforced"),
+        ("scripts/validate_execution_evidence.py", "required hard check must be pass for delivery complete"),
+        ("scripts/validate_execution_evidence.py", "ARTIFACT_VALID"),
+        ("scripts/top_protocol_runner.py", "Run or validate a TOP runner workflow"),
+        ("scripts/top_protocol_runner.py", "accept_external_runner_evidence"),
+        ("scripts/top_protocol_runner.py", "TOP_CONTEXT_PACKAGE"),
+        ("scripts/top_protocol_runner.py", "modelInvocationEvidence"),
+        ("scripts/top_protocol_runner.py", "python-script"),
+        ("scripts/top_protocol_runner.py", "skip_state_update"),
+        ("scripts/adapters/llm_api_adapter.py", "openai-responses"),
+        ("scripts/adapters/llm_api_adapter.py", "TOP_CONTEXT_PACKAGE"),
+        ("scripts/adapters/llm_api_adapter.py", "modelInvocationEvidence"),
+        ("scripts/adapters/llm_api_adapter.py", "dry-run"),
+        ("scripts/adapters/llm_api_adapter.py", "resolvedFrom"),
+        ("scripts/adapters/llm_api_adapter.py", "artifactWriteRequests"),
+        ("scripts/adapters/llm_api_adapter.py", "artifactWrites"),
+        ("scripts/certify_orchestration_run.py", "Certify a TOP orchestration run package"),
+        ("scripts/certify_orchestration_run.py", "certify_orchestration_run: COMPLETE"),
+        ("scripts/certify_orchestration_run.py", "SNAPSHOT_STALE"),
+        ("scripts/certify_orchestration_run.py", "skip_state_update"),
+        ("scripts/certify_orchestration_run.py", "post-repair-judicial-validation"),
+        ("scripts/certify_orchestration_run.py", "repairedRefs"),
+        ("scripts/create_orchestration_run.py", "Create a TOP orchestration run package"),
+        ("scripts/create_orchestration_run.py", "protocol-defined"),
+        ("scripts/create_orchestration_run.py", "final-audit.md"),
+        ("scripts/create_orchestration_run.py", "--repair-loop"),
+        ("scripts/create_orchestration_run.py", "--repair-artifact-dogfood"),
+        ("scripts/create_orchestration_run.py", "repair-artifact-fixture"),
+        ("scripts/update_orchestration_state.py", "Derive and write TOP orchestration run state"),
+        ("scripts/update_orchestration_state.py", "STATE_WRITTEN"),
+        ("scripts/update_orchestration_state.py", "invalid run state transition"),
+        ("scripts/validate_orchestration_run.py", "Validate one TOP orchestration run package"),
+        ("scripts/validate_orchestration_run.py", "RUN_VALID certified"),
+        ("scripts/validate_orchestration_run.py", "RUN_STALE"),
+        ("scripts/validate_orchestration_run.py", "RUN_INVALID"),
+        ("scripts/validate_orchestration_run.py", "delivery complete required pass must have modelInvocationEvidence true"),
+        ("scripts/validate_orchestration_run.py", "delivery complete after repair requires"),
+        ("scripts/validate_orchestration_run.py", "repaired refs"),
+        ("scripts/validate_orchestration_regressions.py", "Run TOP orchestration regression fixtures"),
+        ("scripts/validate_orchestration_regressions.py", "missing judicial handoff"),
+        ("scripts/validate_orchestration_regressions.py", "process-only false complete"),
+        ("scripts/validate_orchestration_regressions.py", "required hard check not_verified"),
+        ("scripts/validate_orchestration_regressions.py", "RUN_VALID not-certified"),
+        ("scripts/validate_orchestration_regressions.py", "repair_without_post_judicial"),
+        ("scripts/validate_repair_artifact_fixture.py", "Validate the repair artifact dogfood fixture"),
+        ("scripts/validate_repair_artifact_fixture.py", "validate_repair_artifact_fixture: OK"),
+        ("scripts/run_orchestration_workflow.py", "Run a TOP orchestration workflow driver"),
+        ("scripts/run_orchestration_workflow.py", "RUN_VALID not-certified"),
+        ("scripts/run_orchestration_workflow.py", "CERTIFICATION_NOT_CERTIFIED"),
+        ("top/schemas/runner-workflow.schema.json", "TOP Runner Workflow"),
+        ("top/schemas/runner-report.schema.json", "TOP Runner Report"),
+        ("top/schemas/context-package.schema.json", "TOP Context Package"),
+        ("top/schemas/pass-invocation-evidence.schema.json", "TOP Pass Invocation Evidence"),
+        ("top/schemas/pass-invocation-evidence.schema.json", "artifactWrites"),
+        ("top/schemas/task-capsule.schema.json", "artifactWriteRequests"),
+        ("top/schemas/certification-snapshot.schema.json", "TOP Certification Snapshot"),
+        ("top/schemas/run-state.schema.json", "TOP Orchestration Run State"),
+        ("top/schemas/migration-workflow.schema.json", "separationOfPowers"),
+        ("top/schemas/migration-workflow.schema.json", "executionEvidence"),
+        ("top/artifact-manifest.json", "top/schemas/agent-workflow.schema.json"),
+        ("top/artifact-manifest.json", "workflow/enforcement-evidence-model.md"),
+        ("top/modes/mode-manifest.json", "protocol_only_default"),
+        ("top/modes/mode-manifest.json", "Delivery complete requires an independent judicial validation pass"),
+        ("top/spec.json", "delivery-certification.schema.json"),
+        ("top/spec.json", "workflow/enforcement-evidence-model.md"),
+        ("top/validation/output-rules.md", "runner-enforced"),
+        ("top/shared-rules/skill-governance.md", "Protocol-only execution must not be reported as runner-enforced execution"),
         ("canon/validation-rejection-protocol.md", "Validate the smallest meaningful artifact"),
         ("canon/validation-rejection-protocol.md", "micro-check"),
         ("canon/validation-rejection-protocol.md", "meso-check"),
@@ -564,6 +839,7 @@ def check_required_phrases(root):
         ("rules/pattern-recognition.md", "Concrete content privacy and fragment-output signals"),
         ("rules/pattern-recognition.md", "Spec shape and generated layout signals"),
         ("rules/pattern-recognition.md", "Missing checkpoint / non-independent validation signals"),
+        ("rules/pattern-recognition.md", "Required post-generation delivery gate signals"),
         ("rules/pattern-recognition.md", "Migration git branch safety signals"),
         ("references/migration-heuristics.md", "Giant controller access surface"),
         ("references/pattern-cards.md", "Runtime Branch Binding Pattern"),
@@ -609,6 +885,18 @@ def check_required_phrases(root):
         ("contracts/agent-output-contracts/generation-output.md", "generated_controller_runtime_shape_self_check"),
         ("contracts/agent-output-contracts/validation-output.md", "controller_runtime_shape_check"),
         ("contracts/agent-output-contracts/final-audit-output.md", "controller_tree_audit"),
+        ("contracts/agent-output-contracts/validation-output.md", "content_child_import_check"),
+        ("contracts/agent-output-contracts/validation-output.md", "prompt_code_contract_drift_check"),
+        ("contracts/agent-output-contracts/validation-output.md", "node_global_store_access_check"),
+        ("contracts/agent-output-contracts/validation-output.md", "bridge_callback_injection_check"),
+        ("contracts/agent-output-contracts/validation-output.md", "self_audited_pass_report_check"),
+        ("contracts/agent-output-contracts/validation-output.md", "execution_evidence"),
+        ("contracts/agent-output-contracts/validation-output.md", "runner_enforcement_claim_check"),
+        ("contracts/agent-output-contracts/validation-output.md", "Required hard-check status `fail` or `not_verified` blocks delivery complete"),
+        ("contracts/agent-output-contracts/final-audit-output.md", "separation_of_powers_audit"),
+        ("contracts/agent-output-contracts/final-audit-output.md", "delivery_certification_audit"),
+        ("contracts/agent-output-contracts/final-audit-output.md", "execution_evidence_audit"),
+        ("contracts/agent-output-contracts/final-audit-output.md", "must not use `complete`, `certified`, `delivery complete`"),
         ("canon/validation-rules.md", "`type` names the actual node type"),
         ("hydration-manifest.json", "canon/agent-power-separation.md"),
         ("hydration-manifest.json", "canon/validation-rejection-protocol.md"),
@@ -769,6 +1057,21 @@ def check_validation_control_consistency(root):
         ("rules/violation-catalog.md", "WF-028"),
         ("rules/violation-catalog.md", "WF-029"),
         ("rules/violation-catalog.md", "WF-030"),
+        ("rules/violation-catalog.md", "WF-031"),
+        ("canon/agent-power-separation.md", "No self-certified delivery"),
+        ("top/schemas/agent-workflow.schema.json", "selfCertificationAllowed"),
+        ("top/schemas/validation-report.schema.json", "checkedFiles"),
+        ("top/schemas/delivery-certification.schema.json", "generationAndValidationSeparate"),
+        ("top/schemas/fragments/execution-evidence.schema.json", "executionIsolationLevel"),
+        ("top/schemas/fragments/execution-evidence.schema.json", "verificationEvidenceLevel"),
+        ("top/schemas/delivery-certification.schema.json", "judicialHandoffRef"),
+        ("top/schemas/delivery-certification.schema.json", "noRequiredGateFailedOrNotVerified"),
+        ("contracts/agent-output-contracts/validation-output.md", "delivery_report_gate_check"),
+        ("contracts/agent-output-contracts/validation-output.md", "execution_evidence"),
+        ("contracts/agent-output-contracts/validation-output.md", "runner-enforced"),
+        ("contracts/agent-output-contracts/final-audit-output.md", "delivery_certification_audit"),
+        ("contracts/agent-output-contracts/final-audit-output.md", "runner-enforced"),
+        ("workflow/enforcement-evidence-model.md", "Simulated separation cannot certify independent validation"),
     ]
     for file_name, phrase in required_phrases:
         if phrase not in read_text(root / file_name):
@@ -786,6 +1089,1131 @@ def check_validation_control_consistency(root):
         if "WF-023" not in text or "validation passed" not in text:
             errors.append(f"{file_name}: generator self-validation prohibition missing")
     return errors
+
+
+def check_execution_evidence_validator_smoke(root):
+    errors = []
+    if validate_document is None:
+        return [f"scripts/validate_execution_evidence.py import failed: {validate_execution_evidence_import_error}"]
+
+    protocol_only_not_certified = {
+        "status": "not-certified",
+        "executionEvidence": {
+            "executionIsolationLevel": "protocol-followed-by-agent",
+            "verificationEvidenceLevel": "agent-claimed",
+            "runnerName": None,
+            "separateInvocationIds": [],
+            "schemaValidationCommand": None,
+            "hardCheckCommands": [],
+            "limitations": ["Protocol-only mode; no runner evidence."],
+        },
+    }
+
+    invalid_complete = {
+        "deliveryStatus": "complete",
+        "executionEvidence": {
+            "executionIsolationLevel": "protocol-followed-by-agent",
+            "verificationEvidenceLevel": "agent-claimed",
+            "runnerName": None,
+            "separateInvocationIds": [],
+            "schemaValidationCommand": None,
+            "hardCheckCommands": [],
+            "limitations": ["Single context."],
+        },
+        "judicialHandoffRef": "",
+        "validationReportRef": "",
+        "requiredHardChecks": [
+            {
+                "id": "quick-validate",
+                "description": "Package sanity validation",
+                "requiredForComplete": True,
+                "status": "not_verified",
+                "command": None,
+                "evidence": [],
+            }
+        ],
+        "noRequiredGateFailedOrNotVerified": False,
+    }
+
+    valid_complete = {
+        "deliveryStatus": "complete",
+        "executionEvidence": {
+            "executionIsolationLevel": "runner-enforced",
+            "verificationEvidenceLevel": "hard-check-verified",
+            "runnerName": "top-runner",
+            "separateInvocationIds": ["executive-pass", "judicial-pass"],
+            "schemaValidationCommand": "python scripts/quick_validate.py D:/TOP/top-skill",
+            "hardCheckCommands": ["python scripts/quick_validate.py D:/TOP/top-skill"],
+            "limitations": ["Smoke fixture only."],
+        },
+        "judicialHandoffRef": "handoff://judicial-pass",
+        "validationReportRef": "report://validation",
+        "requiredHardChecks": [
+            {
+                "id": "quick-validate",
+                "description": "Package sanity validation",
+                "requiredForComplete": True,
+                "status": "pass",
+                "command": "python scripts/quick_validate.py D:/TOP/top-skill",
+                "evidence": ["quick_validate: OK"],
+            }
+        ],
+        "blockingChecks": [
+            {
+                "checkId": "delivery-law",
+                "status": "pass",
+                "evidence": ["Delivery law fixture passed."],
+            }
+        ],
+        "noBlockingInScopeViolations": True,
+        "generationAndValidationSeparate": True,
+        "noUnverifiedRequiredGates": True,
+        "noRequiredGateFailedOrNotVerified": True,
+    }
+
+    protocol_errors = validate_document(protocol_only_not_certified, "protocol-only-smoke")
+    if protocol_errors:
+        errors.append("execution evidence validator rejected protocol-only not-certified smoke fixture")
+        errors.extend(protocol_errors)
+
+    invalid_errors = validate_document(invalid_complete, "invalid-complete-smoke")
+    if not invalid_errors:
+        errors.append("execution evidence validator failed to reject invalid delivery complete smoke fixture")
+
+    valid_errors = validate_document(valid_complete, "valid-complete-smoke")
+    if valid_errors:
+        errors.append("execution evidence validator rejected valid delivery complete smoke fixture")
+        errors.extend(valid_errors)
+
+    return errors
+
+
+def write_smoke_json(path, data):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+
+
+def smoke_sha256(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def check_top_protocol_runner_smoke(root):
+    errors = []
+    if run_workflow is None:
+        return [f"scripts/top_protocol_runner.py import failed: {top_protocol_runner_import_error}"]
+
+    with tempfile.TemporaryDirectory(prefix="top-runner-smoke-") as temp_name:
+        temp_root = Path(temp_name).resolve()
+        capsule = {
+            "schemaVersion": "1.0",
+            "workflowId": "runner-smoke",
+            "taskId": "executive-task",
+            "role": "executive",
+            "objective": "Produce a smoke handoff.",
+            "allowedActions": ["write handoff"],
+            "forbiddenActions": ["validate own output", "certify delivery"],
+            "inputReferences": [],
+            "contextSlices": ["smoke"],
+            "outputContract": "handoff-artifact",
+            "mayEditFiles": True,
+            "mayValidate": False,
+            "mayRepair": False,
+            "mayReport": False,
+            "mayCertifyDelivery": False,
+            "stopCondition": "handoff written",
+        }
+        handoff = {
+            "schemaVersion": "1.0",
+            "workflowId": "runner-smoke",
+            "passId": "executive-pass",
+            "taskId": "executive-task",
+            "role": "executive",
+            "agentName": "smoke-executive",
+            "taskCapsuleRef": "capsules/executive-task.json",
+            "inputReferences": [],
+            "outputReferences": ["handoffs/executive-pass.json"],
+            "filesRead": ["capsules/executive-task.json"],
+            "filesChanged": [],
+            "commandsRun": [],
+            "status": "done",
+            "executionEvidence": {
+                "executionIsolationLevel": "protocol-followed-by-agent",
+                "verificationEvidenceLevel": "agent-claimed",
+                "runnerName": None,
+                "separateInvocationIds": [],
+                "schemaValidationCommand": None,
+                "hardCheckCommands": [],
+                "limitations": ["Smoke handoff is not runner-enforced."],
+            },
+            "mayEditFiles": True,
+            "mayValidate": False,
+            "mayRepair": False,
+            "mayReport": False,
+            "mayCertifyDelivery": False,
+            "limitations": ["Smoke handoff."],
+            "didNotDo": ["did not validate", "did not certify delivery"],
+            "handoffTo": "judicial",
+        }
+        runner_workflow = {
+            "schemaVersion": "1.0",
+            "workflowId": "runner-smoke",
+            "runId": "runner-smoke-run",
+            "runnerName": "top-protocol-runner",
+            "mode": "validation",
+            "runnerCapabilities": {
+                "launchesSeparateProcesses": False,
+                "launchesSeparateInvocations": False,
+                "isolatesContexts": False,
+                "executesHardChecks": True,
+                "validatesHandoffs": True,
+            },
+            "passes": [
+                {
+                    "passId": "executive-pass",
+                    "role": "executive",
+                    "taskCapsuleRef": "capsules/executive-task.json",
+                    "handoffArtifactRef": "handoffs/executive-pass.json",
+                    "invocationId": "invocation-executive",
+                    "contextId": "context-executive",
+                    "command": None,
+                    "cwd": None,
+                    "timeoutSeconds": 30,
+                    "requiredForDelivery": False,
+                }
+            ],
+            "hardChecks": [
+                {
+                    "id": "python-smoke",
+                    "description": "Python command smoke check",
+                    "requiredForComplete": True,
+                    "command": [sys.executable, "-B", "-c", "print('runner smoke ok')"],
+                    "cwd": None,
+                    "timeoutSeconds": 30,
+                }
+            ],
+            "deliveryCertificationRef": None,
+            "limitations": ["Smoke run does not prove runner-enforced isolation."],
+        }
+
+        write_smoke_json(temp_root / "capsules" / "executive-task.json", capsule)
+        write_smoke_json(temp_root / "handoffs" / "executive-pass.json", handoff)
+
+        report, runner_errors = run_workflow(
+            runner_workflow,
+            temp_root,
+            execute_passes=False,
+            execute_hard_checks=True,
+            accept_external_runner_evidence=False,
+        )
+        if runner_errors:
+            errors.append("top_protocol_runner rejected valid smoke workflow")
+            errors.extend(runner_errors)
+        if report.get("runnerStatus") != "pass":
+            errors.append("top_protocol_runner smoke report did not pass")
+        if report.get("executionEvidence", {}).get("verificationEvidenceLevel") != "hard-check-verified":
+            errors.append("top_protocol_runner did not produce hard-check-verified evidence")
+        if report.get("executionEvidence", {}).get("executionIsolationLevel") == "runner-enforced":
+            errors.append("top_protocol_runner claimed runner-enforced without accepted external evidence")
+        pass_result = report.get("passResults", [{}])[0]
+        if not pass_result.get("contextPackageRef"):
+            errors.append("top_protocol_runner smoke did not record contextPackageRef")
+        if not pass_result.get("invocationEvidenceRef"):
+            errors.append("top_protocol_runner smoke did not record invocationEvidenceRef")
+        if pass_result.get("modelInvocationEvidence") is True:
+            errors.append("top_protocol_runner process smoke falsely claimed modelInvocationEvidence")
+        if not (temp_root / "contexts" / "executive-pass.context-package.json").exists():
+            errors.append("top_protocol_runner smoke did not materialize context package")
+        if not (temp_root / "invocations" / "executive-pass.invocation-evidence.json").exists():
+            errors.append("top_protocol_runner smoke did not record invocation evidence")
+
+        broken = dict(runner_workflow)
+        broken["hardChecks"] = [
+            {
+                "id": "missing-required-command",
+                "description": "Invalid required hard check",
+                "requiredForComplete": True,
+                "command": None,
+            }
+        ]
+        _report, broken_errors = run_workflow(
+            broken,
+            temp_root,
+            execute_passes=False,
+            execute_hard_checks=True,
+            accept_external_runner_evidence=False,
+        )
+        if not broken_errors:
+            errors.append("top_protocol_runner failed to reject missing required hard-check command")
+
+    return errors
+
+
+def check_orchestration_certifier_smoke(root):
+    errors = []
+    if certify_orchestration_run is None:
+        return [f"scripts/certify_orchestration_run.py import failed: {certify_orchestration_run_import_error}"]
+
+    with tempfile.TemporaryDirectory(prefix="top-certifier-smoke-") as temp_name:
+        temp_root = Path(temp_name).resolve()
+        execution_evidence = {
+            "executionIsolationLevel": "runner-enforced",
+            "verificationEvidenceLevel": "hard-check-verified",
+            "runnerName": "top-protocol-runner",
+            "separateInvocationIds": ["resp-executive", "resp-judicial"],
+            "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+            "hardCheckCommands": ["python -B scripts/quick_validate.py ."],
+            "limitations": ["Smoke fixture only."],
+        }
+        runner_workflow = {
+            "schemaVersion": "1.0",
+            "workflowId": "certifier-smoke",
+            "runId": "certifier-smoke-run",
+            "runnerName": "top-protocol-runner",
+            "mode": "validation",
+            "runnerCapabilities": {
+                "launchesSeparateProcesses": True,
+                "launchesSeparateInvocations": True,
+                "isolatesContexts": True,
+                "executesHardChecks": True,
+                "validatesHandoffs": True,
+            },
+            "passes": [
+                {
+                    "passId": "executive",
+                    "role": "executive",
+                    "taskCapsuleRef": "capsules/executive.task-capsule.json",
+                    "handoffArtifactRef": "handoffs/executive.handoff.json",
+                    "invocationId": "resp-executive",
+                    "contextId": "resp-executive-fresh-context",
+                    "adapterKind": "llm-api",
+                    "contextPackageRef": "contexts/executive.context-package.json",
+                    "invocationEvidenceRef": "invocations/executive.invocation-evidence.json",
+                    "freshContextRequired": True,
+                    "command": None,
+                    "cwd": None,
+                    "timeoutSeconds": 300,
+                    "requiredForDelivery": True,
+                },
+                {
+                    "passId": "judicial",
+                    "role": "judicial",
+                    "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+                    "handoffArtifactRef": "handoffs/judicial.handoff.json",
+                    "invocationId": "resp-judicial",
+                    "contextId": "resp-judicial-fresh-context",
+                    "adapterKind": "llm-api",
+                    "contextPackageRef": "contexts/judicial.context-package.json",
+                    "invocationEvidenceRef": "invocations/judicial.invocation-evidence.json",
+                    "freshContextRequired": True,
+                    "command": None,
+                    "cwd": None,
+                    "timeoutSeconds": 300,
+                    "requiredForDelivery": True,
+                },
+            ],
+            "hardChecks": [
+                {
+                    "id": "quick-validate",
+                    "description": "Package validation",
+                    "requiredForComplete": True,
+                    "commandType": "python-script",
+                    "scriptRef": "scripts/quick_validate.py",
+                    "scriptBaseRef": "skill-root",
+                    "args": ["."],
+                    "cwdRef": "skill-root",
+                    "timeoutSeconds": 300,
+                }
+            ],
+            "deliveryCertificationRef": "reports/delivery-certification.json",
+            "limitations": ["Smoke runner workflow."],
+        }
+        runner_report = {
+            "schemaVersion": "1.0",
+            "workflowId": "certifier-smoke",
+            "runId": "certifier-smoke-run",
+            "runnerName": "top-protocol-runner",
+            "runnerStatus": "pass",
+            "executionEvidence": execution_evidence,
+            "passResults": [
+                {
+                    "passId": "executive",
+                    "role": "executive",
+                    "invocationId": "resp-executive",
+                    "contextId": "resp-executive-fresh-context",
+                    "adapterKind": "llm-api",
+                    "contextPackageRef": "contexts/executive.context-package.json",
+                    "invocationEvidenceRef": "invocations/executive.invocation-evidence.json",
+                    "freshContext": True,
+                    "receivedOnlyContextPackage": True,
+                    "modelInvocationEvidence": True,
+                    "status": "pass",
+                    "exitCode": 0,
+                    "errors": [],
+                },
+                {
+                    "passId": "judicial",
+                    "role": "judicial",
+                    "invocationId": "resp-judicial",
+                    "contextId": "resp-judicial-fresh-context",
+                    "adapterKind": "llm-api",
+                    "contextPackageRef": "contexts/judicial.context-package.json",
+                    "invocationEvidenceRef": "invocations/judicial.invocation-evidence.json",
+                    "freshContext": True,
+                    "receivedOnlyContextPackage": True,
+                    "modelInvocationEvidence": True,
+                    "status": "pass",
+                    "exitCode": 0,
+                    "errors": [],
+                },
+            ],
+            "hardCheckResults": [
+                {
+                    "id": "quick-validate",
+                    "requiredForComplete": True,
+                    "status": "pass",
+                    "command": "python -B scripts/quick_validate.py .",
+                    "exitCode": 0,
+                    "evidence": ["quick_validate: OK"],
+                }
+            ],
+            "deliveryCertificationResult": {
+                "status": "pass",
+                "ref": "reports/delivery-certification.json",
+                "errors": [],
+            },
+            "limitations": ["Smoke runner report."],
+        }
+        judicial_handoff = {
+            "schemaVersion": "1.0",
+            "workflowId": "certifier-smoke",
+            "passId": "judicial",
+            "taskId": "judicial-task",
+            "role": "judicial",
+            "agentName": "judicial-smoke",
+            "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+            "inputReferences": ["handoffs/executive.handoff.json"],
+            "outputReferences": ["handoffs/judicial.handoff.json"],
+            "filesRead": ["runner/runner-report.json"],
+            "filesChanged": ["handoffs/judicial.handoff.json"],
+            "commandsRun": [],
+            "status": "done",
+            "executionEvidence": {
+                "executionIsolationLevel": "protocol-followed-by-agent",
+                "verificationEvidenceLevel": "agent-claimed",
+                "runnerName": None,
+                "separateInvocationIds": [],
+                "schemaValidationCommand": None,
+                "hardCheckCommands": [],
+                "limitations": ["Judicial smoke handoff."],
+            },
+            "mayEditFiles": False,
+            "mayValidate": True,
+            "mayRepair": False,
+            "mayReport": True,
+            "mayCertifyDelivery": False,
+            "limitations": ["Smoke judicial handoff."],
+            "didNotDo": ["did not repair", "did not certify delivery"],
+            "handoffTo": "certification",
+        }
+
+        write_smoke_json(temp_root / "runner" / "runner-workflow.json", runner_workflow)
+        write_smoke_json(temp_root / "runner" / "runner-report.json", runner_report)
+        write_smoke_json(temp_root / "handoffs" / "judicial.handoff.json", judicial_handoff)
+
+        class Args:
+            root = str(temp_root)
+            runner_workflow = "runner/runner-workflow.json"
+            runner_report = "runner/runner-report.json"
+            judicial_handoff = "handoffs/judicial.handoff.json"
+            validation_report = "reports/validation-report.json"
+            delivery_certification = "reports/delivery-certification.json"
+            final_audit = "reports/final-audit.md"
+            snapshot = "reports/certification-snapshot.json"
+
+        import contextlib
+        import io
+
+        with contextlib.redirect_stdout(io.StringIO()):
+            result = certify_orchestration_run(Args)
+        if result != 0:
+            errors.append("certify_orchestration_run smoke did not complete")
+
+        delivery = load_json(temp_root / "reports" / "delivery-certification.json")
+        validation = load_json(temp_root / "reports" / "validation-report.json")
+        if delivery.get("deliveryStatus") != "complete":
+            errors.append("certify_orchestration_run smoke did not write complete delivery certification")
+        certification_errors = validate_document(delivery, "certifier-smoke-delivery")
+        validation_errors = validate_document(validation, "certifier-smoke-validation")
+        if certification_errors:
+            errors.append("certify_orchestration_run wrote invalid delivery certification")
+            errors.extend(certification_errors)
+        if validation_errors:
+            errors.append("certify_orchestration_run wrote invalid validation report")
+            errors.extend(validation_errors)
+        snapshot = load_json(temp_root / "reports" / "certification-snapshot.json")
+        if not snapshot.get("artifacts"):
+            errors.append("certify_orchestration_run did not write snapshot artifacts")
+        with contextlib.redirect_stdout(io.StringIO()):
+            snapshot_result = verify_certification_snapshot(Args)
+        if snapshot_result != 0:
+            errors.append("certify_orchestration_run snapshot verification did not report current")
+
+        judicial_handoff["limitations"] = ["Smoke judicial handoff changed after certification."]
+        write_smoke_json(temp_root / "handoffs" / "judicial.handoff.json", judicial_handoff)
+        with contextlib.redirect_stdout(io.StringIO()):
+            stale_result = verify_certification_snapshot(Args)
+        if stale_result == 0:
+            errors.append("certify_orchestration_run snapshot verification failed to detect stale artifact")
+
+    return errors
+
+
+def check_orchestration_state_smoke(root):
+    errors = []
+    if update_orchestration_state is None:
+        return [f"scripts/update_orchestration_state.py import failed: {update_orchestration_state_import_error}"]
+
+    with tempfile.TemporaryDirectory(prefix="top-state-smoke-") as temp_name:
+        temp_root = Path(temp_name).resolve()
+        runner_workflow = {
+            "schemaVersion": "1.0",
+            "workflowId": "state-smoke",
+            "runId": "state-smoke-run",
+            "runnerName": "top-protocol-runner",
+            "mode": "validation",
+            "runnerCapabilities": {
+                "launchesSeparateProcesses": True,
+                "launchesSeparateInvocations": True,
+                "isolatesContexts": True,
+                "executesHardChecks": True,
+                "validatesHandoffs": True,
+            },
+            "passes": [],
+            "hardChecks": [],
+            "deliveryCertificationRef": "reports/delivery-certification.json",
+            "limitations": ["State smoke workflow."],
+        }
+        runner_report = {
+            "schemaVersion": "1.0",
+            "workflowId": "state-smoke",
+            "runId": "state-smoke-run",
+            "runnerName": "top-protocol-runner",
+            "runnerStatus": "pass",
+            "executionEvidence": {
+                "executionIsolationLevel": "runner-enforced",
+                "verificationEvidenceLevel": "hard-check-verified",
+                "runnerName": "top-protocol-runner",
+                "separateInvocationIds": ["executive-invocation", "judicial-invocation"],
+                "schemaValidationCommand": "python -B scripts/quick_validate.py .",
+                "hardCheckCommands": ["python -B scripts/quick_validate.py ."],
+                "limitations": ["State smoke evidence."],
+            },
+            "passResults": [
+                {
+                    "passId": "executive",
+                    "role": "executive",
+                    "invocationId": "executive-invocation",
+                    "contextId": "executive-context",
+                    "status": "pass",
+                    "errors": [],
+                },
+                {
+                    "passId": "judicial",
+                    "role": "judicial",
+                    "invocationId": "judicial-invocation",
+                    "contextId": "judicial-context",
+                    "status": "pass",
+                    "errors": [],
+                },
+            ],
+            "hardCheckResults": [],
+            "deliveryCertificationResult": {
+                "status": "pass",
+                "ref": "reports/delivery-certification.json",
+                "errors": [],
+            },
+            "limitations": ["State smoke report."],
+        }
+        judicial_handoff = {
+            "schemaVersion": "1.0",
+            "workflowId": "state-smoke",
+            "passId": "judicial",
+            "taskId": "judicial-task",
+            "role": "judicial",
+            "agentName": "judicial-smoke",
+            "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+            "inputReferences": ["handoffs/executive.handoff.json"],
+            "outputReferences": ["handoffs/judicial.handoff.json"],
+            "filesRead": ["runner/runner-report.json"],
+            "filesChanged": ["handoffs/judicial.handoff.json"],
+            "commandsRun": [],
+            "status": "done",
+            "executionEvidence": {
+                "executionIsolationLevel": "protocol-followed-by-agent",
+                "verificationEvidenceLevel": "agent-claimed",
+                "runnerName": None,
+                "separateInvocationIds": [],
+                "schemaValidationCommand": None,
+                "hardCheckCommands": [],
+                "limitations": ["State smoke judicial handoff."],
+            },
+            "mayEditFiles": False,
+            "mayValidate": True,
+            "mayRepair": False,
+            "mayReport": True,
+            "mayCertifyDelivery": False,
+            "limitations": ["State smoke judicial handoff."],
+            "didNotDo": ["did not repair", "did not certify delivery"],
+            "handoffTo": "certification",
+        }
+        delivery = {
+            "schemaVersion": "1.0",
+            "certificationId": "state-smoke-run-delivery-certification",
+            "workflowId": "state-smoke",
+            "deliveryStatus": "complete",
+            "executionEvidence": runner_report["executionEvidence"],
+            "judicialValidationRef": "reports/validation-report.json",
+            "judicialHandoffRef": "handoffs/judicial.handoff.json",
+            "validationReportRef": "reports/validation-report.json",
+            "finalAuditReportRef": "reports/final-audit.md",
+            "generationOrRepairPassIds": ["executive"],
+            "judicialPassId": "judicial",
+            "separationOfPowersProof": ["State smoke proof."],
+            "requiredHardChecks": [],
+            "blockingChecks": [],
+            "knownExclusions": [],
+            "noBlockingInScopeViolations": True,
+            "generationAndValidationSeparate": True,
+            "noUnverifiedRequiredGates": True,
+            "noRequiredGateFailedOrNotVerified": True,
+        }
+
+        write_smoke_json(temp_root / "runner" / "runner-workflow.json", runner_workflow)
+        write_smoke_json(temp_root / "runner" / "runner-report.json", runner_report)
+        write_smoke_json(temp_root / "handoffs" / "judicial.handoff.json", judicial_handoff)
+        write_smoke_json(temp_root / "reports" / "delivery-certification.json", delivery)
+        snapshot = {
+            "schemaVersion": "1.0",
+            "workflowId": "state-smoke",
+            "runId": "state-smoke-run",
+            "snapshotStatus": "current",
+            "certifiedAt": "2026-05-13T00:00:00Z",
+            "certifiedBy": "quick_validate smoke",
+            "deliveryStatus": "complete",
+            "executionEvidence": runner_report["executionEvidence"],
+            "artifacts": [
+                {
+                    "ref": "runner/runner-report.json",
+                    "role": "runner-report",
+                    "sha256": smoke_sha256(temp_root / "runner" / "runner-report.json"),
+                },
+                {
+                    "ref": "handoffs/judicial.handoff.json",
+                    "role": "judicial-handoff",
+                    "sha256": smoke_sha256(temp_root / "handoffs" / "judicial.handoff.json"),
+                },
+                {
+                    "ref": "reports/delivery-certification.json",
+                    "role": "delivery-certification",
+                    "sha256": smoke_sha256(temp_root / "reports" / "delivery-certification.json"),
+                },
+            ],
+            "limitations": ["State smoke snapshot."],
+        }
+        write_smoke_json(temp_root / "reports" / "certification-snapshot.json", snapshot)
+
+        class Args:
+            root = str(temp_root)
+            state = "run-state.json"
+            runner_workflow = "runner/runner-workflow.json"
+            runner_report = "runner/runner-report.json"
+            judicial_handoff = "handoffs/judicial.handoff.json"
+            delivery_certification = "reports/delivery-certification.json"
+            certification_snapshot = "reports/certification-snapshot.json"
+            verify = False
+            force = False
+
+        import contextlib
+        import io
+
+        with contextlib.redirect_stdout(io.StringIO()):
+            result = update_orchestration_state(Args)
+        if result != 0:
+            errors.append("update_orchestration_state smoke did not write state")
+        state = load_json(temp_root / "run-state.json")
+        if state.get("currentState") != "certified":
+            errors.append("update_orchestration_state smoke did not derive certified state")
+
+        judicial_handoff["limitations"] = ["State smoke judicial handoff changed after certification."]
+        write_smoke_json(temp_root / "handoffs" / "judicial.handoff.json", judicial_handoff)
+        with contextlib.redirect_stdout(io.StringIO()):
+            stale_result = update_orchestration_state(Args)
+        if stale_result != 0:
+            errors.append("update_orchestration_state smoke did not allow certified to stale transition")
+        stale_state = load_json(temp_root / "run-state.json")
+        if stale_state.get("currentState") != "stale":
+            errors.append("update_orchestration_state smoke did not derive stale state")
+
+    return errors
+
+
+def check_orchestration_run_verifier_smoke(root):
+    errors = []
+    if validate_orchestration_run is None:
+        return [f"scripts/validate_orchestration_run.py import failed: {validate_orchestration_run_import_error}"]
+    if update_orchestration_state is None:
+        return [f"scripts/update_orchestration_state.py import failed: {update_orchestration_state_import_error}"]
+
+    with tempfile.TemporaryDirectory(prefix="top-run-verifier-smoke-") as temp_name:
+        temp_root = Path(temp_name).resolve()
+        execution_evidence = {
+            "executionIsolationLevel": "runner-enforced",
+            "verificationEvidenceLevel": "hard-check-verified",
+            "runnerName": "top-protocol-runner",
+            "separateInvocationIds": ["executive-invocation", "judicial-invocation"],
+            "schemaValidationCommand": "python -B scripts/top_protocol_runner.py runner/runner-workflow.json",
+            "hardCheckCommands": ["python -B scripts/quick_validate.py ."],
+            "limitations": ["Verifier smoke evidence."],
+        }
+        runner_workflow = {
+            "schemaVersion": "1.0",
+            "workflowId": "run-verifier-smoke",
+            "runId": "run-verifier-smoke-run",
+            "runnerName": "top-protocol-runner",
+            "mode": "validation",
+            "runnerCapabilities": {
+                "launchesSeparateProcesses": True,
+                "launchesSeparateInvocations": True,
+                "isolatesContexts": True,
+                "executesHardChecks": True,
+                "validatesHandoffs": True,
+            },
+            "passes": [
+                {
+                    "passId": "executive",
+                    "role": "executive",
+                    "taskCapsuleRef": "capsules/executive.task-capsule.json",
+                    "handoffArtifactRef": "handoffs/executive.handoff.json",
+                    "invocationId": "executive-invocation",
+                    "contextId": "executive-context",
+                    "requiredForDelivery": True,
+                },
+                {
+                    "passId": "judicial",
+                    "role": "judicial",
+                    "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+                    "handoffArtifactRef": "handoffs/judicial.handoff.json",
+                    "invocationId": "judicial-invocation",
+                    "contextId": "judicial-context",
+                    "requiredForDelivery": True,
+                },
+            ],
+            "hardChecks": [],
+            "deliveryCertificationRef": "reports/delivery-certification.json",
+            "limitations": ["Verifier smoke workflow."],
+        }
+        runner_report = {
+            "schemaVersion": "1.0",
+            "workflowId": "run-verifier-smoke",
+            "runId": "run-verifier-smoke-run",
+            "runnerName": "top-protocol-runner",
+            "runnerStatus": "pass",
+            "executionEvidence": execution_evidence,
+            "passResults": [
+                {
+                    "passId": "executive",
+                    "role": "executive",
+                    "invocationId": "executive-invocation",
+                    "contextId": "executive-context",
+                    "adapterKind": "llm-api",
+                    "contextPackageRef": "contexts/executive.context-package.json",
+                    "invocationEvidenceRef": "invocations/executive.invocation-evidence.json",
+                    "freshContext": True,
+                    "receivedOnlyContextPackage": True,
+                    "modelInvocationEvidence": True,
+                    "status": "pass",
+                    "exitCode": 0,
+                    "errors": [],
+                },
+                {
+                    "passId": "judicial",
+                    "role": "judicial",
+                    "invocationId": "judicial-invocation",
+                    "contextId": "judicial-context",
+                    "adapterKind": "llm-api",
+                    "contextPackageRef": "contexts/judicial.context-package.json",
+                    "invocationEvidenceRef": "invocations/judicial.invocation-evidence.json",
+                    "freshContext": True,
+                    "receivedOnlyContextPackage": True,
+                    "modelInvocationEvidence": True,
+                    "status": "pass",
+                    "exitCode": 0,
+                    "errors": [],
+                },
+            ],
+            "hardCheckResults": [],
+            "deliveryCertificationResult": {
+                "status": "pass",
+                "ref": "reports/delivery-certification.json",
+                "errors": [],
+            },
+            "limitations": ["Verifier smoke report."],
+        }
+        judicial_handoff = {
+            "schemaVersion": "1.0",
+            "workflowId": "run-verifier-smoke",
+            "passId": "judicial",
+            "taskId": "judicial-task",
+            "role": "judicial",
+            "agentName": "judicial-smoke",
+            "taskCapsuleRef": "capsules/judicial.task-capsule.json",
+            "inputReferences": ["handoffs/executive.handoff.json"],
+            "outputReferences": ["handoffs/judicial.handoff.json"],
+            "filesRead": ["runner/runner-report.json"],
+            "filesChanged": ["handoffs/judicial.handoff.json"],
+            "commandsRun": [],
+            "status": "done",
+            "executionEvidence": {
+                "executionIsolationLevel": "protocol-followed-by-agent",
+                "verificationEvidenceLevel": "agent-claimed",
+                "runnerName": None,
+                "separateInvocationIds": [],
+                "schemaValidationCommand": None,
+                "hardCheckCommands": [],
+                "limitations": ["Verifier smoke judicial handoff."],
+            },
+            "mayEditFiles": False,
+            "mayValidate": True,
+            "mayRepair": False,
+            "mayReport": True,
+            "mayCertifyDelivery": False,
+            "limitations": ["Verifier smoke judicial handoff."],
+            "didNotDo": ["did not repair", "did not certify delivery"],
+            "handoffTo": "certification",
+        }
+        delivery = {
+            "schemaVersion": "1.0",
+            "certificationId": "run-verifier-smoke-run-delivery-certification",
+            "workflowId": "run-verifier-smoke",
+            "deliveryStatus": "complete",
+            "executionEvidence": execution_evidence,
+            "judicialValidationRef": "reports/validation-report.json",
+            "judicialHandoffRef": "handoffs/judicial.handoff.json",
+            "validationReportRef": "reports/validation-report.json",
+            "finalAuditReportRef": "reports/final-audit.md",
+            "generationOrRepairPassIds": ["executive"],
+            "judicialPassId": "judicial",
+            "separationOfPowersProof": ["Verifier smoke proof."],
+            "requiredHardChecks": [],
+            "blockingChecks": [],
+            "knownExclusions": [],
+            "noBlockingInScopeViolations": True,
+            "generationAndValidationSeparate": True,
+            "noUnverifiedRequiredGates": True,
+            "noRequiredGateFailedOrNotVerified": True,
+        }
+
+        write_smoke_json(temp_root / "runner" / "runner-workflow.json", runner_workflow)
+        write_smoke_json(temp_root / "runner" / "runner-report.json", runner_report)
+        write_smoke_json(temp_root / "handoffs" / "judicial.handoff.json", judicial_handoff)
+        write_smoke_json(temp_root / "reports" / "delivery-certification.json", delivery)
+        snapshot = {
+            "schemaVersion": "1.0",
+            "workflowId": "run-verifier-smoke",
+            "runId": "run-verifier-smoke-run",
+            "snapshotStatus": "current",
+            "certifiedAt": "2026-05-13T00:00:00Z",
+            "certifiedBy": "quick_validate smoke",
+            "deliveryStatus": "complete",
+            "executionEvidence": execution_evidence,
+            "artifacts": [
+                {
+                    "ref": "runner/runner-report.json",
+                    "role": "runner-report",
+                    "sha256": smoke_sha256(temp_root / "runner" / "runner-report.json"),
+                },
+                {
+                    "ref": "handoffs/judicial.handoff.json",
+                    "role": "judicial-handoff",
+                    "sha256": smoke_sha256(temp_root / "handoffs" / "judicial.handoff.json"),
+                },
+                {
+                    "ref": "reports/delivery-certification.json",
+                    "role": "delivery-certification",
+                    "sha256": smoke_sha256(temp_root / "reports" / "delivery-certification.json"),
+                },
+            ],
+            "limitations": ["Verifier smoke snapshot."],
+        }
+        write_smoke_json(temp_root / "reports" / "certification-snapshot.json", snapshot)
+
+        class StateArgs:
+            root = str(temp_root)
+            state = "run-state.json"
+            runner_workflow = "runner/runner-workflow.json"
+            runner_report = "runner/runner-report.json"
+            judicial_handoff = "handoffs/judicial.handoff.json"
+            delivery_certification = "reports/delivery-certification.json"
+            certification_snapshot = "reports/certification-snapshot.json"
+            verify = False
+            force = False
+
+        class VerifyArgs:
+            root = str(temp_root)
+            state = "run-state.json"
+            runner_workflow = "runner/runner-workflow.json"
+            runner_report = "runner/runner-report.json"
+            judicial_handoff = "handoffs/judicial.handoff.json"
+            delivery_certification = "reports/delivery-certification.json"
+            certification_snapshot = "reports/certification-snapshot.json"
+
+        import contextlib
+        import io
+
+        with contextlib.redirect_stdout(io.StringIO()):
+            state_result = update_orchestration_state(StateArgs)
+        if state_result != 0:
+            errors.append("run verifier smoke could not write state")
+
+        status, delivery_status, invalid, stale = validate_orchestration_run(VerifyArgs)
+        if status != "RUN_VALID certified" or delivery_status != "complete" or invalid or stale:
+            errors.append("validate_orchestration_run did not accept valid certified smoke run")
+            errors.extend(invalid)
+            errors.extend(stale)
+
+        judicial_handoff["limitations"] = ["Verifier smoke judicial handoff changed after certification."]
+        write_smoke_json(temp_root / "handoffs" / "judicial.handoff.json", judicial_handoff)
+        status, _delivery_status, invalid, stale = validate_orchestration_run(VerifyArgs)
+        if status != "RUN_STALE" or invalid or not stale:
+            errors.append("validate_orchestration_run did not report stale smoke run")
+            errors.extend(invalid)
+
+    return errors
+
+
+def check_orchestration_workflow_driver_smoke(root):
+    errors = []
+    if run_orchestration_workflow is None:
+        return [f"scripts/run_orchestration_workflow.py import failed: {run_orchestration_workflow_import_error}"]
+
+    with tempfile.TemporaryDirectory(prefix="top-workflow-driver-smoke-") as temp_name:
+        temp_root = Path(temp_name).resolve()
+        workflow_id = "workflow-driver-smoke"
+        run_id = "workflow-driver-smoke-run"
+        (temp_root / "capsules").mkdir(parents=True, exist_ok=True)
+        (temp_root / "runner").mkdir(parents=True, exist_ok=True)
+        (temp_root / "reports").mkdir(parents=True, exist_ok=True)
+        (temp_root / "scratch").mkdir(parents=True, exist_ok=True)
+        (temp_root / "handoffs").mkdir(parents=True, exist_ok=True)
+
+        adapter_script = r'''
+import json
+import os
+from pathlib import Path
+
+root = Path.cwd().resolve()
+context_ref = os.environ["TOP_CONTEXT_PACKAGE"]
+handoff_ref = os.environ["TOP_HANDOFF_ARTIFACT"]
+context = json.loads((root / context_ref).read_text(encoding="utf-8"))
+capsule = json.loads((root / context["taskCapsuleRef"]).read_text(encoding="utf-8"))
+role = capsule["role"]
+pass_id = context["passId"]
+handoff = {
+    "schemaVersion": "1.0",
+    "workflowId": context["workflowId"],
+    "passId": pass_id,
+    "taskId": capsule["taskId"],
+    "role": role,
+    "agentName": f"{role}-process-smoke",
+    "taskCapsuleRef": context["taskCapsuleRef"],
+    "inputReferences": capsule.get("inputReferences", []),
+    "outputReferences": [handoff_ref],
+    "filesRead": [context_ref, context["taskCapsuleRef"]],
+    "filesChanged": [handoff_ref],
+    "commandsRun": ["scratch/process_pass.py"],
+    "status": "done",
+    "executionEvidence": {
+        "executionIsolationLevel": "protocol-followed-by-agent",
+        "verificationEvidenceLevel": "agent-claimed",
+        "runnerName": None,
+        "separateInvocationIds": [],
+        "schemaValidationCommand": None,
+        "hardCheckCommands": [],
+        "limitations": ["Process smoke pass cannot prove model context isolation."],
+    },
+    "limitations": ["Process smoke pass completed without model invocation evidence."],
+    "didNotDo": capsule.get("forbiddenActions", []),
+    "handoffTo": "judicial" if role == "executive" else "certification",
+    "mayEditFiles": bool(capsule.get("mayEditFiles")),
+    "mayValidate": bool(capsule.get("mayValidate")),
+    "mayRepair": bool(capsule.get("mayRepair")),
+    "mayReport": bool(capsule.get("mayReport")),
+    "mayCertifyDelivery": bool(capsule.get("mayCertifyDelivery")),
+}
+(root / handoff_ref).parent.mkdir(parents=True, exist_ok=True)
+(root / handoff_ref).write_text(json.dumps(handoff, indent=2) + "\n", encoding="utf-8")
+'''
+        (temp_root / "scratch" / "process_pass.py").write_text(adapter_script.strip() + "\n", encoding="utf-8")
+
+        def capsule(pass_id, role):
+            is_judicial = role == "judicial"
+            return {
+                "schemaVersion": "1.0",
+                "workflowId": workflow_id,
+                "taskId": f"{pass_id}-task",
+                "role": role,
+                "objective": f"Run {role} driver smoke pass.",
+                "allowedActions": ["write scoped handoff"],
+                "forbiddenActions": ["certify delivery", "use hidden prior chat"],
+                "inputReferences": ["handoffs/executive.handoff.json"] if is_judicial else [],
+                "contextSlices": [f"Concrete context for {role} driver smoke pass."],
+                "outputContract": f"handoffs/{pass_id}.handoff.json",
+                "requiredChecks": [],
+                "stopCondition": "Write one handoff artifact and stop.",
+                "mayEditFiles": False,
+                "mayValidate": is_judicial,
+                "mayRepair": False,
+                "mayReport": is_judicial,
+                "mayCertifyDelivery": False,
+            }
+
+        for pass_id, role in [("executive", "executive"), ("judicial", "judicial")]:
+            write_smoke_json(temp_root / "capsules" / f"{pass_id}.task-capsule.json", capsule(pass_id, role))
+
+        runner_workflow = {
+            "schemaVersion": "1.0",
+            "workflowId": workflow_id,
+            "runId": run_id,
+            "runnerName": "top-protocol-runner",
+            "mode": "validation",
+            "runnerCapabilities": {
+                "launchesSeparateProcesses": True,
+                "launchesSeparateInvocations": False,
+                "isolatesContexts": False,
+                "executesHardChecks": True,
+                "validatesHandoffs": True,
+            },
+            "passes": [
+                {
+                    "passId": pass_id,
+                    "role": role,
+                    "taskCapsuleRef": f"capsules/{pass_id}.task-capsule.json",
+                    "handoffArtifactRef": f"handoffs/{pass_id}.handoff.json",
+                    "invocationId": f"{run_id}-{pass_id}-invocation",
+                    "contextId": f"{run_id}-{pass_id}-context",
+                    "adapterKind": "process",
+                    "contextPackageRef": f"contexts/{pass_id}.context-package.json",
+                    "invocationEvidenceRef": f"invocations/{pass_id}.invocation-evidence.json",
+                    "freshContextRequired": True,
+                    "commandType": "python-script",
+                    "scriptRef": "process_pass.py",
+                    "scriptBaseRef": "scratch",
+                    "cwdRef": "runner-root",
+                    "timeoutSeconds": 60,
+                    "requiredForDelivery": True,
+                }
+                for pass_id, role in [("executive", "executive"), ("judicial", "judicial")]
+            ],
+            "hardChecks": [],
+            "deliveryCertificationRef": "reports/delivery-certification.json",
+            "limitations": ["Driver smoke uses process passes, not model invocation evidence."],
+        }
+        write_smoke_json(temp_root / "runner" / "runner-workflow.json", runner_workflow)
+
+        protocol_evidence = {
+            "executionIsolationLevel": "protocol-defined",
+            "verificationEvidenceLevel": "none",
+            "runnerName": None,
+            "separateInvocationIds": [],
+            "schemaValidationCommand": None,
+            "hardCheckCommands": [],
+            "limitations": ["Initial driver smoke certification placeholder."],
+        }
+        delivery = {
+            "schemaVersion": "1.0",
+            "certificationId": f"{run_id}-delivery-certification",
+            "workflowId": workflow_id,
+            "deliveryStatus": "not-certified",
+            "executionEvidence": protocol_evidence,
+            "judicialValidationRef": "reports/validation-report.json",
+            "judicialHandoffRef": "handoffs/judicial.handoff.json",
+            "validationReportRef": "reports/validation-report.json",
+            "finalAuditReportRef": "reports/final-audit.md",
+            "generationOrRepairPassIds": [],
+            "judicialPassId": "judicial",
+            "separationOfPowersProof": ["Driver smoke starts not-certified."],
+            "requiredHardChecks": [],
+            "blockingChecks": [
+                {
+                    "checkId": "runner-evidence",
+                    "status": "not_verified",
+                    "evidence": ["Runner has not produced evidence yet."],
+                }
+            ],
+            "knownExclusions": [],
+            "noBlockingInScopeViolations": False,
+            "generationAndValidationSeparate": False,
+            "noUnverifiedRequiredGates": False,
+            "noRequiredGateFailedOrNotVerified": False,
+        }
+        write_smoke_json(temp_root / "reports" / "delivery-certification.json", delivery)
+
+        skill_root = str(root)
+
+        class Args:
+            root = skill_root
+            run_root = str(temp_root)
+            workflow_id = None
+            run_id = None
+            mode = "validation"
+            runner_name = "top-protocol-runner"
+            adapter_kind = "process"
+            llm_smoke = False
+            adapter_dry_run = False
+            pass_ = None
+            force = False
+            create = False
+            skip_create = True
+            skip_runner = False
+            skip_certification = False
+            skip_snapshot_verify = False
+            execute_passes = True
+            execute_hard_checks = False
+            accept_external_runner_evidence = False
+            stop_on_runner_failure = False
+            runner_workflow = "runner/runner-workflow.json"
+            runner_report = "runner/runner-report.json"
+            judicial_handoff = "handoffs/judicial.handoff.json"
+            validation_report = "reports/validation-report.json"
+            delivery_certification = "reports/delivery-certification.json"
+            final_audit = "reports/final-audit.md"
+            certification_snapshot = "reports/certification-snapshot.json"
+            state = "run-state.json"
+
+        import contextlib
+        import io
+
+        with contextlib.redirect_stdout(io.StringIO()):
+            status, delivery_status, invalid, stale, run_root = run_orchestration_workflow(Args)
+        if status != "RUN_VALID not-certified":
+            errors.append(f"run_orchestration_workflow smoke expected RUN_VALID not-certified, got {status}")
+        if delivery_status != "not-certified":
+            errors.append(f"run_orchestration_workflow smoke expected not-certified delivery, got {delivery_status}")
+        if invalid:
+            errors.extend(invalid)
+        if stale:
+            errors.extend(stale)
+        state = load_json(temp_root / "run-state.json")
+        if state.get("currentState") != "not-certified":
+            errors.append("run_orchestration_workflow smoke did not derive not-certified state")
+
+    return errors
+
+
+def check_orchestration_regression_fixtures(root):
+    if run_orchestration_regressions is None:
+        return [f"scripts/validate_orchestration_regressions.py import failed: {run_orchestration_regressions_import_error}"]
+    return run_orchestration_regressions()
 
 
 CONTENT_SOURCE_SUFFIXES = {
@@ -1085,6 +2513,45 @@ def check_project_spec_shape(root):
     return errors
 
 
+def check_repair_artifact_fixture_smoke(root):
+    if validate_repair_artifact_fixture is None:
+        return [f"scripts/validate_repair_artifact_fixture.py import failed: {validate_repair_artifact_fixture_import_error}"]
+
+    errors = []
+    with tempfile.TemporaryDirectory() as tmp:
+        artifact = Path(tmp) / "repair-target.json"
+        artifact.write_text(
+            json.dumps(
+                {
+                    "component": "DriverStatusBadge",
+                    "statusLabel": "Ready",
+                    "isValid": True,
+                    "repairedBy": "repair-1",
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+        if validate_repair_artifact_fixture(artifact):
+            errors.append("validate_repair_artifact_fixture did not accept valid repaired artifact")
+
+        artifact.write_text(
+            json.dumps(
+                {
+                    "component": "DriverStatusBadge",
+                    "statusLabel": "Broken",
+                    "isValid": False,
+                    "repairedBy": "repair-1",
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+        if not validate_repair_artifact_fixture(artifact):
+            errors.append("validate_repair_artifact_fixture did not reject invalid repaired artifact")
+    return errors
+
+
 def run(root):
     hard_checks = [
         ("required paths", check_required_paths),
@@ -1100,6 +2567,14 @@ def run(root):
         ("branch-scoped migration control", check_branch_scoped_migration_control_consistency),
         ("migration git branch safety", check_migration_git_branch_safety_consistency),
         ("validation control consistency", check_validation_control_consistency),
+        ("execution evidence validator smoke", check_execution_evidence_validator_smoke),
+        ("top protocol runner smoke", check_top_protocol_runner_smoke),
+        ("orchestration certifier smoke", check_orchestration_certifier_smoke),
+        ("orchestration state smoke", check_orchestration_state_smoke),
+        ("orchestration run verifier smoke", check_orchestration_run_verifier_smoke),
+        ("orchestration workflow driver smoke", check_orchestration_workflow_driver_smoke),
+        ("orchestration regression fixtures", check_orchestration_regression_fixtures),
+        ("repair artifact fixture smoke", check_repair_artifact_fixture_smoke),
         ("project spec shape", check_project_spec_shape),
     ]
     all_errors = []

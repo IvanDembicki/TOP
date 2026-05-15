@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-loop-dogfood",
+  "taskId": "judicial-task",
+  "role": "judicial",
+  "objective": "Run judicial pass judicial.",
+  "allowedActions": [
+    "validate current artifacts",
+    "write judicial verdict"
+  ],
+  "forbiddenActions": [
+    "repair implementation",
+    "certify delivery without hard-check evidence"
+  ],
+  "inputReferences": [
+    "handoffs/repair-1.handoff.json",
+    "invocations/repair-1.invocation-evidence.json",
+    "runner/runner-report.json"
+  ],
+  "contextSlices": [
+    "Validate only the artifacts and handoffs explicitly listed in inputReferences.",
+    "If this is the final judicial pass, validate post-repair artifacts and ignore repair self-claims.",
+    "Do not repair implementation artifacts and do not certify delivery."
+  ],
+  "outputContract": "handoffs/judicial.handoff.json",
+  "requiredChecks": [],
+  "stopCondition": "Write one handoff artifact and stop.",
+  "mayEditFiles": false,
+  "mayValidate": true,
+  "mayRepair": false,
+  "mayReport": true,
+  "mayCertifyDelivery": false
+}

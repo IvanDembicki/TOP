@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-orchestration",
+  "runId": "2026-05-12-activation-pilot",
+  "passId": "certification",
+  "role": "certification",
+  "adapterKind": "process",
+  "invocationId": "2026-05-12-activation-pilot-certification-invocation",
+  "contextId": "2026-05-12-activation-pilot-certification-context",
+  "runnerName": "top-protocol-runner",
+  "processId": null,
+  "command": null,
+  "startedAt": null,
+  "endedAt": null,
+  "exitCode": null,
+  "taskCapsuleRef": "capsules/certification.task-capsule.json",
+  "contextPackageRef": "contexts/certification.context-package.json",
+  "handoffArtifactRef": "handoffs/certification.handoff.json",
+  "contextHash": "48093f1b362e79acb712bb156a7736092bba42262d5df5d087e70752fbbb136c",
+  "handoffHash": "b4928300d259f7612b19c4a8f6e05e47798fb58032d86f1a9c21bc00f71f4ee5",
+  "freshContext": false,
+  "receivedOnlyContextPackage": false,
+  "modelInvocationEvidence": false,
+  "limitations": [
+    "Runner-observed process evidence is not proof of separate LLM context.",
+    "An adapter must write invocation evidence with modelInvocationEvidence=true to support runner-enforced isolation."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-artifact-dogfood",
+  "runId": "2026-05-14-repair-artifact-dogfood",
+  "passId": "judicial-initial",
+  "role": "judicial",
+  "taskCapsuleRef": "capsules/judicial-initial.task-capsule.json",
+  "handoffArtifactRef": "handoffs/judicial-initial.handoff.json",
+  "inputReferences": [
+    "handoffs/executive.handoff.json",
+    "invocations/executive.invocation-evidence.json",
+    "artifacts/repair-target.json"
+  ],
+  "contextSlices": [
+    "Validate the explicitly referenced initial repair-target artifact and handoffs.",
+    "This is the pre-repair judicial pass. If the artifact is invalid, use status done, record the blocking finding, and hand off to repair.",
+    "Do not use status blocked merely because the pre-repair artifact is invalid; blocked means the judicial pass itself could not complete.",
+    "Do not repair implementation artifacts and do not certify delivery."
+  ],
+  "forbiddenInputs": [
+    "full prior chat transcript unless explicitly listed in inputReferences",
+    "unbounded agent memory",
+    "implementation files outside task capsule scope unless explicitly referenced"
+  ],
+  "materializedBy": "top-protocol-runner",
+  "materializedAt": "2026-05-15T01:27:16Z",
+  "contextHash": "a6ab59cd6601b29004b56e542ae288da1395e0f2c1a3d67600a0e4b426a49f5b",
+  "limitations": [
+    "Context package records bounded inputs; it does not by itself prove LLM context isolation."
+  ]
+}

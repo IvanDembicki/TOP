@@ -83,6 +83,15 @@ spec_sync_handoff:
 - Generation output is an executor report, not a validation verdict. The
   executor produces artifacts. The validator produces verdicts. The log records
   both. The canon governs all.
+- `GENERATION_OUTPUT.md` may say generation completed for the listed artifacts,
+  but it must not say delivery completed. Delivery status may be changed to
+  `complete` only by delivery certification that satisfies
+  `workflow/enforcement-evidence-model.md`: runner-enforced execution
+  isolation, hard-check-verified validation evidence, a valid independent
+  judicial handoff artifact, and no required gate with `fail` or `not_verified`
+  status.
+- Generation output must not claim `runner-enforced`, `hard-check-verified`,
+  `certified`, or delivery certification authority.
 - Generation must not claim `TOP-clean`, `CORE-015 clean`, `canon compliant`,
   `validation passed`, `no violations`, `ready_for_manual_QA`, `ready_for_use`,
   `final_status: pass`, or equivalent verdicts for its own artifacts. Such

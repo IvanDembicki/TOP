@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-orchestration",
+  "passId": "executive",
+  "taskId": "executive-task",
+  "role": "executive",
+  "agentName": "executive-agent",
+  "taskCapsuleRef": "capsules/executive.task-capsule.json",
+  "inputReferences": [
+    "workflow/enforcement-evidence-model.md",
+    "workflow/run-package-layout.md",
+    "workflow/orchestrator-protocol.md",
+    "scripts/create_orchestration_run.py",
+    "top/artifact-manifest.json",
+    "top/modes/mode-manifest.json",
+    "hydration-manifest.json"
+  ],
+  "outputReferences": [
+    "workflow/activation-and-operating-procedure.md",
+    "top/orchestration/top-skill-2-orchestration/2026-05-12-activation-pilot/",
+    "runner/runner-workflow.json"
+  ],
+  "filesRead": [
+    "AI_PRELOAD_CONTEXT.md",
+    "rules/skill-maintenance-rules.md",
+    "workflow/enforcement-evidence-model.md",
+    "workflow/run-package-layout.md",
+    "workflow/orchestrator-protocol.md",
+    "scripts/create_orchestration_run.py"
+  ],
+  "filesChanged": [
+    "workflow/activation-and-operating-procedure.md",
+    "workflow/enforcement-evidence-model.md",
+    "workflow/orchestrator-protocol.md",
+    "workflow/run-package-layout.md",
+    "skill.json",
+    "release-metadata.json",
+    "hydration-manifest.json",
+    "top/spec.json",
+    "top/artifact-manifest.json",
+    "top/modes/mode-manifest.json",
+    "top/validation/output-rules.md",
+    "top/shared-rules/skill-governance.md",
+    "top/README.md",
+    "scripts/quick_validate.py",
+    "scripts/create_orchestration_run.py",
+    "SKILL.md",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "commandsRun": [
+    "python -B scripts\\create_orchestration_run.py --root . --workflow-id top-skill-2-orchestration --run-id 2026-05-12-activation-pilot --mode maintenance"
+  ],
+  "status": "done",
+  "executionEvidence": {
+    "executionIsolationLevel": "protocol-followed-by-agent",
+    "verificationEvidenceLevel": "agent-claimed",
+    "runnerName": null,
+    "separateInvocationIds": [],
+    "schemaValidationCommand": null,
+    "hardCheckCommands": [],
+    "limitations": [
+      "Executive work was performed in the current LLM context.",
+      "This handoff is not runner-enforced and is not independent judicial validation."
+    ]
+  },
+  "limitations": [
+    "Retrospective pilot handoff for changes already made in this conversation.",
+    "No external runner launched this executive pass in a separate LLM invocation."
+  ],
+  "didNotDo": [
+    "validate own output",
+    "certify delivery",
+    "write final audit"
+  ],
+  "handoffTo": "judicial",
+  "mayEditFiles": true,
+  "mayValidate": false,
+  "mayRepair": false,
+  "mayReport": false,
+  "mayCertifyDelivery": false
+}

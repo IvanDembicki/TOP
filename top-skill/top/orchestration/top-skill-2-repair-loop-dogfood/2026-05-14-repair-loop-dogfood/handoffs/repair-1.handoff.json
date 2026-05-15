@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-loop-dogfood",
+  "passId": "repair-1",
+  "taskId": "repair-1-task",
+  "role": "repair",
+  "agentName": "repair-llm-api-pass",
+  "taskCapsuleRef": "capsules/repair-1.task-capsule.json",
+  "inputReferences": [
+    "handoffs/judicial-initial.handoff.json",
+    "runner/runner-report.json"
+  ],
+  "outputReferences": [
+    "handoffs/repair-1.handoff.json"
+  ],
+  "filesRead": [
+    "capsules/repair-1.task-capsule.json",
+    "contexts/repair-1.context-package.json"
+  ],
+  "filesChanged": [
+    "handoffs/repair-1.handoff.json"
+  ],
+  "commandsRun": [
+    "scripts/adapters/llm_api_adapter.py"
+  ],
+  "status": "done",
+  "executionEvidence": {
+    "executionIsolationLevel": "protocol-followed-by-agent",
+    "verificationEvidenceLevel": "agent-claimed",
+    "runnerName": null,
+    "separateInvocationIds": [],
+    "schemaValidationCommand": null,
+    "hardCheckCommands": [],
+    "limitations": [
+      "Pass handoff may claim only protocol-followed-by-agent evidence; runner-enforced evidence is assigned by the runner."
+    ]
+  },
+  "limitations": [
+    "No scoped implementation repair was performed because the only prior judicial issue was missing runner/runner-report.json evidence, which is a runner/orchestration artifact unavailable to this repair pass."
+  ],
+  "didNotDo": [
+    "validate own repair",
+    "certify delivery"
+  ],
+  "handoffTo": "judicial",
+  "mayEditFiles": true,
+  "mayValidate": false,
+  "mayRepair": true,
+  "mayReport": false,
+  "mayCertifyDelivery": false
+}

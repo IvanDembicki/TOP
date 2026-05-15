@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-artifact-dogfood",
+  "runId": "2026-05-14-repair-artifact-dogfood",
+  "passId": "executive",
+  "role": "executive",
+  "taskCapsuleRef": "capsules/executive.task-capsule.json",
+  "handoffArtifactRef": "handoffs/executive.handoff.json",
+  "inputReferences": [],
+  "contextSlices": [
+    "Inspect artifacts/repair-target.json and identify that it is intentionally invalid.",
+    "Return an executive handoff only; do not repair the artifact in this pass.",
+    "Use status done when the initial handoff records the broken artifact for judicial review."
+  ],
+  "forbiddenInputs": [
+    "full prior chat transcript unless explicitly listed in inputReferences",
+    "unbounded agent memory",
+    "implementation files outside task capsule scope unless explicitly referenced"
+  ],
+  "materializedBy": "top-protocol-runner",
+  "materializedAt": "2026-05-15T01:27:08Z",
+  "contextHash": "0372980087a7da280f821b923c6cef9b998e47b328d092fc0c318a9c15e5f3e9",
+  "limitations": [
+    "Context package records bounded inputs; it does not by itself prove LLM context isolation."
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-driver-dogfood",
+  "runId": "2026-05-14-driver-exit-status-dogfood",
+  "runnerName": "top-protocol-runner",
+  "runnerStatus": "pass",
+  "executionEvidence": {
+    "executionIsolationLevel": "schema-validated",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "2026-05-14-driver-exit-status-dogfood-executive-invocation",
+      "2026-05-14-driver-exit-status-dogfood-judicial-invocation"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B scripts/quick_validate.py ."
+    ],
+    "limitations": [
+      "Dogfood runner workflow for driver exit/status semantics.",
+      "Passes are separate processes, not separate model invocations.",
+      "No external runner-enforced invocation evidence is present.",
+      "Runner isolation was not accepted as runner-enforced evidence."
+    ]
+  },
+  "passResults": [
+    {
+      "passId": "executive",
+      "role": "executive",
+      "invocationId": "2026-05-14-driver-exit-status-dogfood-executive-invocation",
+      "contextId": "2026-05-14-driver-exit-status-dogfood-executive-context",
+      "adapterKind": "process",
+      "contextPackageRef": "contexts/executive.context-package.json",
+      "invocationEvidenceRef": "invocations/executive.invocation-evidence.json",
+      "freshContext": true,
+      "receivedOnlyContextPackage": false,
+      "modelInvocationEvidence": false,
+      "status": "pass",
+      "exitCode": 0,
+      "errors": []
+    },
+    {
+      "passId": "judicial",
+      "role": "judicial",
+      "invocationId": "2026-05-14-driver-exit-status-dogfood-judicial-invocation",
+      "contextId": "2026-05-14-driver-exit-status-dogfood-judicial-context",
+      "adapterKind": "process",
+      "contextPackageRef": "contexts/judicial.context-package.json",
+      "invocationEvidenceRef": "invocations/judicial.invocation-evidence.json",
+      "freshContext": true,
+      "receivedOnlyContextPackage": false,
+      "modelInvocationEvidence": false,
+      "status": "pass",
+      "exitCode": 0,
+      "errors": []
+    }
+  ],
+  "hardCheckResults": [
+    {
+      "id": "top-skill-quick-validate",
+      "requiredForComplete": true,
+      "status": "pass",
+      "command": "python -B scripts/quick_validate.py .",
+      "exitCode": 0,
+      "evidence": [
+        "quick_validate: OK\nvalidated: D:\\TOP\\top-skill\nhard_checks: 20\nagent_review_candidates: 0"
+      ]
+    }
+  ],
+  "deliveryCertificationResult": {
+    "status": "pass",
+    "ref": "reports/delivery-certification.json",
+    "errors": []
+  },
+  "limitations": [
+    "Dogfood runner workflow for driver exit/status semantics.",
+    "Passes are separate processes, not separate model invocations.",
+    "No external runner-enforced invocation evidence is present."
+  ]
+}

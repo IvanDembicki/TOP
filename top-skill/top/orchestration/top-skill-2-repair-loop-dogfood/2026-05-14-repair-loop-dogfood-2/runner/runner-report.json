@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "top-skill-2-repair-loop-dogfood",
+  "runId": "2026-05-14-repair-loop-dogfood-2",
+  "runnerName": "top-protocol-runner",
+  "runnerStatus": "not_verified",
+  "executionEvidence": {
+    "executionIsolationLevel": "runner-enforced",
+    "verificationEvidenceLevel": "hard-check-verified",
+    "runnerName": "top-protocol-runner",
+    "separateInvocationIds": [
+      "resp_08917c979733e38a006a066f07df68819399fe6f556594f874",
+      "resp_061b2353223699a8006a066f0d6624819ea85552cffa192b9a",
+      "resp_078293cb21e599be006a066f1be6e48196ad34991aeb1dff5d",
+      "resp_0ee571b5cf1178f0006a066f28aefc81919fd7755e67a0cf10"
+    ],
+    "schemaValidationCommand": "python scripts/top_protocol_runner.py <runner-workflow.json>",
+    "hardCheckCommands": [
+      "python -B scripts/quick_validate.py ."
+    ],
+    "limitations": [
+      "Scaffolded runner workflow.",
+      "LLM API adapter is configured; runner-enforced evidence requires successful API credentials and separate model invocations."
+    ]
+  },
+  "passResults": [
+    {
+      "passId": "executive",
+      "role": "executive",
+      "invocationId": "resp_08917c979733e38a006a066f07df68819399fe6f556594f874",
+      "contextId": "resp_08917c979733e38a006a066f07df68819399fe6f556594f874-fresh-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/executive.context-package.json",
+      "invocationEvidenceRef": "invocations/executive.invocation-evidence.json",
+      "freshContext": true,
+      "receivedOnlyContextPackage": true,
+      "modelInvocationEvidence": true,
+      "status": "pass",
+      "exitCode": 0,
+      "errors": []
+    },
+    {
+      "passId": "judicial-initial",
+      "role": "judicial",
+      "invocationId": "resp_061b2353223699a8006a066f0d6624819ea85552cffa192b9a",
+      "contextId": "resp_061b2353223699a8006a066f0d6624819ea85552cffa192b9a-fresh-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/judicial-initial.context-package.json",
+      "invocationEvidenceRef": "invocations/judicial-initial.invocation-evidence.json",
+      "freshContext": true,
+      "receivedOnlyContextPackage": true,
+      "modelInvocationEvidence": true,
+      "status": "not_verified",
+      "exitCode": 0,
+      "errors": []
+    },
+    {
+      "passId": "repair-1",
+      "role": "repair",
+      "invocationId": "resp_078293cb21e599be006a066f1be6e48196ad34991aeb1dff5d",
+      "contextId": "resp_078293cb21e599be006a066f1be6e48196ad34991aeb1dff5d-fresh-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/repair-1.context-package.json",
+      "invocationEvidenceRef": "invocations/repair-1.invocation-evidence.json",
+      "freshContext": true,
+      "receivedOnlyContextPackage": true,
+      "modelInvocationEvidence": true,
+      "status": "pass",
+      "exitCode": 0,
+      "errors": []
+    },
+    {
+      "passId": "judicial",
+      "role": "judicial",
+      "invocationId": "resp_0ee571b5cf1178f0006a066f28aefc81919fd7755e67a0cf10",
+      "contextId": "resp_0ee571b5cf1178f0006a066f28aefc81919fd7755e67a0cf10-fresh-context",
+      "adapterKind": "llm-api",
+      "contextPackageRef": "contexts/judicial.context-package.json",
+      "invocationEvidenceRef": "invocations/judicial.invocation-evidence.json",
+      "freshContext": true,
+      "receivedOnlyContextPackage": true,
+      "modelInvocationEvidence": true,
+      "status": "not_verified",
+      "exitCode": 0,
+      "errors": []
+    }
+  ],
+  "hardCheckResults": [
+    {
+      "id": "top-skill-quick-validate",
+      "requiredForComplete": true,
+      "status": "pass",
+      "command": "python -B scripts/quick_validate.py .",
+      "exitCode": 0,
+      "evidence": [
+        "quick_validate: OK\nvalidated: D:\\TOP\\top-skill\nhard_checks: 21\nagent_review_candidates: 0"
+      ]
+    }
+  ],
+  "deliveryCertificationResult": {
+    "status": "pass",
+    "ref": "reports/delivery-certification.json",
+    "errors": []
+  },
+  "limitations": [
+    "Scaffolded runner workflow.",
+    "LLM API adapter is configured; runner-enforced evidence requires successful API credentials and separate model invocations.",
+    "One or more required pass handoffs are not pass/complete."
+  ]
+}
