@@ -18,6 +18,7 @@
     "New requirements invalidate old decisions that conflict with them.",
     "Every important migration decision must be traceable through plan, workflow, status, or log evidence.",
     "Structured migration workflow state must be represented in JSON when the schema exists.",
+    "TOP node spec objects must preserve the canonical top-level field order: type, doc, prompt, props, children.",
     "Migration discovers hidden architecture instead of wrapping legacy scopes as single nodes.",
     "Delivery completion requires independent judicial validation evidence and cannot be self-certified by an executive pass.",
     "The top-skill 2.0 protocol layer is protocol-only unless an external runner proves separate invocations, separate contexts, and explicit handoff artifacts.",

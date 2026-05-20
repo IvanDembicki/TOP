@@ -575,6 +575,16 @@ def check_required_phrases(root):
         ("SKILL.md", "Content constructor receives exactly one semantic argument"),
         ("SKILL.md", "RootContext"),
         ("SKILL.md", "TOP spec props are declarative metadata"),
+        ("SKILL.md", "canonical top-level field order"),
+        ("SKILL.md", "Library Object External Context Boundary"),
+        ("references/tree-model.md", "canonical top-level field order"),
+        ("references/pattern-cards.md", "Library Object External Context Boundary"),
+        ("references/node-model.md", "Library Object External Context Boundary"),
+        ("references/interaction-contracts.md", "Library object external context boundary"),
+        ("rules/pattern-recognition.md", "Library object external context boundary signals"),
+        ("references/node-validation-rules.md", "Library Object External Context Boundary review"),
+        ("agents/validation-agent.md", "Library Object External Context Boundary review"),
+        ("prompts/generate-top-node.md", "Library Object External Context Boundary pattern"),
         ("rules/skill-maintenance-rules.md", "No exhaustive-looking technology lists"),
         ("rules/skill-maintenance-rules.md", "Missed case feedback loop"),
         ("rules/violation-catalog.md", "CORE-026"),
@@ -629,6 +639,7 @@ def check_required_phrases(root):
         ("contracts/top-folder-contract.md", "Git safety gate"),
         ("contracts/top-folder-contract.md", "top/migration/<branch-id>/MIGRATION_WORKFLOW.json"),
         ("contracts/top-folder-contract.md", "Shared artifacts are `top/migration/MIGRATION_LOG.md`"),
+        ("contracts/top-folder-contract.md", "Canonical node field order"),
         ("canon/migration.md", "Migration artifact layout must be canonical"),
         ("canon/migration.md", "Migration workflow tree, plan, and action log are mandatory"),
         ("canon/migration.md", "Migration means discovering and externalizing hidden structure"),
@@ -2489,22 +2500,47 @@ def check_content_privacy_prefilter(root):
 
 def check_project_spec_shape(root):
     errors = []
+    spec_paths = []
     specs_root = root / "top" / "specs"
-    if not specs_root.exists():
+    if specs_root.exists():
+        spec_paths.extend(sorted(specs_root.glob("**/*.json")))
+    for candidate in (root / "top" / "spec.json", root / "top" / "tree.json"):
+        if candidate.exists():
+            spec_paths.append(candidate)
+    examples_root = root / "examples"
+    if examples_root.exists():
+        spec_paths.extend(sorted(examples_root.glob("**/*.json")))
+    if not spec_paths:
         return errors
+
+    canonical_node_order = ["type", "doc", "prompt", "props", "children"]
+
+    def enforces_canonical_type(path):
+        try:
+            return specs_root.exists() and specs_root in path.parents
+        except Exception:
+            return False
 
     def visit(value, path, trail):
         if isinstance(value, dict):
             looks_like_node = any(key in value for key in ("children", "prompt", "props", "doc"))
-            if looks_like_node and "type" not in value and ("id" in value or "name" in value):
+            if enforces_canonical_type(path) and looks_like_node and "type" not in value and ("id" in value or "name" in value):
                 errors.append(f"{rel(path, root)}:{trail}: node-like object lacks canonical type field")
+            if "type" in value and looks_like_node:
+                actual_order = [key for key in value.keys() if key in canonical_node_order]
+                expected_order = [key for key in canonical_node_order if key in value]
+                if actual_order != expected_order:
+                    errors.append(
+                        f"{rel(path, root)}:{trail}: TOP node fields must use canonical order "
+                        "`type`, `doc`, `prompt`, `props`, `children`"
+                    )
             for key, child in value.items():
                 visit(child, path, f"{trail}.{key}")
         elif isinstance(value, list):
             for index, child in enumerate(value):
                 visit(child, path, f"{trail}[{index}]")
 
-    for path in sorted(specs_root.glob("**/*.json")):
+    for path in spec_paths:
         try:
             data = load_json(path)
         except Exception:

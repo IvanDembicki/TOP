@@ -292,6 +292,22 @@ Each node in `top/tree_editor.json` (or equivalent file) must have:
 }
 ```
 
+### Canonical node field order
+
+Every TOP node object in `top/specs/**/*.json`, `top/tree.json`, or an
+equivalent project-local spec tree must use this canonical top-level field
+order:
+
+1. `type`
+2. `doc`
+3. `prompt`
+4. `props`
+5. `children`
+
+When optional fields are absent, the remaining fields must preserve this
+relative order. Any additional project-local top-level fields, if explicitly
+allowed by a local contract, must appear after these canonical fields.
+
 ### Required fields
 
 | Field | Requirement |
@@ -397,6 +413,8 @@ their roles explicitly.
 ## Invariants
 
 - Every prompt file referenced in JSON must exist on disk
+- Every TOP node object in a JSON spec tree must preserve the canonical
+  top-level field order: `type`, `doc`, `prompt`, `props`, `children`
 - Every new migration branch spec must live under `top/specs/` unless an established root index records a different project convention
 - Every migration-mode task that creates or changes TOP artifacts must maintain
   `top/migration/<branch-id>/MIGRATION_WORKFLOW.json`,

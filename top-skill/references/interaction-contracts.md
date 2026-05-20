@@ -110,6 +110,25 @@ through `IControllerAccess`.
 Root `null` or `RootContext` is allowed only for root ownership/bootstrap. It
 must not become a dependency injection container.
 
+## 1b. Library object external context boundary
+
+Recommended pattern: a runtime/library object root should act as the external
+context boundary for its runtime branch.
+
+The root is the preferred place to attach branch-external access: parent
+context, data tree, presentation/style tree, asset tree, permission context,
+runtime services, external connectors, and other external contextual
+structures. Descendants inside the runtime/library branch should not
+independently discover or attach to those external sources. They should request
+needed values or capabilities through the branch root or through narrow
+contracts derived from that root.
+
+This is a recommended modeling heuristic, not an absolute prohibition. When a
+descendant directly accesses an ancestor, global store, data tree,
+presentation/style tree, asset tree, service, permission source, or connector,
+validation should review whether the dependency should instead enter through
+the branch-root contract. Explicitly modeled exceptions are allowed.
+
 ## 2. Search access
 
 Search access is access to nodes that are not structurally guaranteed to exist.

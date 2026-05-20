@@ -201,6 +201,12 @@ If a discrepancy arises between this agent file and the output contract:
   PanelDisplayStyle discipline, reusable-pattern extraction, modal/form/list
   candidate analysis, hook bridge isolation, and global-store residual
   discipline
+- Library Object External Context Boundary review for runtime/library branches:
+  descendants should not independently discover ancestors, global stores, data
+  trees, presentation/style trees, asset trees, services, permission sources, or
+  connectors when the branch root can expose a narrow explicit contract. Treat
+  this as recommended-pattern review, not a hard failure unless another canon
+  rule is violated or the exception is undocumented.
 - controller validation
 - lifecycle validation
 - method-semantics validation

@@ -458,6 +458,12 @@ Required checks for migration branches:
 - direct global store access is not labeled canonical TOP access unless modeled
   as a connector/data boundary; otherwise it is a migration residual with target
   repair and expiry;
+- runtime/library branch descendants that directly reach ancestors, global
+  stores, data trees, presentation/style trees, asset trees, services,
+  permission sources, or connectors trigger `Library Object External Context Boundary review`.
+  This is a recommended-pattern smell, not an automatic hard
+  violation unless it also breaks a core access, injection, privacy, connector,
+  or global-store rule;
 - helper components, modals, forms, cards, rows, tiles, list items, banners,
   selectors, status panels, action panels, and repeated structures are
   classified as local details, nodes, state nodes, black boxes, or reusable

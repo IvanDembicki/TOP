@@ -159,6 +159,9 @@
           "type": "ThemeHolder",
           "doc": "Switchable holder for active presentation theme. Owns theme state and exposes the active theme model.",
           "prompt": "prompts/presentation/ThemeHolder.prompt.md",
+          "props": {
+            "materializationPolicy": "target-optional-runtime"
+          },
           "children": [
             {
               "type": "LightTheme",
@@ -176,10 +179,7 @@
                 "materializationPolicy": "target-optional-runtime"
               }
             }
-          ],
-          "props": {
-            "materializationPolicy": "target-optional-runtime"
-          }
+          ]
         },
         {
           "type": "TreeEditorPresentation",

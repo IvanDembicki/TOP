@@ -6,7 +6,7 @@ description: Skill for designing, generating, and validating systems built with 
 # TOP Skill
 
 **Version:** 2.0.0
-**Last updated:** 2026-05-14 18:59 -07:00
+**Last updated:** 2026-05-20 14:28 -07:00
 **Invocation:** `/top`
 
 > **Rule for AI:** whenever any top-skill file is modified, update the date and time in this field to the current values.
@@ -841,6 +841,14 @@ A good result for the generative layer:
 - Do not place platform-specific implementation details in behavioral prompt sections. Put them only in `Platform implementation notes`.
 - Do not mechanically transfer `Platform implementation notes` from one technology to another; use them as context and choose the target-appropriate implementation independently.
 - Spec tree descriptions must be stored as `.json` inside `top/`.
+- TOP node spec objects must preserve the canonical top-level field order:
+  `type`, `doc`, `prompt`, `props`, `children`. Optional omissions keep the
+  remaining fields in that relative order.
+- Runtime/library branch roots should use the recommended
+  `Library Object External Context Boundary` pattern: the root is the preferred gateway for
+  branch-external data, presentation/style, asset, permission, service,
+  connector, and parent/context access, while descendants use narrow contracts
+  derived from the root unless an exception is explicitly modeled.
 - Do not make the verification loop infinite.
 - Do not fix only the code while leaving the prompt outdated.
 - Do not merge controller and concrete content into one class where content exists.

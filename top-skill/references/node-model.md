@@ -552,6 +552,28 @@ Two usage scenarios:
 For AI, both scenarios are equivalent: `lib:true` means library node.
 The difference in scenario does not affect analysis.
 
+### Library Object External Context Boundary
+
+Recommended pattern: the root of a runtime/library object acts as the external
+context boundary for its runtime branch.
+
+The root is the preferred attachment point for branch-external dependencies:
+parent context, data tree access, presentation/style tree access, asset tree
+access, permissions, runtime services, external connectors, and other external
+trees or contextual structures.
+
+Descendants inside the library object should not independently reach outside
+the branch. They should request required values or capabilities through the
+library object root, or through narrow contracts derived from that root. The
+root may obtain external information from its parent, explicitly attached
+context contracts, or approved connectors, and then expose only the minimal
+resolved access needed by internal descendants.
+
+This is not a hard invariant. It is a strong recommended modeling pattern.
+Exceptions are allowed when explicitly described in the spec, prompt, or branch
+contract. Do not reduce it to "the root holds the data model": the root is the
+external context boundary, not necessarily a data holder.
+
 ### Location of the Lib Type
 
 The lib type can be declared:

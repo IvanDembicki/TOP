@@ -136,6 +136,30 @@ decomposition evidence, single-node proof, reusable-pattern analysis,
 PanelDisplayStyle justification, hook bridge residual classification, or helper
 component classification.
 
+### Group A3a — Library object external context boundary signals
+
+Library Object External Context Boundary is a strong recommended modeling
+pattern, not a hard invariant.
+
+Review signals:
+- a descendant inside a runtime/library branch directly reaches an ancestor,
+  global store, data tree, presentation/style tree, asset tree, service,
+  permission source, or connector;
+- external access is attached to multiple internal descendants instead of the
+  library object root;
+- branch prompts/specs do not state whether the external dependency belongs to
+  the branch-root contract, an explicit connector, or an approved exception;
+- a runtime/library branch root is treated only as a data holder and not as the
+  external context boundary for services, assets, presentation/style context,
+  permissions, and other external trees.
+
+Review questions:
+- is the external dependency part of the explicit library object root contract?
+- should the root obtain this access and expose a narrower resolved
+  contract/value/capability to the descendant?
+- is external context leaking into the branch through accidental direct
+  dependencies?
+
 ### Group A4 — Concrete content privacy and fragment-output signals
 
 Concrete locally implemented content is private to the owning controller.

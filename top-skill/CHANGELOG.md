@@ -7,6 +7,16 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [Unreleased]
+
+- Added canonical TOP node spec field order: `type`, `doc`, `prompt`, `props`,
+  `children`, with optional fields omitted only while preserving relative
+  order.
+- Added the recommended Library Object External Context Boundary pattern for
+  runtime/library branches and review signals for descendants that reach
+  external context directly instead of using the branch root or explicit
+  connectors.
+
 ## [2.0.0] — 2026-05-14
 
 - Promoted the top-skill 2.0 harness protocol to the first runner-enforced

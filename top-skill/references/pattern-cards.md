@@ -364,3 +364,63 @@ Forbidden:
 - passing many fields because the runtime item is dynamic;
 - treating a list item DTO as the permanent owner of state;
 - using framework props/config as the TOP branch API.
+
+---
+
+## 12. Library Object External Context Boundary
+
+### Definition
+
+Recommended pattern: a runtime/library object root is the external context
+boundary of its runtime branch.
+
+The root is the preferred attachment point for branch-external dependencies:
+parent context, data tree access, presentation/style tree access, asset tree
+access, permission context, runtime services, external connectors, and other
+external trees or contextual structures.
+
+This pattern is not limited to data models. The root represents the outside
+world to the internal runtime/library subtree.
+
+### When to use
+
+- a runtime/library branch is instantiated from a reusable type;
+- descendants inside the branch need branch-owned entity/context values;
+- descendants need environment values, permissions, style/presentation context,
+  assets, services, or connector capabilities;
+- the branch should remain reusable across different parent environments.
+
+### Preferred flow
+
+- branch root attaches to parent/context and approved external context contracts;
+- branch root obtains external information from its parent, explicit context
+  contracts, or approved connectors;
+- descendants request needed values or capabilities through the branch root or
+  through narrow contracts derived from the root;
+- the root exposes only the minimal resolved access needed internally.
+
+### Smell
+
+A descendant inside a runtime/library branch directly reaches an ancestor,
+global store, data tree, presentation/style tree, asset tree, service,
+permission source, or connector.
+
+Review:
+- is this external dependency part of the explicit branch-root contract?
+- should the root obtain the access and re-expose a narrower resolved
+  contract/value/capability to the descendant?
+- is external context leaking into the library branch through accidental direct
+  dependencies?
+
+### Status
+
+This is a strong recommended modeling pattern / canonical heuristic, not a hard
+invariant. Exceptions are allowed when explicitly described in the spec, prompt,
+or branch contract.
+
+### Common confusion
+
+- reducing the pattern to "the root holds the data model";
+- allowing every descendant to independently discover the external world;
+- treating direct global store, service, asset, style, or connector access as
+  normal because the branch is runtime-created.

@@ -25,6 +25,9 @@ This means:
 - the tree model is not extended with new project-specific top-level node fields;
 - additional node properties are stored in `props`;
 - classification attributes in the spec, including content classification, are fixed via `props`.
+- TOP node spec objects use the canonical top-level field order
+  `type`, `doc`, `prompt`, `props`, `children`; omitted optional fields do not
+  change the relative order of the remaining fields.
 
 ---
 

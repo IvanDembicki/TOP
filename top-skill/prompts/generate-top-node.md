@@ -37,6 +37,13 @@ rules:
 - runtime-created branches must follow the Runtime Branch Binding Pattern:
   entity context binding preferred, identity key binding when the branch resolves
   its context, typed DTO binding only when converted to owned data early.
+- prefer the Library Object External Context Boundary pattern for
+  runtime/library branches: attach branch-external access at the branch root
+  where possible, including parent context, data tree, presentation/style tree,
+  asset tree, permissions, runtime services, and connectors. Descendants should
+  request narrow values/capabilities through the root or contracts derived from
+  it. This is a recommended modeling pattern, not a hard invariant; document
+  explicit exceptions in the prompt/spec/branch contract.
 - do not invent behavior absent from the semantic layer
 - do not lose, weaken, omit from prompts, or leave uncovered behavior proven by legacy tests
 - generate or adapt TOP-compatible tests for each prompt requirement derived from legacy tests
