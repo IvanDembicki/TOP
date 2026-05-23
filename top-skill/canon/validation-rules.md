@@ -197,11 +197,20 @@ Canonical repair for context data injection:
 - If a switchable holder has an operation or query whose meaning belongs to the
   current active state, validation must verify that the holder delegates only to
   `openedChild`.
+- A valid switchable holder must have at least one state/candidate child and a
+  non-null `openedChild`. If no state was explicitly selected, the first
+  state/candidate child is the default opened child.
 - Active-state operations include target lookup, hit-test, event routing, active
   command availability, active capability checks, and active output requests.
 - Validation must reject holder/external traversal logic that iterates closed
   state siblings, asks every state child for active behavior, or branches on
   owner-held mode/status/phase to decide which state behavior applies.
+- Validation must reject nullable opened-child fallback as a normal active
+  behavior path. No-result belongs to the opened state child's answer, not to a
+  missing `openedChild`.
+- Validation must reject a generic runtime/library collection being treated as
+  switchable unless its children are explicitly modeled as the switchable
+  candidate set with one selected/opened child.
 - The state child owns its own response, including returning `null` or another
   no-result value for non-interactive, unavailable, or inactive semantics.
 - Explicit all-state introspection, metadata, validation, or persistence may
@@ -209,6 +218,22 @@ Canonical repair for context data injection:
   must not be used as active runtime behavior dispatch.
 - When the invalid traversal hides or duplicates switchable behavior, classify
   it as `CORE-003`.
+
+## Node-owned downward propagation check
+- For downward queries/events, validation must verify that propagation enters
+  through an approved entrypoint and is then controlled by node-local contracts.
+- The entrypoint may be the whole tree root, a branch root, interaction-layer
+  node, viewport/canvas node, connector boundary, or another declared subroot.
+  It is not required to be the whole tree root.
+- Validation must reject external traversal mechanisms that inspect internal
+  node modes, state siblings, child policies, platform representation, or
+  external-tree internals to decide active propagation.
+- Each node owns whether it answers, returns no-result, stops, delegates to
+  `openedChild`, delegates to selected children, or delegates through an
+  adapter/connector.
+- Connector/adapter delegation to external trees is valid only through explicit
+  narrow boundaries; the external walker must not directly traverse external
+  tree internals.
 
 ## Controller validation
 - Controller owns behavior, lifecycle, orchestration, branching.

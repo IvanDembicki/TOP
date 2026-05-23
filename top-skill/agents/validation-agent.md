@@ -209,6 +209,17 @@ If a discrepancy arises between this agent file and the output contract:
   queries that belong to the current active state must delegate only to
   `openedChild`; closed state siblings are not walked and owner-held
   mode/status is not branched on for active behavior
+- switchable holder contract validation (`CORE-038`): a switchable holder has
+  at least one state/candidate child, exactly one non-null opened child, a
+  default first opened child when no explicit state is selected, and no
+  runtime/library collection role mixed into the same child policy unless it is
+  explicitly modeled as the switchable candidate set
+- node-owned downward propagation validation: downward queries/events enter
+  through an approved propagation entrypoint and then each node decides answer,
+  no-result, stop, opened-child delegation, selected-child delegation, or
+  connector/adapter delegation; external walkers must not inspect node modes,
+  closed state siblings, child policies, platform representation, or
+  external-tree internals to steer propagation
 - Library Object External Context Boundary review for runtime/library branches:
   descendants should not independently discover ancestors, global stores, data
   trees, presentation/style trees, asset trees, services, permission sources, or

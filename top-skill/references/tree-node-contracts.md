@@ -68,8 +68,14 @@ to call it. See `canon/architectural-invariants.md` — **View Access Invariant*
 - `openChild(child)`
 
 ### Invariants
-- if the child collection is empty, `openedChild == null`;
-- if the child collection is non-empty, the first child is open by default;
+- a valid switchable node has at least one switchable state/candidate child;
+- `openedChild` is never null for a valid switchable node;
+- if no child is explicitly selected, the first state/candidate child is open
+  by default;
+- if the child collection is empty, the node is not a switchable node;
+- runtime/library collection children do not make a node switchable unless they
+  are explicitly modeled as the switchable candidate set with one selected/opened
+  child;
 - direct external modification of `openedChild` must not create a separate public semantics;
 - `openChild(child)` is the canonical switching path.
 

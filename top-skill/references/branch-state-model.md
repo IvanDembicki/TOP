@@ -65,6 +65,14 @@ In a switchable node, the current opened child is stored in the `openedChild` re
 `openedChild` points to the child node that defines the behavior and representation
 of the parent in the current state.
 
+For a valid switchable node, `openedChild` is not nullable. The holder has at
+least one state/candidate child and exactly one opened child. If no state is
+explicitly selected, the first state child is the default opened child.
+
+If there are no state/candidate children, the node is not switchable. If
+`openedChild` is missing during active behavior propagation, the model or
+lifecycle is invalid; this must not be treated as a normal no-result answer.
+
 ---
 
 ## Switching — mechanics

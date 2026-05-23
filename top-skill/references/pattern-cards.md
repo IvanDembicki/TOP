@@ -37,8 +37,10 @@ A switchable node may be fixed or dynamic:
 - there is a switchable holder;
 - there is a candidate child set, fixed or dynamic;
 - only one candidate child is active/opened at a time;
+- a valid switchable holder always has one opened child; missing/null
+  `openedChild` is invalid, not a no-result behavior;
 - switching follows a lifecycle-consistent path;
-- for dynamic switchable, the candidate-set source of truth, child type policy, creation/removal lifecycle, ordering if relevant, and fallback behavior when the opened child disappears are explicitly described.
+- for dynamic switchable, the candidate-set source of truth, child type policy, creation/removal lifecycle, ordering if relevant, and replacement/empty-state behavior when the opened child disappears are explicitly described.
 
 ### Common confusion
 - confusion with `single-child mutable node`;
@@ -66,11 +68,16 @@ Example: a printer selector whose available printer children are discovered at r
 - source of truth for the candidate set is explicit;
 - source of truth for the selected/opened child is explicit;
 - create/remove/reorder lifecycle is explicit;
-- behavior is explicit when the currently opened child is removed: fallback selection, null/empty state, or another declared policy.
+- behavior is explicit when the currently opened child is removed: select
+  another candidate, open an explicit empty/unavailable state candidate, or use
+  another declared lifecycle transition. The holder must not remain with null
+  `openedChild` during active behavior propagation.
 
 ### Common confusion
 - treating any mutable collection with a selected row as dynamic switchable when the collection itself does not own opened-child lifecycle;
 - treating single-child replacement as dynamic switchable even though no candidate set is retained.
+- treating a runtime/library collection as a switchable holder without modeling
+  its children as a switchable candidate set with one selected/opened child.
 ## 2. Single-Child Mutable Node
 
 ### Definition

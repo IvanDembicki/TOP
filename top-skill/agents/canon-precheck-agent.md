@@ -70,6 +70,12 @@ If a discrepancy arises between this agent file and the output contract:
   representation, behavior, hit targets, context actions, or capabilities
 - active-state operations/queries on switchable holders delegate to
   `openedChild` only; closed state siblings are not walked for active behavior
+- switchable holder contracts are non-null: at least one state/candidate child,
+  exactly one opened child, default first child when no explicit state is
+  selected, and no nullable opened-child fallback for active behavior
+- downward query/event propagation is node-owned after an approved entrypoint;
+  external walkers do not inspect modes, closed siblings, child policies, or
+  connector internals to steer propagation
 </validation_focus>
 
 <handoff_rules>

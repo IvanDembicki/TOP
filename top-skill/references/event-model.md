@@ -16,6 +16,41 @@ Events do not violate tree discipline:
 
 ## Event/request propagation directions
 
+### Downward query/event propagation
+
+A downward query or event enters the tree through an approved propagation
+entrypoint. The entrypoint does not have to be the whole application root. It
+may be a tree root, branch root, interaction-layer node, viewport/canvas node,
+connector boundary, or another declared subroot when the caller already has an
+architecturally valid scope.
+
+After entry, propagation is node-owned. The external mechanism makes the typed
+call and stops controlling internal traversal. Each node decides locally whether
+to:
+- answer;
+- return no-result;
+- stop propagation;
+- delegate to `openedChild`;
+- delegate to a selected child set;
+- delegate through a connector or adapter;
+- translate the request to an attached external tree through its boundary.
+
+The external propagation mechanism must not inspect internal node modes,
+state-child siblings, child policies, platform representation, or external-tree
+internals to decide where the query goes next. It must not be a global walker
+that "knows" which children are view-capable, which state is unavailable, which
+adapter should be called, or which closed siblings should be skipped.
+
+Nodes own those decisions through their declared contracts. For example, a
+presentation-only node may return no-result for a data query, a switchable
+holder delegates active-state behavior to its non-null `openedChild`, and a
+connector node may forward through an explicit adapter that speaks to an
+external tree.
+
+This pattern applies to result-producing queries such as target lookup and
+hit-test as well as to event/request routing. The return type, no-result value,
+and traversal order are project-specific; the ownership rule is not.
+
 ### Bottom-up (bubbling)
 
 A child node or locally implemented content reports a semantic event/request to

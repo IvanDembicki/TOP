@@ -31,6 +31,13 @@ Only the state-holder owns the reference to the active/opened state child.
 
 This means:
 - the state-holder determines who is currently active;
+- a valid state-holder always has exactly one opened child;
+- if no state was explicitly selected, the first state child is the default
+  opened child;
+- if there are no state/candidate children, the node is not a switchable
+  state-holder;
+- `openedChild` absence is a construction/lifecycle error, not a normal value
+  to handle during active behavior propagation;
 - a child state node must not change owner-managed state via an arbitrary bypass;
 - no external helper logic may silently bypass the lifecycle.
 
@@ -88,7 +95,7 @@ must delegate to `openedChild` only.
 Canonical form:
 
 ```text
-return openedChild?.operation(args) ?? noResult
+return openedChild.operation(args)
 ```
 
 The holder must not loop over all state children, ask closed sibling states for
@@ -100,6 +107,11 @@ Each state child owns its own response policy. For example, a non-interactive
 state returns a no-result value; an editing state may expose editing targets; a
 display state may expose display targets. The holder and external traversal
 mechanisms do not encode that taxonomy.
+
+Nullable opened-child fallback is forbidden for active-state operations. The
+state selection mechanism must establish an opened child before active
+propagation begins. No-result belongs to the state child's answer, not to a
+missing `openedChild`.
 
 This rule is not limited to pointer hit-test. It applies to active-state target
 lookup, event routing, active command availability, active capability checks,
@@ -246,6 +258,17 @@ It is unclear who owns the active/opened reference:
 
 ### 10.5. Hidden branch rules
 Branch open/close propagation exists but is never explicitly described.
+
+### 10.6. Nullable opened child
+A switchable holder treats missing/null `openedChild` as a normal runtime case,
+or active behavior uses nullable opened-child fallback instead of repairing
+state selection.
+
+### 10.7. Mixed child policy
+A node mixes switchable state-holder semantics with a generic runtime/library
+collection child policy. Runtime/library collection children do not make a node
+switchable unless they are explicitly modeled as the switchable candidate set
+with one selected/opened child.
 
 ---
 

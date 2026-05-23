@@ -571,7 +571,7 @@ Canonical form:
 
 ```text
 getActiveTarget(input):
-  return openedChild?.getActiveTarget(input) ?? null
+  return openedChild.getActiveTarget(input)
 ```
 
 The operation name is illustrative. The same rule applies to hit-test, target
@@ -584,6 +584,9 @@ state may expose different targets or capabilities through their own
 implementations. The holder does not encode those differences.
 
 Anti-patterns:
+- the holder treats missing/null `openedChild` as normal active behavior;
+- the holder uses nullable opened-child fallback instead of ensuring a selected
+  opened child;
 - the holder loops over all state children and asks closed siblings for active
   behavior;
 - external traversal inspects holder `mode`/`status` or state siblings to decide
@@ -596,6 +599,39 @@ or capability surface until opened.
 
 This is primarily a state-replacement correctness rule. Performance is a
 secondary benefit.
+
+### Node-owned downward query/event propagation
+
+When a query or event travels downward, it enters through an approved
+propagation entrypoint and then becomes node-owned propagation.
+
+The entrypoint may be a tree root, branch root, interaction-layer node,
+viewport/canvas node, connector boundary, or another declared subroot. It does
+not have to be the whole application root.
+
+After entry, each node decides locally whether to answer, return no-result,
+stop, delegate to `openedChild`, delegate to selected children, or delegate
+through a connector/adapter. The external caller or traversal mechanism must not
+inspect internal modes, closed state siblings, child policies, platform
+representation, or external-tree internals to steer propagation.
+
+Candidate violations:
+- a global walker branches on `mode`, `status`, state child names, or
+  unavailable/edit/display concepts outside the node;
+- a traversal mechanism loops through closed switchable state siblings for an
+  active behavior query;
+- external code directly traverses a connected external tree instead of calling
+  the node's explicit connector/adapter boundary;
+- the traversal mechanism decides which nodes are "view" or "interactive"
+  through out-of-band knowledge instead of asking node contracts.
+
+Canonical repair:
+- introduce an approved propagation entrypoint;
+- move traversal policy into node/controller methods;
+- let switchable holders delegate active-state behavior to non-null
+  `openedChild`;
+- let connector nodes translate and forward through explicit adapters;
+- make no-result a node response, not an external traversal assumption.
 
 ### Agent chain for refactoring
 

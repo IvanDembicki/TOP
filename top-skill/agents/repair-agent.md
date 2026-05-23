@@ -84,6 +84,14 @@ If a discrepancy arises between this agent file and the output contract:
 - repair switchable active-state operation traversal by replacing loops over
   state siblings or mode/status branches with `openedChild` delegation, and by
   moving state-specific response/no-result policy into the child state nodes
+- repair invalid switchable holder contracts by adding explicit state/candidate
+  children, establishing a default opened child, replacing nullable
+  opened-child fallback with valid state selection, or reclassifying a
+  runtime/library collection as dynamic composition instead of switchable
+- repair external/global-walker downward propagation by moving traversal decisions
+  into node/controller methods, using approved propagation entrypoints, routing
+  active-state behavior through non-null `openedChild`, and routing external
+  tree access through explicit connector/adapter boundaries
 - repair hook bridge orchestration by isolating bridge logic as a connector,
   bridge component, black-box boundary, data bridge node, or adapter residual
   and moving workflow decisions out of locally implemented content

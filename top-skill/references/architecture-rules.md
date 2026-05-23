@@ -53,6 +53,12 @@ These are distinct patterns with different semantics:
 - **Single-child mutable node** — the parent always contains exactly one child position, and the concrete child instance in that position is replaced by data. No retained candidate set is required.
 - **Mutable node with library children** — a container to which elements are added and removed at runtime without the container necessarily owning one lifecycle-opened selected child.
 
+A runtime/library collection is not switchable merely because its children are
+runtime-created. If dynamic switchable is intended, the runtime-created
+children must be modeled as the switchable candidate set, the selected/opened
+child source of truth must be explicit, and `openedChild` must never be null
+during active behavior propagation.
+
 ### R4. Mixing Switchable and Non-Switchable Child Nodes Is Prohibited
 
 A single node cannot mix switchable and non-switchable child nodes. For a dynamic switchable node, the dynamic candidate set is the switchable child set; ordinary non-switchable child responsibilities must be extracted into separate child nodes or explicit supporting branches.

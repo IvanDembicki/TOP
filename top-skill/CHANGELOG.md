@@ -9,6 +9,15 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.0.3] — 2026-05-22
+
+- Added node-owned downward query/event propagation: after a query or event
+  enters through an approved entrypoint, each node owns local forwarding,
+  no-result, stop, child delegation, or connector/adapter delegation decisions.
+- Tightened switchable holder semantics: `openedChild` is non-null for a valid
+  switchable holder; missing opened child is invalid, and runtime/library
+  collection roles must not be confused with switchable state ownership.
+
 ## [2.0.2] — 2026-05-22
 
 - Added active-state operation delegation guidance for switchable holders:

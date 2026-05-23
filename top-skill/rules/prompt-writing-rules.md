@@ -127,7 +127,13 @@ Must describe:
 - which child is the default, fallback, or initial selected/opened child;
 - what happens on onOpen of each child or candidate type;
 - what happens on onClose of each child or candidate type;
-- for dynamic switchable: candidate child type policy, candidate-set source of truth, selected-child source of truth, create/remove lifecycle, and behavior when the opened child is removed;
+- for dynamic switchable: candidate child type policy, candidate-set source of
+  truth, selected-child source of truth, create/remove lifecycle, and behavior
+  when the opened child is removed without leaving `openedChild` null during
+  active behavior propagation;
+- that a node with no state/candidate child is not switchable, and runtime or
+  library collection children are not switchable children unless explicitly
+  modeled as the switchable candidate set;
 - whether branch hooks (onBranchOpen/onBranchClose) are used, and if so — who calls them and under what traversal policy;
 - who is the owner of switching (controller, not content and not the state node itself).
 

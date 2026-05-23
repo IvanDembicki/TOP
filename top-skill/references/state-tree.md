@@ -69,6 +69,12 @@ Rules:
 - In a non-switchable node, all child nodes are opened simultaneously.
 - In a switchable node, only one child node is opened — the one pointed to by
   the parent's `openedChild`.
+- A valid switchable node has at least one state/candidate child and exactly one
+  opened child. If no state was explicitly selected, the first state child is
+  the default opened child.
+- If there are no state/candidate children, the node is not a switchable node.
+  A missing or null `openedChild` is a construction/lifecycle error, not a
+  normal runtime state.
 - All other child nodes of the switchable node are considered closed.
 - The root node of the state tree is considered opened by definition.
 
@@ -102,7 +108,7 @@ switchable holder delegates only to `openedChild`.
 Canonical form:
 
 ```text
-return openedChild?.operation(args) ?? noResult
+return openedChild.operation(args)
 ```
 
 Examples of active-state operations include target lookup, hit-test, event
@@ -124,6 +130,9 @@ Each state child owns the semantics of its answer. A non-interactive,
 unavailable, or inactive state returns the appropriate no-result value itself.
 The traversal or dispatch mechanism outside the branch must not know the
 holder's internal state taxonomy.
+
+Do not use nullable opened-child fallback for active behavior propagation.
+Fallback belongs to state-selection initialization, not to query execution.
 
 All-state introspection, metadata, validation, or persistence may inspect all
 state children only through an explicitly declared non-behavioral contract. It

@@ -103,6 +103,18 @@ Also specify:
 - The prompt must state that `IContentAccess` is not a data/view-model/state/callback bag for Content. Controller-owned data and actions used by Content belong behind `IControllerAccess` methods/accessors.
 - These access artifacts must be narrow and strongly typed where the language permits. They must be materialized as named contract artifacts or other explicitly designated typed boundaries, and the constructor/factory/method parameter accepting such an artifact must have an explicit contract type. Anonymous/untyped parameters such as `constructor(facing)` without an explicit contract type are not allowed if the language can express it.
 - Construction must attach TOP objects to context, not inject data. Static nodes receive only parent/context, locally implemented content receives only owning controller access, and connectors or black-box boundaries receive only their explicit boundary interface. Runtime-created branch roots may receive parent/context plus one canonical Runtime Branch Binding input: entity context reference, stable identity key, or typed immutable DTO fallback. Do not pass data packets, flags, callbacks, config/options/props-like objects, stores, services, child views, presentation values, visibility values, style values, text values, runtime state, handlers, scattered entity fields, or arbitrary extra values through constructors, runtime entrypoints, or setter-style post-construction configuration.
+- Switchable holders must have at least one state/candidate child and a non-null
+  `openedChild`. If no state is explicitly selected, use the first
+  state/candidate child as the default opened child. Active-state
+  operations/queries delegate to `openedChild`; do not generate nullable
+  opened-child fallback, loops over closed state siblings, or mode/status
+  branches for active behavior.
+- Downward query/event propagation must be node-owned after an approved
+  entrypoint. Generate node/controller methods that decide locally whether to
+  answer, return no-result, stop, delegate to active/selected children, or use a
+  connector/adapter boundary. Do not generate an external/global walker that
+  inspects node modes, closed siblings, child policies, platform representation,
+  or external-tree internals to steer propagation.
 - If the node has a separate content, the controller must not work with the concrete implementation bypassing the content object and its external interface. A public/base-class primitive getter does not legalize such a bypass.
 - If the controller needs a presentation change, the prompt must require
   controller-owned state plus node/runtime dirty or lifecycle/render refresh.

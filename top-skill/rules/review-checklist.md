@@ -88,6 +88,12 @@ A result is not valid until all checklist items pass.
 - lifecycle ownership is explicit
 - no hidden retention
 - no uncontrolled creation/destruction
+- switchable holders have at least one state/candidate child and a non-null
+  `openedChild`
+- active-state operations delegate to `openedChild` rather than closed siblings
+  or mode/status branches
+- downward queries/events propagate through node-owned forwarding from an
+  approved entrypoint, not through a global walker that inspects internals
 
 ---
 

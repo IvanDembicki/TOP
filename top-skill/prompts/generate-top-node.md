@@ -146,6 +146,16 @@ rules:
   controller access
 - if structures, elements, handlers, visibility modes, representations, or
   capabilities vary, generate explicit child state nodes for the alternatives
+- for switchable holders, generate at least one state/candidate child, a
+  non-null `openedChild`, and a default first opened child when no explicit
+  state is selected
+- for active-state operations/queries, generate direct delegation to
+  `openedChild`; do not generate loops over closed state siblings, nullable
+  opened-child fallback, or mode/status branches for active behavior
+- for downward query/event propagation, generate approved entrypoint methods and
+  node-owned local forwarding decisions; do not generate an external/global
+  walker that inspects node internals, state siblings, child policies, platform
+  representation, or connector internals
 - if selection logic belongs to an external, native, third-party, or
   self-contained implementation, wrap it as black-box component content behind a
   narrow explicit interface

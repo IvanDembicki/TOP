@@ -75,6 +75,14 @@ Check:
 - confirmation that switchable holder active-state operations/queries delegate
   only to `openedChild` and do not iterate closed state siblings or branch on
   owner-held mode/status for active behavior;
+- confirmation that switchable holders have a non-null opened child, a default
+  first state/candidate child when no explicit state is selected, and no
+  nullable opened-child fallback or mixed runtime/library collection child
+  policy;
+- confirmation that downward query/event propagation enters through an approved
+  entrypoint and is then controlled by node-local contracts, not by an external
+  walker that inspects modes, closed siblings, child policies, platform
+  representation, or connector internals;
 - for migration scopes, confirmation that bridge residuals are isolated as
   bridge components, connectors, black-box boundaries, data bridge nodes, or
   adapter residuals, and do not make locally implemented content own

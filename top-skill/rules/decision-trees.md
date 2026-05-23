@@ -181,7 +181,7 @@ Pipeline:
    - no → use mutable collection/single-child mutable or repair the lifecycle model
    - yes → use dynamic switchable
 
-5. If the currently opened child is removed, is fallback/null/empty-state behavior explicit?
+5. If the currently opened child is removed, is replacement/empty-state behavior explicit without leaving `openedChild` null during active behavior propagation?
    - no → the model is incomplete
    - yes → dynamic switchable is valid
 

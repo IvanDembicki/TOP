@@ -258,6 +258,37 @@ Canonical correction direction:
 
 ---
 
+## 2d. Switchable and Downward Propagation Validation
+
+Required checks:
+- a node modeled as switchable has at least one state/candidate child;
+- `openedChild` is non-null for every valid switchable holder;
+- if no state is explicitly selected, the first state/candidate child is the
+  default opened child;
+- active-state operations/queries delegate to `openedChild` and do not use
+  nullable opened-child fallback;
+- no holder or external traversal loops over closed state siblings for active
+  behavior;
+- no external walker branches on node mode/status/state names, child policies,
+  platform representation, or connector internals to steer active propagation;
+- runtime/library collection children are not treated as switchable children
+  unless the branch explicitly models them as the switchable candidate set with
+  one selected/opened child;
+- downward queries/events enter through an approved propagation entrypoint and
+  then propagate by node-owned local forwarding decisions.
+
+Canonical correction direction:
+- establish explicit state/candidate children and a default opened child;
+- replace nullable opened-child or null fallback logic with non-null state
+  selection;
+- move active behavior/no-result policy into the opened state child;
+- move traversal decisions from global walkers into node/controller contracts;
+- route external tree traversal through explicit connector/adapter boundaries;
+- reclassify generic runtime/library collections as dynamic composition unless
+  they are truly a switchable candidate set.
+
+---
+
 ## 3. Content behavior validation
 
 Required checks:

@@ -529,7 +529,10 @@ A `dynamic switchable node` is permitted when:
 - selection changes use the same lifecycle-consistent switching path as any other switchable node;
 - the candidate-set source of truth and selected-child source of truth are explicit;
 - child type policy is explicit, for example through `childrenType` or an equivalent project-local contract;
-- the policy for removing the currently opened child is explicit: fallback selection, null/empty state, or another declared behavior.
+- the policy for removing the currently opened child never leaves
+  `openedChild` null during active behavior propagation. It must select another
+  candidate, open an explicit empty/unavailable state candidate, or leave the
+  switchable role through a declared lifecycle transition.
 
 A dynamic switchable node is not a plain mutable collection. The defining feature is not dynamic children by itself, but dynamic candidates plus owner-managed active/opened selection.
 ### Error
