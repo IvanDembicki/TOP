@@ -81,6 +81,9 @@ If a discrepancy arises between this agent file and the output contract:
 - repair excessive `PanelDisplayStyle` use by extracting hidden state branches,
   modal/form/list nodes, async process nodes, capability branches, or data
   boundaries instead of adding more display-token getters
+- repair switchable active-state operation traversal by replacing loops over
+  state siblings or mode/status branches with `openedChild` delegation, and by
+  moving state-specific response/no-result policy into the child state nodes
 - repair hook bridge orchestration by isolating bridge logic as a connector,
   bridge component, black-box boundary, data bridge node, or adapter residual
   and moving workflow decisions out of locally implemented content

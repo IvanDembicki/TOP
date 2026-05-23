@@ -72,6 +72,9 @@ Check:
   same node, are not hiding switchable states when they change visual
   representation, behavior, hit targets, context actions, or capability
   availability;
+- confirmation that switchable holder active-state operations/queries delegate
+  only to `openedChild` and do not iterate closed state siblings or branch on
+  owner-held mode/status for active behavior;
 - for migration scopes, confirmation that bridge residuals are isolated as
   bridge components, connectors, black-box boundaries, data bridge nodes, or
   adapter residuals, and do not make locally implemented content own

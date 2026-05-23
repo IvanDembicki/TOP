@@ -79,6 +79,35 @@ The exact set of hooks may differ, but:
 
 ---
 
+## 4a. Active-State Operation Delegation
+
+State holders own the active/opened state reference. For any operation or query
+whose meaning is "answer according to the currently active state", the holder
+must delegate to `openedChild` only.
+
+Canonical form:
+
+```text
+return openedChild?.operation(args) ?? noResult
+```
+
+The holder must not loop over all state children, ask closed sibling states for
+active behavior, or branch on mode/status/phase to decide which behavior should
+answer. A closed sibling is retained state, not part of the active behavior
+surface.
+
+Each state child owns its own response policy. For example, a non-interactive
+state returns a no-result value; an editing state may expose editing targets; a
+display state may expose display targets. The holder and external traversal
+mechanisms do not encode that taxonomy.
+
+This rule is not limited to pointer hit-test. It applies to active-state target
+lookup, event routing, active command availability, active capability checks,
+and active output requests. Explicit all-state introspection or persistence is
+allowed only when declared as non-behavioral metadata/validation logic.
+
+---
+
 ## 5. Child-triggered Switching
 
 If a child node triggers switching via `open()` or a similar method,

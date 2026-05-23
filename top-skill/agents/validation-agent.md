@@ -205,6 +205,10 @@ If a discrepancy arises between this agent file and the output contract:
   owner-held fields on the same node, must be treated as architectural state
   when they change visual representation, behavior, hit targets, context
   actions, or capability availability
+- active-state operation delegation validation: switchable holder operations or
+  queries that belong to the current active state must delegate only to
+  `openedChild`; closed state siblings are not walked and owner-held
+  mode/status is not branched on for active behavior
 - Library Object External Context Boundary review for runtime/library branches:
   descendants should not independently discover ancestors, global stores, data
   trees, presentation/style trees, asset trees, services, permission sources, or

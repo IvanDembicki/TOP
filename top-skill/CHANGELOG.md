@@ -9,6 +9,12 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.0.2] — 2026-05-22
+
+- Added active-state operation delegation guidance for switchable holders:
+  operations that concern the currently active state must delegate only through
+  `openedChild`, not iterate closed state siblings or branch on mode/status.
+
 ## [2.0.1] — 2026-05-22
 
 - Added canonical TOP node spec field order: `type`, `doc`, `prompt`, `props`,

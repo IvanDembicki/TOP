@@ -94,6 +94,43 @@ it sequentially opens the node and all its ancestors.
 
 ---
 
+## Active-state operation delegation
+
+When an operation or query is semantically about the current active state, the
+switchable holder delegates only to `openedChild`.
+
+Canonical form:
+
+```text
+return openedChild?.operation(args) ?? noResult
+```
+
+Examples of active-state operations include target lookup, hit-test, event
+routing, active command availability, active capability checks, and active
+output requests. The exact operation name and no-result value are
+project-specific.
+
+The holder must not:
+- iterate all state children for active behavior;
+- ask closed state siblings to answer active-state queries;
+- branch on owner-held mode/status/phase to emulate state behavior.
+
+Closed state siblings may remain in the tree for persistence, caching, future
+switching, or controlled lifecycle, but they are not part of the active
+behavior surface, pointer surface, context-action surface, or capability
+surface until opened.
+
+Each state child owns the semantics of its answer. A non-interactive,
+unavailable, or inactive state returns the appropriate no-result value itself.
+The traversal or dispatch mechanism outside the branch must not know the
+holder's internal state taxonomy.
+
+All-state introspection, metadata, validation, or persistence may inspect all
+state children only through an explicitly declared non-behavioral contract. It
+must not be used as active runtime behavior dispatch.
+
+---
+
 ## Opened branch
 
 The opened branch is the subtree of all nodes whose every ancestor up to the root is opened.

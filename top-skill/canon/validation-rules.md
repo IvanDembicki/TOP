@@ -193,6 +193,23 @@ Canonical repair for context data injection:
 - If the current controller is not the owner of the decision, it raises or
   passes a semantic event upward instead of directly mutating an unrelated node.
 
+## Switchable active-state delegation check
+- If a switchable holder has an operation or query whose meaning belongs to the
+  current active state, validation must verify that the holder delegates only to
+  `openedChild`.
+- Active-state operations include target lookup, hit-test, event routing, active
+  command availability, active capability checks, and active output requests.
+- Validation must reject holder/external traversal logic that iterates closed
+  state siblings, asks every state child for active behavior, or branches on
+  owner-held mode/status/phase to decide which state behavior applies.
+- The state child owns its own response, including returning `null` or another
+  no-result value for non-interactive, unavailable, or inactive semantics.
+- Explicit all-state introspection, metadata, validation, or persistence may
+  inspect all state children only through a declared non-behavioral contract. It
+  must not be used as active runtime behavior dispatch.
+- When the invalid traversal hides or duplicates switchable behavior, classify
+  it as `CORE-003`.
+
 ## Controller validation
 - Controller owns behavior, lifecycle, orchestration, branching.
 - Controller remains a controller-only artifact.

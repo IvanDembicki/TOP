@@ -68,6 +68,8 @@ If a discrepancy arises between this agent file and the output contract:
 - mode/status/phase flags, including owner-held fields on the same node, are
   reviewed as hidden switchable candidates when they change visual
   representation, behavior, hit targets, context actions, or capabilities
+- active-state operations/queries on switchable holders delegate to
+  `openedChild` only; closed state siblings are not walked for active behavior
 </validation_focus>
 
 <handoff_rules>

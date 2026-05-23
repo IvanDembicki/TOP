@@ -562,6 +562,41 @@ After (canonical):
 - A state node **does not read** the mode/status it represents — it **is** the representation of that mode/status
 - Functionality absent in ViewState is not hidden — it architecturally does not exist in that state
 
+### Active-state operation/query delegation
+
+When a switchable holder exposes an operation or query that belongs to the
+current active state, it forwards to `openedChild` only.
+
+Canonical form:
+
+```text
+getActiveTarget(input):
+  return openedChild?.getActiveTarget(input) ?? null
+```
+
+The operation name is illustrative. The same rule applies to hit-test, target
+lookup, event routing, active command availability, active capability checks,
+and active output requests.
+
+State children own their answer. A non-interactive or unavailable state returns
+`null` or the project's equivalent no-result value. An edit state and a display
+state may expose different targets or capabilities through their own
+implementations. The holder does not encode those differences.
+
+Anti-patterns:
+- the holder loops over all state children and asks closed siblings for active
+  behavior;
+- external traversal inspects holder `mode`/`status` or state siblings to decide
+  current-state behavior;
+- leaf nodes carry mode guards while the holder still walks closed branches.
+
+Closed state siblings may remain in the tree for persistence, caching, or future
+switching, but they are not part of the active behavior, pointer, context-action,
+or capability surface until opened.
+
+This is primarily a state-replacement correctness rule. Performance is a
+secondary benefit.
+
 ### Agent chain for refactoring
 
 ```
