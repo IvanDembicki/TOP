@@ -51,6 +51,43 @@ This pattern applies to result-producing queries such as target lookup and
 hit-test as well as to event/request routing. The return type, no-result value,
 and traversal order are project-specific; the ownership rule is not.
 
+### Tell-only propagation and no-op boundaries
+
+Node-owned propagation is tell-only at each boundary. Once the caller has an
+architecturally valid entrypoint, it invokes the node's declared operation or
+query. It must not first ask the node or its descendants whether they can handle
+the event and then use that answer to steer traversal.
+
+Forbidden external steering forms include:
+- `if child.canHandle(event) child.handle(event)`;
+- `if child.hasCapability(query) return child.query(...)`;
+- out-of-band checks such as `isInteractive`, `supportsEvent`, `listensTo`, or
+  equivalent capability probes used by the caller to choose internal
+  descendants.
+
+The receiving node owns the next step. For a result-producing query, it may
+return a result or the project's no-result value. For an event/command, it may
+perform the action, delegate deeper, stop propagation, or no-op. A no-op is a
+valid node response; it is not a reason for the caller to inspect internals and
+try another path.
+
+This follows from node boundary ownership. The node is the smallest object that
+knows its own current state, active child, behavior set, connector boundaries,
+and subtree policy. If the current branch has no relevant behavior, the no-op
+or no-result boundary should be placed as high as the owning node boundary
+allows, instead of letting an external mechanism create a waterfall through
+children that the node already knows are inactive or irrelevant.
+
+Capability reporting may exist as an internal optimization or stable public
+status when the model explicitly needs it, but it must not become a preflight
+gate that lets external traversal decide which internal child should receive
+the call. The canonical flow is:
+
+```text
+caller -> node.handle/query(...)
+node -> handle | no-op/no-result | delegate to active/selected child | connector
+```
+
 ### Bottom-up (bubbling)
 
 A child node or locally implemented content reports a semantic event/request to

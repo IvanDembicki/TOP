@@ -119,6 +119,9 @@ project-specific.
 The holder must not:
 - iterate all state children for active behavior;
 - ask closed state siblings to answer active-state queries;
+- probe `canHandle`, `hasCapability`, `isInteractive`, `supportsEvent`, or an
+  equivalent preflight method to decide which state child should receive active
+  behavior;
 - branch on owner-held mode/status/phase to emulate state behavior.
 
 Closed state siblings may remain in the tree for persistence, caching, future

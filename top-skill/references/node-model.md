@@ -387,6 +387,15 @@ This is necessary so that the controller can:
 - coordinate propagation;
 - maintain node consistency.
 
+Propagation ownership follows from the same node boundary. A caller may invoke
+the node's declared handler/query, but it must not inspect the node's children,
+state, modes, or capabilities to decide how propagation should continue inside
+that node. The node itself owns whether to return a result, return no-result,
+no-op, stop, delegate to an active or selected child, or delegate through a
+connector. External ask-then-handle traversal such as
+`if child.canHandle(event) child.handle(event)` breaks the node boundary because
+the caller starts making decisions that belong inside the child node.
+
 ---
 
 

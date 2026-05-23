@@ -5,8 +5,8 @@ description: Skill for designing, generating, and validating systems built with 
 
 # TOP Skill
 
-**Version:** 2.0.3
-**Last updated:** 2026-05-22 20:56 -07:00
+**Version:** 2.0.4
+**Last updated:** 2026-05-23 00:32 -07:00
 **Invocation:** `/top`
 
 > **Rule for AI:** whenever any top-skill file is modified, update the date and time in this field to the current values.
@@ -189,6 +189,11 @@ artifact writes, post-repair judicial validation, delivery certification, and
 read-only run verification. It does not include durable execution,
 observability dashboards, multi-provider adapters, or platform-specific
 architecture rules.
+
+Version 2.0.4 adds tell-only downward propagation. A caller invokes a node
+boundary and does not perform external can-handle/preflight traversal. The
+receiving node owns the local decision to handle, return no-result, no-op, or
+delegate deeper.
 
 ---
 
@@ -460,6 +465,7 @@ Strong signals for activating the skill:
 37. `PanelDisplayStyle` and equivalent display tokens are not substitutes for node decomposition. They are allowed only for stable structural sections whose existence is constant and whose visibility/display is an already-resolved presentation value. They must not hide state alternatives, lifecycle-bearing branches, async process states, forms, modal states, permission-gated capabilities, workflows, or data ownership boundaries.
 38. Mode/status/phase flags are architectural state even when stored inside the same node. If an owner-held mode flag changes visual representation, behavior, hit targets, context actions, or capability availability, validate it as a hidden switchable candidate (`CORE-003`) and prefer explicit child state nodes unless switching is proven not to be the correct pattern.
 39. Downward query/event propagation is node-owned. A query or event enters the tree through an approved propagation entrypoint, which may be the whole tree root, a branch root, an interaction-layer node, a connector boundary, or another declared subroot. From that point on, no external walker may inspect internal node modes, state siblings, child policies, or external-tree details to control propagation. Each node decides locally whether to answer, return no-result, stop, delegate to an active child, delegate to a selected child set, or delegate through a connector/adapter. Propagation is node-owned forwarding through declared contracts, not external tree inspection.
+39a. Tell-only propagation follows from node boundary ownership. After a query/event reaches a node, the caller says "handle/answer this" through the declared contract; it must not first ask whether the node or its children can handle the event and then use that answer to steer traversal. Ask-then-handle patterns such as `if child.canHandle(event) child.handle(event)` recreate an external smart walker. The receiving node owns whether the call becomes a result, no-result, stop, no-op, active-child delegation, selected-child delegation, or connector delegation. When a subtree has no relevant behavior in the current state, place the no-op/no-result boundary as high as that node ownership boundary allows.
 40. Switchable holders use non-null active-state operation delegation. A switchable holder has at least one state/candidate child and exactly one opened child. If no state is explicitly selected, the first state child is the default opened child. A modeled switchable with no opened child is invalid, not a normal runtime case. When an operation, query, event route, target lookup, capability check, or output request is semantically about the currently active state, the holder delegates to `openedChild` and returns that answer. It must not iterate closed state siblings, ask every state child, branch on owner-held mode/status, or use nullable opened-child fallback to emulate state behavior. Closed state nodes may remain in the tree for persistence or future switching, but they are not part of the active behavior, hit-test surface, context-action surface, or capability surface until opened.
 41. Runtime Branch Binding Pattern: runtime-created branches may be bound to a narrow entity context, a stable identity key that resolves an entity context, or a typed immutable DTO that is converted into owned data as early as possible. They must not receive scattered constructor data, props/config/callback bags, mutable model objects, presentation values, or direct services/stores.
 42. Migration readiness terms must be precise: `ready_for_generation`, `ready_for_integration`, `ready_for_manual_QA`, and `ready_for_production_candidate` are separate statuses. Do not use unqualified `ready_for_use` for a model that is only ready for generation or for generated code that has not passed architectural validation.

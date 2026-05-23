@@ -383,6 +383,29 @@ stored in access contracts, or passed to adapters/helpers. Presentation updates
 use controller-owned state plus dirty/render/lifecycle refresh and content pull
 of already-resolved values.
 
+### Requirements for downward propagation
+
+Generation must materialize downward query/event propagation as tell-only
+node-boundary calls. A caller invokes the node's declared handler/query and
+does not perform ask-then-handle or capability-preflight traversal to decide
+which internal child should receive the call.
+
+Do not generate external propagation code such as:
+
+```text
+if child.canHandle(event) child.handle(event)
+```
+
+or equivalent `hasCapability`, `isInteractive`, `supportsEvent`, `listensTo`,
+mode/status, state-child-name, or child-policy probes used by the caller to
+steer propagation inside another node.
+
+The receiving node owns result, no-result, no-op, stop, active/selected-child
+delegation, and connector delegation. If the node already knows that its
+subtree has no relevant active behavior, generate the no-op/no-result at that
+node boundary rather than forcing a generic traversal waterfall through
+descendants.
+
 ### Requirements for internal access boundaries
 Generation must create for nodes with a separate content only explicitly defined, narrow, and maximally strictly typed internal access boundaries: `IControllerAccess` and `IContentAccess`.
 If a node has a separate content class/object, generation must materialize separate explicit access artifacts for both directions where the technology permits. Anything else is strictly prohibited.

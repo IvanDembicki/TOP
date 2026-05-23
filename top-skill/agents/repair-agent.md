@@ -92,6 +92,11 @@ If a discrepancy arises between this agent file and the output contract:
   into node/controller methods, using approved propagation entrypoints, routing
   active-state behavior through non-null `openedChild`, and routing external
   tree access through explicit connector/adapter boundaries
+- repair ask-then-handle propagation by replacing external `canHandle`,
+  `hasCapability`, `isInteractive`, `supportsEvent`, or equivalent preflight
+  gates with tell-only node-boundary handler/query calls; move no-op/no-result,
+  stop, and delegation policy into the receiving node at the highest owning
+  boundary that can know the subtree has no relevant active behavior
 - repair hook bridge orchestration by isolating bridge logic as a connector,
   bridge component, black-box boundary, data bridge node, or adapter residual
   and moving workflow decisions out of locally implemented content

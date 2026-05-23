@@ -431,3 +431,46 @@ or branch contract.
 - allowing every descendant to independently discover the external world;
 - treating direct global store, service, asset, style, or connector access as
   normal because the branch is runtime-created.
+
+---
+
+## 13. Tell-Only Downward Propagation
+
+### Definition
+
+A downward query or event is invoked at a node boundary, and the receiving node
+owns the local propagation decision.
+
+The caller does not ask whether the node or its children can handle the event
+before invoking it. The caller says "handle/query this" through the declared
+contract; the node answers, returns no-result, no-ops, stops, delegates to an
+active/selected child, or delegates through a connector.
+
+### When to use
+
+- result-producing queries such as target lookup, hit-test, focus target
+  lookup, command availability, or capability output;
+- downward events/commands that may or may not matter to a subtree;
+- propagation through switchable state holders;
+- propagation across connector/adapted external tree boundaries.
+
+### Invariants
+
+- propagation starts at an architecturally approved entrypoint;
+- after entry, each node owns the next local step;
+- no external walker inspects node modes, child policies, state-child names, or
+  connector internals;
+- no external `canHandle`/capability preflight is used to choose internal
+  descendants;
+- no-op/no-result is a valid response owned by the receiving node;
+- no-op/no-result should be placed at the highest owning node boundary that can
+  know the subtree has no relevant active behavior.
+
+### Common confusion
+
+- `if child.canHandle(event) child.handle(event)` looks efficient but moves the
+  propagation decision outside the child node;
+- a capability/status method becomes non-canonical when it is used by external
+  traversal as a preflight gate;
+- switchable holders are walked through all state siblings instead of delegating
+  active behavior to the non-null `openedChild`.

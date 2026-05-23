@@ -94,6 +94,12 @@ A result is not valid until all checklist items pass.
   or mode/status branches
 - downward queries/events propagate through node-owned forwarding from an
   approved entrypoint, not through a global walker that inspects internals
+- no preflight capability checks such as `canHandle`, `hasCapability`,
+  `isInteractive`, or `supportsEvent` are used by external traversal to decide
+  a child/subtree's internal propagation
+- no-op/no-result behavior is owned by the receiving node and placed at the
+  highest relevant node boundary, not discovered by walking through every
+  descendant
 
 ---
 

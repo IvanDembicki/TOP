@@ -220,6 +220,12 @@ If a discrepancy arises between this agent file and the output contract:
   connector/adapter delegation; external walkers must not inspect node modes,
   closed state siblings, child policies, platform representation, or
   external-tree internals to steer propagation
+- tell-only propagation validation (`CORE-039`): callers invoke a node's
+  declared handler/query and do not use ask-then-handle or capability preflight
+  such as `canHandle`, `hasCapability`, `isInteractive`, `supportsEvent`, or
+  `listensTo` to steer a child subtree; no-op/no-result belongs to the
+  receiving node and should be placed at the highest owning boundary that can
+  know the subtree has no relevant active behavior
 - Library Object External Context Boundary review for runtime/library branches:
   descendants should not independently discover ancestors, global stores, data
   trees, presentation/style trees, asset trees, services, permission sources, or

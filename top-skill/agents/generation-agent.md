@@ -99,6 +99,13 @@ If a discrepancy arises between this agent file and the output contract:
 - generate presentation changes as controller state updates plus node/runtime
   dirty or lifecycle/render refresh, followed by content pulling already-resolved
   primitive values through controller access
+- generate downward query/event propagation as tell-only node-boundary calls:
+  callers invoke the declared handler/query, and receiving nodes own result,
+  no-result, no-op, stop, active/selected-child delegation, or connector
+  delegation
+- do not generate external ask-then-handle or capability-preflight traversal
+  such as `canHandle`, `hasCapability`, `isInteractive`, or `supportsEvent`
+  used to decide which internal child/subtree receives the call
 - generate data mutation only through architecturally allowed data controller
   domain methods; a data controller may mutate its own private data content, but
   presentation content must report intent and must not access data content
@@ -145,6 +152,9 @@ If a discrepancy arises between this agent file and the output contract:
   callback bags, mutable raw model objects, services/stores, presentation values,
   or arbitrary runtime state instead of one canonical Runtime Branch Binding
   input
+- generate external propagation walkers that use `canHandle`, capability
+  preflight, mode/status checks, or child-policy inspection to decide internal
+  propagation instead of invoking node-boundary handlers/queries
 - generate controller-shaped services/helpers/modules that do not participate in
   the runtime controller tree (`CORE-037`)
 - generate child content, public wrappers, render fragments, or target artifacts

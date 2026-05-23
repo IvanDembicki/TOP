@@ -115,6 +115,13 @@ Also specify:
   connector/adapter boundary. Do not generate an external/global walker that
   inspects node modes, closed siblings, child policies, platform representation,
   or external-tree internals to steer propagation.
+- Propagation must be tell-only at each node boundary. A caller invokes the
+  declared handler/query; it does not run `canHandle`, `hasCapability`,
+  `isInteractive`, `supportsEvent`, or equivalent preflight checks to decide
+  which internal child/subtree receives the call. The receiving node owns
+  result, no-result, no-op, stop, active/selected-child delegation, and
+  connector delegation. Place no-op/no-result at the highest owning node
+  boundary that already knows the subtree has no relevant active behavior.
 - If the node has a separate content, the controller must not work with the concrete implementation bypassing the content object and its external interface. A public/base-class primitive getter does not legalize such a bypass.
 - If the controller needs a presentation change, the prompt must require
   controller-owned state plus node/runtime dirty or lifecycle/render refresh.

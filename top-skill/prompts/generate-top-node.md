@@ -156,6 +156,15 @@ rules:
   node-owned local forwarding decisions; do not generate an external/global
   walker that inspects node internals, state siblings, child policies, platform
   representation, or connector internals
+- generate tell-only propagation at node boundaries: callers invoke the
+  declared handler/query, and the receiving node decides result, no-result,
+  no-op, stop, active/selected-child delegation, or connector delegation
+- do not generate ask-then-handle or capability-preflight propagation such as
+  `if child.canHandle(event) child.handle(event)`, `hasCapability`,
+  `isInteractive`, `supportsEvent`, or equivalent probes used by external
+  traversal to steer a child subtree
+- when a subtree has no relevant active behavior, implement no-op/no-result at
+  the highest owning node boundary that can know that fact
 - if selection logic belongs to an external, native, third-party, or
   self-contained implementation, wrap it as black-box component content behind a
   narrow explicit interface

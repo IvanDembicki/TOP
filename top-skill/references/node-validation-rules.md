@@ -271,11 +271,18 @@ Required checks:
   behavior;
 - no external walker branches on node mode/status/state names, child policies,
   platform representation, or connector internals to steer active propagation;
+- no external caller uses ask-then-handle or capability-preflight checks such
+  as `canHandle`, `hasCapability`, `isInteractive`, `supportsEvent`, or
+  `listensTo` to steer propagation through a node's internal descendants;
 - runtime/library collection children are not treated as switchable children
   unless the branch explicitly models them as the switchable candidate set with
   one selected/opened child;
 - downward queries/events enter through an approved propagation entrypoint and
-  then propagate by node-owned local forwarding decisions.
+  then propagate by node-owned local forwarding decisions;
+- result-producing queries return a result or no-result from the receiving
+  node; events/commands handle, delegate, stop, or no-op at the receiving node;
+- no-op/no-result is placed at the highest owning node boundary that already
+  knows the subtree has no relevant active behavior.
 
 Canonical correction direction:
 - establish explicit state/candidate children and a default opened child;
@@ -283,6 +290,9 @@ Canonical correction direction:
   selection;
 - move active behavior/no-result policy into the opened state child;
 - move traversal decisions from global walkers into node/controller contracts;
+- replace ask-then-handle preflight with tell-only handler/query invocation;
+- move no-op/no-result policy into the receiving node instead of exposing child
+  capability probing to callers;
 - route external tree traversal through explicit connector/adapter boundaries;
 - reclassify generic runtime/library collections as dynamic composition unless
   they are truly a switchable candidate set.

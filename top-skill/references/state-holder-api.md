@@ -103,6 +103,12 @@ active behavior, or branch on mode/status/phase to decide which behavior should
 answer. A closed sibling is retained state, not part of the active behavior
 surface.
 
+The holder also must not implement active-state behavior through ask-then-handle
+preflight, such as probing `canHandle`, `hasCapability`, or `isInteractive` on
+state children and then choosing a child from that result. It delegates the
+operation/query to the non-null `openedChild`; the state child owns result,
+no-result, no-op, or deeper delegation.
+
 Each state child owns its own response policy. For example, a non-interactive
 state returns a no-result value; an editing state may expose editing targets; a
 display state may expose display targets. The holder and external traversal

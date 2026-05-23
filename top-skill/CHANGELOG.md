@@ -9,6 +9,13 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.0.4] — 2026-05-23
+
+- Added tell-only downward propagation: callers invoke a node boundary and do
+  not use `canHandle`/capability preflight checks to steer traversal.
+- Added no-op/no-result boundary guidance so a node can stop propagation at the
+  highest owned boundary when its subtree has no relevant active behavior.
+
 ## [2.0.3] — 2026-05-22
 
 - Added node-owned downward query/event propagation: after a query or event

@@ -624,6 +624,14 @@ Candidate violations:
   the node's explicit connector/adapter boundary;
 - the traversal mechanism decides which nodes are "view" or "interactive"
   through out-of-band knowledge instead of asking node contracts.
+- ask-then-handle traversal such as `if child.canHandle(event)
+  child.handle(event)`;
+- capability preflight probes such as `hasCapability`, `isInteractive`,
+  `supportsEvent`, `listensTo`, `hasPointerMove`, `canHover`, or equivalent
+  names used by external traversal to decide which descendant receives an
+  operation/query;
+- code that treats a no-op/no-result from one node as permission for the caller
+  to inspect the node's children or try closed/internal branches itself.
 
 Canonical repair:
 - introduce an approved propagation entrypoint;
@@ -632,6 +640,15 @@ Canonical repair:
   `openedChild`;
 - let connector nodes translate and forward through explicit adapters;
 - make no-result a node response, not an external traversal assumption.
+- replace ask-then-handle preflight with tell-only propagation: call the node's
+  declared handler/query and let that node return result/no-result, no-op, stop,
+  or delegate deeper;
+- move no-op/no-result policy to the highest owning node boundary that already
+  knows the subtree has no relevant active behavior.
+
+Capability/reporting methods are not automatically forbidden. They become a
+`CORE-039` candidate when they are used by an external caller as a preflight
+gate to steer propagation through another node's internal subtree.
 
 ### Agent chain for refactoring
 

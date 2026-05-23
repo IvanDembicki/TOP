@@ -83,6 +83,13 @@ Check:
   entrypoint and is then controlled by node-local contracts, not by an external
   walker that inspects modes, closed siblings, child policies, platform
   representation, or connector internals;
+- confirmation that downward propagation is tell-only at node boundaries:
+  callers invoke the declared handler/query and do not use ask-then-handle or
+  capability-preflight checks such as `canHandle`, `hasCapability`,
+  `isInteractive`, `supportsEvent`, or `listensTo` to steer a child subtree;
+- confirmation that no-op/no-result behavior is implemented by the receiving
+  node at the highest owning boundary that can know the subtree has no relevant
+  active behavior;
 - for migration scopes, confirmation that bridge residuals are isolated as
   bridge components, connectors, black-box boundaries, data bridge nodes, or
   adapter residuals, and do not make locally implemented content own
@@ -190,6 +197,7 @@ Categorize them as:
   implemented content (`CORE-015`);
 - controller-shaped service/helper/module that does not participate in the
   runtime controller tree (`CORE-037`);
+- external propagation preflight / ask-then-handle traversal (`CORE-039`);
 - invalid shared derived fact repair that swaps `CORE-029` with Invariant 14 or Invariant 14 with `CORE-029`;
 - instability / ambiguity in prompt;
 - artifact placement mismatch.

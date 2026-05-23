@@ -225,12 +225,23 @@ Canonical repair for context data injection:
 - The entrypoint may be the whole tree root, a branch root, interaction-layer
   node, viewport/canvas node, connector boundary, or another declared subroot.
   It is not required to be the whole tree root.
+- Propagation is tell-only at each node boundary. The caller invokes the
+  declared handler/query and the receiving node decides whether to answer,
+  return no-result, no-op, stop, delegate, or cross a connector boundary.
+- Validation must reject external ask-then-handle or capability-preflight
+  steering such as `if child.canHandle(event) child.handle(event)`,
+  `hasCapability`, `isInteractive`, `supportsEvent`, `listensTo`, or equivalent
+  probes when the caller uses them to choose internal propagation paths.
 - Validation must reject external traversal mechanisms that inspect internal
   node modes, state siblings, child policies, platform representation, or
   external-tree internals to decide active propagation.
 - Each node owns whether it answers, returns no-result, stops, delegates to
   `openedChild`, delegates to selected children, or delegates through an
   adapter/connector.
+- No-op/no-result should be implemented at the highest owning node boundary
+  that already knows the subtree has no relevant active behavior. Do not force
+  a waterfall through children just because a generic dispatcher can enumerate
+  them.
 - Connector/adapter delegation to external trees is valid only through explicit
   narrow boundaries; the external walker must not directly traverse external
   tree internals.

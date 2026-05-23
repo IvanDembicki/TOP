@@ -76,6 +76,10 @@ If a discrepancy arises between this agent file and the output contract:
 - downward query/event propagation is node-owned after an approved entrypoint;
   external walkers do not inspect modes, closed siblings, child policies, or
   connector internals to steer propagation
+- tell-only propagation is preserved: models must not require ask-then-handle
+  or capability-preflight traversal (`canHandle`, `hasCapability`,
+  `isInteractive`, `supportsEvent`, or equivalent) to decide a child subtree's
+  internal propagation; no-op/no-result belongs to the receiving node
 </validation_focus>
 
 <handoff_rules>
