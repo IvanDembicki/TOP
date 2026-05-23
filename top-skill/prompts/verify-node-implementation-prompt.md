@@ -68,6 +68,10 @@ Check:
   display-token getters do not hide state alternatives, modal/form/list
   ownership, async process branches, permission-gated capabilities, workflows,
   or data boundaries;
+- confirmation that mode/status/phase flags, including owner-held fields on the
+  same node, are not hiding switchable states when they change visual
+  representation, behavior, hit targets, context actions, or capability
+  availability;
 - for migration scopes, confirmation that bridge residuals are isolated as
   bridge components, connectors, black-box boundaries, data bridge nodes, or
   adapter residuals, and do not make locally implemented content own

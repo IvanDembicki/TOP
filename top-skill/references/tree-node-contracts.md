@@ -142,7 +142,10 @@ the data model, without changing structure or switching state.
 - Create or delete child nodes.
 - Register or remove listeners.
 - Switch `openedChild`.
-- Read architectural state (isEditMode, openedChild, lifecycle phase) in order to conditionally change the visibility or behavior of UI elements.
+- Read architectural state (isEditMode, mode, status, openedChild, lifecycle
+  phase, owner-held mode flag, etc.) in order to conditionally change the
+  visibility, representation, hit targets, context actions, capability surface,
+  or behavior of UI elements.
 - Manage content lifecycle (activate, deactivate, mount, unmount).
 
 ### Idempotency
@@ -161,7 +164,10 @@ Empty body (`refresh() {}`). Override only if the node has data-dependent displa
 
 ### Anti-pattern: hidden switchable in refresh()
 
-If `refresh()` reads architectural state (isEditMode, openedChild, etc.) and on that basis shows/hides elements or changes available behavior — this is a `core_violation: hidden switchable`.
+If `refresh()` reads architectural state (isEditMode, mode, status, openedChild,
+owner-held mode flag, etc.) and on that basis shows/hides elements, changes hit
+targets, changes context actions, changes capability availability, or changes
+available behavior — this is a `core_violation: hidden switchable`.
 
 Test: if everything except data-reads and display-updates is removed from `refresh()` and the logic remains complete — the implementation is correct. If `refresh()` loses meaning without reading architectural state — it is a violation.
 

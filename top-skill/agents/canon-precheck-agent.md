@@ -65,6 +65,9 @@ If a discrepancy arises between this agent file and the output contract:
   modal/form/list/workflow responsibilities lack decomposition proof
 - `PanelDisplayStyle` or equivalent display-token use is justified only for
   stable structural sections and is not hiding state branches or workflows
+- mode/status/phase flags, including owner-held fields on the same node, are
+  reviewed as hidden switchable candidates when they change visual
+  representation, behavior, hit targets, context actions, or capabilities
 </validation_focus>
 
 <handoff_rules>

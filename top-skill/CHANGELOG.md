@@ -9,6 +9,8 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.0.1] — 2026-05-22
+
 - Added canonical TOP node spec field order: `type`, `doc`, `prompt`, `props`,
   `children`, with optional fields omitted only while preserving relative
   order.
@@ -16,6 +18,9 @@ Versioning follows [Semantic Versioning](https://semver.org/).
   runtime/library branches and review signals for descendants that reach
   external context directly instead of using the branch root or explicit
   connectors.
+- Clarified `CORE-003` hidden switchable detection so owner-held `mode`,
+  `status`, or `phase` fields count as architectural state when they change
+  representation, behavior, hit targets, context actions, or capabilities.
 
 ## [2.0.0] — 2026-05-14
 

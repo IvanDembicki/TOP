@@ -413,6 +413,10 @@ explicit child state nodes.
 ### Group D — Internal state flags
 
 - Field `_isHovered`, `_isPressed`, `_isExpanded`, `_isActive`, `_currentState` — the node tracks its own visual state
+- Field `mode`, `status`, `phase`, `_mode`, `_status`, `_activeMode`,
+  `_displayMode`, or equivalent — the node tracks an owner-held architectural
+  state that can select representation, behavior, hit targets, context actions,
+  or capabilities
 - Pattern `_listenersAdded = false` with a check before `addEventListener` — conditional handler registration
 - Any boolean/enum field that changes rendering or behavior, not model data
 
@@ -428,7 +432,8 @@ explicit child state nodes.
 - `el.disabled = condition`
 - `input.readOnly = condition`
 
-These are not model data. If they are toggled based on mode — this is hidden behavioral state.
+These are not model data. If they are toggled based on mode, status, phase, or
+another architectural state — this is hidden behavioral state.
 
 ### Group G — Structural branching in refresh()
 
@@ -448,7 +453,11 @@ In TOP terms: if a node needs the State pattern — this is a signal that a swit
 
 ### Group I — Multiple states described in spec
 
-A node has two or more mutually exclusive visual representations or sets of available actions, conditioned by any external context — regardless of the nature of that context or the mechanism for detecting it.
+A node has two or more mutually exclusive visual representations or sets of
+available actions, conditioned by any architectural mode/status/context —
+including owner-held state inside the same node. The storage location of the
+mode does not matter; what matters is whether the state selects representation,
+behavior, hit targets, context actions, or capabilities.
 
 This signal does not require the presence of code indicators (groups A–G). It is detected through the node's spec/prompt.
 
@@ -481,20 +490,28 @@ See `rules/decision-trees.md` — **Decision tree: switching vs. dynamic composi
 
 ### Definition
 
-A node that independently manages switching between fundamentally different representations or behaviors by referencing external architectural state.
+A node that independently manages switching between fundamentally different
+representations, behaviors, hit targets, context actions, or capabilities by
+referencing architectural state.
 
-A hidden switchable may be monolithic — it may have no explicit child state nodes. It is recognized not by its child structure, but by the fact that it reads external mode and then changes its own state.
+A hidden switchable may be monolithic — it may have no explicit child state
+nodes. It is recognized not by its child structure, but by the fact that it
+reads mode/status/phase/openedChild state, including owner-held state inside the
+same node, and then changes its own representation or behavior.
 
 ### Detection signals
 
 Both conditions must hold simultaneously:
 
-1. The node reads external architectural state:
-   - `isEditMode`, `openedChild`, lifecycle phase, operating mode, etc.
+1. The node reads architectural state:
+   - `isEditMode`, `mode`, `status`, `openedChild`, lifecycle phase,
+     operating mode, owner-held mode flag, etc.
 
 2. And as a result changes at least one of:
    - visual representation of constituent elements (show/hide, swap, structural change)
    - available behavior (drag enabled/disabled, event handlers registered/removed, interactive elements appear/disappear)
+   - hit-test surface or interactive target set
+   - context actions or capability availability
 
 ### Not a violation
 
@@ -542,7 +559,7 @@ After (canonical):
 - ViewState is open by default
 - EditState is activated via `onBranchOpen()` — not via `isEditMode`
 - Each state node mounts its DOM on activation, unmounts on deactivation
-- A state node **does not read** external mode — it **is** the representation of that mode
+- A state node **does not read** the mode/status it represents — it **is** the representation of that mode/status
 - Functionality absent in ViewState is not hidden — it architecturally does not exist in that state
 
 ### Agent chain for refactoring
@@ -555,8 +572,8 @@ TOP Modeling Agent
   → model holder + state nodes in the spec tree
 
 Canon Precheck Agent
-  → verify that state nodes do not read external mode
-  → verify that holder does not duplicate an external mode holder
+  → verify that state nodes do not read the mode/status they represent
+  → verify that holder does not duplicate another mode/status source of truth
 
 Generation Agent
   → implement

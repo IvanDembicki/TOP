@@ -374,10 +374,13 @@ Only canonical patterns are allowed. Everything else is a violation.
 
 Violation signal (both conditions must hold simultaneously):
 
-1. The node accesses external architectural state (isEditMode, openedChild, lifecycle phase, etc.)
+1. The node accesses architectural state (isEditMode, mode, status,
+   openedChild, lifecycle phase, owner-held mode flag, etc.). The state may be
+   internal to the same node, parent-derived, context-derived, or external.
 2. And as a result changes:
    - the visual representation of its constituent elements (show/hide, swap)
    - or the available behavior (drag, event handlers, interactive buttons)
+   - or hit targets, context actions, or capability availability
 
 Not a violation:
 - `refresh()` changes only model data (text, label, icon from data model) — see the formal `refresh()` contract in `references/tree-node-contracts.md §5`

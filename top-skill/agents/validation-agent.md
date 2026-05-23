@@ -201,6 +201,10 @@ If a discrepancy arises between this agent file and the output contract:
   PanelDisplayStyle discipline, reusable-pattern extraction, modal/form/list
   candidate analysis, hook bridge isolation, and global-store residual
   discipline
+- hidden switchable validation (`CORE-003`): mode/status/phase flags, including
+  owner-held fields on the same node, must be treated as architectural state
+  when they change visual representation, behavior, hit targets, context
+  actions, or capability availability
 - Library Object External Context Boundary review for runtime/library branches:
   descendants should not independently discover ancestors, global stores, data
   trees, presentation/style trees, asset trees, services, permission sources, or

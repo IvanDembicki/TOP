@@ -1,7 +1,7 @@
 {
   "name": "top-skill",
   "displayName": "Tree-Oriented Programming Skill",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Skill for designing, analyzing, generating and validating systems built with Tree-Oriented Programming (TOP) paradigm.",
   "author": {
     "name": "Ivans Dembickis",

@@ -59,14 +59,23 @@ validation rules live in `canon/validation-rejection-protocol.md`.
 
 ## Behavioral state split (hidden switchable)
 
-A node is a hidden switchable if it independently manages switching between fundamentally different representations or behaviors by accessing external architectural state.
+A node is a hidden switchable if it independently manages switching between
+fundamentally different representations, behaviors, capabilities, hit targets,
+or context actions by reading architectural state. The architectural state may
+be external, parent-derived, context-derived, or owner-held inside the same node.
+An internal field such as `mode`, `status`, `phase`, `isEditMode`,
+`isExpanded`, or `activeState` is still architectural state when it selects
+representation or behavior.
 
 Detection criterion — both conditions must hold simultaneously:
 
-1. The node reads external architectural state (mode, lifecycle phase, openedChild, etc.)
+1. The node reads architectural state (mode, status, lifecycle phase,
+   openedChild, owner-held mode flag, etc.)
 2. And as a result changes at least one of:
    - the visual representation of its constituent elements
    - the available behavior (drag, add, delete, etc. — either present or absent)
+   - the hit-test surface or interactive target set
+   - the available context actions or capability surface
 
 The number of explicit child nodes is irrelevant. A hidden switchable may be a monolithic node whose internal elements and handlers change.
 
@@ -76,7 +85,7 @@ Not a violation:
   implemented content still may not derive or select label text, color, style,
   visibility, structure, handlers, or representation by itself.
 
-Canonical refactoring: the node becomes an explicit switchable holder with child state nodes. Each state node fully owns its own representation and behavior. A state node does not read the external mode — it is itself the representation of that mode.
+Canonical refactoring: the node becomes an explicit switchable holder with child state nodes. Each state node fully owns its own representation and behavior. A state node does not read the mode/status it represents — it is itself the representation of that mode/status.
 
 ## Locally implemented content static materialization
 
