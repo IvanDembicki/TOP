@@ -21,6 +21,9 @@ ExpandCollapseHolder is the exclusive owner of the expanded/collapsed state of a
   `_expandedState.open()`. The child `open()` path delegates to the base
   switching commit path, which unmounts the outgoing child view and mounts the
   incoming child view.
+- `syncEditorModeState()` — delegates the synchronization request only to
+  `openedChild`. Closed expansion-state siblings are not walked for active
+  behavior.
 
 ## 4. State Ownership
 
@@ -39,12 +42,15 @@ ExpandCollapseHolder is the exclusive owner of the expanded/collapsed state of a
 - The active child's opaque view handle is pulled from the direct child via `getView()` and mounted/unmounted by the base switcher through ExpandCollapseHolder content. ExpandedState may internally pull ChildrenList's handle because ExpandedState is ChildrenList's direct parent.
 - Does not call child methods directly except declared state requests such as
   `open()` and lifecycle/materialization hooks owned by the switchable path.
+- Active-state propagation such as `syncEditorModeState()` delegates only to the
+  non-null `openedChild`.
 
 ## 6. Lifecycle
 
 1. Constructor: creates the holder content boundary with `setContent(...)`.
 2. `buildChildren()`: creates ExpandedState and CollapsedState as children; assigns ExpandedState as the initial active child and places the ChildrenList view into content without calling `openChild()`.
 3. Each call to `toggle()` switches the active child and fires lifecycle hooks.
+4. `syncEditorModeState()` forwards to the active expanded/collapsed state only.
 
 ## 7. Side Effects
 

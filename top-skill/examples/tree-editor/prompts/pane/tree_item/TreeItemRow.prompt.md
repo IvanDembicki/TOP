@@ -13,15 +13,22 @@ representation and the edit-mode row representation for one TreeItem.
 
 - Own the active row state selection between TreeItemRowViewState and
   TreeItemRowEditState.
-- Pull `isEditMode` from the guaranteed TreeEditor ancestor and switch the active
-  child accordingly during refresh.
+- Expose explicit row-mode synchronization methods. `syncRowModeState()` reads
+  `isEditMode` from the guaranteed TreeEditor ancestor and calls
+  `showEditRow()` or `showViewRow()`. Those methods open the target child
+  through `child.open()`.
 - Expose resolved row geometry/drop values to TreeItem through typed methods.
 - Expose TreeItem-derived primitive values to row state children through
   pull-through methods.
 
 ## 3. Inputs and Events
 
-- `refresh()` - selects the active child state and requests child refresh.
+- `syncRowModeState()` - explicit structural synchronization request called
+  after editor mode changes; it is not a refresh hook.
+- `showEditRow()` - calls `_editState.open()`.
+- `showViewRow()` - calls `_viewState.open()`.
+- `refresh()` - requests the currently active child state to refresh resolved
+  primitive values only; it does not switch state.
 - `getLabelText()` - delegates to owning TreeItem.
 - `getIndentToken()` - delegates to owning TreeItem.
 - `getIconToken()` - delegates to owning TreeItem.
@@ -46,18 +53,22 @@ mode, or drop state.
 
 1. Constructor creates row holder content.
 2. `buildChildren()` creates both row states and places the default child.
-3. `refresh()` opens the correct child state and requests active child refresh.
+3. `syncRowModeState()` opens the correct child state through the target child's
+   `open()` method.
+4. `refresh()` requests active child data/display refresh only.
 
 ## 7. Side Effects
 
-- Switches active child through the base switchable mechanism.
+- Explicit row-mode synchronization switches active child through the target
+  child's `open()` method.
 
 ## 8. Constraints and Invariants
 
 - No setter-style propagation into children.
 - No presentation command methods for drop hints. Drop hint is a resolved token
   pulled by content.
-- `isEditMode` is used only by the controller to select the child state.
+- `isEditMode` is used only by the explicit `syncRowModeState()` transition
+  method, never by `refresh()`.
 
 ## 9. Non-Goals
 

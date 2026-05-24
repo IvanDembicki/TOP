@@ -136,25 +136,42 @@ them directly without a coordinated model, this is a runtime defect.
 
 ## 6. Content lifecycle by default
 
-A runtime content instance is not considered permanently alive by default.
-By default, content must be created on demand and destroyed when the corresponding
-node/branch becomes inactive or closed. Any other default is strictly prohibited.
+A runtime content instance has an explicit controller-owned lifecycle policy.
+There is no universal destroy-on-inactive default.
+
+Two canonical policies are allowed:
+- **node-lifetime content** — materialized during the node's content
+  materialization phase and retained until final node destruction;
+- **activation-scoped content** — materialized on open/activate and destroyed
+  on close/deactivate.
+
+Node-lifetime content is valid for stable shells, persistent black-box/content
+boundaries, and nodes whose content does not encode active state for closed
+branches. Activation-scoped content is valid for branches that explicitly
+declare destroy/recreate behavior.
 
 The following must be explicitly defined:
 - who creates the content instance;
 - when content is first materialized;
+- whether the content is node-lifetime or activation-scoped;
 - who destroys the content instance;
-- what constitutes the canonical destroy path on deactivate/close;
-- whether a separately declared retention pattern exists.
+- what constitutes the final destroy path;
+- if activation-scoped, what constitutes the canonical deactivate/close destroy
+  path.
 
 ### Canonical rule
-If a separate retention pattern is not explicitly declared, the content lifecycle must follow the
-active branch/node lifecycle: create on demand, destroy on inactive.
+Content lifecycle must not be inferred from convenience. The prompt/model must
+declare whether content is node-lifetime or activation-scoped, and the
+implementation must follow that policy.
 
 ### What constitutes a violation
-- permanent content by default without a separately declared retention pattern;
-- hidden reuse of an old content instance after re-opening a branch without an explicit model;
-- content instances persisting in closed branches as implicit system state.
+- content lifetime not declared by the node/prompt;
+- hidden reuse of an old content instance after re-opening a branch without an
+  explicit activation-scoped retention/recreation model;
+- content instances persisting in closed branches as implicit active state;
+- activation-scoped content not destroyed on the declared close/deactivate path;
+- node-lifetime content being used to hide state alternatives that should be
+  explicit state nodes.
 
 ## 7. State switching and lifecycle
 
@@ -172,11 +189,10 @@ The following must be explicitly defined:
 No public means of state switching must bypass lifecycle hooks
 if the system declares hooks as part of the model.
 
-The public switching request should target the child node being opened
-(`child.open()` or a semantically equivalent child-side request). The holder
-still owns the final `openedChild` commit, but a holder-side commit primitive
-such as `openChild(child)` may only be called by the child being opened as
-`parent.openChild(this)` or an exact target-equivalent. External code must not
+The public switching request must target the child node being opened
+(`child.open()`). The holder still owns the final `openedChild` commit, but a
+holder-side commit primitive such as `openChild(child)` may only be called by
+the child being opened as exactly `parent.openChild(this)`. External code must not
 use `holder.openChild(target)` to skip the target child's own opening protocol.
 
 ---
@@ -259,7 +275,7 @@ Typical runtime violations include:
 - non-idempotent `init/reset/mount/rebuild/materialize` without an explicit declaration;
 - hidden append instead of replace;
 - direct state mutation bypassing lifecycle;
-- permanent content by default without a separately declared retention pattern;
+- implicit content lifetime policy or content lifetime used as hidden state;
 - inconsistent child ownership;
 - runtime mutation without a serialization policy;
 - desynchronization between the logical tree, runtime tree, and rendered output;

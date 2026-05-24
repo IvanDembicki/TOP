@@ -80,8 +80,8 @@ The public entry is the child state node's opening request:
 - `child.open()`
 
 The child may override `open()` to perform its own opening protocol before
-delegating the commit to the owning holder as `parent.openChild(this)` or an
-exact target-equivalent. Holder-side APIs such as `openChild(child)` are
+delegating the commit to the owning holder as exactly `parent.openChild(this)`.
+Holder-side APIs such as `openChild(child)` are
 internal commit primitives for that path, not competing public switching APIs.
 They must not be used as `holder.openChild(target)` to force some other child
 open from outside that child.

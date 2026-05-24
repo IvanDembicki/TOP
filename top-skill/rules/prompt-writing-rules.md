@@ -135,7 +135,12 @@ Must describe:
   library collection children are not switchable children unless explicitly
   modeled as the switchable candidate set;
 - whether branch hooks (onBranchOpen/onBranchClose) are used, and if so — who calls them and under what traversal policy;
-- who is the owner of switching (controller, not content and not the state node itself).
+- that the holder/controller owns the `openedChild` commit, while the child
+  state node owns its own `open()` request/protocol;
+- that holder commit calls use only `parent.openChild(this)` from the child
+  being opened, never `holder.openChild(target)` / `this.openChild(target)` /
+  `parent.openChild(otherChild)`;
+- that `refresh()` is not a state-switching hook.
 
 ### Node with content (contentType is present)
 
@@ -263,6 +268,7 @@ Before considering the prompt ready, verify:
 ✗  cursor: grab style
 ✓  Visual affordance indicating the element is draggable
 
-✓  Switches openedChild to EditState when isEditMode is true   ← TOP paradigm, allowed
+✗  refresh() switches openedChild to EditState when isEditMode is true
+✓  syncModeState() chooses EditState and calls editState.open()
 ✓  Uses findUpByType to locate ancestor TreeEditor              ← TOP paradigm, allowed
 ```

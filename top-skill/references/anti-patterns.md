@@ -295,22 +295,30 @@ or otherwise making architectural decisions on its own behalf.
 
 ---
 
-## 17. Permanent Content by Default
+## 17. Hidden Content Lifetime Policy
 
 ### What the error is
-Treating a runtime content instance as permanently existing by default
-and retaining it in inactive/closed branches without a separately declared retention pattern.
+Leaving the runtime content lifecycle implicit, or using content lifetime to
+hide active state. Both node-lifetime content and activation-scoped content are
+valid only when the node/prompt declares the policy and the implementation
+follows it.
 
 ### Why this is harmful
-- the content lifecycle ceases to match the branch/node lifecycle;
-- closed branches retain unnecessary runtime instances and state;
-- the analyzer and generator stop distinguishing on-demand creation from permanent retention;
-- re-opening a branch starts depending on previously created hidden state.
+- the analyzer and generator cannot tell whether content is stable shell,
+  activation-scoped material, or hidden state;
+- closed branches may retain runtime instances that behave as implicit active
+  state;
+- re-opening a branch may depend on previously created hidden state;
+- state alternatives can be hidden in content lifetime instead of explicit state
+  nodes.
 
 ### What to look for
-- whether content is created on demand;
-- whether content is destroyed on deactivate/close by default;
-- whether a retention pattern is separately declared if content lives longer than the active branch.
+- whether the prompt declares node-lifetime or activation-scoped content;
+- whether activation-scoped content is destroyed on the declared deactivate/close
+  path;
+- whether node-lifetime content is only a stable shell/content boundary and is
+  disposed on final node destruction;
+- whether content lifetime is used instead of explicit state nodes.
 
 ---
 

@@ -147,8 +147,8 @@ Switching is normally child-initiated through `open()` or a semantically
 equivalent child-side method. This is acceptable only if:
 
 - the child does not bypass owner semantics;
-- the child delegates the state commit to the owning holder by calling
-  `parent.openChild(this)` or an exact target-equivalent;
+- the child delegates the state commit to the owning holder by calling exactly
+  `parent.openChild(this)`;
 - there is no second, incompatible semantics for the same action.
 
 Otherwise a dual switching model arises:
@@ -167,7 +167,7 @@ If a setter such as:
 - `currentState = ...`
 
 is used, it must be an internal low-level primitive inside the
-`parent.openChild(this)` commit path or an exact target-equivalent.
+`parent.openChild(this)` commit path.
 
 It must not be used as a public switching path. Public switching goes through
 the child state node's `open()` method.
@@ -181,7 +181,7 @@ If a child state node has `open()`:
 - `open()` must not create a separate state management model;
 - `open()` may run child-owned opening protocol before delegation;
 - `open()` must delegate the final state commit to the holder-owned canonical
-  commit path by calling `parent.openChild(this)` or an exact target-equivalent.
+  commit path by calling exactly `parent.openChild(this)`.
 
 A switch/state node must not expose `close()` as a public state-switching API.
 Closing a previously opened state is an owner-side lifecycle effect of opening

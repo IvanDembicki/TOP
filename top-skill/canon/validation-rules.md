@@ -272,9 +272,13 @@ Canonical repair for context data injection:
 - Controller does not use render primitives as communication channel.
 
 ## Lifecycle validation
-- Content is created on demand.
-- Content is destroyed on deactivate/close by default.
-- No hidden retention.
+- Content lifecycle policy is explicit: node-lifetime or activation-scoped.
+- Node-lifetime content is valid for stable shells and persistent content
+  boundaries when declared by the node/prompt.
+- Activation-scoped content is created on open/activate and destroyed on
+  close/deactivate only when that policy is explicitly declared.
+- All content is disposed through the final node destruction path.
+- No hidden retention, hidden recreation, or implicit content lifetime state.
 
 ## Method semantics validation
 - Methods are used strictly by intended semantics.
@@ -441,8 +445,7 @@ Not a violation:
   state children and opens that child through `child.open()`; this is modeled
   state switching, not hidden switching, as long as the method is not used as
   active behavior dispatch and does not bypass the child's opening protocol.
-  The opened child then delegates the commit as `parent.openChild(this)` or an
-  exact target-equivalent
+  The opened child then delegates the commit as exactly `parent.openChild(this)`
 - Node behavior is identical in both states
 
 Classification: `core_violation`

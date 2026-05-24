@@ -22,6 +22,8 @@ CollapsedState is the last child of ExpandCollapseHolder. When active, it repres
   ExpandCollapseHolder; asks ancestor TreeItem to refresh resolved toggle/icon
   tokens.
 - `onClose()` — no action required.
+- `syncEditorModeState()` — no-op; collapsed state has no child item branch to
+  synchronize.
 
 ## 4. State Ownership
 
@@ -36,10 +38,12 @@ Has no child nodes.
 1. Constructor: no state or content initialization.
 2. On `onOpen()`: calls `notifyToggle()` on ancestor TreeItem.
 3. On `onClose()`: no action.
+4. `syncEditorModeState()`: no-op.
 
 ## 7. Side Effects
 
 Requests refresh of the controller-owned resolved icon token.
+Editor-mode structural sync stops at this collapsed state.
 
 ## 8. Constraints and Invariants
 

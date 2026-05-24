@@ -28,6 +28,8 @@ exposes their records through a context contract.
 - `refresh()` - pulls current child records, reconciles the child controller set,
   updates child-to-record associations, places direct child opaque handles, and
   requests child refresh.
+- `syncEditorModeState()` - forwards explicit editor-mode structural
+  synchronization to each currently owned child TreeItem.
 - `addChildRecord(record)` - data-controller/domain method called by the owning
   TreeItem when add-child is allowed.
 - `removeChild(child)` - removes an existing child and its associated record.
@@ -52,9 +54,10 @@ collection. The source child records are obtained from the owning TreeItem.
 
 1. Constructor creates content if the collection is active.
 2. `refresh()` reconciles child controllers against current child records.
-3. `deactivate()` destroys presentation content only; logical children and
+3. `syncEditorModeState()` forwards to current child TreeItems.
+4. `deactivate()` destroys presentation content only; logical children and
    associations remain according to the declared retention policy.
-4. `activate()` recreates content and places existing direct child opaque
+5. `activate()` recreates content and places existing direct child opaque
    handles.
 
 ## 7. Side Effects

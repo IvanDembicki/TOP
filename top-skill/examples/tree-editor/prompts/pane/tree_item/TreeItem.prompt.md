@@ -26,6 +26,9 @@ through that parent/context contract.
 
 - `refresh()` - pulls the record through the parent/context contract and
   refreshes its child controllers. It does not receive a data argument.
+- `syncEditorModeState()` - asks TreeItemRow to synchronize its row mode state
+  and asks ExpandCollapseHolder to forward the same request only through its
+  active state branch.
 - `requestToggle()` - called by NodeIcon controller after content reports toggle
   intent.
 - `requestAddChild()` - called by AddBtn controller.
@@ -61,7 +64,8 @@ through that parent/context contract.
 2. Constructor creates item content typed through `IContentAccess`.
 3. `buildChildren()` creates TreeItemRow and ExpandCollapseHolder and places
    their opaque handles through parent-owned materialization.
-4. `refresh()` pulls the current item record, resolves primitive values, and
+4. `syncEditorModeState()` updates explicit row/editor-mode structural state.
+5. `refresh()` pulls the current item record, resolves primitive values, and
    requests child refresh.
 
 ## 7. Side Effects

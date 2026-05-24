@@ -18,7 +18,7 @@
       "children": [
         {
           "type": "TreeItemRow",
-          "doc": "Switchable row holder. It selects view/edit row state in the controller and exposes resolved primitive values through pull methods.",
+          "doc": "Switchable row holder. It synchronizes view/edit row state through an explicit mode-sync method that calls child open(), and exposes resolved primitive values through pull methods.",
           "prompt": "prompts/pane/tree_item/TreeItemRow.prompt.md",
           "props": {
             "contentType": "view"

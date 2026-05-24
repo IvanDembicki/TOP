@@ -9,6 +9,24 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.0.6] — 2026-05-23
+
+- Closed remaining `refresh()` switching drift in Tree Editor row prompts by
+  moving row mode switching into explicit synchronization methods that call
+  child `open()`.
+- Tightened switch commit wording: the only valid direct holder commit shape is
+  `parent.openChild(this)` from the child being opened.
+- Replaced the old destroy-on-inactive content default with an explicit content
+  lifecycle policy: node-lifetime content and activation-scoped content are both
+  valid only when declared.
+- Added hard validation checks for stale switch wording, `refresh()` state
+  switching language, old content-lifecycle defaults, and ambiguous switch
+  target-equivalent wording.
+- Clarified local installation guidance so `top-skill` can be installed as a
+  source link instead of a duplicated stale package.
+- Clarified AI-facing onboarding context: TOP's discipline burden belongs to
+  the AI-operational layer, not to the user or ordinary application developer.
+
 ## [2.0.5] — 2026-05-23
 
 - Tightened switchable state semantics: public switching requests target the

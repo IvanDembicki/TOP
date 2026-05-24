@@ -71,8 +71,9 @@ Required:
   - guarded no-op
 - define the semantic purpose of runtime/lifecycle methods;
 - separately verify that a method such as `buildChildren()` is not being used as a general controller init method;
-- define the default content lifecycle policy: create-on-demand / destroy-on-inactive or an explicitly declared retention pattern;
-- verify that content is not treated as permanently alive by default;
+- define the explicit content lifecycle policy: node-lifetime or
+  activation-scoped;
+- verify that content lifetime is not being used as hidden active state;
 - verify that the public node surface, `IContentAccess`, and `IControllerAccess` are separated, and that the public surface is not substituted by an internal access contract;
 - verify that content does not access the public node surface;
 - verify that `IContentAccess` and `IControllerAccess` are explicitly and maximally strictly typed where the language permits;

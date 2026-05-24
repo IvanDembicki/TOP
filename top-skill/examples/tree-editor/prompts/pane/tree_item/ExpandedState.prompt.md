@@ -25,6 +25,8 @@ ExpandedState is the first (default active) child of ExpandCollapseHolder. When 
 - `onClose()` — fired when this state is deactivated.
 - `requestChildrenRefresh()` - asks ChildrenList to refresh its attached child
   TreeItems from the owning TreeItem record.
+- `syncEditorModeState()` - forwards explicit editor-mode structural
+  synchronization to ChildrenList.
 - `requestAddChild()` - forwards semantic add-child intent to ChildrenList or the
   owning TreeItem controller through an allowed contract.
 
@@ -45,6 +47,7 @@ Owns no independent state. It is itself the expanded state representation. The c
 2. When placed by the parent switcher: `getView()` returns the live ChildrenList view, activating it if needed.
 3. On `onOpen()`: asks ancestor TreeItem to refresh resolved toggle/icon tokens.
 4. On `onClose()`: deactivates ChildrenList content without updating the row icon from the stale outgoing state.
+5. `syncEditorModeState()` forwards to ChildrenList while this state is active.
 
 ## 7. Side Effects
 
@@ -52,6 +55,8 @@ Owns no independent state. It is itself the expanded state representation. The c
 - `onClose()` destroys ChildrenList content while keeping logical child nodes.
 - `onOpen()` asks ancestor TreeItem to refresh resolved toggle/icon tokens after
   the expanded state is active.
+- `syncEditorModeState()` propagates editor-mode structural sync to expanded
+  child items through ChildrenList.
 
 ## 8. Constraints and Invariants
 

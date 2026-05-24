@@ -2,7 +2,7 @@
 
 ### 1. What this system is
 
-This is a **complete development system** for:
+This `top-skill` package is a **complete development system** for:
 
 * AI-driven code generation
 * AI verification of architecture
@@ -14,7 +14,7 @@ It is based on the **Tree-Oriented Programming paradigm**:
 * structure is explicit and enforceable
 * interactions are controlled by design
 
-This system combines:
+The package combines:
 
 * an architectural model
 * a generation protocol
@@ -24,16 +24,21 @@ This system combines:
 
 ### 2. System boundary (critical)
 
-This is **NOT just a methodology or a tool**.
+`top-skill` is **NOT just a methodology or a tool**.
 
-It is a **full execution model for development with AI**, including:
+It is a **full execution model for applying TOP with AI**, including:
 
 * how the system is structured (tree)
 * how code is generated (prompts)
 * how correctness is verified (rules)
 * how the system is evolved (regeneration)
 
-AI is **not optional** — it is a core part of the workflow.
+AI is **not optional for the top-skill workflow** — it is a core part of how
+this package generates, verifies, and evolves TOP artifacts.
+
+This does not mean that TOP itself is an agent pipeline. TOP is the
+architectural paradigm; `top-skill` is the AI-operational layer that applies
+the paradigm through specs, prompts, agents, validation, and regeneration.
 
 ---
 
@@ -44,7 +49,7 @@ AI is **not optional** — it is a core part of the workflow.
 * This is NOT a set of best practices
 * This is NOT a framework tied to a specific technology
 
-This is:
+TOP is:
 
 * a strict architectural paradigm
 * a generation + validation protocol
@@ -69,6 +74,19 @@ The developer does not:
 * enforce architectural rules
 
 These are handled by the skill.
+
+Do not evaluate top-skill as a manual methodology whose discipline burden falls
+on the user or ordinary application developer. That is the wrong adoption
+model. The discipline is carried by the AI-operational layer: agents, hydration,
+contracts, prompts, validation rules, rejection gates, and regeneration
+protocol. The user gives intent and reviews results; the skill bears the
+architectural control burden.
+
+Therefore, "TOP requires discipline" is not the same as "TOP has a difficult
+user entry point." The entry point remains simple because the required
+discipline is automated and enforced by AI. If an evaluation concludes that
+mass users are not ready because they cannot manually maintain the methodology,
+it has misunderstood the system boundary.
 
 To start, the developer only needs a minimal mental model:
 * the system is a tree of nodes

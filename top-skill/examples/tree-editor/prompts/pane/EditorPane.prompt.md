@@ -20,6 +20,8 @@ immutable container node and the direct parent of RootItemHolder.
 
 - `getRootRecord()` - returns `parent.getRootRecord()` through the allowed
   parent/context contract.
+- `syncEditorModeState()` - forwards explicit editor-mode structural
+  synchronization to RootItemHolder.
 - `requestRefresh()` - asks TreeEditor to refresh the branch after data/tree
   changes.
 
@@ -39,7 +41,8 @@ Owns no data state. It is an attachment and content host boundary.
 1. Constructor creates the pane content boundary.
 2. `buildChildren()` creates RootItemHolder and places its opaque handle through
    parent-owned materialization.
-3. Refresh requests are routed to TreeEditor through the parent contract.
+3. `syncEditorModeState()` forwards to RootItemHolder.
+4. Refresh requests are routed to TreeEditor through the parent contract.
 
 ## 7. Side Effects
 

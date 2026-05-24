@@ -5,8 +5,8 @@ description: Skill for designing, generating, and validating systems built with 
 
 # TOP Skill
 
-**Version:** 2.0.5
-**Last updated:** 2026-05-23 21:39 -07:00
+**Version:** 2.0.6
+**Last updated:** 2026-05-24 04:47 -07:00
 **Invocation:** `/top`
 
 > **Rule for AI:** whenever any top-skill file is modified, update the date and time in this field to the current values.
@@ -200,6 +200,11 @@ targets the child state node's own `open()` method, while `openChild(...)`
 remains the holder commit primitive called by the opened child as
 `parent.openChild(this)`. Switch/state nodes must not expose `close()` as a
 public switching API; outgoing state closure is owner lifecycle behavior.
+
+Version 2.0.6 closes remaining switch/lifecycle drift. `refresh()` is rejected
+as a state-switching hook in prompts and examples, switch commits use only
+`parent.openChild(this)`, content lifecycle policy must be explicit, and the
+skill package should be installed as a source link rather than duplicated.
 
 ---
 
@@ -448,7 +453,7 @@ Strong signals for activating the skill:
 14c. A TOP node has exactly one controller and zero-or-one locally implemented content object. Extra modal/form/card/list/bridge/helper presentation fragments must be modeled or classified as child nodes, state nodes, black-box components, bridge boundaries, reusable library nodes, or private target-local implementation detail inside the one content object. Controller APIs must not return platform/content fragments, render/build trees, JSX/widget/composable fragments, style/layout fragments, animation objects, content-owned setter handles, or mutation handles (`CORE-034`). Content-owned setters/mutation handles must not cross the content boundary (`CORE-035`).
 15. If a node has a separate content class/object, `IContentAccess` and `IControllerAccess` must be explicit, narrow, and typed as strictly as the language permits. Their typing must be materialized in the code as separate named contract artifacts or other explicitly designated typed protocol boundaries allowed by the technology, and as explicitly typed boundaries in signatures, fields, and references where these access artifacts are passed or stored. `IContentAccess` is especially required when content wraps a large platform component, widget, native view, or third-party object: the controller may use only the small allowed lifecycle/materialization surface, even if the concrete content object exposes many public methods. `IContentAccess` may expose only controller-to-content lifecycle/materialization access; it must not expose controller-owned data for content to read and must not become a presentation command, mutation, show/hide, update, configure, class/style, apply-state, or render-with channel. An implicit, anonymous, shape-only parameter/object, externally assembled access bundle, parameter bag, props-like object, config/options object, callbacks/handlers bundle, child-output getter bundle, full concrete content type, full concrete controller type, dummy zero-access object, or `IContentAccess` data bag is not a valid materialization of a protocol. Methods exposed through `IControllerAccess` must be controller-boundary methods owned by the controller. A controller-boundary method may delegate internally to utilities, services, stores, or platform APIs, but Content must not receive a raw imported function, externally owned method reference, service method, store action, or callback as the access method itself. These internal access protocols must be hidden from the outside world to the extent the technology allows. The public node surface is not considered one of these internal access protocols. Any other approach is strictly forbidden.
 16. Content interacts with its owning controller only through `IControllerAccess`. If content is visual and needs child visual output, that output may only be requested through explicitly declared `IControllerAccess` endpoints. An ordinary visual node works only with explicitly declared named child-view endpoints. Iterating over `children` for repeated rendering is permitted only inside a separate `DynamicCollectionViewNode` explicitly described by the node contract. Any other approach is strictly forbidden.
-17. Content lifecycle is controlled by the controller: a runtime content instance is created only when actually needed and destroyed when the node/branch becomes inactive, unless a special retention pattern is explicitly defined. Any other approach is strictly forbidden by default.
+17. Content lifecycle is controlled by the controller and must be explicit. A runtime content instance may be node-lifetime content materialized during the node's content materialization phase, or activation-scoped content materialized on open/activate and destroyed on close/deactivate. Node-lifetime content is valid for stable shells and persistent black-box/content boundaries; activation-scoped content is valid for branches that explicitly declare destroy/recreate behavior. All content must be disposed through the node's final destruction path. Hidden retention, hidden recreation, or using content lifetime as unmodeled state is strictly forbidden.
 18. The top-level schema node must remain minimal and stable.
 19. Additional, project-specific, and descriptive node properties are placed in `props`, not added as new top-level fields.
 20. If a node has content and its type needs to be explicitly recorded in the spec, use `props.contentType`, not a top-level `contentType`.

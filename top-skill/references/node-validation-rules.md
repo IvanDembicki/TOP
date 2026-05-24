@@ -393,13 +393,20 @@ Canonical correction direction:
 ## 6. Content lifecycle validation
 
 Required checks:
-- content is created on demand;
-- content is destroyed when the node/branch becomes inactive, unless a retention pattern is explicitly declared;
-- permanent content is absent by default.
+- the node/prompt declares whether content is node-lifetime or
+  activation-scoped;
+- node-lifetime content is stable content and is disposed on final node
+  destruction;
+- activation-scoped content is created on open/activate and destroyed on
+  close/deactivate;
+- content lifetime is not used as hidden active state.
 
 Canonical correction direction:
-- switch the lifecycle to create-on-demand / destroy-on-inactive;
-- extract retention into a separate explicit pattern if it is genuinely needed.
+- declare the content lifecycle policy explicitly;
+- move state alternatives out of content lifetime tricks and into explicit
+  state nodes;
+- add final disposal or activation-scoped cleanup where the declared policy
+  requires it.
 
 ---
 

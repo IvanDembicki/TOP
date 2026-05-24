@@ -484,8 +484,7 @@ the membership of nodes in the opened branch, and the current tree structure.
 ### R8. Switching Is Performed Through the Parent
 
 A child node calls `open()`, runs any child-owned opening protocol, and then
-delegates the state commit to the parent as `parent.openChild(this)` or an
-exact target-equivalent.
+delegates the state commit to the parent as exactly `parent.openChild(this)`.
 The parent closes the previous `openedChild`, reassigns `openedChild`,
 and may call local lifecycle hooks `onClose()` / `onOpen()` on
 the corresponding child nodes.

@@ -23,6 +23,8 @@ context contract.
 - `refresh()` - pulls the current root record. If the record identity changed,
   replaces the existing root child and creates a new TreeItem attached only to
   this holder as parent/context.
+- `syncEditorModeState()` - if the root TreeItem exists, forwards explicit
+  editor-mode structural synchronization to that child.
 - `getRecordForTreeItem(child)` - returns the record associated with the root
   child. This is a pull-through contract, not constructor injection.
 - `requestRefresh()` - forwards a refresh request to EditorPane/TreeEditor.
@@ -47,6 +49,8 @@ It does not own the source root record itself.
 3. `refresh()` pulls the root record, creates/replaces the root child if needed,
    records the child-to-record association, places the child opaque handle, and
    requests the child refresh.
+4. `syncEditorModeState()` forwards to the current root child only when that
+   child exists; missing root child is a data-empty condition, not mode state.
 
 ## 7. Side Effects
 

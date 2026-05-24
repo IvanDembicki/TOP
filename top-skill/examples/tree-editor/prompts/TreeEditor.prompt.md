@@ -65,10 +65,11 @@ through its controller/domain surface. It does not receive or pass source data,
 mode flags, callbacks, config, or presentation values through constructors or
 runtime entrypoints.
 
-When editor mode changes, TreeEditor calls the direct EditorToolbar contract to
-open the matching EditToggleBtn action state before data refresh. The opened
-action child is requested through that child's `open()` path inside
-EditToggleBtn; TreeEditor does not call `openChild()` on a descendant.
+When editor mode changes, TreeEditor calls direct child contracts on
+EditorToolbar and EditorPane to synchronize mode-dependent structural states
+before data refresh. Descendant state changes are requested through each target
+child's `open()` path inside the owning holder; TreeEditor does not call
+`openChild()` on a descendant.
 
 ## 6. Lifecycle
 
@@ -81,7 +82,7 @@ EditToggleBtn; TreeEditor does not call `openChild()` on a descendant.
    data is initialized outside the TOP node API through the declared data/asset
    bootstrap adapter.
 5. `requestEditMode(value)` synchronizes explicit mode-dependent structural
-   states and then calls `refreshAll()`.
+   states through EditorToolbar and EditorPane, then calls `refreshAll()`.
 6. `refreshAll()` performs a synchronous depth-first refresh request.
 
 ## 7. Side Effects

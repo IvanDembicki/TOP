@@ -66,7 +66,7 @@ to call it. See `canon/architectural-invariants.md` — **View Access Invariant*
 ### Methods
 - `getOpenedChild()`
 - `openChild(child)` as the owner-side commit primitive, called only by the
-  child being opened as `parent.openChild(this)` or an exact target-equivalent
+  child being opened as `parent.openChild(this)`
 
 ### Invariants
 - a valid switchable node has at least one switchable state/candidate child;
@@ -108,7 +108,7 @@ to call it. See `canon/architectural-invariants.md` — **View Access Invariant*
 - `open()` may be overridden by the child to run child-owned opening protocol,
   but it does not change owner state directly;
 - `open()` delegates the state commit to the canonical owner-side commit path
-  by calling `parent.openChild(this)` or an exact target-equivalent;
+  by calling exactly `parent.openChild(this)`;
 - `isOpened()` checks only local opened ownership relative to the parent;
 - `isBranchOpened()` checks membership in the opened branch up to the root;
 - `onBranchOpen(node)` and `onBranchClose(node)` exist as extension points; their invocation strategy and propagation policy are defined explicitly in a subclass/policy.

@@ -579,9 +579,16 @@ When a node is removed from the tree (removeChild, clearChildren), `onDetachedFr
 
 **Content lifecycle**
 
-Content is created on demand and by default is destroyed when the corresponding node/branch becomes inactive. Permanent content is an exception that requires an explicit declaration of a retention pattern.
+Content lifecycle is controlled by the controller and must be explicit. A node
+may have node-lifetime content that is materialized during content
+materialization and disposed when the node is finally destroyed. A node may also
+have activation-scoped content that is created on open/activate and destroyed on
+close/deactivate.
 
-If content is created during permanent content materialization, it lives for the lifetime of the node. If content is created during activation, it must be destroyed during deactivation.
+Node-lifetime content is valid for stable shells and persistent content
+boundaries. Activation-scoped content is valid when the node explicitly declares
+destroy/recreate behavior. Content lifetime must not hide state alternatives or
+replace explicit state nodes.
 
 **Full diagram**
 

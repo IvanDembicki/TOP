@@ -80,8 +80,8 @@ lifecycle is invalid; this must not be treated as a normal no-result answer.
 Switching is initiated by calling `open()` on a child node.
 This call may run the child node's own opening protocol and then **delegates
 the state commit to the parent node**. The child does not directly mutate
-`openedChild`; it requests the commit as `parent.openChild(this)` or an exact
-target-equivalent. External code must not bypass the child's `open()` method by
+`openedChild`; it requests the commit as exactly `parent.openChild(this)`.
+External code must not bypass the child's `open()` method by
 forcing the parent commit primitive directly.
 
 Sequence:

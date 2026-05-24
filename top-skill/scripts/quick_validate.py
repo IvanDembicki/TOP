@@ -600,6 +600,9 @@ def check_required_phrases(root):
         ("references/event-model.md", "Tell-only propagation and no-op boundaries"),
         ("references/state-tree.md", "Active-state operation delegation"),
         ("references/state-holder-api.md", "Active-State Operation Delegation"),
+        ("references/state-holder-api.md", "calling exactly `parent.openChild(this)`"),
+        ("references/runtime-model.md", "There is no universal destroy-on-inactive default"),
+        ("rules/startup-update-check.md", "filesystem link"),
         ("references/tree-node-contracts.md", "`openedChild` is never null"),
         ("references/node-validation-rules.md", "Switchable and Downward Propagation Validation"),
         ("references/node-validation-rules.md", "ask-then-handle"),
@@ -988,6 +991,81 @@ def check_known_risky_patterns(root):
             for match in re.finditer(pattern, text):
                 line = text.count("\n", 0, match.start()) + 1
                 errors.append(f"{rel(path, root)}:{line}: risky pattern ({label})")
+    return errors
+
+
+CANON_DRIFT_SUFFIXES = {".md", ".json", ".ts", ".tsx", ".js", ".jsx"}
+
+CANON_DRIFT_SKIP = {
+    "CHANGELOG.md",
+}
+
+CANON_DRIFT_EXPLICIT_INVALID_RE = re.compile(
+    r"✗|invalid|violation|anti-pattern|anti pattern|forbidden|must not",
+    re.IGNORECASE,
+)
+
+REFRESH_STATE_SWITCH_RE = re.compile(
+    r"`?refresh\(\)`?\s*(?:-|:|—)?\s*(opens?|selects?|switches?)\b"
+    r"|`?refresh\(\)`?.{0,80}\bstate switching\b",
+    re.IGNORECASE,
+)
+
+SWITCH_TARGET_EQUIVALENT_RE = re.compile(
+    r"\b(openChild|parent\.openChild|holder-side commit|state commit)\b.{0,140}\btarget-equivalent\b"
+    r"|\btarget-equivalent\b.{0,140}\b(openChild|parent\.openChild|holder-side commit|state commit)\b",
+    re.IGNORECASE,
+)
+
+OLD_CONTENT_LIFECYCLE_RE = re.compile(
+    r"Content is created on demand"
+    r"|destroyed when .*node/branch becomes inactive"
+    r"|destroyed on deactivate/close by default"
+    r"|create-on-demand / destroy-on-inactive"
+    r"|Permanent Content by Default"
+    r"|permanently existing by default",
+    re.IGNORECASE,
+)
+
+OLD_SWITCH_PROMPT_RE = re.compile(
+    r"Switches openedChild to .* when .* is true"
+    r"|owner of switching \(controller, not content and not the state node itself\)",
+    re.IGNORECASE,
+)
+
+
+def check_switching_and_lifecycle_drift(root):
+    errors = []
+    for path in sorted(root.glob("**/*")):
+        if path.is_dir() or path.suffix.lower() not in CANON_DRIFT_SUFFIXES:
+            continue
+        relative = rel(path, root)
+        if relative in CANON_DRIFT_SKIP:
+            continue
+        text = read_text(path)
+        for line_number, line in enumerate(text.splitlines(), start=1):
+            if CANON_DRIFT_EXPLICIT_INVALID_RE.search(line):
+                continue
+            if REFRESH_STATE_SWITCH_RE.search(line):
+                errors.append(
+                    f"{relative}:{line_number}: refresh() is described as state switching; "
+                    "use an explicit transition method that calls child.open()"
+                )
+            if SWITCH_TARGET_EQUIVALENT_RE.search(line):
+                errors.append(
+                    f"{relative}:{line_number}: openChild switching uses ambiguous "
+                    "target-equivalent wording; canonical direct commit is parent.openChild(this)"
+                )
+            if OLD_CONTENT_LIFECYCLE_RE.search(line):
+                errors.append(
+                    f"{relative}:{line_number}: old content lifecycle default remains; "
+                    "declare node-lifetime or activation-scoped content explicitly"
+                )
+            if OLD_SWITCH_PROMPT_RE.search(line):
+                errors.append(
+                    f"{relative}:{line_number}: old switch prompt wording remains; "
+                    "holder owns commit, child owns open(), refresh() does not switch"
+                )
     return errors
 
 
@@ -2650,6 +2728,7 @@ def run(root):
         ("markdown links", check_markdown_links),
         ("required phrases", check_required_phrases),
         ("risky patterns", check_known_risky_patterns),
+        ("switching and lifecycle drift", check_switching_and_lifecycle_drift),
         ("runtime branch binding consistency", check_runtime_branch_binding_consistency),
         ("branch-scoped migration control", check_branch_scoped_migration_control_consistency),
         ("migration git branch safety", check_migration_git_branch_safety_consistency),

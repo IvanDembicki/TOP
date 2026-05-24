@@ -6,6 +6,12 @@ The packaged `SKILL.md` is the bootstrap and fallback entrypoint — not the ful
 
 On every invocation, the agent must hydrate from the installed skill filesystem directory before applying any skill content. See `SKILL.md` § Runtime hydration for the mandatory steps.
 
+For local development, the installed skill directory should point to the source
+directory through a filesystem link where the host supports it. A duplicated
+installed copy is a stale-snapshot risk. If backup copies remain under a
+scanner-visible skill root and still contain `SKILL.md` with the same skill
+name, the host may index old versions as competing skills.
+
 The hydration sequence is:
 1. Read `hydration-manifest.json` from the skill base directory.
 2. Read all `always` tier files.

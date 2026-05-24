@@ -1,6 +1,6 @@
 # TOP Skill — Tree-Oriented Programming
 
-**Version:** 2.0.5 | **License:** MIT | **Invocation:** `/top`
+**Version:** 2.0.6 | **License:** MIT | **Invocation:** `/top`
 
 **TOP turns architecture from a weak social norm into a strong machine-verifiable protocol.**
 
@@ -151,15 +151,16 @@ preserve prior branch history.
 
 ## After updating TOP Skill
 
-**Restarting an AI session is not sufficient after an update.**
+The safest local development setup is to install `top-skill` as a filesystem
+link to the source directory, for example a Windows directory junction from the
+AI environment's skill directory to `D:\TOP\top-skill`. Do not keep a second
+installed copy with its own `SKILL.md`; duplicate installed copies can make the
+host index an old skill snapshot.
 
-When you update TOP Skill files on disk, the AI's loaded skill package may still contain the old version. The skill package is a cached bootstrap snapshot that does not update automatically when files change on disk.
-
-To use the updated version:
-
-1. **Reinstall or refresh the skill package** using the skill refresh mechanism provided by your AI environment.
-2. Start a new AI session only after the refreshed package is available.
-3. Confirm that the agent reports the expected TOP Skill version before continuing serious work.
+When a filesystem link is not available, refresh or reinstall the skill package
+using the mechanism provided by the AI environment, then start a new session and
+confirm that the agent reports the expected TOP Skill version before serious
+work.
 
 > A stale package can bootstrap hydration correctly only if it already contains the hydration rule introduced in version 1.1.6. Packages older than 1.1.6 must be reinstalled to enable hydration.
 
