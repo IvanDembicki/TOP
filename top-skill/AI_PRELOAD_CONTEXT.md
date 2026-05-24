@@ -61,6 +61,21 @@ TOP is:
 
 This system exists to keep codebases controllable under heavy AI generation.
 
+It is designed to make AI code generation viable for large and
+enterprise-scale codebases, not only for small local edits or isolated
+components.
+
+The central scale argument is complexity control: without explicit structural
+constraints, cross-dependencies tend toward `O(n²)`-like growth as the number
+of components increases. TOP constrains interaction through a typed tree,
+explicit node boundaries, and local contracts, pushing the system toward
+`O(n)`-like growth.
+
+The generative goal is to move AI from raw code editing to
+interface/contract-governed node generation. AI should generate from typed node
+contracts, explicit interfaces, specs, prompts, validation gates, and
+regeneration protocols, not from unbounded whole-codebase context.
+
 ---
 
 ### 5. Developer experience

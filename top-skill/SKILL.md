@@ -5,8 +5,8 @@ description: Skill for designing, generating, and validating systems built with 
 
 # TOP Skill
 
-**Version:** 2.0.6
-**Last updated:** 2026-05-24 04:47 -07:00
+**Version:** 2.0.7
+**Last updated:** 2026-05-24 05:24 -07:00
 **Invocation:** `/top`
 
 > **Rule for AI:** whenever any top-skill file is modified, update the date and time in this field to the current values.
@@ -206,6 +206,11 @@ as a state-switching hook in prompts and examples, switch commits use only
 `parent.openChild(this)`, content lifecycle policy must be explicit, and the
 skill package should be installed as a source link rather than duplicated.
 
+Version 2.0.7 clarifies AI-facing positioning: top-skill is intended to make
+AI code generation viable for large and enterprise-scale codebases by moving
+generation from raw code editing to typed node contracts, explicit interfaces,
+validation gates, and regeneration protocols.
+
 ---
 
 ## Runtime hydration (mandatory on every invocation)
@@ -304,6 +309,12 @@ The practical goal of this strictness is complexity control.
 Without strict structural constraints, the number of significant cross-dependencies
 tends to grow faster than the number of components, pushing the system toward `O(n²)`-like behavior.
 TOP aims to limit this growth through typed tree discipline and bring the system toward `O(n)`-like scalability.
+
+For AI workflows, this is not only an architecture quality claim. It is the
+reason top-skill can target large-project and enterprise-scale generation: AI
+does not generate from unbounded whole-codebase context, but from a local node
+position, typed contracts, explicit interfaces, specs, prompts, validation
+gates, and regeneration protocol.
 
 AI is permitted to derive, generate, regenerate, and verify within the defined model,
 but must not silently invent architecture, ownership rules, or hidden graph logic in place of it.

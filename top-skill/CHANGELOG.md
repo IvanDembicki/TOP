@@ -9,6 +9,15 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.0.7] — 2026-05-24
+
+- Clarified AI-facing positioning: top-skill reduces cross-dependency growth
+  from `O(n²)`-like behavior toward `O(n)`-like scaling through typed tree
+  locality and explicit contracts.
+- Clarified the scale goal: make AI code generation viable for large and
+  enterprise-scale codebases by moving generation from raw code editing to
+  interface/contract-governed node generation.
+
 ## [2.0.6] — 2026-05-23
 
 - Closed remaining `refresh()` switching drift in Tree Editor row prompts by

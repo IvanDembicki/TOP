@@ -1,10 +1,15 @@
 # TOP Skill — Tree-Oriented Programming
 
-**Version:** 2.0.6 | **License:** MIT | **Invocation:** `/top`
+**Version:** 2.0.7 | **License:** MIT | **Invocation:** `/top`
 
 **TOP turns architecture from a weak social norm into a strong machine-verifiable protocol.**
 
 A skill for AI-driven design, generation, and validation of systems built with the **Tree-Oriented Programming (TOP)** paradigm.
+
+The product goal is to make AI code generation viable for large and
+enterprise-scale codebases by moving generation from raw code editing to typed
+node contracts, explicit interfaces, specs, prompts, validation gates, and
+regeneration protocols.
 
 Migration safety rule: every TOP migration must create or switch to a dedicated
 git branch, normally `top-migration/<branch-id>`, and log the git safety gate
@@ -27,6 +32,10 @@ The tree is the structural model of the entire system. It defines composition, s
 TOP extends OOP: if OOP defines how individual objects work, TOP defines strict rules for their composition and interaction within the system as a whole.
 
 The practical goal is **complexity control**. Without explicit structural constraints, cross-dependencies tend to grow as O(n²). TOP constrains them through a typed tree and keeps growth closer to O(n).
+
+For AI generation, this is the core scaling mechanism: instead of asking AI to
+hold an entire enterprise project in context, TOP gives it a local node,
+explicit interfaces, and machine-verifiable contracts.
 
 ---
 
