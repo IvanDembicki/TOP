@@ -5,8 +5,8 @@ description: Skill for designing, generating, and validating systems built with 
 
 # TOP Skill
 
-**Version:** 2.0.4
-**Last updated:** 2026-05-23 00:32 -07:00
+**Version:** 2.0.5
+**Last updated:** 2026-05-23 21:39 -07:00
 **Invocation:** `/top`
 
 > **Rule for AI:** whenever any top-skill file is modified, update the date and time in this field to the current values.
@@ -194,6 +194,12 @@ Version 2.0.4 adds tell-only downward propagation. A caller invokes a node
 boundary and does not perform external can-handle/preflight traversal. The
 receiving node owns the local decision to handle, return no-result, no-op, or
 delegate deeper.
+
+Version 2.0.5 tightens switchable state semantics. Public state switching now
+targets the child state node's own `open()` method, while `openChild(...)`
+remains the holder commit primitive called by the opened child as
+`parent.openChild(this)`. Switch/state nodes must not expose `close()` as a
+public switching API; outgoing state closure is owner lifecycle behavior.
 
 ---
 

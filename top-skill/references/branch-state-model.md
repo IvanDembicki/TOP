@@ -78,10 +78,15 @@ lifecycle is invalid; this must not be treated as a normal no-result answer.
 ## Switching — mechanics
 
 Switching is initiated by calling `open()` on a child node.
-This call **delegates switching to the parent node** — the child does not perform switching itself.
+This call may run the child node's own opening protocol and then **delegates
+the state commit to the parent node**. The child does not directly mutate
+`openedChild`; it requests the commit as `parent.openChild(this)` or an exact
+target-equivalent. External code must not bypass the child's `open()` method by
+forcing the parent commit primitive directly.
 
 Sequence:
-1. `child.open()` — the child requests switching from the parent.
+1. `child.open()` — the child runs any child-owned opening protocol and requests
+   switching from the parent by calling `parent.openChild(this)`.
 2. Parent calls `onClose()` on the previous `openedChild`.
 3. Parent reassigns `openedChild = newChild`.
 4. Parent calls `onOpen()` on the new `openedChild`.

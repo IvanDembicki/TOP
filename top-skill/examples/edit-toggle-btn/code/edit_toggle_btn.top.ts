@@ -17,9 +17,20 @@ export class EditToggleBtnNode extends SwitchableNode implements EditToggleBtnCo
     this.buildChildren();
   }
 
-  override refresh(): void {
-    const target = this._editor.isEditMode ? this._editMode : this._viewMode;
-    this.openChild(target);
+  syncActionForCurrentEditorMode(): void {
+    if (this._editor.isEditMode) {
+      this.showEditModeAction();
+    } else {
+      this.showViewModeAction();
+    }
+  }
+
+  showEditModeAction(): void {
+    this._editMode.open();
+  }
+
+  showViewModeAction(): void {
+    this._viewMode.open();
   }
 
   private buildChildren(): void {

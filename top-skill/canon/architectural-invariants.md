@@ -691,7 +691,8 @@ If the technology provides explicit semantic lifecycle methods (`materializeCont
 **Repair:**
 - move content creation into the content materialization phase or method;
 - move child materialization into the child materialization phase or method;
-- move mount/attach logic into the parent's composition method or `openChild()`.
+- move mount/attach logic into the parent's composition method or switchable
+  commit path.
 
 ---
 
@@ -719,7 +720,8 @@ The parent is the sole authority over where and when each child's view enters th
 - relying on parent structure knowledge from inside the child to perform self-insertion.
 
 **Repair:**
-- move mount/insert calls to the parent's `openChild()`, `buildChildren()`, or a dedicated parent-side composition method;
+- move mount/insert calls to the parent's switchable commit path,
+  `buildChildren()`, or a dedicated parent-side composition method;
 - child exposes only `getView()`; parent decides placement.
 
 ---

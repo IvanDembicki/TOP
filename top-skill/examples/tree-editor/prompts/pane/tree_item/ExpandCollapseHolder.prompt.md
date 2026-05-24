@@ -16,7 +16,11 @@ ExpandCollapseHolder is the exclusive owner of the expanded/collapsed state of a
 
 ## 3. Inputs and Events
 
-- `toggle()` — called by `TreeItem._toggle()`. If the active child is `_expandedState`, opens `_collapsedState`; otherwise opens `_expandedState`. The base switching path unmounts the outgoing child view and mounts the incoming child view.
+- `toggle()` — called by `TreeItem._toggle()`. If the active child is
+  `_expandedState`, calls `_collapsedState.open()`; otherwise calls
+  `_expandedState.open()`. The child `open()` path delegates to the base
+  switching commit path, which unmounts the outgoing child view and mounts the
+  incoming child view.
 
 ## 4. State Ownership
 
@@ -28,9 +32,13 @@ ExpandCollapseHolder is the exclusive owner of the expanded/collapsed state of a
 
 - Two children: ExpandedState (`_expandedState`, default) and CollapsedState (`_collapsedState`).
 - `_expandedState` is active by default. During initial child materialization, assign it as the active child and place its view without firing child lifecycle hooks.
-- Switching via `this.openChild(newChild)` called directly in `toggle()`, firing `onClose()` on the outgoing child and `onOpen()` on the incoming child.
+- Switching uses `target.open()` from `toggle()`, allowing the target state node
+  to run its own opening protocol before it delegates as `parent.openChild(this)`.
+  The `parent.openChild(this)` commit then fires `onClose()` on the outgoing child and
+  `onOpen()` on the incoming child.
 - The active child's opaque view handle is pulled from the direct child via `getView()` and mounted/unmounted by the base switcher through ExpandCollapseHolder content. ExpandedState may internally pull ChildrenList's handle because ExpandedState is ChildrenList's direct parent.
-- Does not call methods on children directly other than through lifecycle hooks.
+- Does not call child methods directly except declared state requests such as
+  `open()` and lifecycle/materialization hooks owned by the switchable path.
 
 ## 6. Lifecycle
 
@@ -57,7 +65,7 @@ Switching changes the mounted child view through the base switcher. ChildrenList
 ## 10. Platform Implementation Notes
 
 - Visual element: `div` with CSS class `expand-collapse-holder`.
-- `toggle()`: `if (this.isExpanded) { this.openChild(this._collapsedState); } else { this.openChild(this._expandedState); }` where `isExpanded` is a getter returning `this.openedChild === this._expandedState`.
+- `toggle()`: `if (this.isExpanded) { this._collapsedState.open(); } else { this._expandedState.open(); }` where `isExpanded` is a getter returning `this.openedChild === this._expandedState`.
 - `childrenList` accessor delegates to `this._expandedState.childrenList`.
 - Initial mount of ChildrenList: `buildChildren()` creates both states and assigns ExpandedState as the initial active child without calling `openChild()`.
 - Extends `DomNode`.

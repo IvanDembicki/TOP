@@ -39,7 +39,8 @@ Owns only the active normal/hover child state.
 1. Constructor creates edit-state holder content.
 2. `buildChildren()` creates both sub-state children and places NormalState by
    default.
-3. Hover/normal changes happen through semantic requests and `openChild`.
+3. Hover/normal changes happen through semantic requests that call the target
+   state child's `open()` method.
 
 ## 7. Side Effects
 

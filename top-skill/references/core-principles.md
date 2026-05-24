@@ -76,10 +76,15 @@ It is determined by the configuration of the tree:
 
 A state holder manages switching through child state nodes.
 Switching must proceed through a single lifecycle-consistent path.
-The specific form of entry may vary:
+The public entry is the child state node's opening request:
 - `child.open()`
-- `holder.openChild(child)`
-- another equivalent mechanism, if it leads to the same canonical switching path
+
+The child may override `open()` to perform its own opening protocol before
+delegating the commit to the owning holder as `parent.openChild(this)` or an
+exact target-equivalent. Holder-side APIs such as `openChild(child)` are
+internal commit primitives for that path, not competing public switching APIs.
+They must not be used as `holder.openChild(target)` to force some other child
+open from outside that child.
 
 Direct public assignment to `openedChild` as an independent alternative API path must not introduce separate switching semantics.
 For normative details of the canonical switching path, see `state-holder-api.md` and `tree-node-contracts.md`.

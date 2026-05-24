@@ -48,8 +48,8 @@ Each child node has its own prompt and code file. File extensions are target-spe
 | `spec.props.contentType = "view"` | content exposes an opaque view handle via `getView()` |
 | prompt §1 — Role: switchable holder | class extends `SwitchableNode` |
 | prompt §4 — State ownership via `openedChild` | active child is stored in `openedChild` |
-| prompt §3 — `refresh()` reads `isEditMode` | `findUpByType(TreeEditorNode).isEditMode` |
-| prompt §5 — parent-owned placement | `openChild(target)` mounts the active child view |
+| prompt §3 — explicit action-state sync reads `isEditMode` | `syncActionForCurrentEditorMode()` reads `findUpByType(TreeEditorNode).isEditMode` |
+| prompt §5 — child-owned open request, parent-owned placement | `target.open()` requests the switch; inside that path the target delegates as `parent.openChild(this)` and the holder mounts the active child view |
 | prompt §6 — initial child without lifecycle hooks | `setInitialChild(this._viewMode)` |
 | prompt §8 — must not cache editor mode | no local boolean for mode state |
 
@@ -67,7 +67,7 @@ delete code/edit_toggle_btn.top.*
 
 Preserved across regeneration:
 - holder owns `openedChild`, not editor mode
-- `refresh()` reads mode from an ancestor public contract
+- explicit action-state synchronization reads mode from an ancestor public contract
 - child placement is driven by the switchable mechanism
 - the concrete action control belongs to child state nodes
 - low-level activation subscriptions stay inside content boundaries

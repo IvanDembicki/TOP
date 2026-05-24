@@ -16,7 +16,7 @@ EditorModeHolder is the exclusive owner of the editor's view/edit mode state. It
 
 ## 3. Inputs and Events
 
-- `toggle()` — called by TreeEditor as part of its public coordination path. If the current active child is `_viewModeState`, opens `_editModeState`; otherwise opens `_viewModeState`.
+- `toggle()` — called by TreeEditor as part of its public coordination path. If the current active child is `_viewModeState`, calls `_editModeState.open()`; otherwise calls `_viewModeState.open()`.
 
 ## 4. State Ownership
 
@@ -28,8 +28,12 @@ EditorModeHolder is the exclusive owner of the editor's view/edit mode state. It
 
 - Two children: ViewModeState (`_viewModeState`) and EditModeState (`_editModeState`).
 - ViewModeState is the default active child. During initial child materialization, set the initial active child without calling `openChild()` and without firing child lifecycle hooks.
-- On `toggle()`: computes the target child and calls `openChild(newChild)`.
-- The base switchable path calls `onClose()` on the outgoing child and `onOpen()` on the incoming child.
+- On `toggle()`: computes the target child and calls `target.open()`, allowing
+  the target state node's opening protocol to run before it delegates as
+  `parent.openChild(this)`.
+- The child `open()` path delegates to the base switchable commit path through
+  `parent.openChild(this)`, which calls `onClose()` on the outgoing child and
+  `onOpen()` on the incoming child.
 - State children are logical nodes with no view; mount/unmount calls are no-ops for them.
 
 ## 6. Lifecycle
@@ -37,18 +41,22 @@ EditorModeHolder is the exclusive owner of the editor's view/edit mode state. It
 1. Constructor: no platform content is created.
 2. `buildChildren()`: creates ViewModeState and EditModeState as children and assigns ViewModeState as the initial active child without calling `openChild()`.
 3. Initial activation must not call `ViewModeState.onOpen()` because the parent TreeEditor may still be materializing its direct children.
-4. Each call to `toggle()` switches the active child via `openChild(newChild)`.
-5. The incoming state node's `onOpen()` updates TreeEditor mode and triggers `refreshAll()`.
+4. Each call to `toggle()` switches the active child via `target.open()`.
+5. The incoming state node's `onOpen()` notifies TreeEditor via
+   `requestEditMode(value)`; TreeEditor coordinates dependent structural sync
+   and then triggers `refreshAll()`.
 
 ## 7. Side Effects
 
-None directly. Side effects (TreeEditor mode update and full tree refresh) happen inside the child state nodes via their `onOpen()` hooks.
+None directly. Child state nodes notify TreeEditor from their `onOpen()` hooks;
+TreeEditor owns dependent structural synchronization and full tree refresh.
 
 ## 8. Constraints and Invariants
 
 - Must not apply platform visual mode markers or call TreeEditor mode update methods directly.
 - Must not store mode state in any variable other than `openedChild`.
-- Every explicit mode switch must go through `openChild(newChild)`.
+- Every explicit mode switch must request opening on the target child through
+  `target.open()`.
 - Initial default-child assignment is not an explicit mode switch and must not fire `onOpen()` / `onClose()`.
 - Child state nodes are the only nodes that perform mode-activation side effects.
 

@@ -483,10 +483,16 @@ the membership of nodes in the opened branch, and the current tree structure.
 
 ### R8. Switching Is Performed Through the Parent
 
-A child node calls `open()`, delegating switching to the parent.
+A child node calls `open()`, runs any child-owned opening protocol, and then
+delegates the state commit to the parent as `parent.openChild(this)` or an
+exact target-equivalent.
 The parent closes the previous `openedChild`, reassigns `openedChild`,
 and may call local lifecycle hooks `onClose()` / `onOpen()` on
 the corresponding child nodes.
+External code must not bypass the opened child's `open()` contract by forcing a
+parent-side commit primitive such as `holder.openChild(target)` directly.
+`openChild` is the holder-owned commit path, not a competing public switching
+request.
 
 Branch hooks `onBranchClose(node)` and `onBranchOpen(node)` exist in the canon
 as extension points, but automatic propagation policy for them is not

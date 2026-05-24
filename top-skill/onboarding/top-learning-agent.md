@@ -592,14 +592,14 @@ new NodeX(parent)
     new ChildA(this)
     new ChildB(this)
 
-parent.openChild(nodeX)
+nodeX.open()
   oldChild.onClose()   — deactivates the previous child
   openedChild = nodeX
   nodeX.onOpen()       — activates the new child
 
 nodeX.refresh()        — updates display data
 
-parent.openChild(other)
+other.open()
   nodeX.onClose()      — deactivation
 
 parent.removeChild(nodeX)
@@ -729,7 +729,8 @@ class TabPanel extends SwitchableNode {
 
 Problem: the previous child does not receive `onClose()` and does not release resources. The new child does not receive `onOpen()` and is not activated correctly. The system is left in an undefined state.
 
-Correct: `this.openChild(tab)` — through the canonical path.
+Correct: `tab.open()` — the request targets the child being opened; the child
+then delegates the commit to the parent-owned canonical path.
 
 **Anti-pattern 3: Content accessing architectural state**
 

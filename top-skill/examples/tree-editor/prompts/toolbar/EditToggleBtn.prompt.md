@@ -20,18 +20,28 @@ pulls and applies that already-resolved value.
 
 ## 3. Inputs and Events
 
-- `refresh()` — reads `isEditMode` from the stored ancestor TreeEditor reference and switches `openedChild` to the matching sub-state if it is not already active.
+- `syncActionForCurrentEditorMode()` — explicit structural synchronization
+  request called after editor mode changes. It reads `isEditMode` from the
+  stored ancestor TreeEditor reference and delegates to `showEditModeAction()`
+  or `showViewModeAction()`.
+- `showEditModeAction()` — opens `_editMode` through `_editMode.open()`.
+- `showViewModeAction()` — opens `_viewMode` through `_viewMode.open()`.
 
 ## 4. State Ownership
 
 - Owns the active visual sub-state via `openedChild`.
-- Does not own or cache the editor mode; reads it from the stored `_editor` reference on each `refresh()` call.
+- Does not own or cache the editor mode; explicit synchronization reads it from
+  the stored `_editor` reference only when the editor mode transition has
+  already occurred.
 
 ## 5. Child Interaction Rules
 
 - Two children: EditToggleBtnViewModeState (`_viewMode`) and EditToggleBtnEditModeState (`_editMode`).
 - `_viewMode` is the default active child. During initial child materialization, assign it as the active child without firing child lifecycle hooks.
-- On `refresh()`: choose `_editMode` when `isEditMode` is true, otherwise `_viewMode`; call `openChild(target)` to switch only when needed by the base switchable mechanism.
+- On explicit synchronization: choose `_editMode` when `isEditMode` is true,
+  otherwise `_viewMode`; call `target.open()` so the target child runs its own
+  opening contract before delegating as `parent.openChild(this)` to change
+  `openedChild`.
 - The base switchable mechanism mounts and unmounts the active child's view in this node's content area.
 - Child state nodes own their low-level content subscriptions; EditToggleBtn only switches which child view is mounted.
 
@@ -39,11 +49,16 @@ pulls and applies that already-resolved value.
 
 1. Constructor: captures `_editor = this.findUpByType(TreeEditorNode)`, creates the content boundary with `setContent(...)`, then creates both child state nodes.
 2. `buildChildren()`: creates both child state nodes and assigns `_viewMode` as the initial active child via `setInitialChild(...)`.
-3. On `refresh()`: calls `openChild(target)` if the editor mode has changed. The base switching path unmounts the outgoing child view, mounts the incoming child view, and calls the child lifecycle hooks.
+3. `syncActionForCurrentEditorMode()` calls the selected child's `open()` if
+   the visual action state must follow a completed editor mode transition. The
+   child `open()` path delegates as `parent.openChild(this)` and triggers the
+   switchable lifecycle.
 
 ## 7. Side Effects
 
-- Switching active child during `refresh()` changes the mounted child view and triggers child lifecycle hooks (`onClose()` on the outgoing child, `onOpen()` on the incoming child).
+- Explicit action-state synchronization changes the mounted child view and
+  triggers child lifecycle hooks (`onClose()` on the outgoing child, `onOpen()`
+  on the incoming child).
 
 ## 8. Constraints and Invariants
 
@@ -52,8 +67,10 @@ pulls and applies that already-resolved value.
 - Must not perform manual child mount/unmount inside EditToggleBtn itself.
 - Must not handle low-level activation events directly.
 - Must not cache editor mode as a local boolean.
+- Must not switch action states from `refresh()`.
 - Initial default-child assignment must not call child `onOpen()` because the surrounding tree may still be materializing.
-- `openedChild` must always match the current editor mode after `refresh()` completes.
+- `openedChild` must match the current editor mode after explicit
+  action-state synchronization completes.
 
 ## 9. Non-Goals
 
@@ -68,7 +85,9 @@ pulls and applies that already-resolved value.
 - Extends `SwitchableNode`.
 - Ancestor lookup: `this._editor = this.findUpByType(TreeEditorNode)` captured in constructor.
 - Constructor materialization: `this.setContent(new EditToggleBtnContent(this))`.
-- On `refresh()`: `const target = this._editor.isEditMode ? this._editMode : this._viewMode; this.openChild(target);`
+- `syncActionForCurrentEditorMode()`: `if (this._editor.isEditMode) { this.showEditModeAction(); } else { this.showViewModeAction(); }`
+- `showEditModeAction()`: `this._editMode.open();`
+- `showViewModeAction()`: `this._viewMode.open();`
 
 ## 11. Expected Materialization
 

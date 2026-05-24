@@ -9,6 +9,16 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.0.5] — 2026-05-23
+
+- Tightened switchable state semantics: public switching requests target the
+  child state node's own `open()` method, while `openChild(...)` remains the
+  holder commit primitive called by the opened child as `parent.openChild(this)`.
+- Removed `close()` as a valid switch/state node public switching API; outgoing
+  states close only through owner lifecycle behavior when another child opens.
+- Updated Tree Editor and EditToggle examples to move structural switching out
+  of `refresh()` and into explicit transition methods that call `target.open()`.
+
 ## [2.0.4] — 2026-05-23
 
 - Added tell-only downward propagation: callers invoke a node boundary and do

@@ -428,7 +428,8 @@ Required checks:
 - no lifecycle hook performs self-insertion into a parent integration surface.
 
 Canonical correction direction:
-- move mount calls to the parent's `openChild()` or `buildChildren()`;
+- move mount calls to the parent's switchable commit/composition path or
+  `buildChildren()`;
 - child exposes `getView()`; mounting decision belongs to the parent.
 
 ---

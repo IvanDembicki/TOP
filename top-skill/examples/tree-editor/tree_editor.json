@@ -26,7 +26,7 @@
           "children": [
             {
               "type": "EditToggleBtn",
-              "doc": "Switchable holder for the mode toggle action. Owns the active visual sub-state, switches between EditToggleBtnViewModeState and EditToggleBtnEditModeState based on editor mode, and reads isEditMode from ancestor TreeEditor on refresh().",
+              "doc": "Switchable holder for the mode toggle action. Owns the active visual sub-state and switches between EditToggleBtnViewModeState and EditToggleBtnEditModeState through explicit action-state synchronization, not refresh().",
               "prompt": "prompts/toolbar/EditToggleBtn.prompt.md",
               "children": [
                 {
@@ -67,12 +67,12 @@
           "children": [
             {
               "type": "ViewModeState",
-              "doc": "State node for view mode. onOpen(): updates controller-owned mode state and requests refresh; presentation content later pulls resolved values.",
+              "doc": "State node for view mode. onOpen(): notifies TreeEditor that view mode is active; TreeEditor synchronizes dependent structural state and then requests data refresh.",
               "prompt": "prompts/toolbar/ViewModeState.prompt.md"
             },
             {
               "type": "EditModeState",
-              "doc": "State node for edit mode. onOpen(): updates controller-owned mode state and requests refresh; presentation content later pulls resolved values.",
+              "doc": "State node for edit mode. onOpen(): notifies TreeEditor that edit mode is active; TreeEditor synchronizes dependent structural state and then requests data refresh.",
               "prompt": "prompts/toolbar/EditModeState.prompt.md"
             }
           ]

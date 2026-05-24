@@ -172,6 +172,13 @@ The following must be explicitly defined:
 No public means of state switching must bypass lifecycle hooks
 if the system declares hooks as part of the model.
 
+The public switching request should target the child node being opened
+(`child.open()` or a semantically equivalent child-side request). The holder
+still owns the final `openedChild` commit, but a holder-side commit primitive
+such as `openChild(child)` may only be called by the child being opened as
+`parent.openChild(this)` or an exact target-equivalent. External code must not
+use `holder.openChild(target)` to skip the target child's own opening protocol.
+
 ---
 
 ## 8. Logical structure vs render/materialization attachment

@@ -437,6 +437,12 @@ Violation signal (both conditions must hold simultaneously):
 
 Not a violation:
 - `refresh()` changes only model data (text, label, icon from data model) — see the formal `refresh()` contract in `references/tree-node-contracts.md §5`
+- a declared state-holder transition method chooses one of its own explicit
+  state children and opens that child through `child.open()`; this is modeled
+  state switching, not hidden switching, as long as the method is not used as
+  active behavior dispatch and does not bypass the child's opening protocol.
+  The opened child then delegates the commit as `parent.openChild(this)` or an
+  exact target-equivalent
 - Node behavior is identical in both states
 
 Classification: `core_violation`

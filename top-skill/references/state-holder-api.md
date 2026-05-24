@@ -47,13 +47,28 @@ This means:
 
 The system must have one canonical way to switch state.
 
-Different API forms are acceptable, for example:
-- `child.open()`
-- `holder.openChild(child)`
-- `holder.setCurrentState(child)`
+The public switching request targets the child state node that is being opened:
 
-But regardless of the external form, the internal semantics must be identical.
-If the technology uses a setter such as `openedChild = ...`, it must not create a separate public switching semantics and must either align with the canonical lifecycle-aware path or remain an internal low-level primitive.
+- `child.open()`
+
+The child may override `open()` to run its own opening protocol, validation, or
+pre-delegation behavior. That protocol must not be bypassed by external code.
+
+The holder still owns the `openedChild` reference. The only valid direct use of
+the holder commit primitive is from the opened child's `open()` implementation:
+
+```text
+parent.openChild(this)
+```
+
+`openChild(...)` must not become a competing public switching API that allows a
+caller to force some other child open while skipping that child's own `open()`
+contract. Calls such as `holder.openChild(target)`, `this.openChild(target)`, or
+`parent.openChild(otherChild)` are not valid public switching requests.
+
+If the technology uses a setter such as `openedChild = ...`, it must not create
+a separate public switching semantics and must remain an internal low-level
+primitive or participate only inside the same lifecycle-aware commit path.
 
 ### Canonical requirement
 No public state-switching path may bypass:
@@ -74,10 +89,10 @@ Typical lifecycle order:
 
 1. determine old state;
 2. if old state exists and differs from new state:
-   - perform close of old state;
+   - call `onClose()` on the old state;
    - perform branch-close propagation, if the model requires it;
 3. record new state as the owner-managed active/opened child;
-4. perform open of new state;
+4. call `onOpen()` on the new state;
 5. perform branch-open propagation, if the model requires it.
 
 The exact set of hooks may differ, but:
@@ -128,16 +143,17 @@ allowed only when declared as non-behavioral metadata/validation logic.
 
 ## 5. Child-triggered Switching
 
-If a child node triggers switching via `open()` or a similar method,
-this is acceptable only if:
+Switching is normally child-initiated through `open()` or a semantically
+equivalent child-side method. This is acceptable only if:
 
 - the child does not bypass owner semantics;
-- the call leads to the same lifecycle-consistent path as switching through the holder API;
+- the child delegates the state commit to the owning holder by calling
+  `parent.openChild(this)` or an exact target-equivalent;
 - there is no second, incompatible semantics for the same action.
 
 Otherwise a dual switching model arises:
-- one through the owner API;
-- another through direct internal mutation.
+- one through the child `open()` protocol;
+- another through a direct owner-side commit or mutation.
 
 This is not acceptable.
 
@@ -150,39 +166,27 @@ If a setter such as:
 - `activeChild = ...`
 - `currentState = ...`
 
-is used, it must be explicitly defined whether the setter is:
-- a canonical lifecycle-aware API;
-- or an internal low-level primitive.
+is used, it must be an internal low-level primitive inside the
+`parent.openChild(this)` commit path or an exact target-equivalent.
 
-These two modes must not be mixed implicitly.
-
-### If the setter is canonical
-Then it must:
-- close the old state;
-- open the new state;
-- trigger branch lifecycle, if that is part of the model.
-
-### If the setter is low-level
-Then:
-- it must not be used as a public switching path;
-- the public API must go through a separate lifecycle-aware method.
+It must not be used as a public switching path. Public switching goes through
+the child state node's `open()` method.
 
 ---
 
-## 7. `open()` / `close()` Semantics
+## 7. `open()` Semantics
 
 If a child state node has `open()`:
 - `open()` must not silently bypass the owner lifecycle;
 - `open()` must not create a separate state management model;
-- `open()` must either delegate to the holder API or be part of the same canonical mechanism.
+- `open()` may run child-owned opening protocol before delegation;
+- `open()` must delegate the final state commit to the holder-owned canonical
+  commit path by calling `parent.openChild(this)` or an exact target-equivalent.
 
-If a child state node has `close()`:
-- `close()` must also not destroy owner semantics;
-- it must be clear what close means:
-  - close itself;
-  - reset the holder reference;
-  - transition to default state;
-  - or perform some other canonical transition.
+A switch/state node must not expose `close()` as a public state-switching API.
+Closing a previously opened state is an owner-side lifecycle effect of opening
+another child. The holder calls `onClose()` on the outgoing child inside the
+canonical commit path.
 
 ---
 
@@ -297,5 +301,5 @@ Otherwise the next AI will easily produce an incompatible implementation.
 State switching must go through **one** lifecycle-consistent mechanism.
 
 There must not be two different truths:
-- the "official" one through holder lifecycle;
+- the "official" one through the child `open()` request and holder commit;
 - and the "quick" one through direct mutation.

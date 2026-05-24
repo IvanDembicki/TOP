@@ -10,8 +10,9 @@ ViewModeState is the child of EditorModeHolder that represents the view mode. Wh
 
 ## 2. Responsibility
 
-- Apply view-mode state to TreeEditor when activated.
-- Trigger a full tree refresh so all nodes can update their visual state for view mode.
+- Notify TreeEditor when view mode becomes active.
+- Let TreeEditor coordinate explicit structural synchronization and subsequent
+  data refresh.
 
 ## 3. Inputs and Events
 
@@ -29,14 +30,15 @@ Has no child nodes.
 
 - Default active child of EditorModeHolder.
 - When the editor switches from edit mode to view mode, `onOpen()` fires.
-- On `onOpen()`: calls `TreeEditor.setEditMode(false)` and then `TreeEditor.refreshAll()`.
+- On `onOpen()`: calls `TreeEditor.requestEditMode(false)`.
 - No `onClose()` behavior is required.
 
 ## 7. Side Effects
 
 On `onOpen()`:
-- Updates TreeEditor to view mode through `setEditMode(false)`.
-- Calls `refreshAll()` on TreeEditor, which triggers `refresh()` on every node in the subtree.
+- Notifies TreeEditor that view mode is now active.
+- TreeEditor synchronizes dependent structural state explicitly and then calls
+  `refreshAll()` for data/display refresh.
 
 ## 8. Constraints and Invariants
 
@@ -45,18 +47,20 @@ On `onOpen()`:
 - Must not own any independent mode state.
 - Must not call `toggle()` or any navigation method.
 - Must not directly manipulate TreeEditor's content or platform primitive.
+- Must not directly update individual child nodes; TreeEditor owns mode-change
+  coordination.
 
 ## 9. Non-Goals
 
 - Does not toggle between modes.
 - Does not render any visual content.
-- Does not directly update individual child nodes (that is done through `refreshAll()`).
+- Does not directly update individual child nodes.
 
 ## 10. Platform Implementation Notes
 
 - No DOM element. Extends `SwitchableNode`.
 - TreeEditor lookup: `this._editor = this.findUpByType(TreeEditorNode)` captured in constructor.
-- `onOpen()`: `this._editor.setEditMode(false); this._editor.refreshAll();`
+- `onOpen()`: `this._editor.requestEditMode(false);`
 
 ## 11. Expected Materialization
 

@@ -138,7 +138,8 @@ The agent must compare:
 1. Static children materialized in code:
    - target-specific child materialization methods such as `buildChildren()` when they exist;
    - constructor-time child materialization and direct child constructors receiving the current node as parent;
-   - `setInitialChild(...)`, `openChild(...)`, or equivalent switchable/single-child materialization points;
+   - `setInitialChild(...)`, holder-side switchable commit points, or
+     equivalent switchable/single-child materialization points;
    - ordered static child creation sequence.
 
 2. Dynamic/library children materialized in code:

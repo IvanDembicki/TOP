@@ -20,6 +20,8 @@ holder, and pane.
   and expose it to EditorPane through a narrow controller/domain method.
 - Own drag session state for the currently dragged TreeItem controller.
 - Expose `isEditMode` as a derived read-only property from EditorModeHolder.
+- Coordinate explicit structural synchronization for nodes whose state mirrors
+  editor mode, before requesting data refresh.
 - Expose already-resolved editor presentation tokens through controller access
   so locally implemented content can apply them during refresh.
 - Expose `refreshAll()` to request a full subtree refresh after state or data
@@ -34,9 +36,10 @@ holder, and pane.
   from the declared data/asset context, not injected through this node API.
 - `setDraggedItem(item)` / `getDraggedItem()` / `clearDraggedItem()` - manage
   the current drag session.
-- `requestEditMode(value)` - called by editor mode state controllers. Updates
-  mode state through EditorModeHolder and requests refresh; it does not command
-  content to toggle classes.
+- `requestEditMode(value)` - called by editor mode state controllers after the
+  corresponding mode state becomes active. Synchronizes dependent structural
+  state through direct child contracts, then requests refresh; it does not
+  command content to toggle classes.
 - `refreshAll()` - requests every node in the subtree to refresh from current
   controller/data state.
 
@@ -62,6 +65,11 @@ through its controller/domain surface. It does not receive or pass source data,
 mode flags, callbacks, config, or presentation values through constructors or
 runtime entrypoints.
 
+When editor mode changes, TreeEditor calls the direct EditorToolbar contract to
+open the matching EditToggleBtn action state before data refresh. The opened
+action child is requested through that child's `open()` path inside
+EditToggleBtn; TreeEditor does not call `openChild()` on a descendant.
+
 ## 6. Lifecycle
 
 1. Constructor initializes TreeEditor-owned state only.
@@ -72,11 +80,14 @@ runtime entrypoints.
    boundary and requests refresh/materialization of the pane branch. Raw demo
    data is initialized outside the TOP node API through the declared data/asset
    bootstrap adapter.
-5. `refreshAll()` performs a synchronous depth-first refresh request.
+5. `requestEditMode(value)` synchronizes explicit mode-dependent structural
+   states and then calls `refreshAll()`.
+6. `refreshAll()` performs a synchronous depth-first refresh request.
 
 ## 7. Side Effects
 
 - Host attachment during `attachToHost`.
+- Explicit mode-dependent structural synchronization after mode changes.
 - Subtree refresh after data context, mode state, drag state, or tree structure
   changes.
 
@@ -84,6 +95,9 @@ runtime entrypoints.
 
 - TreeEditor does not mutate its presentation content to show/hide/update mode
   state. It resolves presentation tokens and requests refresh.
+- TreeEditor does not use refresh to switch child states; mode-dependent child
+  states are synchronized through explicit controller methods and child
+  `open()` requests.
 - TreeEditor does not pass data/config/callback/state packets into children.
 - TreeEditor public runtime entrypoints do not receive semantic data packets.
 - The host container is an integration boundary, not a TOP child.

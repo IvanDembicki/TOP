@@ -65,7 +65,8 @@ to call it. See `canon/architectural-invariants.md` — **View Access Invariant*
 
 ### Methods
 - `getOpenedChild()`
-- `openChild(child)`
+- `openChild(child)` as the owner-side commit primitive, called only by the
+  child being opened as `parent.openChild(this)` or an exact target-equivalent
 
 ### Invariants
 - a valid switchable node has at least one switchable state/candidate child;
@@ -77,7 +78,12 @@ to call it. See `canon/architectural-invariants.md` — **View Access Invariant*
   are explicitly modeled as the switchable candidate set with one selected/opened
   child;
 - direct external modification of `openedChild` must not create a separate public semantics;
-- `openChild(child)` is the canonical switching path.
+- the public switching request is `child.open()`;
+- `openChild(child)` is the canonical owner commit path used by `child.open()`;
+- the only valid direct call shape is the child opening itself through its
+  parent: `parent.openChild(this)`;
+- calls such as `holder.openChild(target)`, `this.openChild(target)`, or
+  `parent.openChild(otherChild)` must not be used as public switching requests.
 
 ---
 
@@ -99,7 +105,10 @@ to call it. See `canon/architectural-invariants.md` — **View Access Invariant*
 - `onBranchClose(node)`
 
 ### Semantics
-- `open()` does not change state directly and delegates to the canonical switching path of the owner;
+- `open()` may be overridden by the child to run child-owned opening protocol,
+  but it does not change owner state directly;
+- `open()` delegates the state commit to the canonical owner-side commit path
+  by calling `parent.openChild(this)` or an exact target-equivalent;
 - `isOpened()` checks only local opened ownership relative to the parent;
 - `isBranchOpened()` checks membership in the opened branch up to the root;
 - `onBranchOpen(node)` and `onBranchClose(node)` exist as extension points; their invocation strategy and propagation policy are defined explicitly in a subclass/policy.
@@ -166,7 +175,7 @@ Empty body (`refresh() {}`). Override only if the node has data-dependent displa
 
 - `onOpen()` / `onClose()` — structural lifecycle (node becomes active/inactive); refresh() operates within an already-active context
 - content materialization / child materialization — one-time initialization at node creation
-- `switchToX()` / `openChild()` — changing structural/state configuration
+- `switchToX()` / `child.open()` — changing structural/state configuration
 
 ### Anti-pattern: hidden switchable in refresh()
 
