@@ -1,0 +1,20 @@
+{
+  "name": "top-migrator",
+  "displayName": "TOP Migrator",
+  "version": "0.1.0",
+  "status": "draft",
+  "lastUpdated": "2026-05-25 21:31 -07:00",
+  "description": "Migration orchestration skill for moving existing non-TOP projects into Tree-Oriented Programming using descending recursive semantic analysis, checkpoints, independent validation, repair/rollback loops, and final reporting.",
+  "dependsOn": {
+    "top-skill": ">=2.0.7"
+  },
+  "stableClaims": [],
+  "draftScope": [
+    "Method of Descending Recursive Semantic Analysis",
+    "migration profiles and checkpoints",
+    "failure and escalation model",
+    "component retention policy",
+    "final migration report contract",
+    "lightweight artifact schemas and validator"
+  ]
+}

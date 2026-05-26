@@ -1,0 +1,6 @@
+interface:
+  display_name: "TOP Migrator"
+  short_description: "Legacy-to-TOP migration orchestration"
+  default_prompt: "Use $top-migrator to plan or run a legacy-to-TOP migration with recursive semantic analysis, checkpoints, validation, repair loops, and final reporting."
+policy:
+  allow_implicit_invocation: true

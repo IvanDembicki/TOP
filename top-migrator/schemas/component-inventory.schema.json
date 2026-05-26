@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/top-migrator/component-inventory.schema.json",
+  "title": "TOP Migrator Component Inventory",
+  "type": "object",
+  "required": ["scope", "components"],
+  "additionalProperties": false,
+  "properties": {
+    "scope": { "type": "string", "minLength": 1 },
+    "components": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/componentRecord" }
+    }
+  },
+  "$defs": {
+    "componentRecord": {
+      "type": "object",
+      "required": ["name", "pathOrPackage", "origin", "classification", "reason"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "pathOrPackage": { "type": "string", "minLength": 1 },
+        "origin": {
+          "type": "string",
+          "enum": ["local", "external"]
+        },
+        "classification": {
+          "type": "string",
+          "enum": [
+            "preserved_component",
+            "black_box_component",
+            "top_candidate",
+            "temporary_residual"
+          ]
+        },
+        "reason": { "type": "string", "minLength": 1 },
+        "usedByNodes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "risk": { "type": "string" },
+        "suggestedMigrationTrigger": { "type": "string" },
+        "expiryCondition": { "type": "string" }
+      }
+    }
+  }
+}

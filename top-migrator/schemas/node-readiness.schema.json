@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/top-migrator/node-readiness.schema.json",
+  "title": "TOP Migrator Node Readiness",
+  "type": "object",
+  "required": [
+    "nodePath",
+    "decompositionStatus",
+    "behaviorStatus",
+    "topValidationStatus",
+    "integrationStatus",
+    "readinessStatus"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "nodePath": { "type": "string", "minLength": 1 },
+    "parentNodePath": { "type": "string" },
+    "children": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "decompositionStatus": {
+      "type": "string",
+      "enum": ["pending", "decomposing", "leaf_irreducible", "children_ready", "blocked"]
+    },
+    "behaviorStatus": {
+      "type": "string",
+      "enum": ["not_required", "not_tested", "tests_passed", "tests_failed", "behavior_not_verified"]
+    },
+    "topValidationStatus": {
+      "type": "string",
+      "enum": ["not_required", "not_verified", "top_valid", "top_invalid", "contaminated"]
+    },
+    "integrationStatus": {
+      "type": "string",
+      "enum": ["not_started", "pending", "integrated", "integration_failed", "stale_contract"]
+    },
+    "readinessStatus": {
+      "type": "string",
+      "enum": ["draft", "partial", "blocked", "ready_structural", "ready_verified"]
+    },
+    "irreducibilityReason": { "type": "string" },
+    "blockingReasons": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

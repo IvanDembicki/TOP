@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://top.local/schemas/top-migrator/migration-log.schema.json",
+  "title": "TOP Migrator Migration Log",
+  "type": "object",
+  "required": ["migrationId", "profile", "rootNode", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "migrationId": { "type": "string", "minLength": 1 },
+    "profile": {
+      "type": "string",
+      "enum": ["strict-incremental", "draft-full-pass", "hybrid"]
+    },
+    "rootNode": { "type": "string", "minLength": 1 },
+    "topSkillVersion": { "type": "string" },
+    "entries": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/logEntry" }
+    }
+  },
+  "$defs": {
+    "logEntry": {
+      "type": "object",
+      "required": ["id", "type", "nodePath", "summary", "status"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": {
+          "type": "string",
+          "enum": [
+            "node_extracted",
+            "checkpoint",
+            "behavior_check",
+            "top_validation",
+            "failure",
+            "repair",
+            "rollback",
+            "readiness",
+            "escalation",
+            "component_decision"
+          ]
+        },
+        "nodePath": { "type": "string", "minLength": 1 },
+        "parentNodePath": { "type": "string" },
+        "checkpointId": { "type": "string" },
+        "contractVersion": { "type": "string" },
+        "agentId": { "type": "string" },
+        "summary": { "type": "string", "minLength": 1 },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "pass", "fail", "blocked", "not_verified", "deferred"]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}
