@@ -54,6 +54,36 @@ Root controllers remain runtime tree roots. Leaf controllers remain runtime
 tree nodes. A root has root/host context instead of ordinary parent; a leaf may
 declare no children, but it still has or inherits runtime node mechanics.
 
+### 1.0.1. Minimal Runtime Node Shape
+
+Every concrete runtime TOP tree must preserve three canonical node shapes:
+- **root controller** - has root/host context and owns its declared children;
+  it does not have an ordinary parent;
+- **branch controller** - has parent/context, root context, and declared
+  child ownership;
+- **leaf controller** - has parent/context and root context, declares no
+  children, and still has or inherits runtime node mechanics.
+
+Minimum runtime topology contract:
+- every non-root node has exactly one parent/context reference;
+- every parent-owned child collection contains each direct child exactly once;
+- child construction or attachment registers the child with its parent at the
+  child's tree position;
+- a child cannot be stitched into the topology later through external setters,
+  data packets, render composition, or ad hoc list mutation;
+- a child resolves the same root/root context as its parent;
+- depth, order, and index, when materialized, are derived from current tree
+  position or kept consistent with it by the owning topology operation;
+- ancestor traversal, debug tree printing, and topology introspection are
+  permitted when they expose structure only and do not become behavior-routing
+  mechanisms.
+
+Each non-leaf controller must declare its allowed direct child policy. The
+policy may be represented by target-language types, schema entries, prompt tree
+children, or an equivalent project-local contract, but it must be explicit
+enough to reject accidental child kinds. A leaf declaration means the node owns
+no children, not that it loses runtime node identity.
+
 If a node has content, the node must consist of two distinct classes:
 - `Controller`
 - `Content`

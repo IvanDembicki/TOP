@@ -133,6 +133,38 @@ them directly without a coordinated model, this is a runtime defect.
 
 ---
 
+### 5.1. Tree mutation contract
+
+Mutable tree operations must be explicit topology operations owned by the
+controller that owns the affected child collection. The contract must name the
+allowed operations, such as create/attach, remove/detach, reorder, move, and
+clear, and must define how each operation updates:
+- the parent-owned child collection;
+- the child's parent/context relation;
+- root/root context for the child and its subtree;
+- depth, order, or index facts when those facts are materialized;
+- lifecycle hooks and disposal/cleanup;
+- rendered/materialized child placement when content exists;
+- failure behavior for invalid child kinds, invalid positions, duplicate
+  insertion, stale children, or cross-root moves.
+
+Canonical mutation rules:
+- external code must not mutate a controller's child collection directly;
+- create/attach must register the child with its owner exactly once;
+- remove/detach must leave no stale membership in the old parent collection;
+- reorder must use the requested target position, not a recomputed index after
+  removal, and must define bounds behavior;
+- move is detach plus attach with explicit root/context and subtree update
+  semantics;
+- clear must execute the declared detach/dispose path for every removed child;
+- rendered child order must stay consistent with logical child order unless a
+  distinct materialization order is explicitly modeled.
+
+A runtime that exposes raw collection mutation without these semantics is not a
+valid TOP runtime tree even if the static spec tree is correct.
+
+---
+
 
 ## 6. Content lifecycle by default
 

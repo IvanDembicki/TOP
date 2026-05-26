@@ -41,7 +41,8 @@
     "LLM adapter input references must be explicitly listed and must resolve only inside the run root or skill root.",
     "Orchestration regression fixtures must keep false delivery-complete scenarios invalid, including missing judicial handoff, not_verified required hard checks, process-only pass evidence, and stale snapshots.",
     "A repair pass is not a verdict; delivery complete after repair requires a later independent judicial handoff over post-repair artifacts.",
-    "Bounded repair artifact writes must be listed as task-capsule artifactWriteRequests and recorded as invocation-evidence artifactWrites."
+    "Bounded repair artifact writes must be listed as task-capsule artifactWriteRequests and recorded as invocation-evidence artifactWrites.",
+    "Runtime TOP nodes must preserve the minimal root/branch/leaf topology contract: parent or root context, declared child policy, reciprocal child registration, and topology-consistent root, depth, and order when those facts are materialized."
   ],
   "tree": {
     "TopSkill": {

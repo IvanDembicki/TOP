@@ -195,15 +195,23 @@ Required checks:
 - every generated TOP controller extends the project's canonical TOP node base
   class or implements the canonical TOP node runtime interface for the
   target/project;
+- every controller has an explicit root, branch, or leaf runtime shape;
 - every non-root static controller has parent/context or inherited
   parent/context;
 - every root controller has root/host context and runtime tree root mechanics;
+- every non-root controller can resolve the same root/root context as its
+  parent;
 - every controller has or inherits lifecycle, child ownership/registration,
   children access, and a declared child construction policy;
 - every leaf controller has or inherits runtime node mechanics even when it has
   no children;
 - every non-leaf controller constructs child controllers/node objects according
   to spec;
+- child construction or attachment creates reciprocal topology: child points to
+  parent/context, parent-owned children contains the child exactly once, and the
+  child kind is allowed by the parent's declared child policy;
+- depth, order, or index facts, where materialized, are derived from the
+  topology or updated only by the owning topology operation;
 - no declared child is represented only as content, a public wrapper, a render
   fragment, or a target artifact posing as a child node;
 - no controller-shaped service/helper/module is treated as a TOP node without
@@ -216,7 +224,11 @@ checkpoint: generated-controller-runtime-shape
 artifact: controller file
 checks:
 - has/inherits runtime node base or interface;
+- declares root, branch, or leaf runtime shape;
 - has parent/context or root context;
+- preserves reciprocal parent/child registration when it creates children;
+- resolves root/root context through topology;
+- derives or maintains topology-consistent depth/order/index if exposed;
 - has/inherits lifecycle;
 - has declared child policy or explicit leaf declaration;
 - creates child controllers if non-leaf;
@@ -235,6 +247,9 @@ checks:
 - generated controller artifacts;
 - child construction logic;
 - prompt child rules;
+- parent-child reciprocity;
+- root/depth/order consistency where exposed;
+- typed or modeled direct-child policy;
 ```
 
 The meso-check must verify that spec parent-child relations appear as
@@ -251,6 +266,8 @@ Canonical correction direction:
   parent/context or root context;
 - add/inherit the project runtime node base/interface;
 - move child creation into parent-owned child-controller construction;
+- replace ad hoc child list mutation with project topology operations that
+  register, remove, reorder, or move children consistently;
 - convert child content/wrapper/render fragments into child controllers,
   black-box content, or external target artifacts according to the model;
 - rerun the controller runtime shape and controller-tree-topology checks after
